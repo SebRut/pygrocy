@@ -1,18 +1,18 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
+- pip install -r requirements.txt
+- pip install coveralls
 script:
-  - coverage run --source=pygrocy setup.py test
+- coverage run --source=pygrocy setup.py test
 after_success:
-  - coveralls
+- coveralls
 deploy:
   provider: pypi
-  user: "SebRut"
+  user: SebRut
   password:
-    secure: "dgqNgmC6C+NdiKC9D8jJJY66rITE0VjbwpDcZjMWTW+roMMgwNtSMOM9zsOM+goiiOXOh15SKUW4ddJYxrPQGdxdJ8vgju1j4KX7B3LkW3YDIttjb/5h1ZovldYLUUiCu3mYJ2X8TsRblsBFB4NdHxuL11sQEI3nqiGfhnZ1UWSNR+etvBuommzc9UtGTDSQ0PATDdJt0USXQuAv1cvqr2WqdHIRNVceQN2ETMsC0yUoE6pf54wXZlyyRG7SmAnoCCAyrrEpgvPXVS/y62sFmrqFEuhrcFajc4S1zIlXRYCSjUTG3es4+AQpafzBzhBB9k/oUwG4wBStJkA+w5y46uQGiUdUPzi4lX8tL4RF4pE3WR5YnTYt/8j0RDo9gqOUA11EImZes4W7lsKJPupIWnKOGh5IHF4wJk/0EOmVcq+2aK+HG03zainn6G02FXE2yVqr727wXC4JBS+qvYV2DtB5BQRr4Z+sTTsVOk2xMFX3CTQK3N8b6bLTvFcNUzlaJxey7ioAIwEK1uBgjqY4VofPpAjcUnwMdW/liOUNfQbIgLMq1Sci1ghyzaoI3/BSlu57HC9pn8p0tSS+tHobd3fy5XcVO3GuhLyAMivyimre8/zMLlI798f5w9/MYqmKeBZfRr3b8duQbpOsrUvd9Lo+geBvPK3MHhutm/diMPE="
+    secure: M8CyNVDgnwC6x3gX1JfSGSb/VGiPGyJLLWlWg/EEl2Ae00hXNyU4jLnc+Iv8WdyFBoQj7RZ4tTEppKzFLU8OLwq457cSZx3MqKOqhW+qOa1eQ/CHf/AjmlFnt6nneo6VYLXLCBJZ/WFm26PpbwPd3z4DWy+wS3s0gtomVbKxZkJmer/SkcfzAXkKgQdzYybetcaoX0mNUCNtp78iEihyVVhA3tECrZW2wg+wEj3GOj7I/NEvQOy00OxMHRdbp059A/173wrqXlw8iWHqACE0YLpqSTQxL7yvkjSKeZrK3psmCZdMby2BHryXYd/3l7diOad3oRzbQceZCQwcfZ7Q48dvS5HtfBIpCnahRO5QSORVn3Y2Qq+IFym536bBwMjRKglDqcx/v2uaA1AYDsL5wsEev3wnm6YvLTT1OTAa3Z0ZG2ggA7IKl5gDEbmTELE5GXzHVhZX0Yl/vGJIDPLRECIZv7I/SQ9Tr9238+zOp4DMHGGXrRe3jwLe8ZFu++0rveD4r/G8swtCgn3mypnILOgE1z9CIbBm5238jBqBeKs1BMjzXXOeZuVOxh+lg0FtNgeJrIF9O4cnY5mpDd4tgrtONVW67jipONEiTN9WCOnZoq1o3MHQrt+LRz4B9FTmoz/Sx9SUXqkMF8PjsmLYtQ4HcbWVnV3omuq3XJpbC6Y=
   on:
     tags: true
   skip_existing: true
