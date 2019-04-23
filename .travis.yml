@@ -30,7 +30,7 @@ deploy:
     skip_existing: true
     skip_cleanup: true
   - provider: script
-    script: doctr deploy . --built-docs html/
+    script: doctr deploy . --built-docs html/ --build-tags
     on:
       tags: true
     skip_existing: true
