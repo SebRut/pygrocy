@@ -36,10 +36,9 @@ class GrocyApiClient(object):
 
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        from pygrocy.grocy import Product
-        self._expiring_products = [Product(product) for product in parsed_json['expiring_products']]
-        self._expired_products = [Product(product) for product in parsed_json['expired_products']]
-        self._missing_products = [Product(product) for product in parsed_json['missing_products']]
+        self._expiring_products = [ProductData(product) for product in parsed_json['expiring_products']]
+        self._expired_products = [ProductData(product) for product in parsed_json['expired_products']]
+        self._missing_products = [ProductData(product) for product in parsed_json['missing_products']]
 
     @property
     def expiring_products(self):
@@ -82,15 +81,12 @@ class ProductDetailsResponse(object):
         self._next_best_before_date = parse_date(parsed_json['next_best_before_date'])
         self._last_price = parse_float(parsed_json['last_price'])
 
-        from pygrocy.grocy import Product
-        self._product = Product(parsed_json['product'])
+        self._product = ProductData(parsed_json['product'])
 
-        from pygrocy.grocy import QuantityUnit
-        self._quantity_unit_purchase = QuantityUnit(parsed_json['quantity_unit_purchase'])
-        self._quantity_unit_stock = QuantityUnit(parsed_json['quantity_unit_stock'])
+        self._quantity_unit_purchase = QuantityUnitData(parsed_json['quantity_unit_purchase'])
+        self._quantity_unit_stock = QuantityUnitData(parsed_json['quantity_unit_stock'])
 
-        from pygrocy.grocy import Location
-        self._location = Location(parsed_json['location'])
+        self._location = LocationData(parsed_json['location'])
 
     @property
     def last_purchased(self):
@@ -115,3 +111,45 @@ class ProductDetailsResponse(object):
     @property
     def last_price(self):
         return self._last_price
+
+
+class ProductData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json['id'])
+        self._name = parsed_json['name']
+        self._description = parsed_json.get('description', None)
+        self._location_id = parse_int(parsed_json.get('location_id', None))
+        self._qu_id_stock = parse_int(parsed_json.get('qu_id_stock', None))
+        self._qu_id_purchase = parse_int(parsed_json.get('qu_id_purchase', None))
+        self._qu_factor_purchase_to_stock = parse_float(parsed_json.get('qu_factor_purchase_to_stock', None))
+        self._barcodes = parsed_json.get('barcode', "").split(",")
+        self._picture_file_name = parsed_json.get('picture_file_name', None)
+        self._allow_partial_units_in_stock = bool(parsed_json.get('allow_partial_units_in_stock', None) == "true")
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp', None))
+        self._min_stock_amount = parse_int(parsed_json.get('min_stock_amount', None), 0)
+        self._default_best_before_days = parse_int(parsed_json.get('default_best_before_days', None))
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def name(self):
+        return self._name
+
+
+class QuantityUnitData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json['id'])
+        self._name = parsed_json['name']
+        self._name_plural = parsed_json['name_plural']
+        self._description = parsed_json['description']
+        self._row_created_timestamp = parse_date(parsed_json['row_created_timestamp'])
+
+
+class LocationData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json['id'])
+        self._name = parsed_json['name']
+        self._description = parsed_json['description']
+        self._row_created_timestamp = parse_date(parsed_json['row_created_timestamp'])
