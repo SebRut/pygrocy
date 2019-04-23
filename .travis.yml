@@ -18,17 +18,19 @@ script:
 
 after_success:
   - coveralls
-  - if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) &&
-    [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    doctr deploy . --built-docs html/
-  fi
 
 deploy:
-  provider: pypi
-  user: SebRut
-  password:
-    secure: bRGZ4Meg/fURbgVS1HCqCXEsb6TMTdzbRznQ1QZ9x4RKU4SJrVI90oQWOjLo+Td4x6iD7YceYfBE0gAbuHRVknATQ8/A29KEPByHiMglZ/UfkKKRYkJLmj+QEgFbX/1vR6bu7FY2aWcSjL1VW5IfOUQAl6c7soF3AqXpyageeWniic+pZYOxtLBlXQBtgMeIAAGCB7jA8j7Qdp3l7ae9OOMPVjPf7mJjfsb8e3w32BpLyKZlyOjJzEOiaOJgDJumE4PITq0tf7kjUOKjwmGp8zGzXYtM8SdiS+jShsVpPXIAun8XtDFyB8JhdAuXDAtahcGfkdDZzD60eiXQzUFuMIZq8Y6Yh4YS78qK+4AJizdGUoN0tKyy1irPk3MsWtsGrY8LqBZ1zBoS+ryiz2Ovsjq7qfjt5ziM6sfPBF4/2j5TlAiDoiycvWz7vAkZhaMbim0sKcvUb+pYlQT/D5TU7siOTyW8PZWyn1SJ6zb27SW9tkQ3UNKmS9EhPgAkL8jiPtSUoD2d4Tn5UtlMw/s9B/6eZodM3SpWHEkyoWZ3+VRG4uW7ZpV9xBiYonyNtWYpBbAGcmfz8KD7HXzApjcuQWuvANjYeaJuo2pwMY8iE/H0fs+bP/x/5Wlra88VpSY9HKIsdYhxn1TnCsApP6c1aFiAs7nfRGY+y3UsiBT1Zgo=
-  on:
-    tags: true
-  skip_existing: true
-  skip_cleanup: true
+  - provider: pypi
+    user: SebRut
+    password:
+      secure: bRGZ4Meg/fURbgVS1HCqCXEsb6TMTdzbRznQ1QZ9x4RKU4SJrVI90oQWOjLo+Td4x6iD7YceYfBE0gAbuHRVknATQ8/A29KEPByHiMglZ/UfkKKRYkJLmj+QEgFbX/1vR6bu7FY2aWcSjL1VW5IfOUQAl6c7soF3AqXpyageeWniic+pZYOxtLBlXQBtgMeIAAGCB7jA8j7Qdp3l7ae9OOMPVjPf7mJjfsb8e3w32BpLyKZlyOjJzEOiaOJgDJumE4PITq0tf7kjUOKjwmGp8zGzXYtM8SdiS+jShsVpPXIAun8XtDFyB8JhdAuXDAtahcGfkdDZzD60eiXQzUFuMIZq8Y6Yh4YS78qK+4AJizdGUoN0tKyy1irPk3MsWtsGrY8LqBZ1zBoS+ryiz2Ovsjq7qfjt5ziM6sfPBF4/2j5TlAiDoiycvWz7vAkZhaMbim0sKcvUb+pYlQT/D5TU7siOTyW8PZWyn1SJ6zb27SW9tkQ3UNKmS9EhPgAkL8jiPtSUoD2d4Tn5UtlMw/s9B/6eZodM3SpWHEkyoWZ3+VRG4uW7ZpV9xBiYonyNtWYpBbAGcmfz8KD7HXzApjcuQWuvANjYeaJuo2pwMY8iE/H0fs+bP/x/5Wlra88VpSY9HKIsdYhxn1TnCsApP6c1aFiAs7nfRGY+y3UsiBT1Zgo=
+    on:
+      tags: true
+    skip_existing: true
+    skip_cleanup: true
+  - provider: script
+    script: doctr deploy . --built-docs html/
+    on:
+      tags: true
+    skip_existing: true
+    skip_cleanup: true
