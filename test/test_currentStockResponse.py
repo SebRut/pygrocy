@@ -6,8 +6,8 @@ from pygrocy.grocy_api_client import CurrentStockResponse
 
 class TestCurrentStockResponse(TestCase):
     def test_parse(self):
-        input = """{"product_id": 0,"amount": "12.53","best_before_date": "2019-04-22"}"""
-        response = CurrentStockResponse(json.loads(input))
+        input_json = """{"product_id": 0,"amount": "12.53","best_before_date": "2019-04-22"}"""
+        response = CurrentStockResponse(json.loads(input_json))
 
         assert response.product_id == 0
         assert response.amount == 12.53
