@@ -93,3 +93,4 @@ modules.xml
 
 venv/
 __pycache__
+html/

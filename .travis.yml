@@ -1,19 +1,37 @@
 language: python
 python:
-- '3.6'
+  - '3.6'
+
+env:
+  global:
+    # Doctr deploy key for SebRut/pygrocy
+    - secure: "YoHepp7ZFuwmdlghnhwT7aczFamnuwTrAuOyXuhxV9bX9eqziurL5K39R04OD5hdPcbNXoVos1YbE4hBGFQpAk6ReiBqqhh+3qDw/HeEpZxRX9dISw+74Nu9kAYXNR8Ab5Zcov85IV3xvTqpawMeBpiXBuJFTbdvZbWhN1jglpR4D9VG//LaNjR/FbCH/41xzpuK3L1mSCQM3jJSSxPU7ZfkWzNvsGj1X///m3la3gR7DL1M4QC9hnzKF6KRNl0kVUuNnK8GhT66ZBGaCVDTqQeDQGTrjsCGuCsQnoydVV2XFwljZ3B6qE27ZqhehlloK2s8/go18zAuj9HpdkTx0RzeUOkxIDp9hAnAys4iGz7Ltk+sx0jGbNsv2Z8oHBgDhv6mu/0UMwD1dL83ZL3L0qWDJfDY3NZSlV0oW9ZPz5ZG8ObnnKKh4vHfp7HUpp/ElYEio7JzQit4FI7gnZRDFEAeH/NvwX8+t0SGXITyyn2U2X5Hz7TUe3laNaDe6Bq59+jebnRdTttuhyoXcMHtjm9HerqRussV+2jyTUf+ktWOFZFjavqUSj6k3iV9yKrgYwfW2+tsaOBZqEHwkRkd5DbNFLvkd0+NEBRfsJV4v51z9QdES3FlPpY/nPqORVkPCLxriCWLf+lTtYi6rtjixvvc4poFFz6WTNILwuOLqrs="
+
 install:
-- pip install -r requirements.txt
-- pip install coveralls
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
+  - pip install coveralls
+
 script:
-- coverage run --source=pygrocy setup.py test
+  - coverage run --source=pygrocy setup.py test
+  - set -e
+  - pdoc --html pygrocy
+
 after_success:
-- coveralls
+  - coveralls
+
 deploy:
-  provider: pypi
-  user: SebRut
-  password:
-    secure: bRGZ4Meg/fURbgVS1HCqCXEsb6TMTdzbRznQ1QZ9x4RKU4SJrVI90oQWOjLo+Td4x6iD7YceYfBE0gAbuHRVknATQ8/A29KEPByHiMglZ/UfkKKRYkJLmj+QEgFbX/1vR6bu7FY2aWcSjL1VW5IfOUQAl6c7soF3AqXpyageeWniic+pZYOxtLBlXQBtgMeIAAGCB7jA8j7Qdp3l7ae9OOMPVjPf7mJjfsb8e3w32BpLyKZlyOjJzEOiaOJgDJumE4PITq0tf7kjUOKjwmGp8zGzXYtM8SdiS+jShsVpPXIAun8XtDFyB8JhdAuXDAtahcGfkdDZzD60eiXQzUFuMIZq8Y6Yh4YS78qK+4AJizdGUoN0tKyy1irPk3MsWtsGrY8LqBZ1zBoS+ryiz2Ovsjq7qfjt5ziM6sfPBF4/2j5TlAiDoiycvWz7vAkZhaMbim0sKcvUb+pYlQT/D5TU7siOTyW8PZWyn1SJ6zb27SW9tkQ3UNKmS9EhPgAkL8jiPtSUoD2d4Tn5UtlMw/s9B/6eZodM3SpWHEkyoWZ3+VRG4uW7ZpV9xBiYonyNtWYpBbAGcmfz8KD7HXzApjcuQWuvANjYeaJuo2pwMY8iE/H0fs+bP/x/5Wlra88VpSY9HKIsdYhxn1TnCsApP6c1aFiAs7nfRGY+y3UsiBT1Zgo=
-  on:
-    tags: true
-  skip_existing: true
-  skip_cleanup: true
+  - provider: pypi
+    user: SebRut
+    password:
+      secure: bRGZ4Meg/fURbgVS1HCqCXEsb6TMTdzbRznQ1QZ9x4RKU4SJrVI90oQWOjLo+Td4x6iD7YceYfBE0gAbuHRVknATQ8/A29KEPByHiMglZ/UfkKKRYkJLmj+QEgFbX/1vR6bu7FY2aWcSjL1VW5IfOUQAl6c7soF3AqXpyageeWniic+pZYOxtLBlXQBtgMeIAAGCB7jA8j7Qdp3l7ae9OOMPVjPf7mJjfsb8e3w32BpLyKZlyOjJzEOiaOJgDJumE4PITq0tf7kjUOKjwmGp8zGzXYtM8SdiS+jShsVpPXIAun8XtDFyB8JhdAuXDAtahcGfkdDZzD60eiXQzUFuMIZq8Y6Yh4YS78qK+4AJizdGUoN0tKyy1irPk3MsWtsGrY8LqBZ1zBoS+ryiz2Ovsjq7qfjt5ziM6sfPBF4/2j5TlAiDoiycvWz7vAkZhaMbim0sKcvUb+pYlQT/D5TU7siOTyW8PZWyn1SJ6zb27SW9tkQ3UNKmS9EhPgAkL8jiPtSUoD2d4Tn5UtlMw/s9B/6eZodM3SpWHEkyoWZ3+VRG4uW7ZpV9xBiYonyNtWYpBbAGcmfz8KD7HXzApjcuQWuvANjYeaJuo2pwMY8iE/H0fs+bP/x/5Wlra88VpSY9HKIsdYhxn1TnCsApP6c1aFiAs7nfRGY+y3UsiBT1Zgo=
+    on:
+      tags: true
+    skip_existing: true
+    skip_cleanup: true
+  - provider: script
+    script: doctr deploy . --built-docs html/
+    on:
+      tags: true
+    skip_existing: true
+    skip_cleanup: true
