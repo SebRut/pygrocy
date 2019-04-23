@@ -4,6 +4,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/SebRut/pygrocy/badge.svg?branch=master)](https://coveralls.io/github/SebRut/pygrocy?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/sebrut/pygrocy/badge)](https://www.codefactor.io/repository/github/sebrut/pygrocy)
 
+[Documentation](https://sebrut.github.io/pygrocy/pygrocy/grocy.html)
+
 ## Installation
 
 `pip install pygrocy`
