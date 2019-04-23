@@ -4,14 +4,23 @@
 [![Coverage Status](https://coveralls.io/repos/github/SebRut/pygrocy/badge.svg?branch=master)](https://coveralls.io/github/SebRut/pygrocy?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/sebrut/pygrocy/badge)](https://www.codefactor.io/repository/github/sebrut/pygrocy)
 
-## Example
-```
+## Installation
+
+`pip install pygrocy`
+
+## Usage
+Import the package: 
+```python
 from pygrocy import Grocy
+```
 
-# get a grocy instance
+Obtain a grocy instance:
+```python
 grocy = Grocy("https://example.com/api/", "GROCY_API_KEY")
+```
 
-# get current stock
+Get current stock:
+```python
 for entry in grocy.stock():
     print("{} in stock for product id {}".format(entry.product_id, entry.amount))
 ```
