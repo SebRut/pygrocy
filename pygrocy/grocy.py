@@ -90,7 +90,8 @@ class Grocy(object):
         chores = [Chore(self._api_client, chore) for chore in raw_chores]
 
         if get_details:
-            [chore.get_details() for chore in chores]
+            for chore in chores:
+                chore.get_details()
         return chores
 
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
