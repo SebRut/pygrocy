@@ -49,6 +49,20 @@ class ProductData(object):
         return self._name
 
 
+class ChoreData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json['id'])
+        self._name = parsed_json['name']
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+
 class CurrentChoreResponse(object):
     def __init__(self, parsed_json):
         self._chore_id = parse_int(parsed_json['chore_id'], None)
@@ -147,6 +161,15 @@ class ProductDetailsResponse(object):
         return self._last_price
 
 
+class ChoreDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self._chore = ChoreData(parsed_json['chore'])
+
+    @property
+    def chore(self) -> ChoreData:
+        return self._chore
+
+
 class GrocyApiClient(object):
     def __init__(self, base_url, api_key):
         self._base_url = base_url
@@ -179,3 +202,9 @@ class GrocyApiClient(object):
         resp = requests.get(req_url, headers=self._headers)
         parsed_json = resp.json()
         return [CurrentChoreResponse(chore) for chore in parsed_json]
+
+    def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
+        req_url = urljoin(urljoin(self._base_url, "chores/"), str(chore_id))
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return ChoreDetailsResponse(parsed_json)
