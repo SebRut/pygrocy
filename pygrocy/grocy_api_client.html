@@ -22,40 +22,88 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">import json
+<pre><code class="python">from datetime import datetime
+from typing import List
 from urllib.parse import urljoin
 
 import requests
 
-from pygrocy.utils import parse_date, parse_int, parse_float
+from pygrocy.utils import parse_date, parse_float, parse_int
 
 
-class GrocyApiClient(object):
-    def __init__(self, base_url, api_key):
-        self._base_url = base_url
-        self._api_key = api_key
-        self._headers = {
-            &#34;accept&#34;: &#34;application/json&#34;,
-            &#34;GROCY-API-KEY&#34;: api_key
-        }
+class QuantityUnitData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+        self._name = parsed_json[&#39;name&#39;]
+        self._name_plural = parsed_json[&#39;name_plural&#39;]
+        self._description = parsed_json[&#39;description&#39;]
+        self._row_created_timestamp = parse_date(parsed_json[&#39;row_created_timestamp&#39;])
 
-    def get_stock(self):
-        req_url = urljoin(self._base_url, &#34;stock&#34;)
-        resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
-        return [CurrentStockResponse(response) for response in parsed_json]
 
-    def get_volatile_stock(self):
-        req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
-        resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
-        return CurrentVolatilStockResponse(parsed_json)
+class LocationData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+        self._name = parsed_json[&#39;name&#39;]
+        self._description = parsed_json[&#39;description&#39;]
+        self._row_created_timestamp = parse_date(parsed_json[&#39;row_created_timestamp&#39;])
 
-    def get_product(self, product_id):
-        req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
-        resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
-        return ProductDetailsResponse(parsed_json)
+
+class ProductData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+        self._name = parsed_json[&#39;name&#39;]
+        self._description = parsed_json.get(&#39;description&#39;, None)
+        self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
+        self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
+        self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
+        self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
+        self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
+        self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
+        self._allow_partial_units_in_stock = bool(parsed_json.get(&#39;allow_partial_units_in_stock&#39;, None) == &#34;true&#34;)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
+        self._min_stock_amount = parse_int(parsed_json.get(&#39;min_stock_amount&#39;, None), 0)
+        self._default_best_before_days = parse_int(parsed_json.get(&#39;default_best_before_days&#39;, None))
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+
+class ChoreData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+        self._name = parsed_json[&#39;name&#39;]
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+
+class CurrentChoreResponse(object):
+    def __init__(self, parsed_json):
+        self._chore_id = parse_int(parsed_json[&#39;chore_id&#39;], None)
+        self._last_tracked_time = parse_date(parsed_json[&#39;last_tracked_time&#39;])
+        self._next_estimated_execution_time = parse_date(parsed_json[&#39;next_estimated_execution_time&#39;])
+
+    @property
+    def chore_id(self) -&gt; int:
+        return self._chore_id
+
+    @property
+    def last_tracked_time(self) -&gt; datetime:
+        return self._last_tracked_time
+
+    @property
+    def next_estimated_execution_time(self) -&gt; datetime:
+        return self._next_estimated_execution_time
 
 
 class CurrentVolatilStockResponse(object):
@@ -65,15 +113,15 @@ class CurrentVolatilStockResponse(object):
         self._missing_products = [ProductData(product) for product in parsed_json[&#39;missing_products&#39;]]
 
     @property
-    def expiring_products(self):
+    def expiring_products(self) -&gt; List[ProductData]:
         return self._expiring_products
 
     @property
-    def expired_products(self):
+    def expired_products(self) -&gt; List[ProductData]:
         return self._expired_products
 
     @property
-    def missing_products(self):
+    def missing_products(self) -&gt; List[ProductData]:
         return self._missing_products
 
 
@@ -84,15 +132,15 @@ class CurrentStockResponse(object):
         self._best_before_date = parse_date(parsed_json[&#39;best_before_date&#39;])
 
     @property
-    def product_id(self):
+    def product_id(self) -&gt; int:
         return self._product_id
 
     @property
-    def amount(self):
+    def amount(self) -&gt; float:
         return self._amount
 
     @property
-    def best_before_date(self):
+    def best_before_date(self) -&gt; datetime:
         return self._best_before_date
 
 
@@ -113,70 +161,77 @@ class ProductDetailsResponse(object):
         self._location = LocationData(parsed_json[&#39;location&#39;])
 
     @property
-    def last_purchased(self):
+    def last_purchased(self) -&gt; datetime:
         return self._last_purchased
 
     @property
-    def last_used(self):
+    def last_used(self) -&gt; datetime:
         return self._last_used
 
     @property
-    def stock_amount(self):
+    def stock_amount(self) -&gt; int:
         return self._stock_amount
 
     @property
-    def stock_amount_opened(self):
+    def stock_amount_opened(self) -&gt; int:
         return self._stock_amount_opened
 
     @property
-    def next_best_before_date(self):
+    def next_best_before_date(self) -&gt; datetime:
         return self._next_best_before_date
 
     @property
-    def last_price(self):
+    def last_price(self) -&gt; float:
         return self._last_price
 
 
-class ProductData(object):
+class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json[&#39;id&#39;])
-        self._name = parsed_json[&#39;name&#39;]
-        self._description = parsed_json.get(&#39;description&#39;, None)
-        self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
-        self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
-        self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchase&#39;, None))
-        self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
-        self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
-        self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
-        self._allow_partial_units_in_stock = bool(parsed_json.get(&#39;allow_partial_units_in_stock&#39;, None) == &#34;true&#34;)
-        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
-        self._min_stock_amount = parse_int(parsed_json.get(&#39;min_stock_amount&#39;, None), 0)
-        self._default_best_before_days = parse_int(parsed_json.get(&#39;default_best_before_days&#39;, None))
+        self._chore = ChoreData(parsed_json[&#39;chore&#39;])
 
     @property
-    def id(self):
-        return self._id
-
-    @property
-    def name(self):
-        return self._name
+    def chore(self) -&gt; ChoreData:
+        return self._chore
 
 
-class QuantityUnitData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json[&#39;id&#39;])
-        self._name = parsed_json[&#39;name&#39;]
-        self._name_plural = parsed_json[&#39;name_plural&#39;]
-        self._description = parsed_json[&#39;description&#39;]
-        self._row_created_timestamp = parse_date(parsed_json[&#39;row_created_timestamp&#39;])
+class GrocyApiClient(object):
+    def __init__(self, base_url, api_key):
+        self._base_url = base_url
+        self._api_key = api_key
+        self._headers = {
+            &#34;accept&#34;: &#34;application/json&#34;,
+            &#34;GROCY-API-KEY&#34;: api_key
+        }
 
+    def get_stock(self) -&gt; List[CurrentStockResponse]:
+        req_url = urljoin(self._base_url, &#34;stock&#34;)
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return [CurrentStockResponse(response) for response in parsed_json]
 
-class LocationData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json[&#39;id&#39;])
-        self._name = parsed_json[&#39;name&#39;]
-        self._description = parsed_json[&#39;description&#39;]
-        self._row_created_timestamp = parse_date(parsed_json[&#39;row_created_timestamp&#39;])</code></pre>
+    def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
+        req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return CurrentVolatilStockResponse(parsed_json)
+
+    def get_product(self, product_id) -&gt; ProductDetailsResponse:
+        req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return ProductDetailsResponse(parsed_json)
+
+    def get_chores(self) -&gt; List[CurrentChoreResponse]:
+        req_url = urljoin(self._base_url, &#34;chores&#34;)
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return [CurrentChoreResponse(chore) for chore in parsed_json]
+
+    def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
+        req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return ChoreDetailsResponse(parsed_json)</code></pre>
 </details>
 </section>
 <section>
@@ -188,6 +243,186 @@ class LocationData(object):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="pygrocy.grocy_api_client.ChoreData"><code class="flex name class">
+<span>class <span class="ident">ChoreData</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ChoreData(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+        self._name = parsed_json[&#39;name&#39;]
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreData.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreData.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initialize self.
+See help(type(self)) for accurate signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, parsed_json):
+    self._id = parse_int(parsed_json[&#39;id&#39;])
+    self._name = parsed_json[&#39;name&#39;]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse"><code class="flex name class">
+<span>class <span class="ident">ChoreDetailsResponse</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ChoreDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self._chore = ChoreData(parsed_json[&#39;chore&#39;])
+
+    @property
+    def chore(self) -&gt; ChoreData:
+        return self._chore</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.chore"><code class="name">var <span class="ident">chore</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def chore(self) -&gt; ChoreData:
+    return self._chore</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initialize self.
+See help(type(self)) for accurate signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, parsed_json):
+    self._chore = ChoreData(parsed_json[&#39;chore&#39;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse"><code class="flex name class">
+<span>class <span class="ident">CurrentChoreResponse</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class CurrentChoreResponse(object):
+    def __init__(self, parsed_json):
+        self._chore_id = parse_int(parsed_json[&#39;chore_id&#39;], None)
+        self._last_tracked_time = parse_date(parsed_json[&#39;last_tracked_time&#39;])
+        self._next_estimated_execution_time = parse_date(parsed_json[&#39;next_estimated_execution_time&#39;])
+
+    @property
+    def chore_id(self) -&gt; int:
+        return self._chore_id
+
+    @property
+    def last_tracked_time(self) -&gt; datetime:
+        return self._last_tracked_time
+
+    @property
+    def next_estimated_execution_time(self) -&gt; datetime:
+        return self._next_estimated_execution_time</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.chore_id"><code class="name">var <span class="ident">chore_id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def chore_id(self) -&gt; int:
+    return self._chore_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.last_tracked_time"><code class="name">var <span class="ident">last_tracked_time</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def last_tracked_time(self) -&gt; datetime:
+    return self._last_tracked_time</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def next_estimated_execution_time(self) -&gt; datetime:
+    return self._next_estimated_execution_time</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initialize self.
+See help(type(self)) for accurate signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, parsed_json):
+    self._chore_id = parse_int(parsed_json[&#39;chore_id&#39;], None)
+    self._last_tracked_time = parse_date(parsed_json[&#39;last_tracked_time&#39;])
+    self._next_estimated_execution_time = parse_date(parsed_json[&#39;next_estimated_execution_time&#39;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentStockResponse</span></span>
 </code></dt>
@@ -202,15 +437,15 @@ class LocationData(object):
         self._best_before_date = parse_date(parsed_json[&#39;best_before_date&#39;])
 
     @property
-    def product_id(self):
+    def product_id(self) -&gt; int:
         return self._product_id
 
     @property
-    def amount(self):
+    def amount(self) -&gt; float:
         return self._amount
 
     @property
-    def best_before_date(self):
+    def best_before_date(self) -&gt; datetime:
         return self._best_before_date</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -221,7 +456,7 @@ class LocationData(object):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def amount(self):
+def amount(self) -&gt; float:
     return self._amount</code></pre>
 </details>
 </dd>
@@ -231,7 +466,7 @@ def amount(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def best_before_date(self):
+def best_before_date(self) -&gt; datetime:
     return self._best_before_date</code></pre>
 </details>
 </dd>
@@ -241,7 +476,7 @@ def best_before_date(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def product_id(self):
+def product_id(self) -&gt; int:
     return self._product_id</code></pre>
 </details>
 </dd>
@@ -278,15 +513,15 @@ See help(type(self)) for accurate signature.</p></section>
         self._missing_products = [ProductData(product) for product in parsed_json[&#39;missing_products&#39;]]
 
     @property
-    def expiring_products(self):
+    def expiring_products(self) -&gt; List[ProductData]:
         return self._expiring_products
 
     @property
-    def expired_products(self):
+    def expired_products(self) -&gt; List[ProductData]:
         return self._expired_products
 
     @property
-    def missing_products(self):
+    def missing_products(self) -&gt; List[ProductData]:
         return self._missing_products</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -297,7 +532,7 @@ See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def expired_products(self):
+def expired_products(self) -&gt; List[ProductData]:
     return self._expired_products</code></pre>
 </details>
 </dd>
@@ -307,7 +542,7 @@ def expired_products(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def expiring_products(self):
+def expiring_products(self) -&gt; List[ProductData]:
     return self._expiring_products</code></pre>
 </details>
 </dd>
@@ -317,7 +552,7 @@ def expiring_products(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def missing_products(self):
+def missing_products(self) -&gt; List[ProductData]:
     return self._missing_products</code></pre>
 </details>
 </dd>
@@ -356,23 +591,35 @@ See help(type(self)) for accurate signature.</p></section>
             &#34;GROCY-API-KEY&#34;: api_key
         }
 
-    def get_stock(self):
+    def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
         resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
+        parsed_json = resp.json()
         return [CurrentStockResponse(response) for response in parsed_json]
 
-    def get_volatile_stock(self):
+    def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
         resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
+        parsed_json = resp.json()
         return CurrentVolatilStockResponse(parsed_json)
 
-    def get_product(self, product_id):
+    def get_product(self, product_id) -&gt; ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
         resp = requests.get(req_url, headers=self._headers)
-        parsed_json = json.loads(resp.text)
-        return ProductDetailsResponse(parsed_json)</code></pre>
+        parsed_json = resp.json()
+        return ProductDetailsResponse(parsed_json)
+
+    def get_chores(self) -&gt; List[CurrentChoreResponse]:
+        req_url = urljoin(self._base_url, &#34;chores&#34;)
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return [CurrentChoreResponse(chore) for chore in parsed_json]
+
+    def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
+        req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
+        resp = requests.get(req_url, headers=self._headers)
+        parsed_json = resp.json()
+        return ChoreDetailsResponse(parsed_json)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -393,6 +640,34 @@ See help(type(self)) for accurate signature.</p></section>
     }</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
+<span>def <span class="ident">get_chore</span></span>(<span>self, chore_id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
+    req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
+    resp = requests.get(req_url, headers=self._headers)
+    parsed_json = resp.json()
+    return ChoreDetailsResponse(parsed_json)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chores"><code class="name flex">
+<span>def <span class="ident">get_chores</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_chores(self) -&gt; List[CurrentChoreResponse]:
+    req_url = urljoin(self._base_url, &#34;chores&#34;)
+    resp = requests.get(req_url, headers=self._headers)
+    parsed_json = resp.json()
+    return [CurrentChoreResponse(chore) for chore in parsed_json]</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product"><code class="name flex">
 <span>def <span class="ident">get_product</span></span>(<span>self, product_id)</span>
 </code></dt>
@@ -400,10 +675,10 @@ See help(type(self)) for accurate signature.</p></section>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def get_product(self, product_id):
+<pre><code class="python">def get_product(self, product_id) -&gt; ProductDetailsResponse:
     req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
     resp = requests.get(req_url, headers=self._headers)
-    parsed_json = json.loads(resp.text)
+    parsed_json = resp.json()
     return ProductDetailsResponse(parsed_json)</code></pre>
 </details>
 </dd>
@@ -414,10 +689,10 @@ See help(type(self)) for accurate signature.</p></section>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def get_stock(self):
+<pre><code class="python">def get_stock(self) -&gt; List[CurrentStockResponse]:
     req_url = urljoin(self._base_url, &#34;stock&#34;)
     resp = requests.get(req_url, headers=self._headers)
-    parsed_json = json.loads(resp.text)
+    parsed_json = resp.json()
     return [CurrentStockResponse(response) for response in parsed_json]</code></pre>
 </details>
 </dd>
@@ -428,10 +703,10 @@ See help(type(self)) for accurate signature.</p></section>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def get_volatile_stock(self):
+<pre><code class="python">def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
     req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
     resp = requests.get(req_url, headers=self._headers)
-    parsed_json = json.loads(resp.text)
+    parsed_json = resp.json()
     return CurrentVolatilStockResponse(parsed_json)</code></pre>
 </details>
 </dd>
@@ -484,7 +759,7 @@ See help(type(self)) for accurate signature.</p></section>
         self._description = parsed_json.get(&#39;description&#39;, None)
         self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
         self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
-        self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchase&#39;, None))
+        self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
         self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
         self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
@@ -494,11 +769,11 @@ See help(type(self)) for accurate signature.</p></section>
         self._default_best_before_days = parse_int(parsed_json.get(&#39;default_best_before_days&#39;, None))
 
     @property
-    def id(self):
+    def id(self) -&gt; int:
         return self._id
 
     @property
-    def name(self):
+    def name(self) -&gt; str:
         return self._name</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -509,7 +784,7 @@ See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def id(self):
+def id(self) -&gt; int:
     return self._id</code></pre>
 </details>
 </dd>
@@ -519,7 +794,7 @@ def id(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def name(self):
+def name(self) -&gt; str:
     return self._name</code></pre>
 </details>
 </dd>
@@ -540,7 +815,7 @@ See help(type(self)) for accurate signature.</p></section>
     self._description = parsed_json.get(&#39;description&#39;, None)
     self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
     self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
-    self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchase&#39;, None))
+    self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
     self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
     self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
     self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
@@ -576,27 +851,27 @@ See help(type(self)) for accurate signature.</p></section>
         self._location = LocationData(parsed_json[&#39;location&#39;])
 
     @property
-    def last_purchased(self):
+    def last_purchased(self) -&gt; datetime:
         return self._last_purchased
 
     @property
-    def last_used(self):
+    def last_used(self) -&gt; datetime:
         return self._last_used
 
     @property
-    def stock_amount(self):
+    def stock_amount(self) -&gt; int:
         return self._stock_amount
 
     @property
-    def stock_amount_opened(self):
+    def stock_amount_opened(self) -&gt; int:
         return self._stock_amount_opened
 
     @property
-    def next_best_before_date(self):
+    def next_best_before_date(self) -&gt; datetime:
         return self._next_best_before_date
 
     @property
-    def last_price(self):
+    def last_price(self) -&gt; float:
         return self._last_price</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -607,7 +882,7 @@ See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def last_price(self):
+def last_price(self) -&gt; float:
     return self._last_price</code></pre>
 </details>
 </dd>
@@ -617,7 +892,7 @@ def last_price(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def last_purchased(self):
+def last_purchased(self) -&gt; datetime:
     return self._last_purchased</code></pre>
 </details>
 </dd>
@@ -627,7 +902,7 @@ def last_purchased(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def last_used(self):
+def last_used(self) -&gt; datetime:
     return self._last_used</code></pre>
 </details>
 </dd>
@@ -637,7 +912,7 @@ def last_used(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def next_best_before_date(self):
+def next_best_before_date(self) -&gt; datetime:
     return self._next_best_before_date</code></pre>
 </details>
 </dd>
@@ -647,7 +922,7 @@ def next_best_before_date(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def stock_amount(self):
+def stock_amount(self) -&gt; int:
     return self._stock_amount</code></pre>
 </details>
 </dd>
@@ -657,7 +932,7 @@ def stock_amount(self):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def stock_amount_opened(self):
+def stock_amount_opened(self) -&gt; int:
     return self._stock_amount_opened</code></pre>
 </details>
 </dd>
@@ -742,6 +1017,30 @@ See help(type(self)) for accurate signature.</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="pygrocy.grocy_api_client.ChoreData" href="#pygrocy.grocy_api_client.ChoreData">ChoreData</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.__init__" href="#pygrocy.grocy_api_client.ChoreData.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.id" href="#pygrocy.grocy_api_client.ChoreData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.name" href="#pygrocy.grocy_api_client.ChoreData.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse" href="#pygrocy.grocy_api_client.ChoreDetailsResponse">ChoreDetailsResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.__init__" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.chore" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.chore">chore</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse" href="#pygrocy.grocy_api_client.CurrentChoreResponse">CurrentChoreResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse.__init__" href="#pygrocy.grocy_api_client.CurrentChoreResponse.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse.chore_id" href="#pygrocy.grocy_api_client.CurrentChoreResponse.chore_id">chore_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse.last_tracked_time" href="#pygrocy.grocy_api_client.CurrentChoreResponse.last_tracked_time">last_tracked_time</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time" href="#pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time">next_estimated_execution_time</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.CurrentStockResponse.__init__" href="#pygrocy.grocy_api_client.CurrentStockResponse.__init__">__init__</a></code></li>
@@ -761,8 +1060,10 @@ See help(type(self)) for accurate signature.</p></section>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.GrocyApiClient" href="#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.__init__" href="#pygrocy.grocy_api_client.GrocyApiClient.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock">get_volatile_stock</a></code></li>
