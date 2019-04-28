@@ -14,6 +14,10 @@ setuptools.setup(
     url="https://github.com/sebrut/pygrocy",
     license='MIT',
     packages=setuptools.find_packages(),
+    install_requires=[
+        "requests",
+        "iso8601"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
