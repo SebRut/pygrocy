@@ -26,22 +26,27 @@
 from typing import List
 
 from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
+                               CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
-                               ProductData, ProductDetailsResponse, CurrentStockResponse)
+                               ProductData, ProductDetailsResponse,
+                               TransactionType)
 
 
-class Stock(object):
-    def __init__(self, api_client: GrocyApiClient, stock_response: CurrentStockResponse):
-        self._api_client = api_client
-
+class Product(object):
+    def __init__(self, stock_response: CurrentStockResponse):
         self._product_id = stock_response.product_id
         self._available_amount = stock_response.amount
         self._best_before_date = stock_response.best_before_date
 
-    def update(self):
-        product_response = self._api_client.get_product(self.product_id)
-        self._available_amount = product_response.stock_amount
-        self._best_before_date = product_response.next_best_before_date
+        self._name = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_product(self.product_id)
+        self._name = details.product.name
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
 
     @property
     def product_id(self) -&gt; int:
@@ -57,17 +62,15 @@ class Stock(object):
 
 
 class Chore(object):
-    def __init__(self, api_client: GrocyApiClient, raw_chore: CurrentChoreResponse):
-        self._api_client = api_client
+    def __init__(self, raw_chore: CurrentChoreResponse):
         self._chore_id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
         self._name = None
 
-    def get_details(self):
-        details = self._api_client.get_chore(self.chore_id)
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_chore(self.chore_id)
         self._name = details.chore.name
-
 
     @property
     def chore_id(self) -&gt; int:
@@ -86,13 +89,17 @@ class Chore(object):
         return self._name
 
 
-
 class Grocy(object):
     def __init__(self, base_url, api_key):
         self._api_client = GrocyApiClient(base_url, api_key)
 
-    def stock(self) -&gt; List[Stock]:
-        return [Stock(self._api_client, resp) for resp in self._api_client.get_stock()]
+    def stock(self, get_details: bool = False) -&gt; List[Product]:
+        stock = [Product(resp) for resp in self._api_client.get_stock()]
+
+        if get_details:
+            for item in stock:
+                item.get_details(self._api_client)
+        return stock
 
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
@@ -111,15 +118,23 @@ class Grocy(object):
 
     def chores(self, get_details: bool = False) -&gt; List[Chore]:
         raw_chores = self._api_client.get_chores()
-        chores = [Chore(self._api_client, chore) for chore in raw_chores]
+        chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
             for chore in chores:
-                chore.get_details()
+                chore.get_details(self._api_client)
         return chores
 
     def chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
-        return self._api_client.get_chore(chore_id)</code></pre>
+        return self._api_client.get_chore(chore_id)
+
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)</code></pre>
 </details>
 </section>
 <section>
@@ -139,17 +154,15 @@ class Grocy(object):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Chore(object):
-    def __init__(self, api_client: GrocyApiClient, raw_chore: CurrentChoreResponse):
-        self._api_client = api_client
+    def __init__(self, raw_chore: CurrentChoreResponse):
         self._chore_id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
         self._name = None
 
-    def get_details(self):
-        details = self._api_client.get_chore(self.chore_id)
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_chore(self.chore_id)
         self._name = details.chore.name
-
 
     @property
     def chore_id(self) -&gt; int:
@@ -213,15 +226,14 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <h3>Methods</h3>
 <dl>
 <dt id="pygrocy.grocy.Chore.__init__"><code class="name flex">
-<span>def <span class="ident">__init__</span></span>(<span>self, api_client, raw_chore)</span>
+<span>def <span class="ident">__init__</span></span>(<span>self, raw_chore)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Initialize self.
 See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def __init__(self, api_client: GrocyApiClient, raw_chore: CurrentChoreResponse):
-    self._api_client = api_client
+<pre><code class="python">def __init__(self, raw_chore: CurrentChoreResponse):
     self._chore_id = raw_chore.chore_id
     self._last_tracked_time = raw_chore.last_tracked_time
     self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
@@ -229,14 +241,14 @@ See help(type(self)) for accurate signature.</p></section>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Chore.get_details"><code class="name flex">
-<span>def <span class="ident">get_details</span></span>(<span>self)</span>
+<span>def <span class="ident">get_details</span></span>(<span>self, api_client)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def get_details(self):
-    details = self._api_client.get_chore(self.chore_id)
+<pre><code class="python">def get_details(self, api_client: GrocyApiClient):
+    details = api_client.get_chore(self.chore_id)
     self._name = details.chore.name</code></pre>
 </details>
 </dd>
@@ -253,8 +265,13 @@ See help(type(self)) for accurate signature.</p></section>
     def __init__(self, base_url, api_key):
         self._api_client = GrocyApiClient(base_url, api_key)
 
-    def stock(self) -&gt; List[Stock]:
-        return [Stock(self._api_client, resp) for resp in self._api_client.get_stock()]
+    def stock(self, get_details: bool = False) -&gt; List[Product]:
+        stock = [Product(resp) for resp in self._api_client.get_stock()]
+
+        if get_details:
+            for item in stock:
+                item.get_details(self._api_client)
+        return stock
 
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
@@ -273,15 +290,23 @@ See help(type(self)) for accurate signature.</p></section>
 
     def chores(self, get_details: bool = False) -&gt; List[Chore]:
         raw_chores = self._api_client.get_chores()
-        chores = [Chore(self._api_client, chore) for chore in raw_chores]
+        chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
             for chore in chores:
-                chore.get_details()
+                chore.get_details(self._api_client)
         return chores
 
     def chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
-        return self._api_client.get_chore(chore_id)</code></pre>
+        return self._api_client.get_chore(chore_id)
+
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -295,6 +320,18 @@ See help(type(self)) for accurate signature.</p></section>
 <summary>Source code</summary>
 <pre><code class="python">def __init__(self, base_url, api_key):
     self._api_client = GrocyApiClient(base_url, api_key)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.add_product"><code class="name flex">
+<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=&lt;TransactionType.PURCHASE: &#39;purchase&#39;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                transaction_type: TransactionType = TransactionType.PURCHASE):
+    return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.chore"><code class="name flex">
@@ -317,12 +354,24 @@ See help(type(self)) for accurate signature.</p></section>
 <summary>Source code</summary>
 <pre><code class="python">def chores(self, get_details: bool = False) -&gt; List[Chore]:
     raw_chores = self._api_client.get_chores()
-    chores = [Chore(self._api_client, chore) for chore in raw_chores]
+    chores = [Chore(chore) for chore in raw_chores]
 
     if get_details:
         for chore in chores:
-            chore.get_details()
+            chore.get_details(self._api_client)
     return chores</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.consume_product"><code class="name flex">
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=&lt;TransactionType.CONSUME: &#39;consume&#39;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                    transaction_type: TransactionType = TransactionType.CONSUME):
+    return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.expired_products"><code class="name flex">
@@ -370,14 +419,19 @@ See help(type(self)) for accurate signature.</p></section>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.stock"><code class="name flex">
-<span>def <span class="ident">stock</span></span>(<span>self)</span>
+<span>def <span class="ident">stock</span></span>(<span>self, get_details=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def stock(self) -&gt; List[Stock]:
-    return [Stock(self._api_client, resp) for resp in self._api_client.get_stock()]</code></pre>
+<pre><code class="python">def stock(self, get_details: bool = False) -&gt; List[Product]:
+    stock = [Product(resp) for resp in self._api_client.get_stock()]
+
+    if get_details:
+        for item in stock:
+            item.get_details(self._api_client)
+    return stock</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.volatile_stock"><code class="name flex">
@@ -393,25 +447,28 @@ See help(type(self)) for accurate signature.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="pygrocy.grocy.Stock"><code class="flex name class">
-<span>class <span class="ident">Stock</span></span>
+<dt id="pygrocy.grocy.Product"><code class="flex name class">
+<span>class <span class="ident">Product</span></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Stock(object):
-    def __init__(self, api_client: GrocyApiClient, stock_response: CurrentStockResponse):
-        self._api_client = api_client
-
+<pre><code class="python">class Product(object):
+    def __init__(self, stock_response: CurrentStockResponse):
         self._product_id = stock_response.product_id
         self._available_amount = stock_response.amount
         self._best_before_date = stock_response.best_before_date
 
-    def update(self):
-        product_response = self._api_client.get_product(self.product_id)
-        self._available_amount = product_response.stock_amount
-        self._best_before_date = product_response.next_best_before_date
+        self._name = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_product(self.product_id)
+        self._name = details.product.name
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
 
     @property
     def product_id(self) -&gt; int:
@@ -427,7 +484,7 @@ See help(type(self)) for accurate signature.</p></section>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.grocy.Stock.available_amount"><code class="name">var <span class="ident">available_amount</span></code></dt>
+<dt id="pygrocy.grocy.Product.available_amount"><code class="name">var <span class="ident">available_amount</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -437,7 +494,7 @@ def available_amount(self) -&gt; float:
     return self._available_amount</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Stock.best_before_date"><code class="name">var <span class="ident">best_before_date</span></code></dt>
+<dt id="pygrocy.grocy.Product.best_before_date"><code class="name">var <span class="ident">best_before_date</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -447,7 +504,17 @@ def best_before_date(self) -&gt; datetime:
     return self._best_before_date</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Stock.product_id"><code class="name">var <span class="ident">product_id</span></code></dt>
+<dt id="pygrocy.grocy.Product.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Product.product_id"><code class="name">var <span class="ident">product_id</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -460,33 +527,32 @@ def product_id(self) -&gt; int:
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="pygrocy.grocy.Stock.__init__"><code class="name flex">
-<span>def <span class="ident">__init__</span></span>(<span>self, api_client, stock_response)</span>
+<dt id="pygrocy.grocy.Product.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, stock_response)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Initialize self.
 See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def __init__(self, api_client: GrocyApiClient, stock_response: CurrentStockResponse):
-    self._api_client = api_client
-
+<pre><code class="python">def __init__(self, stock_response: CurrentStockResponse):
     self._product_id = stock_response.product_id
     self._available_amount = stock_response.amount
-    self._best_before_date = stock_response.best_before_date</code></pre>
+    self._best_before_date = stock_response.best_before_date
+
+    self._name = None</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Stock.update"><code class="name flex">
-<span>def <span class="ident">update</span></span>(<span>self)</span>
+<dt id="pygrocy.grocy.Product.get_details"><code class="name flex">
+<span>def <span class="ident">get_details</span></span>(<span>self, api_client)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def update(self):
-    product_response = self._api_client.get_product(self.product_id)
-    self._available_amount = product_response.stock_amount
-    self._best_before_date = product_response.next_best_before_date</code></pre>
+<pre><code class="python">def get_details(self, api_client: GrocyApiClient):
+    details = api_client.get_product(self.product_id)
+    self._name = details.product.name</code></pre>
 </details>
 </dd>
 </dl>
@@ -522,8 +588,10 @@ See help(type(self)) for accurate signature.</p></section>
 <h4><code><a title="pygrocy.grocy.Grocy" href="#pygrocy.grocy.Grocy">Grocy</a></code></h4>
 <ul class="two-column">
 <li><code><a title="pygrocy.grocy.Grocy.__init__" href="#pygrocy.grocy.Grocy.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.add_product" href="#pygrocy.grocy.Grocy.add_product">add_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.chore" href="#pygrocy.grocy.Grocy.chore">chore</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.chores" href="#pygrocy.grocy.Grocy.chores">chores</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.consume_product" href="#pygrocy.grocy.Grocy.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expired_products" href="#pygrocy.grocy.Grocy.expired_products">expired_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expiring_products" href="#pygrocy.grocy.Grocy.expiring_products">expiring_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.missing_products" href="#pygrocy.grocy.Grocy.missing_products">missing_products</a></code></li>
@@ -533,13 +601,14 @@ See help(type(self)) for accurate signature.</p></section>
 </ul>
 </li>
 <li>
-<h4><code><a title="pygrocy.grocy.Stock" href="#pygrocy.grocy.Stock">Stock</a></code></h4>
-<ul class="">
-<li><code><a title="pygrocy.grocy.Stock.__init__" href="#pygrocy.grocy.Stock.__init__">__init__</a></code></li>
-<li><code><a title="pygrocy.grocy.Stock.available_amount" href="#pygrocy.grocy.Stock.available_amount">available_amount</a></code></li>
-<li><code><a title="pygrocy.grocy.Stock.best_before_date" href="#pygrocy.grocy.Stock.best_before_date">best_before_date</a></code></li>
-<li><code><a title="pygrocy.grocy.Stock.product_id" href="#pygrocy.grocy.Stock.product_id">product_id</a></code></li>
-<li><code><a title="pygrocy.grocy.Stock.update" href="#pygrocy.grocy.Stock.update">update</a></code></li>
+<h4><code><a title="pygrocy.grocy.Product" href="#pygrocy.grocy.Product">Product</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygrocy.grocy.Product.__init__" href="#pygrocy.grocy.Product.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.available_amount" href="#pygrocy.grocy.Product.available_amount">available_amount</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.best_before_date" href="#pygrocy.grocy.Product.best_before_date">best_before_date</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.get_details" href="#pygrocy.grocy.Product.get_details">get_details</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.name" href="#pygrocy.grocy.Product.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.product_id" href="#pygrocy.grocy.Product.product_id">product_id</a></code></li>
 </ul>
 </li>
 </ul>

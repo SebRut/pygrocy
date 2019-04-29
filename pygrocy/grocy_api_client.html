@@ -23,6 +23,7 @@
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from datetime import datetime
+from enum import Enum
 from typing import List
 from urllib.parse import urljoin
 
@@ -85,6 +86,13 @@ class ChoreData(object):
     @property
     def name(self) -&gt; str:
         return self._name
+
+
+class UserDto(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+
+        self._username = parsed_json[&#39;username&#39;]
 
 
 class CurrentChoreResponse(object):
@@ -184,14 +192,26 @@ class ProductDetailsResponse(object):
     def last_price(self) -&gt; float:
         return self._last_price
 
+    @property
+    def product(self) -&gt; ProductData:
+        return self._product
+
 
 class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json[&#39;chore&#39;])
+        self._last_done_by = UserDto(parsed_json[&#39;last_done_by&#39;])
 
     @property
     def chore(self) -&gt; ChoreData:
         return self._chore
+
+
+class TransactionType(Enum):
+    PURCHASE = &#34;purchase&#34;
+    CONSUME = &#34;consume&#34;
+    INVENTORY_CORRECTION = &#34;inventory-correction&#34;
+    PRODUCT_OPENED = &#34;product-opened&#34;
 
 
 class GrocyApiClient(object):
@@ -231,7 +251,32 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
         resp = requests.get(req_url, headers=self._headers)
         parsed_json = resp.json()
-        return ChoreDetailsResponse(parsed_json)</code></pre>
+        return ChoreDetailsResponse(parsed_json)
+
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        data = {
+            &#34;amount&#34;: amount,
+            &#34;transaction_type&#34;: transaction_type.value,
+            &#34;price&#34;: price
+        }
+
+        if best_before_date is not None:
+            data[&#34;best_before_date&#34;] = best_before_date.isoformat()
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
+        requests.post(req_url, headers=self._headers, data=data)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        data = {
+            &#34;amount&#34;: amount,
+            &#34;spoiled&#34;: spoiled,
+            &#34;transaction_type&#34;: transaction_type.value
+        }
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
+        requests.post(req_url, headers=self._headers, data=data)</code></pre>
 </details>
 </section>
 <section>
@@ -313,6 +358,7 @@ See help(type(self)) for accurate signature.</p></section>
 <pre><code class="python">class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json[&#39;chore&#39;])
+        self._last_done_by = UserDto(parsed_json[&#39;last_done_by&#39;])
 
     @property
     def chore(self) -&gt; ChoreData:
@@ -342,7 +388,8 @@ See help(type(self)) for accurate signature.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def __init__(self, parsed_json):
-    self._chore = ChoreData(parsed_json[&#39;chore&#39;])</code></pre>
+    self._chore = ChoreData(parsed_json[&#39;chore&#39;])
+    self._last_done_by = UserDto(parsed_json[&#39;last_done_by&#39;])</code></pre>
 </details>
 </dd>
 </dl>
@@ -619,7 +666,32 @@ See help(type(self)) for accurate signature.</p></section>
         req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
         resp = requests.get(req_url, headers=self._headers)
         parsed_json = resp.json()
-        return ChoreDetailsResponse(parsed_json)</code></pre>
+        return ChoreDetailsResponse(parsed_json)
+
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        data = {
+            &#34;amount&#34;: amount,
+            &#34;transaction_type&#34;: transaction_type.value,
+            &#34;price&#34;: price
+        }
+
+        if best_before_date is not None:
+            data[&#34;best_before_date&#34;] = best_before_date.isoformat()
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
+        requests.post(req_url, headers=self._headers, data=data)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        data = {
+            &#34;amount&#34;: amount,
+            &#34;spoiled&#34;: spoiled,
+            &#34;transaction_type&#34;: transaction_type.value
+        }
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
+        requests.post(req_url, headers=self._headers, data=data)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -638,6 +710,47 @@ See help(type(self)) for accurate signature.</p></section>
         &#34;accept&#34;: &#34;application/json&#34;,
         &#34;GROCY-API-KEY&#34;: api_key
     }</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.add_product"><code class="name flex">
+<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=&lt;TransactionType.PURCHASE: &#39;purchase&#39;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                transaction_type: TransactionType = TransactionType.PURCHASE):
+    data = {
+        &#34;amount&#34;: amount,
+        &#34;transaction_type&#34;: transaction_type.value,
+        &#34;price&#34;: price
+    }
+
+    if best_before_date is not None:
+        data[&#34;best_before_date&#34;] = best_before_date.isoformat()
+
+    req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
+    requests.post(req_url, headers=self._headers, data=data)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.consume_product"><code class="name flex">
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=&lt;TransactionType.CONSUME: &#39;consume&#39;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                    transaction_type: TransactionType = TransactionType.CONSUME):
+    data = {
+        &#34;amount&#34;: amount,
+        &#34;spoiled&#34;: spoiled,
+        &#34;transaction_type&#34;: transaction_type.value
+    }
+
+    req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
+    requests.post(req_url, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
@@ -872,7 +985,11 @@ See help(type(self)) for accurate signature.</p></section>
 
     @property
     def last_price(self) -&gt; float:
-        return self._last_price</code></pre>
+        return self._last_price
+
+    @property
+    def product(self) -&gt; ProductData:
+        return self._product</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -914,6 +1031,16 @@ def last_used(self) -&gt; datetime:
 <pre><code class="python">@property
 def next_best_before_date(self) -&gt; datetime:
     return self._next_best_before_date</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.product"><code class="name">var <span class="ident">product</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def product(self) -&gt; ProductData:
+    return self._product</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount"><code class="name">var <span class="ident">stock_amount</span></code></dt>
@@ -1000,6 +1127,71 @@ See help(type(self)) for accurate signature.</p></section>
 </dd>
 </dl>
 </dd>
+<dt id="pygrocy.grocy_api_client.TransactionType"><code class="flex name class">
+<span>class <span class="ident">TransactionType</span></span>
+<span>(</span><span><small>ancestors:</small> enum.Enum)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TransactionType(Enum):
+    PURCHASE = &#34;purchase&#34;
+    CONSUME = &#34;consume&#34;
+    INVENTORY_CORRECTION = &#34;inventory-correction&#34;
+    PRODUCT_OPENED = &#34;product-opened&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.TransactionType.CONSUME"><code class="name">var <span class="ident">CONSUME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="pygrocy.grocy_api_client.TransactionType.INVENTORY_CORRECTION"><code class="name">var <span class="ident">INVENTORY_CORRECTION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="pygrocy.grocy_api_client.TransactionType.PRODUCT_OPENED"><code class="name">var <span class="ident">PRODUCT_OPENED</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="pygrocy.grocy_api_client.TransactionType.PURCHASE"><code class="name">var <span class="ident">PURCHASE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.UserDto"><code class="flex name class">
+<span>class <span class="ident">UserDto</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class UserDto(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json[&#39;id&#39;])
+
+        self._username = parsed_json[&#39;username&#39;]</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.UserDto.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initialize self.
+See help(type(self)) for accurate signature.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, parsed_json):
+    self._id = parse_int(parsed_json[&#39;id&#39;])
+
+    self._username = parsed_json[&#39;username&#39;]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -1062,6 +1254,8 @@ See help(type(self)) for accurate signature.</p></section>
 <h4><code><a title="pygrocy.grocy_api_client.GrocyApiClient" href="#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a></code></h4>
 <ul class="two-column">
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.__init__" href="#pygrocy.grocy_api_client.GrocyApiClient.__init__">__init__</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product">add_product</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.consume_product" href="#pygrocy.grocy_api_client.GrocyApiClient.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
@@ -1091,6 +1285,7 @@ See help(type(self)) for accurate signature.</p></section>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased">last_purchased</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_used" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_used">last_used</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date" href="#pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date">next_best_before_date</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.product" href="#pygrocy.grocy_api_client.ProductDetailsResponse.product">product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount" href="#pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount">stock_amount</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened" href="#pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened">stock_amount_opened</a></code></li>
 </ul>
@@ -1099,6 +1294,21 @@ See help(type(self)) for accurate signature.</p></section>
 <h4><code><a title="pygrocy.grocy_api_client.QuantityUnitData" href="#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.__init__" href="#pygrocy.grocy_api_client.QuantityUnitData.__init__">__init__</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.TransactionType" href="#pygrocy.grocy_api_client.TransactionType">TransactionType</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.TransactionType.CONSUME" href="#pygrocy.grocy_api_client.TransactionType.CONSUME">CONSUME</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TransactionType.INVENTORY_CORRECTION" href="#pygrocy.grocy_api_client.TransactionType.INVENTORY_CORRECTION">INVENTORY_CORRECTION</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TransactionType.PRODUCT_OPENED" href="#pygrocy.grocy_api_client.TransactionType.PRODUCT_OPENED">PRODUCT_OPENED</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TransactionType.PURCHASE" href="#pygrocy.grocy_api_client.TransactionType.PURCHASE">PURCHASE</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.UserDto.__init__" href="#pygrocy.grocy_api_client.UserDto.__init__">__init__</a></code></li>
 </ul>
 </li>
 </ul>
