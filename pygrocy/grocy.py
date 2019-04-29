@@ -2,8 +2,10 @@ from datetime import datetime
 from typing import List
 
 from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
+                               CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
-                               ProductData, ProductDetailsResponse, CurrentStockResponse)
+                               ProductData, ProductDetailsResponse,
+                               TransactionType)
 
 
 class Product(object):
@@ -67,8 +69,13 @@ class Grocy(object):
     def __init__(self, base_url, api_key):
         self._api_client = GrocyApiClient(base_url, api_key)
 
-    def stock(self) -> List[Product]:
-        return [Product(resp) for resp in self._api_client.get_stock()]
+    def stock(self, get_details: bool = False) -> List[Product]:
+        stock = [Product(resp) for resp in self._api_client.get_stock()]
+
+        if get_details:
+            for item in stock:
+                item.get_details(self._api_client)
+        return stock
 
     def volatile_stock(self) -> CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
@@ -96,3 +103,7 @@ class Grocy(object):
 
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)

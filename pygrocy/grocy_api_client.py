@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import List
 from urllib.parse import urljoin
 
@@ -182,6 +183,13 @@ class ChoreDetailsResponse(object):
         return self._chore
 
 
+class TransactionType(Enum):
+    PURCHASE = "purchase"
+    CONSUME = "consume"
+    INVENTORY_CORRECTION = "inventory-correction"
+    PRODUCT_OPENED = "product-opened"
+
+
 class GrocyApiClient(object):
     def __init__(self, base_url, api_key):
         self._base_url = base_url
@@ -220,3 +228,14 @@ class GrocyApiClient(object):
         resp = requests.get(req_url, headers=self._headers)
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        data = {
+            "amount": amount,
+            "spoiled": spoiled,
+            "transaction_type": transaction_type.value
+        }
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id + 300) + "/"), "consume")
+        requests.post(req_url, headers=self._headers, data=data)
