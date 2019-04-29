@@ -104,6 +104,10 @@ class Grocy(object):
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
 
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)

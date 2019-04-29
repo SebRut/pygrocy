@@ -229,6 +229,20 @@ class GrocyApiClient(object):
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        data = {
+            "amount": amount,
+            "transaction_type": transaction_type.value,
+            "price": price
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = best_before_date.isoformat()
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
+        requests.post(req_url, headers=self._headers, data=data)
+
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         data = {
@@ -237,5 +251,5 @@ class GrocyApiClient(object):
             "transaction_type": transaction_type.value
         }
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id + 300) + "/"), "consume")
+        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
         requests.post(req_url, headers=self._headers, data=data)
