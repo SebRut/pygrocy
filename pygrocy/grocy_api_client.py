@@ -63,6 +63,13 @@ class ChoreData(object):
         return self._name
 
 
+class UserDto(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json['id'])
+
+        self._username = parsed_json['username']
+
+
 class CurrentChoreResponse(object):
     def __init__(self, parsed_json):
         self._chore_id = parse_int(parsed_json['chore_id'], None)
@@ -160,10 +167,15 @@ class ProductDetailsResponse(object):
     def last_price(self) -> float:
         return self._last_price
 
+    @property
+    def product(self) -> ProductData:
+        return self._product
+
 
 class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json['chore'])
+        self._last_done_by = UserDto(parsed_json['last_done_by'])
 
     @property
     def chore(self) -> ChoreData:
