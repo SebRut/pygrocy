@@ -18,6 +18,8 @@ class Product(object):
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.product_id)
+        if details is None:
+            return
         self._name = details.product.name
 
     @property
@@ -70,7 +72,10 @@ class Grocy(object):
         self._api_client = GrocyApiClient(base_url, api_key)
 
     def stock(self, get_details: bool = False) -> List[Product]:
-        stock = [Product(resp) for resp in self._api_client.get_stock()]
+        raw_stock = self._api_client.get_stock()
+        if raw_stock is None:
+            return
+        stock = [Product(resp) for resp in raw_stock]
 
         if get_details:
             for item in stock:

@@ -10,25 +10,25 @@ from pygrocy.utils import parse_date, parse_float, parse_int
 
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json['id'])
-        self._name = parsed_json['name']
-        self._name_plural = parsed_json['name_plural']
-        self._description = parsed_json['description']
-        self._row_created_timestamp = parse_date(parsed_json['row_created_timestamp'])
+        self._id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
+        self._name_plural = parsed_json.get('name_plural')
+        self._description = parsed_json.get('description')
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
 
 
 class LocationData(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json['id'])
-        self._name = parsed_json['name']
-        self._description = parsed_json['description']
-        self._row_created_timestamp = parse_date(parsed_json['row_created_timestamp'])
+        self._id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
+        self._description = parsed_json.get('description')
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
 
 
 class ProductData(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json['id'])
-        self._name = parsed_json['name']
+        self._id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
         self._description = parsed_json.get('description', None)
         self._location_id = parse_int(parsed_json.get('location_id', None))
         self._qu_id_stock = parse_int(parsed_json.get('qu_id_stock', None))
@@ -52,8 +52,8 @@ class ProductData(object):
 
 class ChoreData(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json['id'])
-        self._name = parsed_json['name']
+        self._id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
 
     @property
     def id(self) -> int:
@@ -66,16 +66,16 @@ class ChoreData(object):
 
 class UserDto(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json['id'])
+        self._id = parse_int(parsed_json.get('id'))
 
-        self._username = parsed_json['username']
+        self._username = parsed_json.get('username')
 
 
 class CurrentChoreResponse(object):
     def __init__(self, parsed_json):
-        self._chore_id = parse_int(parsed_json['chore_id'], None)
-        self._last_tracked_time = parse_date(parsed_json['last_tracked_time'])
-        self._next_estimated_execution_time = parse_date(parsed_json['next_estimated_execution_time'])
+        self._chore_id = parse_int(parsed_json.get('chore_id'), None)
+        self._last_tracked_time = parse_date(parsed_json.get('last_tracked_time'))
+        self._next_estimated_execution_time = parse_date(parsed_json.get('next_estimated_execution_time'))
 
     @property
     def chore_id(self) -> int:
@@ -92,9 +92,9 @@ class CurrentChoreResponse(object):
 
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        self._expiring_products = [ProductData(product) for product in parsed_json['expiring_products']]
-        self._expired_products = [ProductData(product) for product in parsed_json['expired_products']]
-        self._missing_products = [ProductData(product) for product in parsed_json['missing_products']]
+        self._expiring_products = [ProductData(product) for product in parsed_json.get('expiring_products')]
+        self._expired_products = [ProductData(product) for product in parsed_json.get('expired_products')]
+        self._missing_products = [ProductData(product) for product in parsed_json.get('missing_products')]
 
     @property
     def expiring_products(self) -> List[ProductData]:
@@ -111,9 +111,9 @@ class CurrentVolatilStockResponse(object):
 
 class CurrentStockResponse(object):
     def __init__(self, parsed_json):
-        self._product_id = int(parsed_json['product_id'])
-        self._amount = float(parsed_json['amount'])
-        self._best_before_date = parse_date(parsed_json['best_before_date'])
+        self._product_id = parse_int(parsed_json.get('product_id'))
+        self._amount = parse_float(parsed_json.get('amount'))
+        self._best_before_date = parse_date(parsed_json.get('best_before_date'))
 
     @property
     def product_id(self) -> int:
@@ -130,19 +130,19 @@ class CurrentStockResponse(object):
 
 class ProductDetailsResponse(object):
     def __init__(self, parsed_json):
-        self._last_purchased = parse_date(parsed_json['last_purchased'])
-        self._last_used = parse_date(parsed_json['last_used'])
-        self._stock_amount = int(parsed_json['stock_amount'])
-        self._stock_amount_opened = parse_int(parsed_json['stock_amount_opened'])
-        self._next_best_before_date = parse_date(parsed_json['next_best_before_date'])
-        self._last_price = parse_float(parsed_json['last_price'])
+        self._last_purchased = parse_date(parsed_json.get('last_purchased'))
+        self._last_used = parse_date(parsed_json.get('last_used'))
+        self._stock_amount = parse_int(parsed_json.get('stock_amount'))
+        self._stock_amount_opened = parse_int(parsed_json.get('stock_amount_opened'))
+        self._next_best_before_date = parse_date(parsed_json.get('next_best_before_date'))
+        self._last_price = parse_float(parsed_json.get('last_price'))
 
-        self._product = ProductData(parsed_json['product'])
+        self._product = ProductData(parsed_json.get('product'))
 
-        self._quantity_unit_purchase = QuantityUnitData(parsed_json['quantity_unit_purchase'])
-        self._quantity_unit_stock = QuantityUnitData(parsed_json['quantity_unit_stock'])
+        self._quantity_unit_purchase = QuantityUnitData(parsed_json.get('quantity_unit_purchase'))
+        self._quantity_unit_stock = QuantityUnitData(parsed_json.get('quantity_unit_stock'))
 
-        self._location = LocationData(parsed_json['location'])
+        self._location = LocationData(parsed_json.get('location'))
 
     @property
     def last_purchased(self) -> datetime:
@@ -175,8 +175,8 @@ class ProductDetailsResponse(object):
 
 class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
-        self._chore = ChoreData(parsed_json['chore'])
-        self._last_done_by = UserDto(parsed_json['last_done_by'])
+        self._chore = ChoreData(parsed_json.get('chore'))
+        self._last_done_by = UserDto(parsed_json.get('last_done_by'))
 
     @property
     def chore(self) -> ChoreData:
@@ -202,6 +202,8 @@ class GrocyApiClient(object):
     def get_stock(self) -> List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, "stock")
         resp = requests.get(req_url, headers=self._headers)
+        if resp.status_code != 200 or len(resp.text) == 0:
+            return
         parsed_json = resp.json()
         return [CurrentStockResponse(response) for response in parsed_json]
 
@@ -214,6 +216,8 @@ class GrocyApiClient(object):
     def get_product(self, product_id) -> ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, "stock/products/"), str(product_id))
         resp = requests.get(req_url, headers=self._headers)
+        if resp.status_code != 200 or len(resp.text) == 0:
+            return
         parsed_json = resp.json()
         return ProductDetailsResponse(parsed_json)
 
