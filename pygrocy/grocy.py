@@ -5,7 +5,7 @@ from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
                                CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
                                ProductData, ProductDetailsResponse,
-                               TransactionType)
+                               TransactionType, UserDto)
 
 
 class Product(object):
@@ -44,11 +44,14 @@ class Chore(object):
         self._chore_id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
+
         self._name = None
+        self._last_done_by = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.chore_id)
         self._name = details.chore.name
+        self._last_done_by = details.last_done_by
 
     @property
     def chore_id(self) -> int:
@@ -65,6 +68,10 @@ class Chore(object):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def last_done_by(self) -> UserDto:
+        return self._last_done_by
 
 
 class Grocy(object):

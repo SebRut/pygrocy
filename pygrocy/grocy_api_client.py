@@ -69,6 +69,29 @@ class UserDto(object):
         self._id = parse_int(parsed_json.get('id'))
 
         self._username = parsed_json.get('username')
+        self._first_name = parsed_json.get('first_name')
+        self._last_name = parsed_json.get('last_name')
+        self._display_name = parsed_json.get('display_name')
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def first_name(self) -> str:
+        return self._first_name
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name
+
+    @property
+    def display_name(self) -> str:
+        return self._display_name
 
 
 class CurrentChoreResponse(object):
@@ -181,6 +204,10 @@ class ChoreDetailsResponse(object):
     @property
     def chore(self) -> ChoreData:
         return self._chore
+
+    @property
+    def last_done_by(self) -> UserDto:
+        return self._last_done_by
 
 
 class TransactionType(Enum):
