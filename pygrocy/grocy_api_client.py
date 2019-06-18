@@ -233,6 +233,17 @@ class GrocyApiClient(object):
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
+    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+        data = {
+            "tracked_time": tracked_time.isoformat()
+        }
+
+        if done_by is not None:
+            data["done_by"] = done_by
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
+        requests.post(req_url, headers=self._headers, data=data)
+
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
         data = {

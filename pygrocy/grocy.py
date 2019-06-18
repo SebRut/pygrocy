@@ -106,6 +106,9 @@ class Grocy(object):
                 chore.get_details(self._api_client)
         return chores
 
+    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+        return self._api_client.execute_chore(chore_id, done_by, tracked_time)
+
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
 
