@@ -58,12 +58,18 @@ class ProductData(object):
         self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
         self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
-        self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
         self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
         self._allow_partial_units_in_stock = bool(parsed_json.get(&#39;allow_partial_units_in_stock&#39;, None) == &#34;true&#34;)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
         self._min_stock_amount = parse_int(parsed_json.get(&#39;min_stock_amount&#39;, None), 0)
         self._default_best_before_days = parse_int(parsed_json.get(&#39;default_best_before_days&#39;, None))
+
+        barcodes_raw = parsed_json.get(&#39;barcode&#39;, &#34;&#34;)
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = barcodes_raw.split(&#34;,&#34;)
+
 
     @property
     def id(self) -&gt; int:
@@ -72,6 +78,10 @@ class ProductData(object):
     @property
     def name(self) -&gt; str:
         return self._name
+
+    @property
+    def barcodes(self) -&gt; List[str]:
+        return self._barcodes
 
 
 class ChoreData(object):
@@ -93,6 +103,29 @@ class UserDto(object):
         self._id = parse_int(parsed_json.get(&#39;id&#39;))
 
         self._username = parsed_json.get(&#39;username&#39;)
+        self._first_name = parsed_json.get(&#39;first_name&#39;)
+        self._last_name = parsed_json.get(&#39;last_name&#39;)
+        self._display_name = parsed_json.get(&#39;display_name&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def username(self) -&gt; str:
+        return self._username
+
+    @property
+    def first_name(self) -&gt; str:
+        return self._first_name
+
+    @property
+    def last_name(self) -&gt; str:
+        return self._last_name
+
+    @property
+    def display_name(self) -&gt; str:
+        return self._display_name
 
 
 class CurrentChoreResponse(object):
@@ -205,6 +238,10 @@ class ChoreDetailsResponse(object):
     @property
     def chore(self) -&gt; ChoreData:
         return self._chore
+
+    @property
+    def last_done_by(self) -&gt; UserDto:
+        return self._last_done_by
 
 
 class TransactionType(Enum):
@@ -363,7 +400,11 @@ def name(self) -&gt; str:
 
     @property
     def chore(self) -&gt; ChoreData:
-        return self._chore</code></pre>
+        return self._chore
+
+    @property
+    def last_done_by(self) -&gt; UserDto:
+        return self._last_done_by</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -375,6 +416,16 @@ def name(self) -&gt; str:
 <pre><code class="python">@property
 def chore(self) -&gt; ChoreData:
     return self._chore</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by"><code class="name">var <span class="ident">last_done_by</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def last_done_by(self) -&gt; UserDto:
+    return self._last_done_by</code></pre>
 </details>
 </dd>
 </dl>
@@ -690,7 +741,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 6, 18, 19, 7, 1, 923789))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 6, 28, 11, 48, 55, 147513))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -817,12 +868,18 @@ def missing_products(self) -&gt; List[ProductData]:
         self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
         self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
-        self._barcodes = parsed_json.get(&#39;barcode&#39;, &#34;&#34;).split(&#34;,&#34;)
         self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;, None)
         self._allow_partial_units_in_stock = bool(parsed_json.get(&#39;allow_partial_units_in_stock&#39;, None) == &#34;true&#34;)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
         self._min_stock_amount = parse_int(parsed_json.get(&#39;min_stock_amount&#39;, None), 0)
         self._default_best_before_days = parse_int(parsed_json.get(&#39;default_best_before_days&#39;, None))
+
+        barcodes_raw = parsed_json.get(&#39;barcode&#39;, &#34;&#34;)
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = barcodes_raw.split(&#34;,&#34;)
+
 
     @property
     def id(self) -&gt; int:
@@ -830,10 +887,24 @@ def missing_products(self) -&gt; List[ProductData]:
 
     @property
     def name(self) -&gt; str:
-        return self._name</code></pre>
+        return self._name
+
+    @property
+    def barcodes(self) -&gt; List[str]:
+        return self._barcodes</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.ProductData.barcodes"><code class="name">var <span class="ident">barcodes</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def barcodes(self) -&gt; List[str]:
+    return self._barcodes</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.ProductData.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -1049,8 +1120,84 @@ def stock_amount_opened(self) -&gt; int:
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get(&#39;id&#39;))
 
-        self._username = parsed_json.get(&#39;username&#39;)</code></pre>
+        self._username = parsed_json.get(&#39;username&#39;)
+        self._first_name = parsed_json.get(&#39;first_name&#39;)
+        self._last_name = parsed_json.get(&#39;last_name&#39;)
+        self._display_name = parsed_json.get(&#39;display_name&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def username(self) -&gt; str:
+        return self._username
+
+    @property
+    def first_name(self) -&gt; str:
+        return self._first_name
+
+    @property
+    def last_name(self) -&gt; str:
+        return self._last_name
+
+    @property
+    def display_name(self) -&gt; str:
+        return self._display_name</code></pre>
 </details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.UserDto.display_name"><code class="name">var <span class="ident">display_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def display_name(self) -&gt; str:
+    return self._display_name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.UserDto.first_name"><code class="name">var <span class="ident">first_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def first_name(self) -&gt; str:
+    return self._first_name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.UserDto.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.UserDto.last_name"><code class="name">var <span class="ident">last_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def last_name(self) -&gt; str:
+    return self._last_name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.UserDto.username"><code class="name">var <span class="ident">username</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def username(self) -&gt; str:
+    return self._username</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -1079,6 +1226,7 @@ def stock_amount_opened(self) -&gt; int:
 <h4><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse" href="#pygrocy.grocy_api_client.ChoreDetailsResponse">ChoreDetailsResponse</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.chore" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.chore">chore</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by">last_done_by</a></code></li>
 </ul>
 </li>
 <li>
@@ -1124,6 +1272,7 @@ def stock_amount_opened(self) -&gt; int:
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ProductData.barcodes" href="#pygrocy.grocy_api_client.ProductData.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.id" href="#pygrocy.grocy_api_client.ProductData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.name" href="#pygrocy.grocy_api_client.ProductData.name">name</a></code></li>
 </ul>
@@ -1154,6 +1303,13 @@ def stock_amount_opened(self) -&gt; int:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.UserDto.display_name" href="#pygrocy.grocy_api_client.UserDto.display_name">display_name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.UserDto.first_name" href="#pygrocy.grocy_api_client.UserDto.first_name">first_name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.UserDto.id" href="#pygrocy.grocy_api_client.UserDto.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.UserDto.last_name" href="#pygrocy.grocy_api_client.UserDto.last_name">last_name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.UserDto.username" href="#pygrocy.grocy_api_client.UserDto.username">username</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
