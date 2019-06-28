@@ -34,12 +34,18 @@ class ProductData(object):
         self._qu_id_stock = parse_int(parsed_json.get('qu_id_stock', None))
         self._qu_id_purchase = parse_int(parsed_json.get('qu_id_purchsase', None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get('qu_factor_purchase_to_stock', None))
-        self._barcodes = parsed_json.get('barcode', "").split(",")
         self._picture_file_name = parsed_json.get('picture_file_name', None)
         self._allow_partial_units_in_stock = bool(parsed_json.get('allow_partial_units_in_stock', None) == "true")
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp', None))
         self._min_stock_amount = parse_int(parsed_json.get('min_stock_amount', None), 0)
         self._default_best_before_days = parse_int(parsed_json.get('default_best_before_days', None))
+
+        barcodes_raw = parsed_json.get('barcode', "")
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = barcodes_raw.split(",")
+
 
     @property
     def id(self) -> int:
@@ -48,6 +54,10 @@ class ProductData(object):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def barcodes(self) -> List[str]:
+        return self._barcodes
 
 
 class ChoreData(object):

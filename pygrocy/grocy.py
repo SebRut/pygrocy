@@ -15,12 +15,14 @@ class Product(object):
         self._best_before_date = stock_response.best_before_date
 
         self._name = None
+        self._barcodes = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.product_id)
         if details is None:
             return
         self._name = details.product.name
+        self._barcodes = details.product.barcodes
 
     @property
     def name(self) -> str:
@@ -37,6 +39,10 @@ class Product(object):
     @property
     def best_before_date(self) -> datetime:
         return self._best_before_date
+
+    @property
+    def barcodes(self) -> List[str]:
+        return self._barcodes
 
 
 class Chore(object):
