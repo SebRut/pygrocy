@@ -34,3 +34,24 @@ class TestChoreDetailsResponse(TestCase):
         assert response.chore.name == "string"
 
         assert response.last_done_by.display_name == "string"
+
+    def test_no_last_tracked_data(self):
+        input_json = """{
+            "chore": {
+                "id": 0,
+                "name": "string",
+                "description": "string",
+                "period_type": "manually",
+                "period_days": 0,
+                "row_created_timestamp": "2019-05-04T11:31:04.563Z"
+            },
+            "last_tracked": null,
+            "track_count": 0,
+            "last_done_by": null,
+            "next_estimated_execution_time": "2019-05-04T11:31:04.564Z"
+        }"""
+
+        response = ChoreDetailsResponse(json.loads(input_json))
+
+        assert response.last_tracked is None
+        assert response.last_done_by is None

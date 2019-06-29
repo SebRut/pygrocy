@@ -57,6 +57,7 @@ class Chore(object):
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.chore_id)
         self._name = details.chore.name
+        self._last_tracked_time = details.last_tracked
         self._last_done_by = details.last_done_by
 
     @property

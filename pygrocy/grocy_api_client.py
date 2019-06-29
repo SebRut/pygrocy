@@ -209,7 +209,12 @@ class ProductDetailsResponse(object):
 class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json.get('chore'))
-        self._last_done_by = UserDto(parsed_json.get('last_done_by'))
+        self._last_tracked = parse_date(parsed_json.get('last_tracked'))
+
+        if self._last_tracked is None:
+            self._last_done_by = None
+        else:
+            self._last_done_by = UserDto(parsed_json.get('last_done_by'))
 
     @property
     def chore(self) -> ChoreData:
@@ -218,6 +223,10 @@ class ChoreDetailsResponse(object):
     @property
     def last_done_by(self) -> UserDto:
         return self._last_done_by
+
+    @property
+    def last_tracked(self) -> datetime:
+        return self._last_tracked
 
 
 class TransactionType(Enum):
