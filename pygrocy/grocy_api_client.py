@@ -239,7 +239,7 @@ class GrocyApiClient(object):
     def get_stock(self) -> List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, "stock")
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return [CurrentStockResponse(response) for response in parsed_json]
@@ -253,7 +253,7 @@ class GrocyApiClient(object):
     def get_product(self, product_id) -> ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, "stock/products/"), str(product_id))
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return ProductDetailsResponse(parsed_json)
