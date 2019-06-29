@@ -233,7 +233,12 @@ class ProductDetailsResponse(object):
 class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json.get(&#39;chore&#39;))
-        self._last_done_by = UserDto(parsed_json.get(&#39;last_done_by&#39;))
+        self._last_tracked = parse_date(parsed_json.get(&#39;last_tracked&#39;))
+
+        if self._last_tracked is None:
+            self._last_done_by = None
+        else:
+            self._last_done_by = UserDto(parsed_json.get(&#39;last_done_by&#39;))
 
     @property
     def chore(self) -&gt; ChoreData:
@@ -242,6 +247,10 @@ class ChoreDetailsResponse(object):
     @property
     def last_done_by(self) -&gt; UserDto:
         return self._last_done_by
+
+    @property
+    def last_tracked(self) -&gt; datetime:
+        return self._last_tracked
 
 
 class TransactionType(Enum):
@@ -263,7 +272,7 @@ class GrocyApiClient(object):
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return [CurrentStockResponse(response) for response in parsed_json]
@@ -277,7 +286,7 @@ class GrocyApiClient(object):
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return ProductDetailsResponse(parsed_json)
@@ -396,7 +405,12 @@ def name(self) -&gt; str:
 <pre><code class="python">class ChoreDetailsResponse(object):
     def __init__(self, parsed_json):
         self._chore = ChoreData(parsed_json.get(&#39;chore&#39;))
-        self._last_done_by = UserDto(parsed_json.get(&#39;last_done_by&#39;))
+        self._last_tracked = parse_date(parsed_json.get(&#39;last_tracked&#39;))
+
+        if self._last_tracked is None:
+            self._last_done_by = None
+        else:
+            self._last_done_by = UserDto(parsed_json.get(&#39;last_done_by&#39;))
 
     @property
     def chore(self) -&gt; ChoreData:
@@ -404,7 +418,11 @@ def name(self) -&gt; str:
 
     @property
     def last_done_by(self) -&gt; UserDto:
-        return self._last_done_by</code></pre>
+        return self._last_done_by
+
+    @property
+    def last_tracked(self) -&gt; datetime:
+        return self._last_tracked</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -426,6 +444,16 @@ def chore(self) -&gt; ChoreData:
 <pre><code class="python">@property
 def last_done_by(self) -&gt; UserDto:
     return self._last_done_by</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_tracked"><code class="name">var <span class="ident">last_tracked</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def last_tracked(self) -&gt; datetime:
+    return self._last_tracked</code></pre>
 </details>
 </dd>
 </dl>
@@ -630,7 +658,7 @@ def missing_products(self) -&gt; List[ProductData]:
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return [CurrentStockResponse(response) for response in parsed_json]
@@ -644,7 +672,7 @@ def missing_products(self) -&gt; List[ProductData]:
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
         resp = requests.get(req_url, headers=self._headers)
-        if resp.status_code != 200 or len(resp.text) == 0:
+        if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
         return ProductDetailsResponse(parsed_json)
@@ -741,7 +769,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 6, 28, 11, 48, 55, 147513))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 6, 29, 12, 38, 8, 656118))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -797,7 +825,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <pre><code class="python">def get_product(self, product_id) -&gt; ProductDetailsResponse:
     req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
     resp = requests.get(req_url, headers=self._headers)
-    if resp.status_code != 200 or len(resp.text) == 0:
+    if resp.status_code != 200 or not resp.text:
         return
     parsed_json = resp.json()
     return ProductDetailsResponse(parsed_json)</code></pre>
@@ -813,7 +841,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <pre><code class="python">def get_stock(self) -&gt; List[CurrentStockResponse]:
     req_url = urljoin(self._base_url, &#34;stock&#34;)
     resp = requests.get(req_url, headers=self._headers)
-    if resp.status_code != 200 or len(resp.text) == 0:
+    if resp.status_code != 200 or not resp.text:
         return
     parsed_json = resp.json()
     return [CurrentStockResponse(response) for response in parsed_json]</code></pre>
@@ -1227,6 +1255,7 @@ def username(self) -&gt; str:
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.chore" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.chore">chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by">last_done_by</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.last_tracked" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.last_tracked">last_tracked</a></code></li>
 </ul>
 </li>
 <li>
