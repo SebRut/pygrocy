@@ -121,3 +121,4 @@ class TestGrocy(TestCase):
             }
         ]
         responses.add(responses.GET, "https://example.com/api/stock", json=resp, status=200)
+        
