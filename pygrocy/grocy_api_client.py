@@ -299,7 +299,7 @@ class GrocyApiClient(object):
         }
 
         if best_before_date is not None:
-            data["best_before_date"] = best_before_date.isoformat()
+            data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
         requests.post(req_url, headers=self._headers, data=data)
