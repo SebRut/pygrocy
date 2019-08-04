@@ -237,9 +237,10 @@ class TransactionType(Enum):
 
 
 class GrocyApiClient(object):
-    def __init__(self, base_url, api_key):
+    def __init__(self, base_url, api_key, verify_ssl = True):
         self._base_url = base_url
         self._api_key = api_key
+        self._verify_ssl = verify_ssl
         self._headers = {
             "accept": "application/json",
             "GROCY-API-KEY": api_key
@@ -247,7 +248,7 @@ class GrocyApiClient(object):
 
     def get_stock(self) -> List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, "stock")
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -255,13 +256,13 @@ class GrocyApiClient(object):
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         req_url = urljoin(self._base_url, "stock/volatile")
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -> ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, "stock/products/"), str(product_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -269,13 +270,13 @@ class GrocyApiClient(object):
 
     def get_chores(self) -> List[CurrentChoreResponse]:
         req_url = urljoin(self._base_url, "chores")
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, "chores/"), str(chore_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
@@ -288,7 +289,7 @@ class GrocyApiClient(object):
             data["done_by"] = done_by
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify_ssl=self._verify_ssl, headers=self._headers, data=data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -302,7 +303,7 @@ class GrocyApiClient(object):
             data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify_ssl=self._verify_ssl, headers=self._headers, data=data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -313,4 +314,4 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify_ssl=self._verify_ssl, headers=self._headers, data=data)
