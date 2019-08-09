@@ -7,7 +7,26 @@ import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
 
-
+class ShoppingListItem(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get('id'))
+        self._product_id = parse_int(parsed_json.get('product_id'))
+        self._note = parsed_json.get('note')
+        self._amount = parse_float(parsed_json.get('amount'))
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
+        
+    @property
+    def id(self) -> int:
+        return self._id
+        
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+        
+    @property
+    def amount(self) -> float:
+        return self._amount
+        
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get('id'))
@@ -315,3 +334,11 @@ class GrocyApiClient(object):
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
         requests.post(req_url, verify_ssl=self._verify_ssl, headers=self._headers, data=data)
+        
+    def get_shopping_list(self) -> List[ShoppingListItem]:
+        req_url = urljoin(self._base_url, "objects/shopping_list")
+        resp = requests.get(req_url, verify_ssl=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200 or not resp.text:
+            return
+        parsed_json = resp.json()
+        return [ShoppingListItem(response) for response in parsed_json]
