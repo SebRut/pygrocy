@@ -261,9 +261,10 @@ class TransactionType(Enum):
 
 
 class GrocyApiClient(object):
-    def __init__(self, base_url, api_key):
+    def __init__(self, base_url, api_key, verify_ssl = True):
         self._base_url = base_url
         self._api_key = api_key
+        self._verify_ssl = verify_ssl
         self._headers = {
             &#34;accept&#34;: &#34;application/json&#34;,
             &#34;GROCY-API-KEY&#34;: api_key
@@ -271,7 +272,7 @@ class GrocyApiClient(object):
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -279,13 +280,13 @@ class GrocyApiClient(object):
 
     def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -293,13 +294,13 @@ class GrocyApiClient(object):
 
     def get_chores(self) -&gt; List[CurrentChoreResponse]:
         req_url = urljoin(self._base_url, &#34;chores&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
@@ -312,7 +313,7 @@ class GrocyApiClient(object):
             data[&#34;done_by&#34;] = done_by
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id) + &#34;/&#34;), &#34;execute&#34;)
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -326,7 +327,7 @@ class GrocyApiClient(object):
             data[&#34;best_before_date&#34;] = best_before_date.strftime(&#39;%Y-%m-%d&#39;)
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -337,7 +338,7 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
-        requests.post(req_url, headers=self._headers, data=data)</code></pre>
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </section>
 <section>
@@ -640,16 +641,17 @@ def missing_products(self) -&gt; List[ProductData]:
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient"><code class="flex name class">
 <span>class <span class="ident">GrocyApiClient</span></span>
-<span>(</span><span>base_url, api_key)</span>
+<span>(</span><span>base_url, api_key, verify_ssl=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class GrocyApiClient(object):
-    def __init__(self, base_url, api_key):
+    def __init__(self, base_url, api_key, verify_ssl = True):
         self._base_url = base_url
         self._api_key = api_key
+        self._verify_ssl = verify_ssl
         self._headers = {
             &#34;accept&#34;: &#34;application/json&#34;,
             &#34;GROCY-API-KEY&#34;: api_key
@@ -657,7 +659,7 @@ def missing_products(self) -&gt; List[ProductData]:
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -665,13 +667,13 @@ def missing_products(self) -&gt; List[ProductData]:
 
     def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code != 200 or not resp.text:
             return
         parsed_json = resp.json()
@@ -679,13 +681,13 @@ def missing_products(self) -&gt; List[ProductData]:
 
     def get_chores(self) -&gt; List[CurrentChoreResponse]:
         req_url = urljoin(self._base_url, &#34;chores&#34;)
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
         req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
-        resp = requests.get(req_url, headers=self._headers)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
@@ -698,7 +700,7 @@ def missing_products(self) -&gt; List[ProductData]:
             data[&#34;done_by&#34;] = done_by
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id) + &#34;/&#34;), &#34;execute&#34;)
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -712,7 +714,7 @@ def missing_products(self) -&gt; List[ProductData]:
             data[&#34;best_before_date&#34;] = best_before_date.strftime(&#39;%Y-%m-%d&#39;)
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
-        requests.post(req_url, headers=self._headers, data=data)
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -723,7 +725,7 @@ def missing_products(self) -&gt; List[ProductData]:
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
-        requests.post(req_url, headers=self._headers, data=data)</code></pre>
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -746,7 +748,7 @@ def missing_products(self) -&gt; List[ProductData]:
         data[&#34;best_before_date&#34;] = best_before_date.strftime(&#39;%Y-%m-%d&#39;)
 
     req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;add&#34;)
-    requests.post(req_url, headers=self._headers, data=data)</code></pre>
+    requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.consume_product"><code class="name flex">
@@ -765,11 +767,11 @@ def missing_products(self) -&gt; List[ProductData]:
     }
 
     req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
-    requests.post(req_url, headers=self._headers, data=data)</code></pre>
+    requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 8, 3, 18, 4, 17, 744680))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 8, 26, 7, 10, 5, 756455))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -784,7 +786,7 @@ def missing_products(self) -&gt; List[ProductData]:
         data[&#34;done_by&#34;] = done_by
 
     req_url = urljoin(urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id) + &#34;/&#34;), &#34;execute&#34;)
-    requests.post(req_url, headers=self._headers, data=data)</code></pre>
+    requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
@@ -796,7 +798,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <summary>Source code</summary>
 <pre><code class="python">def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
     req_url = urljoin(urljoin(self._base_url, &#34;chores/&#34;), str(chore_id))
-    resp = requests.get(req_url, headers=self._headers)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     parsed_json = resp.json()
     return ChoreDetailsResponse(parsed_json)</code></pre>
 </details>
@@ -810,7 +812,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <summary>Source code</summary>
 <pre><code class="python">def get_chores(self) -&gt; List[CurrentChoreResponse]:
     req_url = urljoin(self._base_url, &#34;chores&#34;)
-    resp = requests.get(req_url, headers=self._headers)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     parsed_json = resp.json()
     return [CurrentChoreResponse(chore) for chore in parsed_json]</code></pre>
 </details>
@@ -824,7 +826,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <summary>Source code</summary>
 <pre><code class="python">def get_product(self, product_id) -&gt; ProductDetailsResponse:
     req_url = urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id))
-    resp = requests.get(req_url, headers=self._headers)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     if resp.status_code != 200 or not resp.text:
         return
     parsed_json = resp.json()
@@ -840,7 +842,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <summary>Source code</summary>
 <pre><code class="python">def get_stock(self) -&gt; List[CurrentStockResponse]:
     req_url = urljoin(self._base_url, &#34;stock&#34;)
-    resp = requests.get(req_url, headers=self._headers)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     if resp.status_code != 200 or not resp.text:
         return
     parsed_json = resp.json()
@@ -856,7 +858,7 @@ def missing_products(self) -&gt; List[ProductData]:
 <summary>Source code</summary>
 <pre><code class="python">def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
     req_url = urljoin(self._base_url, &#34;stock/volatile&#34;)
-    resp = requests.get(req_url, headers=self._headers)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     parsed_json = resp.json()
     return CurrentVolatilStockResponse(parsed_json)</code></pre>
 </details>

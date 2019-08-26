@@ -106,8 +106,8 @@ class Chore(object):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key):
-        self._api_client = GrocyApiClient(base_url, api_key)
+    def __init__(self, base_url, api_key, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, verify_ssl)
 
     def stock(self, get_details: bool = False) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
@@ -284,15 +284,15 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </dd>
 <dt id="pygrocy.grocy.Grocy"><code class="flex name class">
 <span>class <span class="ident">Grocy</span></span>
-<span>(</span><span>base_url, api_key)</span>
+<span>(</span><span>base_url, api_key, verify_ssl=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Grocy(object):
-    def __init__(self, base_url, api_key):
-        self._api_client = GrocyApiClient(base_url, api_key)
+    def __init__(self, base_url, api_key, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, verify_ssl)
 
     def stock(self, get_details: bool = False) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
@@ -398,7 +398,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 8, 3, 18, 4, 17, 745123))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 8, 26, 7, 10, 5, 756867))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
