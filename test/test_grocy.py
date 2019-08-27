@@ -3,6 +3,7 @@ from unittest import TestCase
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
+from pygrocy.grocy import ShoppingListProduct
 from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
 
 
@@ -122,3 +123,38 @@ class TestGrocy(TestCase):
         ]
         responses.add(responses.GET, "https://example.com/api/stock", json=resp, status=200)
         
+    @responses.activate
+    def test_get_shopping_list_valid(self):
+        resp = [
+            {
+                "id": 1,
+                "product_id": 6,
+                "note": "string",
+                "amount": 2,
+                "row_created_timestamp": "2019-04-17 10:30:00",
+                "shopping_list_id": 1,
+                "done": 0
+            }
+        ]
+        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
+
+        shopping_list = self.grocy.shopping_list()
+        
+        assert isinstance(shopping_list, list)
+        assert len(shopping_list) == 1
+        for item in shopping_list:
+            assert isinstance(item, ShoppingListProduct)
+            
+    @responses.activate
+    def test_get_shopping_list_invalid_no_data(self):
+        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", status=200)
+
+        assert self.grocy.shopping_list() is None
+        
+    @responses.activate
+    def test_get_shopping_list_invalid_missing_data(self):
+        resp = [
+            {
+            }
+        ]
+        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
