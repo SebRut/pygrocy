@@ -22,4 +22,4 @@ class TestShoppingListItem(TestCase):
         assert response.id == 1
         assert response.note == "string"
         assert response.amount == 2
-
+        
