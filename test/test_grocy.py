@@ -147,9 +147,11 @@ class TestGrocy(TestCase):
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
-        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", status=200)
-
-        assert self.grocy.shopping_list() is None
+        resp = [
+            {
+            }
+        ]
+        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
         
     @responses.activate
     def test_get_shopping_list_invalid_missing_data(self):
@@ -158,5 +160,37 @@ class TestGrocy(TestCase):
             }
         ]
         responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
+        
+    @responses.activate
+    def test_add_missing_product_to_shopping_list_valid(self):
+        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=204)
+        assert self.grocy.add_missing_product_to_shopping_list() == True
+        
+    @responses.activate
+    def test_add_missing_product_to_shopping_list_error(self):
+        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=400)
+        assert self.grocy.add_missing_product_to_shopping_list() == False
+        
+    @responses.activate
+    def test_clear_shopping_list_valid(self):
+        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=204)
+        assert self.grocy.clear_shopping_list() == True
+        
+    @responses.activate
+    def test_clear_shopping_list_error(self):
+        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=400)
+        assert self.grocy.clear_shopping_list() == False
+        
+    @responses.activate
+    def test_remove_product_in_shopping_list_valid(self):
+        responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=204)
+        assert self.grocy.remove_product_in_shopping_list(1) == True
+        
+    @responses.activate
+    def test_remove_product_in_shopping_list_error(self):
+        responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=400)
+        assert self.grocy.remove_product_in_shopping_list(1) == False
+        
+        
         
         

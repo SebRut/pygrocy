@@ -346,7 +346,7 @@ class GrocyApiClient(object):
     def get_shopping_list(self) -> List[ShoppingListItem]:
         req_url = urljoin(self._base_url, "objects/shopping_list")
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code != 200 or not resp.text:
+        if resp.status_code != 200:
             return
         parsed_json = resp.json()
         return [ShoppingListItem(response) for response in parsed_json]
@@ -357,7 +357,11 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        if resp.status_code == 204:
+            return True
+        else:
+            return False
         
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
@@ -365,9 +369,18 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        if resp.status_code == 204:
+            return True
+        else:
+            return False
         
     def remove_product_in_sl(self, sl_product_id: int):
         req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
-        requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code == 204:
+            return True
+        else:
+            return False
+            
         
