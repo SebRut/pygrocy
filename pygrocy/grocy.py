@@ -179,11 +179,11 @@ class Grocy(object):
         return shopping_list
         
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
-        self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
+        return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
         
     def clear_shopping_list(self, shopping_list_id: int = 1):
-        self._api_client.clear_shopping_list(shopping_list_id)
+        return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(self, shopping_list_product_id: int):
-        self._api_client.remove_product_in_sl(shopping_list_product_id)
+        return self._api_client.remove_product_in_sl(shopping_list_product_id)
         

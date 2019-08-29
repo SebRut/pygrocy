@@ -370,11 +370,12 @@ class GrocyApiClient(object):
         return resp
             
     def remove_product_in_sl(self, sl_product_id: int):
+        
         req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         return resp
-            
-         str(sl_product_id))
+        
+    str(sl_product_id))
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code == 204:
             return True
