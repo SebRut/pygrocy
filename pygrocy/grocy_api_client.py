@@ -358,11 +358,8 @@ class GrocyApiClient(object):
 
         req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        if resp.status_code == 204:
-            return True
-        else:
-            return False
-        
+        return resp
+            
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             "list_id": shopping_list_id
@@ -370,13 +367,14 @@ class GrocyApiClient(object):
 
         req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        if resp.status_code == 204:
-            return True
-        else:
-            return False
-        
+        return resp
+            
     def remove_product_in_sl(self, sl_product_id: int):
         req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        return resp
+            
+         str(sl_product_id))
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         if resp.status_code == 204:
             return True

@@ -164,32 +164,32 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_add_missing_product_to_shopping_list_valid(self):
         responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=204)
-        assert self.grocy.add_missing_product_to_shopping_list() == True
+        assert self.grocy.add_missing_product_to_shopping_list().status_code == 204
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
         responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=400)
-        assert self.grocy.add_missing_product_to_shopping_list() == False
+        assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
         responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=204)
-        assert self.grocy.clear_shopping_list() == True
+        assert self.grocy.clear_shopping_list().status_code == 204
         
     @responses.activate
     def test_clear_shopping_list_error(self):
         responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=400)
-        assert self.grocy.clear_shopping_list() == False
+        assert self.grocy.clear_shopping_list().status_code != 204
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
         responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=204)
-        assert self.grocy.remove_product_in_shopping_list(1) == True
+        assert self.grocy.remove_product_in_shopping_list(1).status_code == 204
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
         responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=400)
-        assert self.grocy.remove_product_in_shopping_list(1) == False
+        assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
         
         
         
