@@ -375,11 +375,3 @@ class GrocyApiClient(object):
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         return resp
         
-    str(sl_product_id))
-        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code == 204:
-            return True
-        else:
-            return False
-            
-        
