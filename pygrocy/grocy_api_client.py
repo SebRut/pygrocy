@@ -7,6 +7,32 @@ import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
 
+class ShoppingListItem(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get('id'))
+        self._product_id = parse_int(parsed_json.get('product_id'))
+        self._note = parsed_json.get('note',None)
+        self._amount = parse_float(parsed_json.get('amount'),0)
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp', None))
+        self._shopping_list_id = parse_int(parsed_json.get('shopping_list_id'))
+        self._done = parse_int(parsed_json.get('done'))
+
+
+    @property
+    def id(self) -> int:
+        return self._id
+    
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+
+    @property
+    def note(self) -> str:
+        return self._note
+
+    @property
+    def amount(self) -> float:
+        return self._amount
 
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
@@ -315,3 +341,37 @@ class GrocyApiClient(object):
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+
+        
+    def get_shopping_list(self) -> List[ShoppingListItem]:
+        req_url = urljoin(self._base_url, "objects/shopping_list")
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200:
+            return
+        parsed_json = resp.json()
+        return [ShoppingListItem(response) for response in parsed_json]
+
+    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            "list_id": shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def clear_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            "list_id": shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def remove_product_in_sl(self, sl_product_id: int):
+        
+        req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        return resp
+        
