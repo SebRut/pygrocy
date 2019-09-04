@@ -3,6 +3,7 @@ from typing import List
 
 from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
                                CurrentStockResponse,
+                               ShoppingListItem,
                                CurrentVolatilStockResponse, GrocyApiClient,
                                ProductData, ProductDetailsResponse,
                                TransactionType, UserDto)
@@ -44,7 +45,39 @@ class Product(object):
     def barcodes(self) -> List[str]:
         return self._barcodes
 
-
+class ShoppingListProduct(object):
+    def __init__(self, raw_shopping_list: ShoppingListItem):
+        self._id = raw_shopping_list.id
+        self._product_id = raw_shopping_list.product_id
+        self._note = raw_shopping_list.note
+        self._amount = raw_shopping_list.amount
+        self._product = None
+        
+    def get_details(self, api_client: GrocyApiClient):
+        self._product = api_client.get_product(self._product_id).product
+        
+    @property
+    def id(self) -> int:
+        return self._id
+        
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+        
+    @property
+    def amount(self) -> int:
+        return self._amount
+        
+    @property
+    def note(self) -> str:
+        return self._note
+        
+    @property
+    def product(self) -> Product:
+        if self._product_id is None:
+            self.get_details()
+        return self._product
+    
 class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
         self._chore_id = raw_chore.chore_id
@@ -133,3 +166,24 @@ class Grocy(object):
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
+    
+    def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list()
+        if raw_shoppinglist is None:
+            return
+        shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
+
+        if get_details:
+            for item in shopping_list:
+                item.get_details(self._api_client)
+        return shopping_list
+        
+    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
+        return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
+        
+    def clear_shopping_list(self, shopping_list_id: int = 1):
+        return self._api_client.clear_shopping_list(shopping_list_id)
+
+    def remove_product_in_shopping_list(self, shopping_list_product_id: int):
+        return self._api_client.remove_product_in_sl(shopping_list_product_id)
+        
