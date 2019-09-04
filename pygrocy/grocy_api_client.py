@@ -49,6 +49,18 @@ class LocationData(object):
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description')
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
+        
+    @property
+    def id(self) -> int:
+        return self._id
+        
+    @property
+    def name(self) -> str:
+        return self._name
+        
+    @property
+    def description(self) -> str:
+        return self._description
 
 
 class ProductData(object):
@@ -375,3 +387,22 @@ class GrocyApiClient(object):
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         return resp
         
+    def get_product_groups(self) -> List[LocationData]:
+        req_url = urljoin(self._base_url, "objects/product_groups")
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200 or not resp.text:
+            return
+        parsed_json = resp.json()
+        return [LocationData(response) for response in parsed_json]
+        
+    def upload_product_picture(self, product_id, pic_file):
+        if not os.path.exists(pic_file):
+            return
+        up_header = self._headers
+        up_header['accept'] = '*/*'
+        up_header['Content-Type'] = 'application/octet-stream'
+        b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
+        url = 'files/productpictures/{!s}' .format(self.base_url, str(b64fn, "utf-8"))
+        resp =requests.put(url, verify=self.verify_ssl, headers=up_header , data=open(pic_file,'rb'))
+        return resp
+            
