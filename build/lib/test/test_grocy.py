@@ -147,8 +147,8 @@ class TestGrocy(TestCase):
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
-        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", status=400)
-        assert self.grocy.shopping_list() is None
+        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
+        assert self.shopping_list() is None
         
     @responses.activate
     def test_get_shopping_list_invalid_missing_data(self):
