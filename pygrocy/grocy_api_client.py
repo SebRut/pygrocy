@@ -395,14 +395,3 @@ class GrocyApiClient(object):
         parsed_json = resp.json()
         return [LocationData(response) for response in parsed_json]
         
-    def upload_product_picture(self, product_id, pic_file):
-        if not os.path.exists(pic_file):
-            return
-        up_header = self._headers
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/octet-stream'
-        b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
-        url = 'files/productpictures/{!s}' .format(self.base_url, str(b64fn, "utf-8"))
-        resp =requests.put(url, verify=self.verify_ssl, headers=up_header , data=open(pic_file,'rb'))
-        return resp
-            
