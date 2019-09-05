@@ -12,12 +12,13 @@ class TestProductDetailsResponse(TestCase):
         assert response.product.barcodes is None
 
     def test_parse(self):
-        input_json = """{ "product": { "id": 0, "name": "string", "description": "string", "location_id": 0, "qu_id_purchase": 0, "qu_id_stock": 0, "qu_factor_purchase_to_stock": 0, "barcode": "string,123", "min_stock_amount": 0, "default_best_before_days": 0, "picture_file_name": "string", "allow_partial_units_in_stock": true, "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "quantity_unit_purchase": { "id": 0, "name": "string", "name_plural": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "quantity_unit_stock": { "id": 0, "name": "string", "name_plural": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "last_purchased": "2019-04-22", "last_used": "2019-04-22T09:54:15.835Z", "stock_amount": 10, "stock_amount_opened": 2, "next_best_before_date": "2019-04-22T09:54:15.835Z", "last_price": 0, "location": { "id": 0, "name": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" } }"""
+        input_json = """{ "product": { "id": 0, "name": "string", "description": "string", "location_id": 0, "product_group_id": 0, "qu_id_purchase": 0, "qu_id_stock": 0, "qu_factor_purchase_to_stock": 0, "barcode": "string,123", "min_stock_amount": 0, "default_best_before_days": 0, "picture_file_name": "string", "allow_partial_units_in_stock": true, "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "quantity_unit_purchase": { "id": 0, "name": "string", "name_plural": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "quantity_unit_stock": { "id": 0, "name": "string", "name_plural": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" }, "last_purchased": "2019-04-22", "last_used": "2019-04-22T09:54:15.835Z", "stock_amount": 10, "stock_amount_opened": 2, "next_best_before_date": "2019-04-22T09:54:15.835Z", "last_price": 0, "location": { "id": 0, "name": "string", "description": "string", "row_created_timestamp": "2019-04-22T09:54:15.835Z" } }"""
         response = ProductDetailsResponse(json.loads(input_json))
 
         assert response.stock_amount == 10
         assert response.stock_amount_opened == 2
         assert response.last_price == 0
+        assert response.product.product_group_id == 0
 
         assert response.next_best_before_date.year == 2019
         assert response.next_best_before_date.month == 4
