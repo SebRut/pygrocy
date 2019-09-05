@@ -18,6 +18,7 @@ class Product(object):
 
         self._name = None
         self._barcodes = None
+        self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.product_id)
@@ -25,6 +26,7 @@ class Product(object):
             return
         self._name = details.product.name
         self._barcodes = details.product.barcodes
+        self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -> str:
@@ -33,6 +35,10 @@ class Product(object):
     @property
     def product_id(self) -> int:
         return self._product_id
+        
+    @property
+    def product_group_id(self) -> int:
+        return self._product_group_id
 
     @property
     def available_amount(self) -> float:

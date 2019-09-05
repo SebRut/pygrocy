@@ -69,6 +69,7 @@ class ProductData(object):
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description', None)
         self._location_id = parse_int(parsed_json.get('location_id', None))
+        self._product_group_id = parse_int(parsed_json.get('product_group_id', None))
         self._qu_id_stock = parse_int(parsed_json.get('qu_id_stock', None))
         self._qu_id_purchase = parse_int(parsed_json.get('qu_id_purchsase', None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get('qu_factor_purchase_to_stock', None))
@@ -88,6 +89,10 @@ class ProductData(object):
     @property
     def id(self) -> int:
         return self._id
+        
+    @property
+    def product_group_id(self) -> int:
+        return self._product_group_id
 
     @property
     def name(self) -> str:
@@ -394,4 +399,5 @@ class GrocyApiClient(object):
             return
         parsed_json = resp.json()
         return [LocationData(response) for response in parsed_json]
+        
         

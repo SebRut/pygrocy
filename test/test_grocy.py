@@ -36,6 +36,7 @@ class TestGrocy(TestCase):
                 "qu_id_stock": 0,
                 "qu_factor_purchase_to_stock": 0,
                 "barcode": "string",
+                "product_group_id": 0,
                 "min_stock_amount": 0,
                 "default_best_before_days": 0,
                 "picture_file_name": "string",
@@ -74,6 +75,7 @@ class TestGrocy(TestCase):
         product.get_details(api_client)
 
         assert product.name == "string"
+        assert product.product_group_id == 0
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
