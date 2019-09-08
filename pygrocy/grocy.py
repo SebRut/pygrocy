@@ -218,4 +218,8 @@ class Grocy(object):
             return
         return [Group(resp) for resp in raw_groups]
         
+    def add_product_pic(self, product_id: int, pic_path: str):
+        if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
+            return
+        return self._api_client.update_product_pic(product_id)
         

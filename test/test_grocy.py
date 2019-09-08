@@ -1,5 +1,6 @@
 from unittest import TestCase
-
+from unittest.mock import patch, mock_open
+from io import FileIO
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
@@ -221,6 +222,44 @@ class TestGrocy(TestCase):
             }
         ]
         responses.add(responses.GET, "https://example.com/api/objects/product_groups", json=resp, status=200)
+        
+    @responses.activate
+    def test_upload_product_picture_valid(self):
+        with patch("os.path.exists" ) as m_exist:
+            with patch("builtins.open", mock_open()) as m_open:
+                m_exist.return_value = True
+                api_client = GrocyApiClient("https://example.com/api/", "api_key")
+                responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=204)
+                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code == 204
+            
+    @responses.activate
+    def test_upload_product_picture_invalid_missing_data(self):
+        with patch("os.path.exists" ) as m_exist:
+            m_exist.return_value = False
+            api_client = GrocyApiClient("https://example.com/api/", "api_key")
+            responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=204)
+            assert api_client.upload_product_picture(1,"/somepath/pic.jpg") is None
+        
+    @responses.activate
+    def test_upload_product_picture_error(self):
+        with patch("os.path.exists" ) as m_exist:
+            with patch("builtins.open", mock_open()) as m_open:
+                m_exist.return_value = True
+                api_client = GrocyApiClient("https://example.com/api/", "api_key")
+                responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=400)
+                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code != 204
+                
+    @responses.activate
+    def test_update_product_pic_valid(self):
+        api_client = GrocyApiClient("https://example.com/api/", "api_key")
+        responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=204)
+        assert api_client.update_product_pic(1).status_code == 204
+        
+    @responses.activate
+    def test_update_product_pic_error(self):
+        api_client = GrocyApiClient("https://example.com/api/", "api_key")
+        responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=400)
+        assert api_client.update_product_pic(1).status_code != 204
         
         
         
