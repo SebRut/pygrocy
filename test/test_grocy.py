@@ -3,6 +3,7 @@ from unittest import TestCase
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
+from pygrocy.grocy import Group
 from pygrocy.grocy import ShoppingListProduct
 from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
 
@@ -35,6 +36,7 @@ class TestGrocy(TestCase):
                 "qu_id_stock": 0,
                 "qu_factor_purchase_to_stock": 0,
                 "barcode": "string",
+                "product_group_id": 0,
                 "min_stock_amount": 0,
                 "default_best_before_days": 0,
                 "picture_file_name": "string",
@@ -73,6 +75,7 @@ class TestGrocy(TestCase):
         product.get_details(api_client)
 
         assert product.name == "string"
+        assert product.product_group_id == 0
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
@@ -187,6 +190,37 @@ class TestGrocy(TestCase):
     def test_remove_product_in_shopping_list_error(self):
         responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=400)
         assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
+        
+    @responses.activate
+    def test_get_product_groups_valid(self):
+        resp = [
+            {
+                "id": 1,
+                "name": "string",
+                "description": "string",
+                "row_created_timestamp": "2019-04-17 10:30:00",
+            }
+        ]
+        responses.add(responses.GET, "https://example.com/api/objects/product_groups", json=resp, status=200)
+        product_groups_list = self.grocy.product_groups()
+        
+        assert isinstance(product_groups_list, list)
+        assert len(product_groups_list) == 1
+        for item in product_groups_list:
+            assert isinstance(item, Group)
+            
+    @responses.activate
+    def test_get_product_groups_invalid_no_data(self):
+        responses.add(responses.GET, "https://example.com/api/objects/product_groups", status=400)
+        assert self.grocy.product_groups() is None
+        
+    @responses.activate
+    def test_get_product_groups_invalid_missing_data(self):
+        resp = [
+            {
+            }
+        ]
+        responses.add(responses.GET, "https://example.com/api/objects/product_groups", json=resp, status=200)
         
         
         

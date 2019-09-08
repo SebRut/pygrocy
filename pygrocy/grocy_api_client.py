@@ -49,6 +49,18 @@ class LocationData(object):
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description')
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
+        
+    @property
+    def id(self) -> int:
+        return self._id
+        
+    @property
+    def name(self) -> str:
+        return self._name
+        
+    @property
+    def description(self) -> str:
+        return self._description
 
 
 class ProductData(object):
@@ -57,6 +69,7 @@ class ProductData(object):
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description', None)
         self._location_id = parse_int(parsed_json.get('location_id', None))
+        self._product_group_id = parse_int(parsed_json.get('product_group_id', None))
         self._qu_id_stock = parse_int(parsed_json.get('qu_id_stock', None))
         self._qu_id_purchase = parse_int(parsed_json.get('qu_id_purchsase', None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get('qu_factor_purchase_to_stock', None))
@@ -76,6 +89,10 @@ class ProductData(object):
     @property
     def id(self) -> int:
         return self._id
+        
+    @property
+    def product_group_id(self) -> int:
+        return self._product_group_id
 
     @property
     def name(self) -> str:
@@ -374,4 +391,13 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         return resp
+        
+    def get_product_groups(self) -> List[LocationData]:
+        req_url = urljoin(self._base_url, "objects/product_groups")
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200 or not resp.text:
+            return
+        parsed_json = resp.json()
+        return [LocationData(response) for response in parsed_json]
+        
         

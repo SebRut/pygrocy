@@ -4,6 +4,7 @@ from typing import List
 from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
                                CurrentStockResponse,
                                ShoppingListItem,
+                               LocationData,
                                CurrentVolatilStockResponse, GrocyApiClient,
                                ProductData, ProductDetailsResponse,
                                TransactionType, UserDto)
@@ -17,6 +18,7 @@ class Product(object):
 
         self._name = None
         self._barcodes = None
+        self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.product_id)
@@ -24,6 +26,7 @@ class Product(object):
             return
         self._name = details.product.name
         self._barcodes = details.product.barcodes
+        self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -> str:
@@ -32,6 +35,10 @@ class Product(object):
     @property
     def product_id(self) -> int:
         return self._product_id
+        
+    @property
+    def product_group_id(self) -> int:
+        return self._product_group_id
 
     @property
     def available_amount(self) -> float:
@@ -44,6 +51,24 @@ class Product(object):
     @property
     def barcodes(self) -> List[str]:
         return self._barcodes
+
+class Group(object):
+    def __init__(self, raw_product_group: LocationData):
+        self._id = raw_product_group.id
+        self._name = raw_product_group.name
+        self._description = raw_product_group.description
+        
+    @property
+    def id(self) -> int:
+        return self._id
+        
+    @property
+    def name(self) -> str:
+        return self._name
+        
+    @property
+    def description(self) -> str:
+        return self._description
 
 class ShoppingListProduct(object):
     def __init__(self, raw_shopping_list: ShoppingListItem):
@@ -186,4 +211,11 @@ class Grocy(object):
 
     def remove_product_in_shopping_list(self, shopping_list_product_id: int):
         return self._api_client.remove_product_in_sl(shopping_list_product_id)
+        
+    def product_groups(self) -> List[Group]:
+        raw_groups = self._api_client.get_product_groups()
+        if raw_groups is None:
+            return
+        return [Group(resp) for resp in raw_groups]
+        
         
