@@ -2,7 +2,9 @@ from datetime import datetime
 from enum import Enum
 from typing import List
 from urllib.parse import urljoin
-
+import os
+import base64
+import json
 import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
@@ -400,4 +402,25 @@ class GrocyApiClient(object):
         parsed_json = resp.json()
         return [LocationData(response) for response in parsed_json]
         
-        
+    def upload_product_picture(self, product_id: int, pic_path: str):
+        if not os.path.exists(pic_path):
+            return
+        up_header = self._headers.copy()
+        up_header['accept'] = '*/*'
+        up_header['Content-Type'] = 'application/octet-stream'
+        b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
+        req_url = urljoin(urljoin(self._base_url, "files/productpictures/" ), str(b64fn, "utf-8"))
+        with open(pic_path,'rb') as pic:
+            resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
+            return resp
+            
+    def update_product_pic(self, product_id: int):
+        pic_name = '{}.jpg'.format(product_id)
+        data = { "picture_file_name":  pic_name }
+        up_header = self._headers.copy()
+        up_header['accept'] = '*/*'
+        up_header['Content-Type'] = 'application/json'
+        req_url = urljoin(urljoin(self._base_url, "objects/products/"), str(product_id))
+        resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
+        return resp
+            
