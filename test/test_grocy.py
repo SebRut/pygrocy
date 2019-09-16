@@ -261,5 +261,124 @@ class TestGrocy(TestCase):
         responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=400)
         assert api_client.update_product_pic(1).status_code != 204
         
+    @responses.activate
+    def test_get_expiring_products_valid(self):
+        resp = {
+            "expiring_products" : [
+                {
+                    "product_id": 0,
+                    "amount": "0.33",
+                    "best_before_date": "2019-05-02",
+                    "amount_opened": "0"
+                }
+            ],
+            "expired_products": [],
+            "missing_products": []
+        }
+        
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        eg_product = self.grocy.expiring_products()
+
+        assert isinstance(eg_product, list)
+        assert len(eg_product) == 1
+        for prod in eg_product:
+            assert isinstance(prod, Product)
+
+    @responses.activate
+    def test_get_expiring_invalid_no_data(self):
+        resp = {
+            "expiring_products": [],
+            "expired_products": [],
+            "missing_products": []
+        }
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        assert not self.grocy.expiring_products()
+
+    @responses.activate
+    def test_get_expiring_invalid_missing_data(self):
+        resp = {}
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        
+    @responses.activate
+    def test_get_expired_products_valid(self):
+        resp = {
+            "expired_products" : [
+                {
+                    "product_id": 0,
+                    "amount": "0.33",
+                    "best_before_date": "2019-05-02",
+                    "amount_opened": "0"
+                }
+            ],
+            "expiring_products": [],
+            "missing_products": []
+        }
+        
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        ed_product = self.grocy.expired_products()
+
+        assert isinstance(ed_product, list)
+        assert len(ed_product) == 1
+        for prod in ed_product:
+            assert isinstance(prod, Product)
+
+    @responses.activate
+    def test_get_expired_invalid_no_data(self):
+        resp = {
+            "expiring_products": [],
+            "expired_products": [],
+            "missing_products": []
+        }
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        assert not self.grocy.expired_products()
+
+    @responses.activate
+    def test_get_expired_invalid_missing_data(self):
+        resp = {}
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        
+    @responses.activate
+    def test_get_missing_products_valid(self):
+        resp = {
+            "missing_products" : [
+                {
+                    "product_id": 0,
+                    "amount": "0.33",
+                    "best_before_date": "2019-05-02",
+                    "amount_opened": "0"
+                }
+            ],
+            "expired_products": [],
+            "expiring_products": []
+        }
+        
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        m_product = self.grocy.missing_products()
+
+        assert isinstance(m_product, list)
+        assert len(m_product) == 1
+        for prod in m_product:
+            assert isinstance(prod, Product)
+
+    @responses.activate
+    def test_get_missing_invalid_no_data(self):
+        resp = {
+            "expiring_products": [],
+            "expired_products": [],
+            "missing_products": []
+        }
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+
+        assert not self.grocy.missing_products()
+
+    @responses.activate
+    def test_get_stock_invalid_missing_data(self):
+        resp = {}
+        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
         
         

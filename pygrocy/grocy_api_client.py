@@ -168,31 +168,14 @@ class CurrentChoreResponse(object):
         return self._next_estimated_execution_time
 
 
-class CurrentVolatilStockResponse(object):
-    def __init__(self, parsed_json):
-        self._expiring_products = [ProductData(product) for product in parsed_json.get('expiring_products')]
-        self._expired_products = [ProductData(product) for product in parsed_json.get('expired_products')]
-        self._missing_products = [ProductData(product) for product in parsed_json.get('missing_products')]
-
-    @property
-    def expiring_products(self) -> List[ProductData]:
-        return self._expiring_products
-
-    @property
-    def expired_products(self) -> List[ProductData]:
-        return self._expired_products
-
-    @property
-    def missing_products(self) -> List[ProductData]:
-        return self._missing_products
-
 
 class CurrentStockResponse(object):
     def __init__(self, parsed_json):
         self._product_id = parse_int(parsed_json.get('product_id'))
         self._amount = parse_float(parsed_json.get('amount'))
         self._best_before_date = parse_date(parsed_json.get('best_before_date'))
-
+        self._amount_opened = parse_int(parsed_json.get('amount_opened'))
+        
     @property
     def product_id(self) -> int:
         return self._product_id
@@ -204,6 +187,29 @@ class CurrentStockResponse(object):
     @property
     def best_before_date(self) -> datetime:
         return self._best_before_date
+
+    @property
+    def amount_opened(self) -> int:
+        return self._amount_opened
+
+class CurrentVolatilStockResponse(object):
+    def __init__(self, parsed_json):
+        self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get('expiring_products')]
+        self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get('expired_products')]
+        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get('missing_products')]
+
+    @property
+    def expiring_products(self) -> List[CurrentStockResponse]:
+        return self._expiring_products
+
+    @property
+    def expired_products(self) -> List[CurrentStockResponse]:
+        return self._expired_products
+
+    @property
+    def missing_products(self) -> List[CurrentStockResponse]:
+        return self._missing_products
+
 
 
 class ProductDetailsResponse(object):

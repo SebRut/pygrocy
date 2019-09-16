@@ -157,15 +157,39 @@ class Grocy(object):
     def volatile_stock(self) -> CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
 
-    def expiring_products(self) -> List[ProductData]:
-        return self.volatile_stock().expiring_products
+    def expiring_products(self, get_details: bool = False) -> List[Product]:
+        raw_eg_product = self.volatile_stock().expiring_products
+        if raw_eg_product is None:
+            return
+        eg_product = [Product(resp) for resp in raw_eg_product]
 
-    def expired_products(self) -> List[ProductData]:
-        return self.volatile_stock().expired_products
+        if get_details:
+            for item in eg_product:
+                item.get_details(self._api_client)
+        return eg_product
 
-    def missing_products(self) -> List[ProductData]:
-        return self.volatile_stock().missing_products
+    def expired_products(self, get_details: bool = False) -> List[Product]:
+        raw_ei_product = self.volatile_stock().expired_products
+        if raw_ei_product is None:
+            return
+        ei_product = [Product(resp) for resp in raw_ei_product]
 
+        if get_details:
+            for item in ei_product:
+                item.get_details(self._api_client)
+        return ei_product
+
+    def missing_products(self, get_details: bool = False) -> List[Product]:
+        raw_m_product = self.volatile_stock().missing_products
+        if raw_m_product is None:
+            return
+        m_product = [Product(resp) for resp in raw_m_product]
+
+        if get_details:
+            for item in m_product:
+                item.get_details(self._api_client)
+        return m_product
+        
     def product(self, product_id: int) -> ProductDetailsResponse:
         return self._api_client.get_product(product_id)
 
