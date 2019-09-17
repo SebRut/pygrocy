@@ -1,6 +1,5 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open
-from io import FileIO
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
@@ -261,6 +260,7 @@ class TestGrocy(TestCase):
         responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=400)
         assert api_client.update_product_pic(1).status_code != 204
         
+        
     @responses.activate
     def test_get_expiring_products_valid(self):
         resp = {
@@ -278,11 +278,11 @@ class TestGrocy(TestCase):
         
         responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
 
-        eg_product = self.grocy.expiring_products()
+        expiring_product = self.grocy.expiring_products()
 
-        assert isinstance(eg_product, list)
-        assert len(eg_product) == 1
-        for prod in eg_product:
+        assert isinstance(expiring_product, list)
+        assert len(expiring_product) == 1
+        for prod in expiring_product:
             assert isinstance(prod, Product)
 
     @responses.activate
@@ -318,11 +318,11 @@ class TestGrocy(TestCase):
         
         responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
 
-        ed_product = self.grocy.expired_products()
+        expired_product = self.grocy.expired_products()
 
-        assert isinstance(ed_product, list)
-        assert len(ed_product) == 1
-        for prod in ed_product:
+        assert isinstance(expired_product, list)
+        assert len(expired_product) == 1
+        for prod in expired_product:
             assert isinstance(prod, Product)
 
     @responses.activate
@@ -358,11 +358,11 @@ class TestGrocy(TestCase):
         
         responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
 
-        m_product = self.grocy.missing_products()
+        missing_product = self.grocy.missing_products()
 
-        assert isinstance(m_product, list)
-        assert len(m_product) == 1
-        for prod in m_product:
+        assert isinstance(missing_product, list)
+        assert len(missing_product) == 1
+        for prod in missing_product:
             assert isinstance(prod, Product)
 
     @responses.activate
@@ -380,5 +380,4 @@ class TestGrocy(TestCase):
     def test_get_stock_invalid_missing_data(self):
         resp = {}
         responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
-        
         
