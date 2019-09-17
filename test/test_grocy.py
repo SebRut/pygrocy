@@ -381,3 +381,34 @@ class TestGrocy(TestCase):
         resp = {}
         responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
         
+    @responses.activate
+    def test_get_userfields_valid(self):
+        resp =  {
+                "uf1": 0,
+                "uf2": "string"
+            }
+        
+        responses.add(responses.GET, "https://example.com/api/userfields/chores/1", json=resp, status=200)
+
+        a_chore_uf = self.grocy.get_userfields("chores",1)
+
+        assert a_chore_uf['uf1'] == 0
+
+
+    @responses.activate
+    def test_get_userfields_invalid_no_data(self):
+        resp = []
+        responses.add(responses.GET, "https://example.com/api/userfields/chores/1", json=resp ,status=200)
+
+        assert not self.grocy.get_userfields("chores",1) 
+
+    @responses.activate
+    def test_set_userfields_valid(self):
+        responses.add(responses.PUT, "https://example.com/api/userfields/chores/1", status=204)
+        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code == 204
+        
+    @responses.activate
+    def test_set_userfields_error(self):
+        responses.add(responses.PUT, "https://example.com/api/userfields/chores/1", status=400)
+        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code != 204
+        
