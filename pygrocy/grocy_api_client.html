@@ -26,11 +26,39 @@
 from enum import Enum
 from typing import List
 from urllib.parse import urljoin
-
+import os
+import base64
+import json
 import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
 
+class ShoppingListItem(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
+        self._note = parsed_json.get(&#39;note&#39;,None)
+        self._amount = parse_float(parsed_json.get(&#39;amount&#39;),0)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
+        self._shopping_list_id = parse_int(parsed_json.get(&#39;shopping_list_id&#39;))
+        self._done = parse_int(parsed_json.get(&#39;done&#39;))
+
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+    
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
+    @property
+    def note(self) -&gt; str:
+        return self._note
+
+    @property
+    def amount(self) -&gt; float:
+        return self._amount
 
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
@@ -47,6 +75,18 @@ class LocationData(object):
         self._name = parsed_json.get(&#39;name&#39;)
         self._description = parsed_json.get(&#39;description&#39;)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        
+    @property
+    def id(self) -&gt; int:
+        return self._id
+        
+    @property
+    def name(self) -&gt; str:
+        return self._name
+        
+    @property
+    def description(self) -&gt; str:
+        return self._description
 
 
 class ProductData(object):
@@ -55,6 +95,7 @@ class ProductData(object):
         self._name = parsed_json.get(&#39;name&#39;)
         self._description = parsed_json.get(&#39;description&#39;, None)
         self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
+        self._product_group_id = parse_int(parsed_json.get(&#39;product_group_id&#39;, None))
         self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
         self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
@@ -74,6 +115,10 @@ class ProductData(object):
     @property
     def id(self) -&gt; int:
         return self._id
+        
+    @property
+    def product_group_id(self) -&gt; int:
+        return self._product_group_id
 
     @property
     def name(self) -&gt; str:
@@ -338,7 +383,71 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+
+        
+    def get_shopping_list(self) -&gt; List[ShoppingListItem]:
+        req_url = urljoin(self._base_url, &#34;objects/shopping_list&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200:
+            return
+        parsed_json = resp.json()
+        return [ShoppingListItem(response) for response in parsed_json]
+
+    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            &#34;list_id&#34;: shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-missing-products&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def clear_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            &#34;list_id&#34;: shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/clear&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def remove_product_in_sl(self, sl_product_id: int):
+        
+        req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        return resp
+        
+    def get_product_groups(self) -&gt; List[LocationData]:
+        req_url = urljoin(self._base_url, &#34;objects/product_groups&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200 or not resp.text:
+            return
+        parsed_json = resp.json()
+        return [LocationData(response) for response in parsed_json]
+        
+    def upload_product_picture(self, product_id: int, pic_path: str):
+        if not os.path.exists(pic_path):
+            return
+        up_header = self._headers.copy()
+        up_header[&#39;accept&#39;] = &#39;*/*&#39;
+        up_header[&#39;Content-Type&#39;] = &#39;application/octet-stream&#39;
+        b64fn = base64.b64encode(&#39;{}.jpg&#39;.format(product_id).encode(&#39;ascii&#39;))
+        req_url = urljoin(urljoin(self._base_url, &#34;files/productpictures/&#34; ), str(b64fn, &#34;utf-8&#34;))
+        with open(pic_path,&#39;rb&#39;) as pic:
+            resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
+            return resp
+            
+    def update_product_pic(self, product_id: int):
+        pic_name = &#39;{}.jpg&#39;.format(product_id)
+        data = { &#34;picture_file_name&#34;:  pic_name }
+        up_header = self._headers.copy()
+        up_header[&#39;accept&#39;] = &#39;*/*&#39;
+        up_header[&#39;Content-Type&#39;] = &#39;application/json&#39;
+        req_url = urljoin(urljoin(self._base_url, &#34;objects/products/&#34;), str(product_id))
+        resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
+        return resp
+            </code></pre>
 </details>
 </section>
 <section>
@@ -725,10 +834,90 @@ def missing_products(self) -&gt; List[ProductData]:
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, &#34;stock/products/&#34;), str(product_id) + &#34;/&#34;), &#34;consume&#34;)
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+
+        
+    def get_shopping_list(self) -&gt; List[ShoppingListItem]:
+        req_url = urljoin(self._base_url, &#34;objects/shopping_list&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200:
+            return
+        parsed_json = resp.json()
+        return [ShoppingListItem(response) for response in parsed_json]
+
+    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            &#34;list_id&#34;: shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-missing-products&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def clear_shopping_list(self, shopping_list_id: int = 1):
+        data = {
+            &#34;list_id&#34;: shopping_list_id
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/clear&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+            
+    def remove_product_in_sl(self, sl_product_id: int):
+        
+        req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+        return resp
+        
+    def get_product_groups(self) -&gt; List[LocationData]:
+        req_url = urljoin(self._base_url, &#34;objects/product_groups&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code != 200 or not resp.text:
+            return
+        parsed_json = resp.json()
+        return [LocationData(response) for response in parsed_json]
+        
+    def upload_product_picture(self, product_id: int, pic_path: str):
+        if not os.path.exists(pic_path):
+            return
+        up_header = self._headers.copy()
+        up_header[&#39;accept&#39;] = &#39;*/*&#39;
+        up_header[&#39;Content-Type&#39;] = &#39;application/octet-stream&#39;
+        b64fn = base64.b64encode(&#39;{}.jpg&#39;.format(product_id).encode(&#39;ascii&#39;))
+        req_url = urljoin(urljoin(self._base_url, &#34;files/productpictures/&#34; ), str(b64fn, &#34;utf-8&#34;))
+        with open(pic_path,&#39;rb&#39;) as pic:
+            resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
+            return resp
+            
+    def update_product_pic(self, product_id: int):
+        pic_name = &#39;{}.jpg&#39;.format(product_id)
+        data = { &#34;picture_file_name&#34;:  pic_name }
+        up_header = self._headers.copy()
+        up_header[&#39;accept&#39;] = &#39;*/*&#39;
+        up_header[&#39;Content-Type&#39;] = &#39;application/json&#39;
+        req_url = urljoin(urljoin(self._base_url, &#34;objects/products/&#34;), str(product_id))
+        resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
+        return resp</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list"><code class="name flex">
+<span>def <span class="ident">add_missing_product_to_shopping_list</span></span>(<span>self, shopping_list_id=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
+    data = {
+        &#34;list_id&#34;: shopping_list_id
+    }
+
+    req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-missing-products&#34;)
+    resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+    return resp</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.add_product"><code class="name flex">
 <span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=<TransactionType.PURCHASE: 'purchase'>)</span>
 </code></dt>
@@ -751,6 +940,23 @@ def missing_products(self) -&gt; List[ProductData]:
     requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list"><code class="name flex">
+<span>def <span class="ident">clear_shopping_list</span></span>(<span>self, shopping_list_id=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def clear_shopping_list(self, shopping_list_id: int = 1):
+    data = {
+        &#34;list_id&#34;: shopping_list_id
+    }
+
+    req_url = urljoin(self._base_url, &#34;stock/shoppinglist/clear&#34;)
+    resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+    return resp</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.consume_product"><code class="name flex">
 <span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=<TransactionType.CONSUME: 'consume'>)</span>
 </code></dt>
@@ -771,7 +977,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 8, 26, 7, 10, 5, 756455))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 9, 17, 5, 28, 58, 707561))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -833,6 +1039,38 @@ def missing_products(self) -&gt; List[ProductData]:
     return ProductDetailsResponse(parsed_json)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups"><code class="name flex">
+<span>def <span class="ident">get_product_groups</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_product_groups(self) -&gt; List[LocationData]:
+    req_url = urljoin(self._base_url, &#34;objects/product_groups&#34;)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+    if resp.status_code != 200 or not resp.text:
+        return
+    parsed_json = resp.json()
+    return [LocationData(response) for response in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list"><code class="name flex">
+<span>def <span class="ident">get_shopping_list</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_shopping_list(self) -&gt; List[ShoppingListItem]:
+    req_url = urljoin(self._base_url, &#34;objects/shopping_list&#34;)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+    if resp.status_code != 200:
+        return
+    parsed_json = resp.json()
+    return [ShoppingListItem(response) for response in parsed_json]</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_stock"><code class="name flex">
 <span>def <span class="ident">get_stock</span></span>(<span>self)</span>
 </code></dt>
@@ -863,6 +1101,58 @@ def missing_products(self) -&gt; List[ProductData]:
     return CurrentVolatilStockResponse(parsed_json)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl"><code class="name flex">
+<span>def <span class="ident">remove_product_in_sl</span></span>(<span>self, sl_product_id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_product_in_sl(self, sl_product_id: int):
+    
+    req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
+    resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+    return resp</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.update_product_pic"><code class="name flex">
+<span>def <span class="ident">update_product_pic</span></span>(<span>self, product_id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def update_product_pic(self, product_id: int):
+    pic_name = &#39;{}.jpg&#39;.format(product_id)
+    data = { &#34;picture_file_name&#34;:  pic_name }
+    up_header = self._headers.copy()
+    up_header[&#39;accept&#39;] = &#39;*/*&#39;
+    up_header[&#39;Content-Type&#39;] = &#39;application/json&#39;
+    req_url = urljoin(urljoin(self._base_url, &#34;objects/products/&#34;), str(product_id))
+    resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
+    return resp</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture"><code class="name flex">
+<span>def <span class="ident">upload_product_picture</span></span>(<span>self, product_id, pic_path)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def upload_product_picture(self, product_id: int, pic_path: str):
+    if not os.path.exists(pic_path):
+        return
+    up_header = self._headers.copy()
+    up_header[&#39;accept&#39;] = &#39;*/*&#39;
+    up_header[&#39;Content-Type&#39;] = &#39;application/octet-stream&#39;
+    b64fn = base64.b64encode(&#39;{}.jpg&#39;.format(product_id).encode(&#39;ascii&#39;))
+    req_url = urljoin(urljoin(self._base_url, &#34;files/productpictures/&#34; ), str(b64fn, &#34;utf-8&#34;))
+    with open(pic_path,&#39;rb&#39;) as pic:
+        resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
+        return resp</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.LocationData"><code class="flex name class">
@@ -878,8 +1168,53 @@ def missing_products(self) -&gt; List[ProductData]:
         self._id = parse_int(parsed_json.get(&#39;id&#39;))
         self._name = parsed_json.get(&#39;name&#39;)
         self._description = parsed_json.get(&#39;description&#39;)
-        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))</code></pre>
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        
+    @property
+    def id(self) -&gt; int:
+        return self._id
+        
+    @property
+    def name(self) -&gt; str:
+        return self._name
+        
+    @property
+    def description(self) -&gt; str:
+        return self._description</code></pre>
 </details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.LocationData.description"><code class="name">var <span class="ident">description</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.LocationData.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.LocationData.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductData"><code class="flex name class">
 <span>class <span class="ident">ProductData</span></span>
@@ -895,6 +1230,7 @@ def missing_products(self) -&gt; List[ProductData]:
         self._name = parsed_json.get(&#39;name&#39;)
         self._description = parsed_json.get(&#39;description&#39;, None)
         self._location_id = parse_int(parsed_json.get(&#39;location_id&#39;, None))
+        self._product_group_id = parse_int(parsed_json.get(&#39;product_group_id&#39;, None))
         self._qu_id_stock = parse_int(parsed_json.get(&#39;qu_id_stock&#39;, None))
         self._qu_id_purchase = parse_int(parsed_json.get(&#39;qu_id_purchsase&#39;, None))
         self._qu_factor_purchase_to_stock = parse_float(parsed_json.get(&#39;qu_factor_purchase_to_stock&#39;, None))
@@ -914,6 +1250,10 @@ def missing_products(self) -&gt; List[ProductData]:
     @property
     def id(self) -&gt; int:
         return self._id
+        
+    @property
+    def product_group_id(self) -&gt; int:
+        return self._product_group_id
 
     @property
     def name(self) -&gt; str:
@@ -953,6 +1293,16 @@ def id(self) -&gt; int:
 <pre><code class="python">@property
 def name(self) -&gt; str:
     return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.product_group_id"><code class="name">var <span class="ident">product_group_id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def product_group_id(self) -&gt; int:
+    return self._product_group_id</code></pre>
 </details>
 </dd>
 </dl>
@@ -1099,6 +1449,85 @@ def stock_amount_opened(self) -&gt; int:
         self._description = parsed_json.get(&#39;description&#39;)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))</code></pre>
 </details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem"><code class="flex name class">
+<span>class <span class="ident">ShoppingListItem</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ShoppingListItem(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
+        self._note = parsed_json.get(&#39;note&#39;,None)
+        self._amount = parse_float(parsed_json.get(&#39;amount&#39;),0)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
+        self._shopping_list_id = parse_int(parsed_json.get(&#39;shopping_list_id&#39;))
+        self._done = parse_int(parsed_json.get(&#39;done&#39;))
+
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+    
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
+    @property
+    def note(self) -&gt; str:
+        return self._note
+
+    @property
+    def amount(self) -&gt; float:
+        return self._amount</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.amount"><code class="name">var <span class="ident">amount</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def amount(self) -&gt; float:
+    return self._amount</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.note"><code class="name">var <span class="ident">note</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def note(self) -&gt; str:
+    return self._note</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.product_id"><code class="name">var <span class="ident">product_id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def product_id(self) -&gt; int:
+    return self._product_id</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.TransactionType"><code class="flex name class">
 <span>class <span class="ident">TransactionType</span></span>
@@ -1286,19 +1715,31 @@ def username(self) -&gt; str:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.GrocyApiClient" href="#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a></code></h4>
-<ul class="two-column">
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list">add_missing_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product">add_product</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list">clear_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.consume_product" href="#pygrocy.grocy_api_client.GrocyApiClient.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.execute_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.execute_chore">execute_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product_groups">get_product_groups</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list">get_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock">get_volatile_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl" href="#pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl">remove_product_in_sl</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.update_product_pic" href="#pygrocy.grocy_api_client.GrocyApiClient.update_product_pic">update_product_pic</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture" href="#pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture">upload_product_picture</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.LocationData" href="#pygrocy.grocy_api_client.LocationData">LocationData</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.LocationData.description" href="#pygrocy.grocy_api_client.LocationData.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.LocationData.id" href="#pygrocy.grocy_api_client.LocationData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.LocationData.name" href="#pygrocy.grocy_api_client.LocationData.name">name</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></h4>
@@ -1306,6 +1747,7 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.ProductData.barcodes" href="#pygrocy.grocy_api_client.ProductData.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.id" href="#pygrocy.grocy_api_client.ProductData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.name" href="#pygrocy.grocy_api_client.ProductData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id" href="#pygrocy.grocy_api_client.ProductData.product_group_id">product_group_id</a></code></li>
 </ul>
 </li>
 <li>
@@ -1322,6 +1764,15 @@ def username(self) -&gt; str:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.QuantityUnitData" href="#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.ShoppingListItem" href="#pygrocy.grocy_api_client.ShoppingListItem">ShoppingListItem</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.amount" href="#pygrocy.grocy_api_client.ShoppingListItem.amount">amount</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.id" href="#pygrocy.grocy_api_client.ShoppingListItem.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.note" href="#pygrocy.grocy_api_client.ShoppingListItem.note">note</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.product_id" href="#pygrocy.grocy_api_client.ShoppingListItem.product_id">product_id</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.TransactionType" href="#pygrocy.grocy_api_client.TransactionType">TransactionType</a></code></h4>
