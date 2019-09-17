@@ -249,3 +249,10 @@ class Grocy(object):
             return
         return self._api_client.update_product_pic(product_id)
         
+    def get_userfields(self, entity: str, object_id: int):
+        return self._api_client.get_userfields(entity, object_id)
+        
+    def set_userfields(self, entity: str, object_id: int, key: str, value):
+        return self._api_client.set_userfields(entity, object_id, key, value)
+        
+        
