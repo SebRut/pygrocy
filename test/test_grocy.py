@@ -1,5 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open
+from datetime import datetime
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
@@ -412,3 +413,20 @@ class TestGrocy(TestCase):
         responses.add(responses.PUT, "https://example.com/api/userfields/chores/1", status=400)
         assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code != 204
         
+    @responses.activate
+    def test_get_last_db_changed_valid(self):
+        resp =  { "changed_time": "2019-09-18T05:30:58.598Z" }
+        
+        responses.add(responses.GET, "https://example.com/api/system/db-changed-time", json=resp, status=200)
+
+        timestamp = self.grocy.get_last_db_changed()
+
+        assert isinstance(timestamp, datetime)
+
+
+    @responses.activate
+    def test_get_last_db_changed_invalid_no_data(self):
+        resp = {}
+        responses.add(responses.GET, "https://example.com/api/system/db-changed-time", json=resp ,status=200)
+
+        assert self.grocy.get_last_db_changed() is None

@@ -255,4 +255,6 @@ class Grocy(object):
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         return self._api_client.set_userfields(entity, object_id, key, value)
         
+    def get_last_db_changed(self):
+        return self._api_client.get_last_db_changed()
         

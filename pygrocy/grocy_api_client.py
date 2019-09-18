@@ -444,3 +444,10 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
         resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
+
+    def get_last_db_changed(self):
+        req_url = urljoin(self._base_url, "system/db-changed-time")
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        last_change_timestamp = parse_date(resp.json().get('changed_time'))
+        return last_change_timestamp
+        
