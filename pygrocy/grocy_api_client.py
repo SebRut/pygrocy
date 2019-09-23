@@ -288,8 +288,8 @@ class TransactionType(Enum):
 
 
 class GrocyApiClient(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._base_url = base_url
+    def __init__(self, base_url, api_key, port: int = 9192, verify_ssl = True):
+        self._base_url = '{}:{}/api/'.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         self._headers = {

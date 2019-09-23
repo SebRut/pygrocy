@@ -19,7 +19,11 @@ from pygrocy import Grocy
 
 Obtain a grocy instance:
 ```python
-grocy = Grocy("https://example.com/api/", "GROCY_API_KEY")
+grocy = Grocy("https://example.com", "GROCY_API_KEY")
+```
+or
+```python
+grocy = Grocy("https://example.com", "GROCY_API_KEY", port = 9192, verify_ssl = True)
 ```
 
 Get current stock:

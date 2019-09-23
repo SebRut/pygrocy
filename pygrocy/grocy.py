@@ -140,8 +140,8 @@ class Chore(object):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._api_client = GrocyApiClient(base_url, api_key, verify_ssl)
+    def __init__(self, base_url, api_key, port: int = 9192, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self, get_details: bool = False) -> List[Product]:
         raw_stock = self._api_client.get_stock()
