@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.6.3" />
+<meta name="generator" content="pdoc 0.6.4" />
 <title>pygrocy.grocy_api_client API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -32,6 +32,8 @@ import json
 import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
+
+DEFAULT_PORT_NUMBER=9192
 
 class ShoppingListItem(object):
     def __init__(self, parsed_json):
@@ -192,31 +194,14 @@ class CurrentChoreResponse(object):
         return self._next_estimated_execution_time
 
 
-class CurrentVolatilStockResponse(object):
-    def __init__(self, parsed_json):
-        self._expiring_products = [ProductData(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
-        self._expired_products = [ProductData(product) for product in parsed_json.get(&#39;expired_products&#39;)]
-        self._missing_products = [ProductData(product) for product in parsed_json.get(&#39;missing_products&#39;)]
-
-    @property
-    def expiring_products(self) -&gt; List[ProductData]:
-        return self._expiring_products
-
-    @property
-    def expired_products(self) -&gt; List[ProductData]:
-        return self._expired_products
-
-    @property
-    def missing_products(self) -&gt; List[ProductData]:
-        return self._missing_products
-
 
 class CurrentStockResponse(object):
     def __init__(self, parsed_json):
         self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
         self._amount = parse_float(parsed_json.get(&#39;amount&#39;))
         self._best_before_date = parse_date(parsed_json.get(&#39;best_before_date&#39;))
-
+        self._amount_opened = parse_float(parsed_json.get(&#39;amount_opened&#39;))
+        
     @property
     def product_id(self) -&gt; int:
         return self._product_id
@@ -228,6 +213,29 @@ class CurrentStockResponse(object):
     @property
     def best_before_date(self) -&gt; datetime:
         return self._best_before_date
+
+    @property
+    def amount_opened(self) -&gt; float:
+        return self._amount_opened
+
+class CurrentVolatilStockResponse(object):
+    def __init__(self, parsed_json):
+        self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
+        self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expired_products&#39;)]
+        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
+
+    @property
+    def expiring_products(self) -&gt; List[CurrentStockResponse]:
+        return self._expiring_products
+
+    @property
+    def expired_products(self) -&gt; List[CurrentStockResponse]:
+        return self._expired_products
+
+    @property
+    def missing_products(self) -&gt; List[CurrentStockResponse]:
+        return self._missing_products
+
 
 
 class ProductDetailsResponse(object):
@@ -306,8 +314,8 @@ class TransactionType(Enum):
 
 
 class GrocyApiClient(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._base_url = base_url
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._base_url = &#39;{}:{}/api/&#39;.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         self._headers = {
@@ -447,7 +455,28 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(self._base_url, &#34;objects/products/&#34;), str(product_id))
         resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
         return resp
-            </code></pre>
+            
+    def get_userfields(self, entity: str, object_id: int):
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if not resp:
+            return resp
+        return resp.json()
+        
+    def set_userfields(self, entity: str, object_id: int, key: str, value):
+        data = {
+            key: value
+        }
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+        resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+
+    def get_last_db_changed(self):
+        req_url = urljoin(self._base_url, &#34;system/db-changed-time&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        last_change_timestamp = parse_date(resp.json().get(&#39;changed_time&#39;))
+        return last_change_timestamp
+        </code></pre>
 </details>
 </section>
 <section>
@@ -641,7 +670,8 @@ def next_estimated_execution_time(self) -&gt; datetime:
         self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
         self._amount = parse_float(parsed_json.get(&#39;amount&#39;))
         self._best_before_date = parse_date(parsed_json.get(&#39;best_before_date&#39;))
-
+        self._amount_opened = parse_float(parsed_json.get(&#39;amount_opened&#39;))
+        
     @property
     def product_id(self) -&gt; int:
         return self._product_id
@@ -652,7 +682,11 @@ def next_estimated_execution_time(self) -&gt; datetime:
 
     @property
     def best_before_date(self) -&gt; datetime:
-        return self._best_before_date</code></pre>
+        return self._best_before_date
+
+    @property
+    def amount_opened(self) -&gt; float:
+        return self._amount_opened</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -664,6 +698,16 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <pre><code class="python">@property
 def amount(self) -&gt; float:
     return self._amount</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentStockResponse.amount_opened"><code class="name">var <span class="ident">amount_opened</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def amount_opened(self) -&gt; float:
+    return self._amount_opened</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse.best_before_date"><code class="name">var <span class="ident">best_before_date</span></code></dt>
@@ -698,20 +742,20 @@ def product_id(self) -&gt; int:
 <summary>Source code</summary>
 <pre><code class="python">class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        self._expiring_products = [ProductData(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
-        self._expired_products = [ProductData(product) for product in parsed_json.get(&#39;expired_products&#39;)]
-        self._missing_products = [ProductData(product) for product in parsed_json.get(&#39;missing_products&#39;)]
+        self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
+        self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expired_products&#39;)]
+        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
 
     @property
-    def expiring_products(self) -&gt; List[ProductData]:
+    def expiring_products(self) -&gt; List[CurrentStockResponse]:
         return self._expiring_products
 
     @property
-    def expired_products(self) -&gt; List[ProductData]:
+    def expired_products(self) -&gt; List[CurrentStockResponse]:
         return self._expired_products
 
     @property
-    def missing_products(self) -&gt; List[ProductData]:
+    def missing_products(self) -&gt; List[CurrentStockResponse]:
         return self._missing_products</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -722,7 +766,7 @@ def product_id(self) -&gt; int:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def expired_products(self) -&gt; List[ProductData]:
+def expired_products(self) -&gt; List[CurrentStockResponse]:
     return self._expired_products</code></pre>
 </details>
 </dd>
@@ -732,7 +776,7 @@ def expired_products(self) -&gt; List[ProductData]:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def expiring_products(self) -&gt; List[ProductData]:
+def expiring_products(self) -&gt; List[CurrentStockResponse]:
     return self._expiring_products</code></pre>
 </details>
 </dd>
@@ -742,7 +786,7 @@ def expiring_products(self) -&gt; List[ProductData]:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def missing_products(self) -&gt; List[ProductData]:
+def missing_products(self) -&gt; List[CurrentStockResponse]:
     return self._missing_products</code></pre>
 </details>
 </dd>
@@ -750,15 +794,15 @@ def missing_products(self) -&gt; List[ProductData]:
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient"><code class="flex name class">
 <span>class <span class="ident">GrocyApiClient</span></span>
-<span>(</span><span>base_url, api_key, verify_ssl=True)</span>
+<span>(</span><span>base_url, api_key, port=9192, verify_ssl=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class GrocyApiClient(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._base_url = base_url
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._base_url = &#39;{}:{}/api/&#39;.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         self._headers = {
@@ -897,7 +941,28 @@ def missing_products(self) -&gt; List[ProductData]:
         up_header[&#39;Content-Type&#39;] = &#39;application/json&#39;
         req_url = urljoin(urljoin(self._base_url, &#34;objects/products/&#34;), str(product_id))
         resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
-        return resp</code></pre>
+        return resp
+            
+    def get_userfields(self, entity: str, object_id: int):
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if not resp:
+            return resp
+        return resp.json()
+        
+    def set_userfields(self, entity: str, object_id: int, key: str, value):
+        data = {
+            key: value
+        }
+        req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+        resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+
+    def get_last_db_changed(self):
+        req_url = urljoin(self._base_url, &#34;system/db-changed-time&#34;)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        last_change_timestamp = parse_date(resp.json().get(&#39;changed_time&#39;))
+        return last_change_timestamp</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -919,7 +984,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.add_product"><code class="name flex">
-<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=<TransactionType.PURCHASE: 'purchase'>)</span>
+<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=&lt;TransactionType.PURCHASE: &#39;purchase&#39;&gt;)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -958,7 +1023,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.consume_product"><code class="name flex">
-<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=<TransactionType.CONSUME: 'consume'>)</span>
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=&lt;TransactionType.CONSUME: &#39;consume&#39;&gt;)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -977,7 +1042,7 @@ def missing_products(self) -&gt; List[ProductData]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 9, 17, 5, 28, 58, 707561))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 10, 9, 7, 7, 26, 710006))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1021,6 +1086,20 @@ def missing_products(self) -&gt; List[ProductData]:
     resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
     parsed_json = resp.json()
     return [CurrentChoreResponse(chore) for chore in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed"><code class="name flex">
+<span>def <span class="ident">get_last_db_changed</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_last_db_changed(self):
+    req_url = urljoin(self._base_url, &#34;system/db-changed-time&#34;)
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+    last_change_timestamp = parse_date(resp.json().get(&#39;changed_time&#39;))
+    return last_change_timestamp</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product"><code class="name flex">
@@ -1087,6 +1166,21 @@ def missing_products(self) -&gt; List[ProductData]:
     return [CurrentStockResponse(response) for response in parsed_json]</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_userfields"><code class="name flex">
+<span>def <span class="ident">get_userfields</span></span>(<span>self, entity, object_id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_userfields(self, entity: str, object_id: int):
+    req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+    resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+    if not resp:
+        return resp
+    return resp.json()</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock"><code class="name flex">
 <span>def <span class="ident">get_volatile_stock</span></span>(<span>self)</span>
 </code></dt>
@@ -1112,6 +1206,22 @@ def missing_products(self) -&gt; List[ProductData]:
     
     req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
     resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+    return resp</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.set_userfields"><code class="name flex">
+<span>def <span class="ident">set_userfields</span></span>(<span>self, entity, object_id, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_userfields(self, entity: str, object_id: int, key: str, value):
+    data = {
+        key: value
+    }
+    req_url = urljoin(urljoin(urljoin(self._base_url, &#34;userfields/&#34;), entity + &#34;/&#34;), str(object_id))
+    resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
     return resp</code></pre>
 </details>
 </dd>
@@ -1701,6 +1811,7 @@ def username(self) -&gt; str:
 <h4><code><a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.CurrentStockResponse.amount" href="#pygrocy.grocy_api_client.CurrentStockResponse.amount">amount</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentStockResponse.amount_opened" href="#pygrocy.grocy_api_client.CurrentStockResponse.amount_opened">amount_opened</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.CurrentStockResponse.best_before_date" href="#pygrocy.grocy_api_client.CurrentStockResponse.best_before_date">best_before_date</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.CurrentStockResponse.product_id" href="#pygrocy.grocy_api_client.CurrentStockResponse.product_id">product_id</a></code></li>
 </ul>
@@ -1723,12 +1834,15 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.execute_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.execute_chore">execute_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed" href="#pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed">get_last_db_changed</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product_groups">get_product_groups</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list">get_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.get_userfields">get_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock">get_volatile_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl" href="#pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl">remove_product_in_sl</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.set_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.set_userfields">set_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.update_product_pic" href="#pygrocy.grocy_api_client.GrocyApiClient.update_product_pic">update_product_pic</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture" href="#pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture">upload_product_picture</a></code></li>
 </ul>
@@ -1799,7 +1913,7 @@ def username(self) -&gt; str:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.4</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.6.3" />
+<meta name="generator" content="pdoc 0.6.4" />
 <title>pygrocy.grocy API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -31,7 +31,7 @@ from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
                                LocationData,
                                CurrentVolatilStockResponse, GrocyApiClient,
                                ProductData, ProductDetailsResponse,
-                               TransactionType, UserDto)
+                               TransactionType, UserDto, DEFAULT_PORT_NUMBER)
 
 
 class Product(object):
@@ -164,8 +164,8 @@ class Chore(object):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._api_client = GrocyApiClient(base_url, api_key, verify_ssl)
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self, get_details: bool = False) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
@@ -181,14 +181,40 @@ class Grocy(object):
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
 
-    def expiring_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().expiring_products
+    def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_expiring_product = self.volatile_stock().expiring_products
+        if raw_expiring_product is None:
+            return
+        expiring_product = [Product(resp) for resp in raw_expiring_product]
 
-    def expired_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().expired_products
+        if get_details:
+            for item in expiring_product:
+                item.get_details(self._api_client)
+        return expiring_product
 
-    def missing_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().missing_products
+    def expired_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_expired_product = self.volatile_stock().expired_products
+        if raw_expired_product is None:
+            return
+        expired_product = [Product(resp) for resp in raw_expired_product]
+
+        if get_details:
+            for item in expired_product:
+                item.get_details(self._api_client)
+        return expired_product
+
+
+    def missing_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_missing_product = self.volatile_stock().missing_products
+        if raw_missing_product is None:
+            return
+        missing_product = [Product(resp) for resp in raw_missing_product]
+
+        if get_details:
+            for item in missing_product:
+                item.get_details(self._api_client)
+        return missing_product
+
 
     def product(self, product_id: int) -&gt; ProductDetailsResponse:
         return self._api_client.get_product(product_id)
@@ -246,6 +272,15 @@ class Grocy(object):
         if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
             return
         return self._api_client.update_product_pic(product_id)
+        
+    def get_userfields(self, entity: str, object_id: int):
+        return self._api_client.get_userfields(entity, object_id)
+        
+    def set_userfields(self, entity: str, object_id: int, key: str, value):
+        return self._api_client.set_userfields(entity, object_id, key, value)
+        
+    def get_last_db_changed(self):
+        return self._api_client.get_last_db_changed()
         </code></pre>
 </details>
 </section>
@@ -374,15 +409,15 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </dd>
 <dt id="pygrocy.grocy.Grocy"><code class="flex name class">
 <span>class <span class="ident">Grocy</span></span>
-<span>(</span><span>base_url, api_key, verify_ssl=True)</span>
+<span>(</span><span>base_url, api_key, port=9192, verify_ssl=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Grocy(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._api_client = GrocyApiClient(base_url, api_key, verify_ssl)
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self, get_details: bool = False) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
@@ -398,14 +433,40 @@ def next_estimated_execution_time(self) -&gt; datetime:
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
 
-    def expiring_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().expiring_products
+    def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_expiring_product = self.volatile_stock().expiring_products
+        if raw_expiring_product is None:
+            return
+        expiring_product = [Product(resp) for resp in raw_expiring_product]
 
-    def expired_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().expired_products
+        if get_details:
+            for item in expiring_product:
+                item.get_details(self._api_client)
+        return expiring_product
 
-    def missing_products(self) -&gt; List[ProductData]:
-        return self.volatile_stock().missing_products
+    def expired_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_expired_product = self.volatile_stock().expired_products
+        if raw_expired_product is None:
+            return
+        expired_product = [Product(resp) for resp in raw_expired_product]
+
+        if get_details:
+            for item in expired_product:
+                item.get_details(self._api_client)
+        return expired_product
+
+
+    def missing_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_missing_product = self.volatile_stock().missing_products
+        if raw_missing_product is None:
+            return
+        missing_product = [Product(resp) for resp in raw_missing_product]
+
+        if get_details:
+            for item in missing_product:
+                item.get_details(self._api_client)
+        return missing_product
+
 
     def product(self, product_id: int) -&gt; ProductDetailsResponse:
         return self._api_client.get_product(product_id)
@@ -462,7 +523,16 @@ def next_estimated_execution_time(self) -&gt; datetime:
     def add_product_pic(self, product_id: int, pic_path: str):
         if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
             return
-        return self._api_client.update_product_pic(product_id)</code></pre>
+        return self._api_client.update_product_pic(product_id)
+        
+    def get_userfields(self, entity: str, object_id: int):
+        return self._api_client.get_userfields(entity, object_id)
+        
+    def set_userfields(self, entity: str, object_id: int, key: str, value):
+        return self._api_client.set_userfields(entity, object_id, key, value)
+        
+    def get_last_db_changed(self):
+        return self._api_client.get_last_db_changed()</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -478,7 +548,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.add_product"><code class="name flex">
-<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=<TransactionType.PURCHASE: 'purchase'>)</span>
+<span>def <span class="ident">add_product</span></span>(<span>self, product_id, amount, price, best_before_date=None, transaction_type=&lt;TransactionType.PURCHASE: &#39;purchase&#39;&gt;)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -542,7 +612,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.consume_product"><code class="name flex">
-<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=<TransactionType.CONSUME: 'consume'>)</span>
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id, amount=1, spoiled=False, transaction_type=&lt;TransactionType.CONSUME: &#39;consume&#39;&gt;)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -554,7 +624,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 9, 17, 5, 28, 58, 708367))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 10, 9, 7, 7, 26, 710739))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -565,36 +635,82 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.expired_products"><code class="name flex">
-<span>def <span class="ident">expired_products</span></span>(<span>self)</span>
+<span>def <span class="ident">expired_products</span></span>(<span>self, get_details=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def expired_products(self) -&gt; List[ProductData]:
-    return self.volatile_stock().expired_products</code></pre>
+<pre><code class="python">def expired_products(self, get_details: bool = False) -&gt; List[Product]:
+    raw_expired_product = self.volatile_stock().expired_products
+    if raw_expired_product is None:
+        return
+    expired_product = [Product(resp) for resp in raw_expired_product]
+
+    if get_details:
+        for item in expired_product:
+            item.get_details(self._api_client)
+    return expired_product</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.expiring_products"><code class="name flex">
-<span>def <span class="ident">expiring_products</span></span>(<span>self)</span>
+<span>def <span class="ident">expiring_products</span></span>(<span>self, get_details=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def expiring_products(self) -&gt; List[ProductData]:
-    return self.volatile_stock().expiring_products</code></pre>
+<pre><code class="python">def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
+    raw_expiring_product = self.volatile_stock().expiring_products
+    if raw_expiring_product is None:
+        return
+    expiring_product = [Product(resp) for resp in raw_expiring_product]
+
+    if get_details:
+        for item in expiring_product:
+            item.get_details(self._api_client)
+    return expiring_product</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.get_last_db_changed"><code class="name flex">
+<span>def <span class="ident">get_last_db_changed</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_last_db_changed(self):
+    return self._api_client.get_last_db_changed()</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.get_userfields"><code class="name flex">
+<span>def <span class="ident">get_userfields</span></span>(<span>self, entity, object_id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_userfields(self, entity: str, object_id: int):
+    return self._api_client.get_userfields(entity, object_id)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.missing_products"><code class="name flex">
-<span>def <span class="ident">missing_products</span></span>(<span>self)</span>
+<span>def <span class="ident">missing_products</span></span>(<span>self, get_details=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def missing_products(self) -&gt; List[ProductData]:
-    return self.volatile_stock().missing_products</code></pre>
+<pre><code class="python">def missing_products(self, get_details: bool = False) -&gt; List[Product]:
+    raw_missing_product = self.volatile_stock().missing_products
+    if raw_missing_product is None:
+        return
+    missing_product = [Product(resp) for resp in raw_missing_product]
+
+    if get_details:
+        for item in missing_product:
+            item.get_details(self._api_client)
+    return missing_product</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.product"><code class="name flex">
@@ -631,6 +747,17 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def remove_product_in_shopping_list(self, shopping_list_product_id: int):
     return self._api_client.remove_product_in_sl(shopping_list_product_id)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.set_userfields"><code class="name flex">
+<span>def <span class="ident">set_userfields</span></span>(<span>self, entity, object_id, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_userfields(self, entity: str, object_id: int, key: str, value):
+    return self._api_client.set_userfields(entity, object_id, key, value)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.shopping_list"><code class="name flex">
@@ -1028,10 +1155,13 @@ def product_id(self) -&gt; int:
 <li><code><a title="pygrocy.grocy.Grocy.execute_chore" href="#pygrocy.grocy.Grocy.execute_chore">execute_chore</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expired_products" href="#pygrocy.grocy.Grocy.expired_products">expired_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expiring_products" href="#pygrocy.grocy.Grocy.expiring_products">expiring_products</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.get_last_db_changed" href="#pygrocy.grocy.Grocy.get_last_db_changed">get_last_db_changed</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.get_userfields" href="#pygrocy.grocy.Grocy.get_userfields">get_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.missing_products" href="#pygrocy.grocy.Grocy.missing_products">missing_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product" href="#pygrocy.grocy.Grocy.product">product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product_groups" href="#pygrocy.grocy.Grocy.product_groups">product_groups</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.remove_product_in_shopping_list" href="#pygrocy.grocy.Grocy.remove_product_in_shopping_list">remove_product_in_shopping_list</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.set_userfields" href="#pygrocy.grocy.Grocy.set_userfields">set_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.shopping_list" href="#pygrocy.grocy.Grocy.shopping_list">shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.stock" href="#pygrocy.grocy.Grocy.stock">stock</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.volatile_stock" href="#pygrocy.grocy.Grocy.volatile_stock">volatile_stock</a></code></li>
@@ -1074,7 +1204,7 @@ def product_id(self) -&gt; int:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.4</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
