@@ -11,7 +11,7 @@ from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
 
 class TestGrocy(TestCase):
     def setUp(self):
-        self.grocy = Grocy("https://example.com/api/", "api_key")
+        self.grocy = Grocy("https://example.com", "api_key")
 
     def test_init(self):
         assert isinstance(self.grocy, Grocy)
@@ -25,7 +25,7 @@ class TestGrocy(TestCase):
         })
         product = Product(current_stock_response)
 
-        api_client = GrocyApiClient("https://example.com/api/", "api_key")
+        api_client = GrocyApiClient("https://example.com", "api_key")
 
         resp = {
             "product": {
@@ -71,7 +71,7 @@ class TestGrocy(TestCase):
                 "row_created_timestamp": "2019-05-02T18:30:48.041Z"
             }
         }
-        responses.add(responses.GET, "https://example.com/api/stock/products/0", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/products/0", json=resp, status=200)
 
         product.get_details(api_client)
 
@@ -87,9 +87,9 @@ class TestGrocy(TestCase):
         })
         product = Product(current_stock_response)
 
-        api_client = GrocyApiClient("https://example.com/api/", "api_key")
+        api_client = GrocyApiClient("https://example.com", "api_key")
 
-        responses.add(responses.GET, "https://example.com/api/stock/products/0", status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/products/0", status=200)
 
         product.get_details(api_client)
 
@@ -104,7 +104,7 @@ class TestGrocy(TestCase):
                 "best_before_date": "2019-05-02"
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/stock", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock", json=resp, status=200)
 
         stock = self.grocy.stock()
 
@@ -115,7 +115,7 @@ class TestGrocy(TestCase):
 
     @responses.activate
     def test_get_stock_invalid_no_data(self):
-        responses.add(responses.GET, "https://example.com/api/stock", status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock", status=200)
 
         assert self.grocy.stock() is None
 
@@ -125,7 +125,7 @@ class TestGrocy(TestCase):
             {
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/stock", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock", json=resp, status=200)
         
     @responses.activate
     def test_get_shopping_list_valid(self):
@@ -140,7 +140,7 @@ class TestGrocy(TestCase):
                 "done": 0
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/shopping_list", json=resp, status=200)
 
         shopping_list = self.grocy.shopping_list()
         
@@ -151,7 +151,7 @@ class TestGrocy(TestCase):
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
-        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", status=400)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/shopping_list", status=400)
         assert self.grocy.shopping_list() is None
         
     @responses.activate
@@ -160,36 +160,36 @@ class TestGrocy(TestCase):
             {
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/objects/shopping_list", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/shopping_list", json=resp, status=200)
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_valid(self):
-        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=204)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/add-missing-products", status=204)
         assert self.grocy.add_missing_product_to_shopping_list().status_code == 204
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
-        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/add-missing-products", status=400)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/add-missing-products", status=400)
         assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
-        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=204)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/clear", status=204)
         assert self.grocy.clear_shopping_list().status_code == 204
         
     @responses.activate
     def test_clear_shopping_list_error(self):
-        responses.add(responses.POST, "https://example.com/api/stock/shoppinglist/clear", status=400)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/clear", status=400)
         assert self.grocy.clear_shopping_list().status_code != 204
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
-        responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=204)
+        responses.add(responses.DELETE, "https://example.com:9192/api/objects/shopping_list/1", status=204)
         assert self.grocy.remove_product_in_shopping_list(1).status_code == 204
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
-        responses.add(responses.DELETE, "https://example.com/api/objects/shopping_list/1", status=400)
+        responses.add(responses.DELETE, "https://example.com:9192/api/objects/shopping_list/1", status=400)
         assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
         
     @responses.activate
@@ -202,7 +202,7 @@ class TestGrocy(TestCase):
                 "row_created_timestamp": "2019-04-17 10:30:00",
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/objects/product_groups", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/product_groups", json=resp, status=200)
         product_groups_list = self.grocy.product_groups()
         
         assert isinstance(product_groups_list, list)
@@ -212,7 +212,7 @@ class TestGrocy(TestCase):
             
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
-        responses.add(responses.GET, "https://example.com/api/objects/product_groups", status=400)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/product_groups", status=400)
         assert self.grocy.product_groups() is None
         
     @responses.activate
@@ -221,23 +221,23 @@ class TestGrocy(TestCase):
             {
             }
         ]
-        responses.add(responses.GET, "https://example.com/api/objects/product_groups", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/objects/product_groups", json=resp, status=200)
         
     @responses.activate
     def test_upload_product_picture_valid(self):
         with patch("os.path.exists" ) as m_exist:
             with patch("builtins.open", mock_open()) as m_open:
                 m_exist.return_value = True
-                api_client = GrocyApiClient("https://example.com/api/", "api_key")
-                responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=204)
+                api_client = GrocyApiClient("https://example.com", "api_key")
+                responses.add(responses.PUT, "https://example.com:9192/api/files/productpictures/MS5qcGc=", status=204)
                 assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code == 204
             
     @responses.activate
     def test_upload_product_picture_invalid_missing_data(self):
         with patch("os.path.exists" ) as m_exist:
             m_exist.return_value = False
-            api_client = GrocyApiClient("https://example.com/api/", "api_key")
-            responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=204)
+            api_client = GrocyApiClient("https://example.com", "api_key")
+            responses.add(responses.PUT, "https://example.com:9192/api/files/productpictures/MS5qcGc=", status=204)
             assert api_client.upload_product_picture(1,"/somepath/pic.jpg") is None
         
     @responses.activate
@@ -245,20 +245,20 @@ class TestGrocy(TestCase):
         with patch("os.path.exists" ) as m_exist:
             with patch("builtins.open", mock_open()) as m_open:
                 m_exist.return_value = True
-                api_client = GrocyApiClient("https://example.com/api/", "api_key")
-                responses.add(responses.PUT, "https://example.com/api/files/productpictures/MS5qcGc=", status=400)
+                api_client = GrocyApiClient("https://example.com", "api_key")
+                responses.add(responses.PUT, "https://example.com:9192/api/files/productpictures/MS5qcGc=", status=400)
                 assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code != 204
                 
     @responses.activate
     def test_update_product_pic_valid(self):
-        api_client = GrocyApiClient("https://example.com/api/", "api_key")
-        responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=204)
+        api_client = GrocyApiClient("https://example.com", "api_key")
+        responses.add(responses.PUT, "https://example.com:9192/api/objects/products/1", status=204)
         assert api_client.update_product_pic(1).status_code == 204
         
     @responses.activate
     def test_update_product_pic_error(self):
-        api_client = GrocyApiClient("https://example.com/api/", "api_key")
-        responses.add(responses.PUT, "https://example.com/api/objects/products/1", status=400)
+        api_client = GrocyApiClient("https://example.com", "api_key")
+        responses.add(responses.PUT, "https://example.com:9192/api/objects/products/1", status=400)
         assert api_client.update_product_pic(1).status_code != 204
         
     
@@ -277,7 +277,7 @@ class TestGrocy(TestCase):
             "missing_products": []
         }
         
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         expiring_product = self.grocy.expiring_products()
 
@@ -293,14 +293,14 @@ class TestGrocy(TestCase):
             "expired_products": [],
             "missing_products": []
         }
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         assert not self.grocy.expiring_products()
 
     @responses.activate
     def test_get_expiring_invalid_missing_data(self):
         resp = {}
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
         
     @responses.activate
     def test_get_expired_products_valid(self):
@@ -317,7 +317,7 @@ class TestGrocy(TestCase):
             "missing_products": []
         }
         
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         expired_product = self.grocy.expired_products()
 
@@ -333,14 +333,14 @@ class TestGrocy(TestCase):
             "expired_products": [],
             "missing_products": []
         }
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         assert not self.grocy.expired_products()
 
     @responses.activate
     def test_get_expired_invalid_missing_data(self):
         resp = {}
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
         
     @responses.activate
     def test_get_missing_products_valid(self):
@@ -357,7 +357,7 @@ class TestGrocy(TestCase):
             "expiring_products": []
         }
         
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         missing_product = self.grocy.missing_products()
 
@@ -373,14 +373,14 @@ class TestGrocy(TestCase):
             "expired_products": [],
             "missing_products": []
         }
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
 
         assert not self.grocy.missing_products()
 
     @responses.activate
     def test_get_stock_invalid_missing_data(self):
         resp = {}
-        responses.add(responses.GET, "https://example.com/api/stock/volatile", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/stock/volatile", json=resp, status=200)
         
     @responses.activate
     def test_get_userfields_valid(self):
@@ -389,7 +389,7 @@ class TestGrocy(TestCase):
                 "uf2": "string"
             }
         
-        responses.add(responses.GET, "https://example.com/api/userfields/chores/1", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/userfields/chores/1", json=resp, status=200)
 
         a_chore_uf = self.grocy.get_userfields("chores",1)
 
@@ -399,25 +399,25 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_get_userfields_invalid_no_data(self):
         resp = []
-        responses.add(responses.GET, "https://example.com/api/userfields/chores/1", json=resp ,status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/userfields/chores/1", json=resp ,status=200)
 
         assert not self.grocy.get_userfields("chores",1) 
 
     @responses.activate
     def test_set_userfields_valid(self):
-        responses.add(responses.PUT, "https://example.com/api/userfields/chores/1", status=204)
+        responses.add(responses.PUT, "https://example.com:9192/api/userfields/chores/1", status=204)
         assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code == 204
         
     @responses.activate
     def test_set_userfields_error(self):
-        responses.add(responses.PUT, "https://example.com/api/userfields/chores/1", status=400)
+        responses.add(responses.PUT, "https://example.com:9192/api/userfields/chores/1", status=400)
         assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code != 204
         
     @responses.activate
     def test_get_last_db_changed_valid(self):
         resp =  { "changed_time": "2019-09-18T05:30:58.598Z" }
         
-        responses.add(responses.GET, "https://example.com/api/system/db-changed-time", json=resp, status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/system/db-changed-time", json=resp, status=200)
 
         timestamp = self.grocy.get_last_db_changed()
 
@@ -427,6 +427,6 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_get_last_db_changed_invalid_no_data(self):
         resp = {}
-        responses.add(responses.GET, "https://example.com/api/system/db-changed-time", json=resp ,status=200)
+        responses.add(responses.GET, "https://example.com:9192/api/system/db-changed-time", json=resp ,status=200)
 
         assert self.grocy.get_last_db_changed() is None

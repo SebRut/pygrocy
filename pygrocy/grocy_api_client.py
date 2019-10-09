@@ -9,6 +9,8 @@ import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
 
+DEFAULT_PORT_NUMBER=9192
+
 class ShoppingListItem(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get('id'))
@@ -288,8 +290,8 @@ class TransactionType(Enum):
 
 
 class GrocyApiClient(object):
-    def __init__(self, base_url, api_key, verify_ssl = True):
-        self._base_url = base_url
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._base_url = '{}:{}/api/'.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         self._headers = {
