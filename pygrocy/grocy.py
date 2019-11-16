@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
+from .grocy_api_client import (TasksResponse, ChoreDetailsResponse, CurrentChoreResponse,
                                CurrentStockResponse,
                                ShoppingListItem,
                                LocationData,
@@ -138,6 +138,54 @@ class Chore(object):
     def last_done_by(self) -> UserDto:
         return self._last_done_by
 
+class Task(object):
+    def __init__(self, task: TasksResponse):
+        self._id = task._id
+        self._category_id = task.category_id
+        self._assigned_to_user_id = task.assigned_to_user_id
+        self._due_date = task.due_date
+        self._done_timestamp = task.done_timestamp
+        self._name = task.name
+        self._description = task.description
+        self._done = task.done
+
+    # def get_details(self, api_client: GrocyApiClient):
+    #     details = api_client.get_tasks(self)
+    #     self._name = details.chore.name
+    #     self._last_tracked_time = details.last_tracked
+    #     self._last_done_by = details.last_done_by
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def category_id(self) -> int:
+        return self._category_id
+
+    @property
+    def assigned_to_user_id(self) -> int:
+        return self._assigned_to_user_id
+
+    @property
+    def done(self) -> int:
+        return self._done
+
+    @property
+    def due_date(self) -> datetime:
+        return self._due_date
+
+    @property
+    def done_timestamp(self) -> datetime:
+        return self._done_timestamp
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._name
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
@@ -209,6 +257,18 @@ class Grocy(object):
 
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
+
+    def tasks(self) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks()
+        tasks = [Task(task) for task in raw_tasks]
+
+        return tasks
+
+    def mark_task_complete(self, id: int, done_time: datetime = datetime.now()):
+        return self._api_client.mark_task_complete(id, done_time)
+
+    def undo_task_complete(self, id: int):
+        return self._api_client.undo_task_complete(id)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):

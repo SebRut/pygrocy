@@ -170,6 +170,49 @@ class CurrentChoreResponse(object):
         return self._next_estimated_execution_time
 
 
+class TasksResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get('id'), None)
+        self._category_id = parse_int(parsed_json.get('category_id'), None)
+        self._name = parsed_json.get('name')
+        self._description = parsed_json.get('description')
+        self._due_date = parse_date(parsed_json.get('due_date'))
+        self._done = parse_int(parsed_json.get('done'), None)
+        self._done_timestamp = parse_date(parsed_json.get('done_timestamp'))
+        self._assigned_to_user_id = parse_int(parsed_json.get('assigned_to_user_id'), None)
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def category_id(self) -> int:
+        return self._category_id
+
+    @property
+    def assigned_to_user_id(self) -> int:
+        return self._assigned_to_user_id
+
+    @property
+    def done(self) -> int:
+        return self._done
+
+    @property
+    def due_date(self) -> datetime:
+        return self._due_date
+
+    @property
+    def done_timestamp(self) -> datetime:
+        return self._done_timestamp
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._name
+
 
 class CurrentStockResponse(object):
     def __init__(self, parsed_json):
@@ -333,6 +376,12 @@ class GrocyApiClient(object):
         parsed_json = resp.json()
         return ChoreDetailsResponse(parsed_json)
 
+    def get_tasks(self) -> List[TasksResponse]:
+        req_url = urljoin(self._base_url, "tasks")
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        parsed_json = resp.json()
+        return [TasksResponse(task) for task in parsed_json]
+
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
         data = {
             "tracked_time": tracked_time.isoformat()
@@ -343,6 +392,19 @@ class GrocyApiClient(object):
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+
+    def mark_task_complete(self, id: int, done_time: datetime = datetime.now()):
+        data = {
+            "done_time": done_time.isoformat()
+        }
+
+        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(id) + "/"), "complete")
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+
+    def undo_task_complete(self, id: int):
+   
+        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(id) + "/"), "undo")
+        requests.post(req_url, verify=self._verify_ssl, headers=self._headers)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
