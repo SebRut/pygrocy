@@ -138,48 +138,48 @@ class Chore(object):
     def last_done_by(self) -> UserDto:
         return self._last_done_by
 
-""" class Task(object):
-    def __init__(self, task: TasksResponse):
-        self._task_id = task.task_id
-        self._category_id = task.category_id
-        self._assigned_to_user_id = task.assigned_to_user_id
-        self._due_date = task.due_date
-        self._done_timestamp = task.done_timestamp
-        self._name = task.name
-        self._description = task.description
-        self._done = task.done
+# class Task(object):
+#     def __init__(self, task: TasksResponse):
+#         self._task_id = task.task_id
+#         self._category_id = task.category_id
+#         self._assigned_to_user_id = task.assigned_to_user_id
+#         self._due_date = task.due_date
+#         self._done_timestamp = task.done_timestamp
+#         self._name = task.name
+#         self._description = task.description
+#         self._done = task.done
 
-    @property
-    def task_id(self) -> int:
-        return self.task_id
+#     @property
+#     def task_id(self) -> int:
+#         return self.task_id
 
-    @property
-    def category_id(self) -> int:
-        return self._category_id
+#     @property
+#     def category_id(self) -> int:
+#         return self._category_id
 
-    @property
-    def assigned_to_user_id(self) -> int:
-        return self._assigned_to_user_id
+#     @property
+#     def assigned_to_user_id(self) -> int:
+#         return self._assigned_to_user_id
 
-    @property
-    def done(self) -> int:
-        return self._done
+#     @property
+#     def done(self) -> int:
+#         return self._done
 
-    @property
-    def due_date(self) -> datetime:
-        return self._due_date
+#     @property
+#     def due_date(self) -> datetime:
+#         return self._due_date
 
-    @property
-    def done_timestamp(self) -> datetime:
-        return self._done_timestamp
+#     @property
+#     def done_timestamp(self) -> datetime:
+#         return self._done_timestamp
 
-    @property
-    def name(self) -> str:
-        return self._name
+#     @property
+#     def name(self) -> str:
+#         return self._name
 
-    @property
-    def description(self) -> str:
-        return self._description """
+#     @property
+#     def description(self) -> str:
+#         return self._description 
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
