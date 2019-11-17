@@ -174,12 +174,12 @@ class Task(object):
         return self._done_timestamp
 
     @property
-    def name(self) -> str:
-        return self._name
-
-    @property
     def description(self) -> str:
         return self._description
+
+    @property
+    def name(self) -> str:
+        return self._name
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
