@@ -182,8 +182,8 @@ class TasksResponse(object):
         self._assigned_to_user_id = parse_int(parsed_json.get('assigned_to_user_id'), None)
 
     @property
-    def id(self) -> int:
-        return self._id
+    def task_id(self) -> int:
+        return self.task_id
 
     @property
     def category_id(self) -> int:

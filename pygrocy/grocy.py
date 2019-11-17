@@ -140,7 +140,7 @@ class Chore(object):
 
 class Task(object):
     def __init__(self, task: TasksResponse):
-        self._id = task.task_id
+        self._task_id = task.task_id
         self._category_id = task.category_id
         self._assigned_to_user_id = task.assigned_to_user_id
         self._due_date = task.due_date
@@ -151,7 +151,7 @@ class Task(object):
 
     @property
     def task_id(self) -> int:
-        return self._id
+        return self.task_id
 
     @property
     def category_id(self) -> int:
