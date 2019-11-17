@@ -138,7 +138,7 @@ class Chore(object):
     def last_done_by(self) -> UserDto:
         return self._last_done_by
 
-class Task(object):
+""" class Task(object):
     def __init__(self, task: TasksResponse):
         self._task_id = task.task_id
         self._category_id = task.category_id
@@ -174,12 +174,12 @@ class Task(object):
         return self._done_timestamp
 
     @property
-    def description(self) -> str:
-        return self._description
-
-    @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description """
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
