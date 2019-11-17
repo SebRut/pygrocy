@@ -172,7 +172,7 @@ class CurrentChoreResponse(object):
 
 class TasksResponse(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get('id'), None)
+        self._task_id = parse_int(parsed_json.get('id'), None)
         self._category_id = parse_int(parsed_json.get('category_id'), None)
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description')
@@ -211,7 +211,7 @@ class TasksResponse(object):
 
     @property
     def description(self) -> str:
-        return self._name
+        return self._description
 
 
 class CurrentStockResponse(object):
@@ -393,17 +393,17 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
-    def mark_task_complete(self, id: int, done_time: datetime = datetime.now()):
+    def mark_task_complete(self, task_id: int, done_time: datetime = datetime.now()):
         data = {
             "done_time": done_time.isoformat()
         }
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(id) + "/"), "complete")
+        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(task_id) + "/"), "complete")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
-    def undo_task_complete(self, id: int):
+    def undo_task_complete(self, task_id: int):
    
-        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(id) + "/"), "undo")
+        req_url = urljoin(urljoin(urljoin(self._base_url, "tasks/"), str(task_id) + "/"), "undo")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,

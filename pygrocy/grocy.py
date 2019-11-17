@@ -140,7 +140,7 @@ class Chore(object):
 
 class Task(object):
     def __init__(self, task: TasksResponse):
-        self._id = task._id
+        self._id = task.task_id
         self._category_id = task.category_id
         self._assigned_to_user_id = task.assigned_to_user_id
         self._due_date = task.due_date
@@ -149,14 +149,8 @@ class Task(object):
         self._description = task.description
         self._done = task.done
 
-    # def get_details(self, api_client: GrocyApiClient):
-    #     details = api_client.get_tasks(self)
-    #     self._name = details.chore.name
-    #     self._last_tracked_time = details.last_tracked
-    #     self._last_done_by = details.last_done_by
-
     @property
-    def id(self) -> int:
+    def task_id(self) -> int:
         return self._id
 
     @property
@@ -185,7 +179,7 @@ class Task(object):
 
     @property
     def description(self) -> str:
-        return self._name
+        return self._description
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
@@ -264,11 +258,11 @@ class Grocy(object):
 
         return tasks
 
-    def mark_task_complete(self, id: int, done_time: datetime = datetime.now()):
-        return self._api_client.mark_task_complete(id, done_time)
+    def mark_task_complete(self, task_id: int, done_time: datetime = datetime.now()):
+        return self._api_client.mark_task_complete(task_id, done_time)
 
-    def undo_task_complete(self, id: int):
-        return self._api_client.undo_task_complete(id)
+    def undo_task_complete(self, task_id: int):
+        return self._api_client.undo_task_complete(task_id)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
