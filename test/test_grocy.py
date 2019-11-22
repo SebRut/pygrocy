@@ -15,6 +15,46 @@ class TestGrocy(TestCase):
 
     def test_init(self):
         assert isinstance(self.grocy, Grocy)
+        
+    @responses.activate
+    def test_get_chores_valid_no_details(self):
+        resp = [
+            {
+                "chore_id": "1",
+                "last_tracked_time": "2019-11-18 00:00:00",
+                "next_estimated_execution_time": "2019-11-25 00:00:00",
+                "track_date_only": "1"
+            },
+            {
+                "chore_id": "2",
+                "last_tracked_time": "2019-11-16 00:00:00",
+                "next_estimated_execution_time": "2019-11-23 00:00:00",
+                "track_date_only": "1"
+            },
+            {
+                "chore_id": "3",
+                "last_tracked_time": "2019-11-10 00:00:00",
+                "next_estimated_execution_time": "2019-12-10 00:00:00",
+                "track_date_only": "1"
+            },
+            {
+                "chore_id": "4",
+                "last_tracked_time": "2019-11-18 00:00:00",
+                "next_estimated_execution_time": "2019-11-25 00:00:00",
+                "track_date_only": "1",
+            }
+        ]
+        
+        responses.add(responses.GET, "https://example.com:9192/api/chores", json=resp, status=200)
+        chores = self.grocy.chores(get_details=False)
+        
+        assert isinstance(chores, list)
+        assert len(chores) == 4
+        assert chores[0].chore_id == 1
+        assert chores[1].chore_id == 2
+        assert chores[2].chore_id == 3
+        assert chores[3].chore_id == 4
+        
 
     @responses.activate
     def test_product_get_details_valid(self):
