@@ -6,7 +6,7 @@ from pygrocy import Grocy
 from pygrocy.grocy import Product
 from pygrocy.grocy import Group
 from pygrocy.grocy import ShoppingListProduct
-from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
+from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TasksResponse
 
 
 class TestGrocy(TestCase):
@@ -430,3 +430,41 @@ class TestGrocy(TestCase):
         responses.add(responses.GET, "https://example.com:9192/api/system/db-changed-time", json=resp ,status=200)
 
         assert self.grocy.get_last_db_changed() is None
+
+
+    @responses.activate
+    def test_get_tasks_valid(self):
+        resp = [
+            {
+                "id": 0,
+                "category_id": 0,
+                "name": "string",
+                "description": "string",
+                "due_date": "2019-05-04T11:31:04.563Z",
+                "done": 0,
+                "done_timestamp": ,
+                "assigned_to_user_id": 0
+            }
+        ]
+        responses.add(responses.GET, "https://example.com:9192/api/tasks", json=resp, status=200)
+
+        tasks_list = self.grocy.tasks()
+        
+        assert isinstance(tasks_list, list)
+        assert len(tasks_list) == 1
+        for item in tasks_list:
+            assert isinstance(item, TasksResponse)
+            
+    @responses.activate
+    def test_get_tasks_invalid_no_data(self):
+        responses.add(responses.GET, "https://example.com:9192/api/tasks", status=400)
+        assert self.grocy.tasks() is None
+        
+    @responses.activate
+    def test_get_tasks_invalid_missing_data(self):
+        resp = [
+            {
+            }
+        ]
+        responses.add(responses.GET, "https://example.com:9192/api/tasks", json=resp, status=200)
+        

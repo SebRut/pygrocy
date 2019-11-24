@@ -252,9 +252,9 @@ class Grocy(object):
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
 
-    def tasks(self) -> List[Task]:
+    def tasks(self) -> List[TasksResponse]:
         raw_tasks = self._api_client.get_tasks()
-        tasks = [Task(task) for task in raw_tasks]
+        tasks = [TasksResponse(task) for task in raw_tasks]
 
         return tasks
 
