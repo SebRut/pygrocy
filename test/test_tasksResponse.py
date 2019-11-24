@@ -22,3 +22,4 @@ class TestTasksResponse(TestCase):
         assert response.task_id == 0
         assert response.name == "string"
         assert response.done_timestamp is None
+        
