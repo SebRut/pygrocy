@@ -386,7 +386,18 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
-            
+    
+    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            "product_id": product_id,
+            "list_id": shopping_list_id,
+            "product_amount": amount
+        }
+
+        req_url = urljoin(self._base_url, "stock/shoppinglist/add-product")
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+    
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             "list_id": shopping_list_id
@@ -457,3 +468,4 @@ class GrocyApiClient(object):
         last_change_timestamp = parse_date(resp.json().get('changed_time'))
         return last_change_timestamp
         
+       
