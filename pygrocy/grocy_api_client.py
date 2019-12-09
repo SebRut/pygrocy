@@ -396,10 +396,14 @@ class GrocyApiClient(object):
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
             
-    def remove_product_in_sl(self, sl_product_id: int):
-        
-        req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
-        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+    def remove_product_in_sl(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            "product_id": product_id,
+            "list_id": shopping_list_id,
+            "product_amount": amount
+        }
+        req_url = urljoin(self._base_url, "stock/shoppinglist/remove-product")
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
         
     def get_product_groups(self) -> List[LocationData]:
