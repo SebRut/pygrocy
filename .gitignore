@@ -94,3 +94,6 @@ modules.xml
 venv/
 __pycache__
 html/
+build/
+pygrocy.egg-info/
+

@@ -213,6 +213,16 @@ class TestGrocy(TestCase):
         assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
         
     @responses.activate
+    def test_add_product_to_shopping_list_valid(self):
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/add-product", status=204)
+        assert self.grocy.add_product_to_shopping_list(1).status_code == 204
+        
+    @responses.activate
+    def test_add_product_to_shopping_list_error(self):
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/add-product", status=400)
+        assert self.grocy.add_product_to_shopping_list(1).status_code != 204
+        
+    @responses.activate
     def test_clear_shopping_list_valid(self):
         responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/clear", status=204)
         assert self.grocy.clear_shopping_list().status_code == 204
@@ -224,12 +234,12 @@ class TestGrocy(TestCase):
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
-        responses.add(responses.DELETE, "https://example.com:9192/api/objects/shopping_list/1", status=204)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/remove-product", status=204)
         assert self.grocy.remove_product_in_shopping_list(1).status_code == 204
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
-        responses.add(responses.DELETE, "https://example.com:9192/api/objects/shopping_list/1", status=400)
+        responses.add(responses.POST, "https://example.com:9192/api/stock/shoppinglist/remove-product", status=400)
         assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
         
     @responses.activate
