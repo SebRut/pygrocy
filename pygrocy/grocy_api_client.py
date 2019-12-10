@@ -407,7 +407,7 @@ class GrocyApiClient(object):
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
             
-    def remove_product_in_sl(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         data = {
             "product_id": product_id,
             "list_id": shopping_list_id,

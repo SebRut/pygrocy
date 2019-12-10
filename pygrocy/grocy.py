@@ -239,7 +239,7 @@ class Grocy(object):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.remove_product_in_sl(product_id, shopping_list_id, amount)
+        return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
         
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
