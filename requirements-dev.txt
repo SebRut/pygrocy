@@ -1,4 +1,4 @@
-coveralls~=1.9.2
+coveralls~=1.10.0
 doctr~=1.8.0
 pdoc3~=0.6.4
 responses~=0.10.9
