@@ -16,7 +16,9 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "requests",
-        "iso8601"
+        "iso8601",
+        "pytz",
+        "tzinfo"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
