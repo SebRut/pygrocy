@@ -340,10 +340,10 @@ class GrocyApiClient(object):
         # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
         # information, so timezone information must be attached.
         local_tz = get_localzone()
-        tracked_time = local_tz.localize(tracked_time)
+        localized_tracked_time = local_tz.localize(tracked_time)
 
         data = {
-            "tracked_time": tracked_time.isoformat()
+            "tracked_time": localized_tracked_time.isoformat()
         }
 
         if done_by is not None:
