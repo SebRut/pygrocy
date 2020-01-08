@@ -336,7 +336,6 @@ class GrocyApiClient(object):
         return ChoreDetailsResponse(parsed_json)
 
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
-
         # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
         # information, so timezone information must be attached.
         local_tz = get_localzone()
