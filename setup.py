@@ -18,7 +18,7 @@ setuptools.setup(
         "requests",
         "iso8601",
         "pytz",
-        "tzinfo"
+        "tzlocal"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
