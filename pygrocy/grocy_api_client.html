@@ -25,10 +25,12 @@
 <pre><code class="python">from datetime import datetime
 from enum import Enum
 from typing import List
+from tzlocal import get_localzone
 from urllib.parse import urljoin
 import os
 import base64
 import json
+import pytz
 import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
@@ -358,8 +360,13 @@ class GrocyApiClient(object):
         return ChoreDetailsResponse(parsed_json)
 
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
+        # information, so timezone information must be attached.
+        local_tz = get_localzone()
+        localized_tracked_time = local_tz.localize(tracked_time)
+
         data = {
-            &#34;tracked_time&#34;: tracked_time.isoformat()
+            &#34;tracked_time&#34;: localized_tracked_time.isoformat()
         }
 
         if done_by is not None:
@@ -410,7 +417,18 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-missing-products&#34;)
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
-            
+    
+    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            &#34;product_id&#34;: product_id,
+            &#34;list_id&#34;: shopping_list_id,
+            &#34;product_amount&#34;: amount
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-product&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+    
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             &#34;list_id&#34;: shopping_list_id
@@ -420,10 +438,14 @@ class GrocyApiClient(object):
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
             
-    def remove_product_in_sl(self, sl_product_id: int):
-        
-        req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
-        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            &#34;product_id&#34;: product_id,
+            &#34;list_id&#34;: shopping_list_id,
+            &#34;product_amount&#34;: amount
+        }
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/remove-product&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
         
     def get_product_groups(self) -&gt; List[LocationData]:
@@ -476,7 +498,8 @@ class GrocyApiClient(object):
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         last_change_timestamp = parse_date(resp.json().get(&#39;changed_time&#39;))
         return last_change_timestamp
-        </code></pre>
+        
+       </code></pre>
 </details>
 </section>
 <section>
@@ -845,8 +868,13 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
         return ChoreDetailsResponse(parsed_json)
 
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
+        # information, so timezone information must be attached.
+        local_tz = get_localzone()
+        localized_tracked_time = local_tz.localize(tracked_time)
+
         data = {
-            &#34;tracked_time&#34;: tracked_time.isoformat()
+            &#34;tracked_time&#34;: localized_tracked_time.isoformat()
         }
 
         if done_by is not None:
@@ -897,7 +925,18 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-missing-products&#34;)
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
-            
+    
+    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            &#34;product_id&#34;: product_id,
+            &#34;list_id&#34;: shopping_list_id,
+            &#34;product_amount&#34;: amount
+        }
+
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-product&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return resp
+    
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             &#34;list_id&#34;: shopping_list_id
@@ -907,10 +946,14 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
             
-    def remove_product_in_sl(self, sl_product_id: int):
-        
-        req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
-        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+        data = {
+            &#34;product_id&#34;: product_id,
+            &#34;list_id&#34;: shopping_list_id,
+            &#34;product_amount&#34;: amount
+        }
+        req_url = urljoin(self._base_url, &#34;stock/shoppinglist/remove-product&#34;)
+        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
         
     def get_product_groups(self) -&gt; List[LocationData]:
@@ -1005,6 +1048,25 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
     requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list"><code class="name flex">
+<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id, shopping_list_id=1, amount=1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+    data = {
+        &#34;product_id&#34;: product_id,
+        &#34;list_id&#34;: shopping_list_id,
+        &#34;product_amount&#34;: amount
+    }
+
+    req_url = urljoin(self._base_url, &#34;stock/shoppinglist/add-product&#34;)
+    resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+    return resp</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list"><code class="name flex">
 <span>def <span class="ident">clear_shopping_list</span></span>(<span>self, shopping_list_id=1)</span>
 </code></dt>
@@ -1042,15 +1104,20 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2019, 10, 9, 7, 7, 26, 710006))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 1, 14, 8, 25, 36, 21007))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+    # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
+    # information, so timezone information must be attached.
+    local_tz = get_localzone()
+    localized_tracked_time = local_tz.localize(tracked_time)
+
     data = {
-        &#34;tracked_time&#34;: tracked_time.isoformat()
+        &#34;tracked_time&#34;: localized_tracked_time.isoformat()
     }
 
     if done_by is not None:
@@ -1195,17 +1262,21 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
     return CurrentVolatilStockResponse(parsed_json)</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl"><code class="name flex">
-<span>def <span class="ident">remove_product_in_sl</span></span>(<span>self, sl_product_id)</span>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list"><code class="name flex">
+<span>def <span class="ident">remove_product_in_shopping_list</span></span>(<span>self, product_id, shopping_list_id=1, amount=1)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def remove_product_in_sl(self, sl_product_id: int):
-    
-    req_url = urljoin(urljoin(self._base_url, &#34;objects/shopping_list/&#34;), str(sl_product_id))
-    resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
+<pre><code class="python">def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+    data = {
+        &#34;product_id&#34;: product_id,
+        &#34;list_id&#34;: shopping_list_id,
+        &#34;product_amount&#34;: amount
+    }
+    req_url = urljoin(self._base_url, &#34;stock/shoppinglist/remove-product&#34;)
+    resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
     return resp</code></pre>
 </details>
 </dd>
@@ -1829,6 +1900,7 @@ def username(self) -&gt; str:
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list">add_missing_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product">add_product</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list">add_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list">clear_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.consume_product" href="#pygrocy.grocy_api_client.GrocyApiClient.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.execute_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.execute_chore">execute_chore</a></code></li>
@@ -1841,7 +1913,7 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.get_userfields">get_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock">get_volatile_stock</a></code></li>
-<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl" href="#pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_sl">remove_product_in_sl</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list">remove_product_in_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.set_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.set_userfields">set_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.update_product_pic" href="#pygrocy.grocy_api_client.GrocyApiClient.update_product_pic">update_product_pic</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture" href="#pygrocy.grocy_api_client.GrocyApiClient.upload_product_picture">upload_product_picture</a></code></li>
