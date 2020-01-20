@@ -13,6 +13,8 @@ from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
 class TestGrocy(TestCase):
 
     def setUp(self):
+        self.grocy = Grocy("https://localhost", "api_key")
+        self.grocy = None
         self.grocy = Grocy("https://localhost", "demo_mode",  verify_ssl = False, port = 443)
 
     def test_init(self):
