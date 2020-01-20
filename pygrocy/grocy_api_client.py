@@ -1,10 +1,12 @@
 from datetime import datetime
 from enum import Enum
 from typing import List
+from tzlocal import get_localzone
 from urllib.parse import urljoin
 import os
 import base64
 import json
+import pytz
 import requests
 
 from pygrocy.utils import parse_date, parse_float, parse_int
@@ -337,8 +339,13 @@ class GrocyApiClient(object):
         return ChoreDetailsResponse(parsed_json)
 
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
+        # information, so timezone information must be attached.
+        local_tz = get_localzone()
+        localized_tracked_time = local_tz.localize(tracked_time)
+
         data = {
-            "tracked_time": tracked_time.isoformat()
+            "tracked_time": localized_tracked_time.isoformat()
         }
 
         if done_by is not None:
