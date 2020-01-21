@@ -114,10 +114,8 @@ class TestGrocy(TestCase):
     def test_add_product_to_shopping_list_valid(self):
         assert self.grocy.add_product_to_shopping_list(22).status_code == 204
         
-    @responses.activate
     def test_add_product_to_shopping_list_error(self):
-        responses.add(responses.POST, "https://localhost:443/api/stock/shoppinglist/add-product", status=400)
-        assert self.grocy.add_product_to_shopping_list(1).status_code != 204
+        assert self.grocy.add_product_to_shopping_list(3000).status_code != 204
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
@@ -201,7 +199,7 @@ class TestGrocy(TestCase):
     
     def test_get_expiring_products_valid(self):
         
-        expiring_product = self.grocy.expiring_products()
+        expiring_product = self.grocy.expiring_products(True)
 
         assert isinstance(expiring_product, list)
         assert len(expiring_product) >= 1
@@ -217,7 +215,7 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, "https://localhost:443/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.expiring_products()
+        assert not self.grocy.expiring_products(True)
 
     @responses.activate
     def test_get_expiring_invalid_missing_data(self):
@@ -226,7 +224,7 @@ class TestGrocy(TestCase):
         
     def test_get_expired_products_valid(self):
         
-        expired_product = self.grocy.expired_products()
+        expired_product = self.grocy.expired_products(True)
 
         assert isinstance(expired_product, list)
         assert len(expired_product) >= 1
@@ -242,7 +240,7 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, "https://localhost:443/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.expired_products()
+        assert not self.grocy.expired_products(True)
 
     @responses.activate
     def test_get_expired_invalid_missing_data(self):
@@ -251,7 +249,7 @@ class TestGrocy(TestCase):
         
     def test_get_missing_products_valid(self):
 
-        missing_product = self.grocy.missing_products()
+        missing_product = self.grocy.missing_products(True)
 
         assert isinstance(missing_product, list)
         assert len(missing_product) >= 1
@@ -267,10 +265,10 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, "https://localhost:443/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.missing_products()
+        assert not self.grocy.missing_products(True)
 
     @responses.activate
-    def test_get_stock_invalid_missing_data(self):
+    def test_get_missing_invalid_missing_data(self):
         resp = {}
         responses.add(responses.GET, "https://localhost:443/api/stock/volatile", json=resp, status=200)
         
