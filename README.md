@@ -32,6 +32,23 @@ for entry in grocy.stock():
     print("{} in stock for product id {}".format(entry.product_id, entry.amount))
 ```
 
+## Dev testing
+You need a Grocy instance running in demo mode at localhost with https (docker or a php server)
+You can setup url, port and ssl in test/test_const.py
+Easy case : install docker and docker-compose and run :
+For pre-release Grocy version :
+```
+  docker-compose build grocy
+  docker pull grocy/grocy-docker:nginx
+  docker-compose up -d
+  curl -kX GET https://localhost
+```
+For latest Grocy version :
+```
+  docker pull
+  docker-compose up -d
+  curl -kX GET https://localhost
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSebRut%2Fpygrocy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSebRut%2Fpygrocy?ref=badge_large)

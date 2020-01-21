@@ -16,7 +16,7 @@ DEFAULT_PORT_NUMBER=9192
 class ShoppingListItem(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get('id'))
-        self._product_id = parse_int(parsed_json.get('product_id'))
+        self._product_id = parse_int(parsed_json.get('product_id', None))
         self._note = parsed_json.get('note',None)
         self._amount = parse_float(parsed_json.get('amount'),0)
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp', None))
@@ -296,10 +296,13 @@ class GrocyApiClient(object):
         self._base_url = '{}:{}/api/'.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
-        self._headers = {
-            "accept": "application/json",
-            "GROCY-API-KEY": api_key
-        }
+        if self._api_key == "demo_mode":
+            self._headers = { "accept": "application/json" }
+        else:
+            self._headers = {
+                "accept": "application/json",
+                "GROCY-API-KEY": api_key
+            }
 
     def get_stock(self) -> List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, "stock")
@@ -474,5 +477,3 @@ class GrocyApiClient(object):
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         last_change_timestamp = parse_date(resp.json().get('changed_time'))
         return last_change_timestamp
-        
-       

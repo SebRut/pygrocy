@@ -79,7 +79,8 @@ class ShoppingListProduct(object):
         self._product = None
         
     def get_details(self, api_client: GrocyApiClient):
-        self._product = api_client.get_product(self._product_id).product
+        if self._product_id:
+            self._product = api_client.get_product(self._product_id).product
         
     @property
     def id(self) -> int:
