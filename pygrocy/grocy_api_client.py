@@ -16,7 +16,7 @@ DEFAULT_PORT_NUMBER=9192
 class ShoppingListItem(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get('id'))
-        self._product_id = parse_int(parsed_json.get('product_id'))
+        self._product_id = parse_int(parsed_json.get('product_id', None))
         self._note = parsed_json.get('note',None)
         self._amount = parse_float(parsed_json.get('amount'),0)
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp', None))
