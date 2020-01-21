@@ -20,8 +20,8 @@ class TestGrocy(TestCase):
     def test_init(self):
         assert isinstance(self.grocy, Grocy)
         
-    def test_get_chores_valid_no_details(self):
-        chores = self.grocy.chores(get_details=False)
+    def test_get_chores_valid(self):
+        chores = self.grocy.chores(get_details=True)
         
         assert isinstance(chores, list)
         assert len(chores) == 6
@@ -32,67 +32,16 @@ class TestGrocy(TestCase):
         assert chores[4].chore_id == 5
         assert chores[5].chore_id == 6
 
-    @responses.activate
     def test_product_get_details_valid(self):
-        current_stock_response = CurrentStockResponse({
-            "product_id": 0,
-            "amount": "0.33",
-            "best_before_date": "2019-05-02"
-        })
-        product = Product(current_stock_response)
+        stock = self.grocy.stock()
+
+        product = stock[0]
 
         api_client = GrocyApiClient("https://localhost", "demo_mode", port = 443, verify_ssl = False)
-
-        resp = {
-            "product": {
-                "id": 0,
-                "name": "string",
-                "description": "string",
-                "location_id": 0,
-                "qu_id_purchase": 0,
-                "qu_id_stock": 0,
-                "qu_factor_purchase_to_stock": 0,
-                "barcode": "string",
-                "product_group_id": 0,
-                "min_stock_amount": 0,
-                "default_best_before_days": 0,
-                "picture_file_name": "string",
-                "allow_partial_units_in_stock": True,
-                "row_created_timestamp": "2019-05-02T18:30:48.041Z"
-            },
-            "quantity_unit_purchase": {
-                "id": 0,
-                "name": "string",
-                "name_plural": "string",
-                "description": "string",
-                "row_created_timestamp": "2019-05-02T18:30:48.041Z"
-            },
-            "quantity_unit_stock": {
-                "id": 0,
-                "name": "string",
-                "name_plural": "string",
-                "description": "string",
-                "row_created_timestamp": "2019-05-02T18:30:48.041Z"
-            },
-            "last_purchased": "2019-05-02",
-            "last_used": "2019-05-02T18:30:48.041Z",
-            "stock_amount": 0,
-            "stock_amount_opened": 0,
-            "next_best_before_date": "2019-05-02T18:30:48.041Z",
-            "last_price": 0,
-            "location": {
-                "id": 0,
-                "name": "string",
-                "description": "string",
-                "row_created_timestamp": "2019-05-02T18:30:48.041Z"
-            }
-        }
-        responses.add(responses.GET, "https://localhost:443/api/stock/products/0", json=resp, status=200)
-
         product.get_details(api_client)
 
-        assert product.name == "string"
-        assert product.product_group_id == 0
+        assert isinstance(product.name, str)
+        assert isinstance(product.product_group_id, int)
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
@@ -134,7 +83,7 @@ class TestGrocy(TestCase):
         responses.add(responses.GET, "https://localhost:443/api/stock", json=resp, status=200)
         
     def test_get_shopping_list_valid(self):
-        shopping_list = self.grocy.shopping_list()
+        shopping_list = self.grocy.shopping_list(True)
         
         assert isinstance(shopping_list, list)
         assert len(shopping_list) >= 1
@@ -338,12 +287,7 @@ class TestGrocy(TestCase):
 
         assert a_chore_uf['uf1'] == 0
 
-
-    @responses.activate
     def test_get_userfields_invalid_no_data(self):
-        resp = []
-        responses.add(responses.GET, "https://localhost:443/api/userfields/chores/1", json=resp ,status=200)
-
         assert not self.grocy.get_userfields("chores",1) 
 
     @responses.activate
