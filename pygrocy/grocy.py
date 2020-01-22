@@ -99,9 +99,7 @@ class ShoppingListProduct(object):
         return self._note
         
     @property
-    def product(self) -> Product:
-        if self._product_id is None:
-            self.get_details()
+    def product(self) -> ProductData:
         return self._product
     
 class Chore(object):
