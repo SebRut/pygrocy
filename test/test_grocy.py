@@ -7,7 +7,7 @@ from pygrocy import Grocy
 from pygrocy.grocy import Product
 from pygrocy.grocy import Group
 from pygrocy.grocy import ShoppingListProduct
-from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
+from pygrocy.grocy_api_client import CurrentStockResponse, ProductData, GrocyApiClient
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 class TestGrocy(TestCase):
@@ -24,13 +24,8 @@ class TestGrocy(TestCase):
         chores = self.grocy.chores(get_details=True)
         
         assert isinstance(chores, list)
-        assert len(chores) == 6
-        assert chores[0].chore_id == 1
-        assert chores[1].chore_id == 2
-        assert chores[2].chore_id == 3
-        assert chores[3].chore_id == 4
-        assert chores[4].chore_id == 5
-        assert chores[5].chore_id == 6
+        assert len(chores) >=1
+        assert isinstance(chores[0].chore_id, int)
 
     def test_product_get_details_valid(self):
         stock = self.grocy.stock()
@@ -61,7 +56,7 @@ class TestGrocy(TestCase):
         assert product.name is None
 
     def test_get_stock_valid(self):
-        stock = self.grocy.stock()
+        stock = self.grocy.stock(True)
 
         assert isinstance(stock, list)
         assert len(stock) >= 10
@@ -89,6 +84,11 @@ class TestGrocy(TestCase):
         assert len(shopping_list) >= 1
         for item in shopping_list:
             assert isinstance(item, ShoppingListProduct)
+            assert isinstance(item.id, int)
+            assert isinstance(item.product_id, int) or item.product_id is None
+            assert isinstance(item.amount, float)
+            if item.product:
+                assert isinstance(item.product, ProductData)
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
@@ -110,12 +110,30 @@ class TestGrocy(TestCase):
     def test_add_missing_product_to_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/add-missing-products", status=400)
         assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
-        
+
     def test_add_product_to_shopping_list_valid(self):
         assert self.grocy.add_product_to_shopping_list(22).status_code == 204
-        
+
     def test_add_product_to_shopping_list_error(self):
         assert self.grocy.add_product_to_shopping_list(3000).status_code != 204
+
+    def test_add_product_valid(self):
+        assert self.grocy.add_product(22, 1, 1.5, datetime.now()).status_code == 200
+
+    def test_add_product_error(self):
+        assert self.grocy.add_product(3000, 1, 1.5, datetime.now()).status_code != 200
+
+    def test_consume_product_valid(self):
+        assert self.grocy.consume_product(22).status_code == 200
+
+    def test_consume_product_error(self):
+        assert self.grocy.consume_product(3000).status_code != 200
+
+    def test_execute_chore_valid(self):
+        assert self.grocy.execute_chore(1, 1, datetime.now()).status_code == 200
+
+    def test_execute_chore_error(self):
+        assert self.grocy.execute_chore(3000).status_code != 200
         
     @responses.activate
     def test_clear_shopping_list_valid(self):

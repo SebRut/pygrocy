@@ -352,7 +352,7 @@ class GrocyApiClient(object):
             data["done_by"] = done_by
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -366,7 +366,7 @@ class GrocyApiClient(object):
             data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -377,7 +377,7 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        return requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
         
     def get_shopping_list(self) -> List[ShoppingListItem]:
