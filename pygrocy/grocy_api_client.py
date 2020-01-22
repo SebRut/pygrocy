@@ -461,7 +461,7 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if not resp:
-            return resp
+            return None
         return resp.json()
         
     def set_userfields(self, entity: str, object_id: int, key: str, value):

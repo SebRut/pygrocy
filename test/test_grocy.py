@@ -2,12 +2,14 @@ from unittest import TestCase
 from unittest.mock import patch, mock_open
 
 from datetime import datetime
+from typing import List
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
 from pygrocy.grocy import Group
 from pygrocy.grocy import ShoppingListProduct
-from pygrocy.grocy_api_client import CurrentStockResponse, ProductData, GrocyApiClient
+from pygrocy.grocy import Chore
+from pygrocy.grocy_api_client import CurrentStockResponse, ProductData, GrocyApiClient, UserDto
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 class TestGrocy(TestCase):
@@ -25,18 +27,19 @@ class TestGrocy(TestCase):
         
         assert isinstance(chores, list)
         assert len(chores) >=1
-        assert isinstance(chores[0].chore_id, int)
+        for chore in chores:
+            assert isinstance(chore, Chore)
+            assert isinstance(chore.chore_id, int)
+            assert isinstance(chore.last_tracked_time, datetime)
+            assert isinstance(chore.next_estimated_execution_time, datetime)
+            assert isinstance(chore.name, str)
+            assert isinstance(chore.last_done_by, UserDto)
 
     def test_product_get_details_valid(self):
-        stock = self.grocy.stock()
+        product = self.grocy.product(5)
 
-        product = stock[0]
-
-        api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
-        product.get_details(api_client)
-
-        assert isinstance(product.name, str)
-        assert isinstance(product.product_group_id, int)
+        assert isinstance(product.product.name, str)
+        assert isinstance(product.product.product_group_id, int)
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
@@ -62,6 +65,10 @@ class TestGrocy(TestCase):
         assert len(stock) >= 10
         for prod in stock:
             assert isinstance(prod, Product)
+            assert isinstance(prod.available_amount, float)
+            assert isinstance(prod.best_before_date, datetime)
+            assert isinstance(prod.barcodes, List) or prod.barcodes is None
+            assert isinstance(prod.product_group_id, int)
 
     @responses.activate
     def test_get_stock_invalid_no_data(self):
@@ -86,9 +93,11 @@ class TestGrocy(TestCase):
             assert isinstance(item, ShoppingListProduct)
             assert isinstance(item.id, int)
             assert isinstance(item.product_id, int) or item.product_id is None
+            assert isinstance(item.note, str) or item.note is None
             assert isinstance(item.amount, float)
             if item.product:
                 assert isinstance(item.product, ProductData)
+                assert isinstance(item.product.id, int)
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
@@ -162,6 +171,9 @@ class TestGrocy(TestCase):
         assert len(product_groups_list) >= 1
         for item in product_groups_list:
             assert isinstance(item, Group)
+            assert isinstance(item.id, int)
+            assert isinstance(item.name, str)
+            assert isinstance(item.description, str) or item.description is None
             
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
