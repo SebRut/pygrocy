@@ -11,8 +11,8 @@ services:
   - docker
 
 before_install:
+  - docker-compose pull
   - docker-compose build grocy
-  - docker pull grocy/grocy-docker:nginx
   - docker-compose up -d
   - curl -kX GET https://localhost
 
