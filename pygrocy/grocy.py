@@ -12,14 +12,14 @@ from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
 
 class Product(object):
     def __init__(self, response):
-        if type(response) is CurrentStockResponse:
+        if isinstance(response, CurrentStockResponse):
             self._product_id = response.product_id
             self._name = None
             self._available_amount = response.amount
             self._best_before_date = response.best_before_date
             self._amount_missing = None
             self._is_partly_in_stock = None
-        elif type(response) is MissingProductResponse:
+        elif isinstance(response, MissingProductResponse):
             self._product_id = response.product_id
             self._name = response.name
             self._available_amount = None
