@@ -196,11 +196,34 @@ class CurrentStockResponse(object):
     def amount_opened(self) -> float:
         return self._amount_opened
 
+class MissingProductResponse(object):
+    def __init__(self, parsed_json):
+        self._product_id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
+        self._amount_missing = parse_float(parsed_json.get('amount_missing'))
+        self._is_partly_in_stock = parse_int(parsed_json.get('is_partly_in_stock'))
+
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def amount_missing(self) -> float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -> int:
+        return self._is_partly_in_stock
+
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
         self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get('expiring_products')]
         self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get('expired_products')]
-        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get('missing_products')]
+        self._missing_products = [MissingProductResponse(product) for product in parsed_json.get('missing_products')]
 
     @property
     def expiring_products(self) -> List[CurrentStockResponse]:
@@ -211,7 +234,7 @@ class CurrentVolatilStockResponse(object):
         return self._expired_products
 
     @property
-    def missing_products(self) -> List[CurrentStockResponse]:
+    def missing_products(self) -> List[MissingProductResponse]:
         return self._missing_products
 
 
