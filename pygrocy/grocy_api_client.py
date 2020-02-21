@@ -201,7 +201,7 @@ class MissingProductResponse(object):
         self._product_id = parse_int(parsed_json.get('id'))
         self._name = parsed_json.get('name')
         self._amount_missing = parse_float(parsed_json.get('amount_missing'))
-        self._is_partly_in_stock = parse_int(parsed_json.get('is_partly_in_stock'))
+        self._is_partly_in_stock = bool(parse_int(parsed_json.get('is_partly_in_stock')))
 
     @property
     def product_id(self) -> int:
@@ -216,7 +216,7 @@ class MissingProductResponse(object):
         return self._amount_missing
 
     @property
-    def is_partly_in_stock(self) -> int:
+    def is_partly_in_stock(self) -> bool:
         return self._is_partly_in_stock
 
 class CurrentVolatilStockResponse(object):
