@@ -1,13 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
-                               CurrentStockResponse, MissingProductResponse,
-                               ShoppingListItem,
-                               LocationData,
+from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
+                               CurrentChoreResponse, CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
+                               LocationData, MissingProductResponse,
                                ProductData, ProductDetailsResponse,
-                               TransactionType, UserDto, DEFAULT_PORT_NUMBER)
+                               ShoppingListItem, TransactionType, UserDto)
 
 
 class Product(object):
@@ -278,4 +277,3 @@ class Grocy(object):
         
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
-        
