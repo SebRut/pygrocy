@@ -6,13 +6,13 @@ from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
                                ShoppingListItem,
                                LocationData,
                                CurrentVolatilStockResponse, GrocyApiClient,
-                               ProductData, ProductDetailsResponse,
+                               ProductDetailsResponse,
                                TransactionType, UserDto, DEFAULT_PORT_NUMBER)
 
 
 class Product(object):
     def __init__(self, stock_response: CurrentStockResponse):
-        self._product_id = stock_response.product_id
+        self._id = stock_response.product_id
         self._available_amount = stock_response.amount
         self._best_before_date = stock_response.best_before_date
 
@@ -21,7 +21,7 @@ class Product(object):
         self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_product(self.product_id)
+        details = api_client.get_product(self.id)
         if details is None:
             return
         self._name = details.product.name
@@ -33,8 +33,8 @@ class Product(object):
         return self._name
 
     @property
-    def product_id(self) -> int:
-        return self._product_id
+    def id(self) -> int:
+        return self._id
         
     @property
     def product_group_id(self) -> int:
@@ -51,6 +51,7 @@ class Product(object):
     @property
     def barcodes(self) -> List[str]:
         return self._barcodes
+
 
 class Group(object):
     def __init__(self, raw_product_group: LocationData):
@@ -69,6 +70,7 @@ class Group(object):
     @property
     def description(self) -> str:
         return self._description
+
 
 class ShoppingListProduct(object):
     def __init__(self, raw_shopping_list: ShoppingListItem):
@@ -91,7 +93,7 @@ class ShoppingListProduct(object):
         return self._product_id
         
     @property
-    def amount(self) -> int:
+    def amount(self) -> float:
         return self._amount
         
     @property
@@ -100,13 +102,12 @@ class ShoppingListProduct(object):
         
     @property
     def product(self) -> Product:
-        if self._product_id is None:
-            self.get_details()
         return self._product
-    
+
+
 class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
-        self._chore_id = raw_chore.chore_id
+        self._id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
 
@@ -114,14 +115,14 @@ class Chore(object):
         self._last_done_by = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_chore(self.chore_id)
+        details = api_client.get_chore(self.id)
         self._name = details.chore.name
         self._last_tracked_time = details.last_tracked
         self._last_done_by = details.last_done_by
 
     @property
-    def chore_id(self) -> int:
-        return self._chore_id
+    def id(self) -> int:
+        return self._id
 
     @property
     def last_tracked_time(self) -> datetime:
@@ -261,4 +262,3 @@ class Grocy(object):
         
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
-        

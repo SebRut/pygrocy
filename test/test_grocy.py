@@ -25,12 +25,12 @@ class TestGrocy(TestCase):
         
         assert isinstance(chores, list)
         assert len(chores) == 6
-        assert chores[0].chore_id == 1
-        assert chores[1].chore_id == 2
-        assert chores[2].chore_id == 3
-        assert chores[3].chore_id == 4
-        assert chores[4].chore_id == 5
-        assert chores[5].chore_id == 6
+        assert chores[0].id == 1
+        assert chores[1].id == 2
+        assert chores[2].id == 3
+        assert chores[3].id == 4
+        assert chores[4].id == 5
+        assert chores[5].id == 6
 
     def test_product_get_details_valid(self):
         stock = self.grocy.stock()
