@@ -1,22 +1,30 @@
 from datetime import datetime
 from typing import List
 
-from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
-                               CurrentStockResponse,
-                               ShoppingListItem,
-                               LocationData,
+from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
+                               CurrentChoreResponse, CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
+                               LocationData, MissingProductResponse,
                                ProductData, ProductDetailsResponse,
-                               TransactionType, UserDto, DEFAULT_PORT_NUMBER)
+                               ShoppingListItem, TransactionType, UserDto)
 
 
 class Product(object):
-    def __init__(self, stock_response: CurrentStockResponse):
-        self._product_id = stock_response.product_id
-        self._available_amount = stock_response.amount
-        self._best_before_date = stock_response.best_before_date
-
-        self._name = None
+    def __init__(self, response):
+        if isinstance(response, CurrentStockResponse):
+            self._product_id = response.product_id
+            self._name = None
+            self._available_amount = response.amount
+            self._best_before_date = response.best_before_date
+            self._amount_missing = None
+            self._is_partly_in_stock = None
+        elif isinstance(response, MissingProductResponse):
+            self._product_id = response.product_id
+            self._name = response.name
+            self._available_amount = None
+            self._best_before_date = None
+            self._amount_missing = response.amount_missing
+            self._is_partly_in_stock = response.is_partly_in_stock
         self._barcodes = None
         self._product_group_id = None
 
@@ -51,6 +59,14 @@ class Product(object):
     @property
     def barcodes(self) -> List[str]:
         return self._barcodes
+
+    @property
+    def amount_missing(self) -> float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -> int:
+        return self._is_partly_in_stock
 
 class Group(object):
     def __init__(self, raw_product_group: LocationData):
@@ -103,7 +119,7 @@ class ShoppingListProduct(object):
         if self._product_id is None:
             self.get_details()
         return self._product
-    
+
 class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
         self._chore_id = raw_chore.chore_id
@@ -261,4 +277,3 @@ class Grocy(object):
         
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
-        
