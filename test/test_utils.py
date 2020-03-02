@@ -25,15 +25,15 @@ class TestUtils(TestCase):
 
     def test_parse_int_no_data(self):
         int_str = None
-        int_number = utils.parse_int(int_str)
+        int_number = utils.parse_int(int_str, -1)
 
-        assert int_number is None
+        assert int_number == -1
 
     def test_parse_int_error(self):
         int_str = "string"
-        int_number = utils.parse_int(int_str)
+        int_number = utils.parse_int(int_str, -1)
 
-        assert int_number is None
+        assert int_number == -1
 
     def test_parse_float_valid(self):
         float_str = "2.01"
@@ -43,12 +43,12 @@ class TestUtils(TestCase):
 
     def test_parse_float_no_data(self):
         float_str = None
-        float_number = utils.parse_float(float_str)
+        float_number = utils.parse_float(float_str, -1)
 
-        assert float_number is None
+        assert float_number == -1
 
     def test_parse_float_error(self):
         float_str = "string"
-        float_number = utils.parse_float(float_str)
+        float_number = utils.parse_float(float_str, -1)
 
-        assert float_number is None
+        assert float_number == -1

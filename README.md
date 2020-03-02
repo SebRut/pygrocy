@@ -32,7 +32,7 @@ for entry in grocy.stock():
     print("{} in stock for product id {}".format(entry.id, entry.amount))
 ```
 
-## Dev testing
+## Development testing
 You need a Grocy instance running in demo mode at localhost with https (docker or a php server)
 You can setup url, port and ssl in test/test_const.py
 Easy case : install docker and docker-compose and run :
