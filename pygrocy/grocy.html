@@ -25,27 +25,35 @@
 <pre><code class="python">from datetime import datetime
 from typing import List
 
-from .grocy_api_client import (ChoreDetailsResponse, CurrentChoreResponse,
-                               CurrentStockResponse,
-                               ShoppingListItem,
-                               LocationData,
+from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
+                               CurrentChoreResponse, CurrentStockResponse,
                                CurrentVolatilStockResponse, GrocyApiClient,
+                               LocationData, MissingProductResponse,
                                ProductData, ProductDetailsResponse,
-                               TransactionType, UserDto, DEFAULT_PORT_NUMBER)
+                               ShoppingListItem, TransactionType, UserDto)
 
 
 class Product(object):
-    def __init__(self, stock_response: CurrentStockResponse):
-        self._product_id = stock_response.product_id
-        self._available_amount = stock_response.amount
-        self._best_before_date = stock_response.best_before_date
-
-        self._name = None
+    def __init__(self, response):
+        if isinstance(response, CurrentStockResponse):
+            self._id = response.product_id
+            self._name = None
+            self._available_amount = response.amount
+            self._best_before_date = response.best_before_date
+            self._amount_missing = None
+            self._is_partly_in_stock = None
+        elif isinstance(response, MissingProductResponse):
+            self._id = response.product_id
+            self._name = response.name
+            self._available_amount = None
+            self._best_before_date = None
+            self._amount_missing = response.amount_missing
+            self._is_partly_in_stock = response.is_partly_in_stock
         self._barcodes = None
         self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_product(self.product_id)
+        details = api_client.get_product(self.id)
         if details is None:
             return
         self._name = details.product.name
@@ -57,8 +65,8 @@ class Product(object):
         return self._name
 
     @property
-    def product_id(self) -&gt; int:
-        return self._product_id
+    def id(self) -&gt; int:
+        return self._id
         
     @property
     def product_group_id(self) -&gt; int:
@@ -75,6 +83,15 @@ class Product(object):
     @property
     def barcodes(self) -&gt; List[str]:
         return self._barcodes
+
+    @property
+    def amount_missing(self) -&gt; float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -&gt; int:
+        return self._is_partly_in_stock
+
 
 class Group(object):
     def __init__(self, raw_product_group: LocationData):
@@ -94,6 +111,7 @@ class Group(object):
     def description(self) -&gt; str:
         return self._description
 
+
 class ShoppingListProduct(object):
     def __init__(self, raw_shopping_list: ShoppingListItem):
         self._id = raw_shopping_list.id
@@ -103,7 +121,8 @@ class ShoppingListProduct(object):
         self._product = None
         
     def get_details(self, api_client: GrocyApiClient):
-        self._product = api_client.get_product(self._product_id).product
+        if self._product_id:
+            self._product = api_client.get_product(self._product_id).product
         
     @property
     def id(self) -&gt; int:
@@ -114,7 +133,7 @@ class ShoppingListProduct(object):
         return self._product_id
         
     @property
-    def amount(self) -&gt; int:
+    def amount(self) -&gt; float:
         return self._amount
         
     @property
@@ -123,13 +142,12 @@ class ShoppingListProduct(object):
         
     @property
     def product(self) -&gt; Product:
-        if self._product_id is None:
-            self.get_details()
         return self._product
-    
+
+
 class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
-        self._chore_id = raw_chore.chore_id
+        self._id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
 
@@ -137,14 +155,14 @@ class Chore(object):
         self._last_done_by = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_chore(self.chore_id)
+        details = api_client.get_chore(self.id)
         self._name = details.chore.name
         self._last_tracked_time = details.last_tracked
         self._last_done_by = details.last_done_by
 
     @property
-    def chore_id(self) -&gt; int:
-        return self._chore_id
+    def id(self) -&gt; int:
+        return self._id
 
     @property
     def last_tracked_time(self) -&gt; datetime:
@@ -283,8 +301,7 @@ class Grocy(object):
         return self._api_client.set_userfields(entity, object_id, key, value)
         
     def get_last_db_changed(self):
-        return self._api_client.get_last_db_changed()
-        </code></pre>
+        return self._api_client.get_last_db_changed()</code></pre>
 </details>
 </section>
 <section>
@@ -306,7 +323,7 @@ class Grocy(object):
 <summary>Source code</summary>
 <pre><code class="python">class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
-        self._chore_id = raw_chore.chore_id
+        self._id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
 
@@ -314,14 +331,14 @@ class Grocy(object):
         self._last_done_by = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_chore(self.chore_id)
+        details = api_client.get_chore(self.id)
         self._name = details.chore.name
         self._last_tracked_time = details.last_tracked
         self._last_done_by = details.last_done_by
 
     @property
-    def chore_id(self) -&gt; int:
-        return self._chore_id
+    def id(self) -&gt; int:
+        return self._id
 
     @property
     def last_tracked_time(self) -&gt; datetime:
@@ -341,14 +358,14 @@ class Grocy(object):
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.grocy.Chore.chore_id"><code class="name">var <span class="ident">chore_id</span></code></dt>
+<dt id="pygrocy.grocy.Chore.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def chore_id(self) -&gt; int:
-    return self._chore_id</code></pre>
+def id(self) -&gt; int:
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Chore.last_done_by"><code class="name">var <span class="ident">last_done_by</span></code></dt>
@@ -402,7 +419,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
-    details = api_client.get_chore(self.chore_id)
+    details = api_client.get_chore(self.id)
     self._name = details.chore.name
     self._last_tracked_time = details.last_tracked
     self._last_done_by = details.last_done_by</code></pre>
@@ -641,7 +658,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 1, 14, 8, 25, 36, 21601))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 3, 3, 8, 0, 11, 96222))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -890,24 +907,33 @@ def name(self) -&gt; str:
 </dd>
 <dt id="pygrocy.grocy.Product"><code class="flex name class">
 <span>class <span class="ident">Product</span></span>
-<span>(</span><span>stock_response)</span>
+<span>(</span><span>response)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Product(object):
-    def __init__(self, stock_response: CurrentStockResponse):
-        self._product_id = stock_response.product_id
-        self._available_amount = stock_response.amount
-        self._best_before_date = stock_response.best_before_date
-
-        self._name = None
+    def __init__(self, response):
+        if isinstance(response, CurrentStockResponse):
+            self._id = response.product_id
+            self._name = None
+            self._available_amount = response.amount
+            self._best_before_date = response.best_before_date
+            self._amount_missing = None
+            self._is_partly_in_stock = None
+        elif isinstance(response, MissingProductResponse):
+            self._id = response.product_id
+            self._name = response.name
+            self._available_amount = None
+            self._best_before_date = None
+            self._amount_missing = response.amount_missing
+            self._is_partly_in_stock = response.is_partly_in_stock
         self._barcodes = None
         self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_product(self.product_id)
+        details = api_client.get_product(self.id)
         if details is None:
             return
         self._name = details.product.name
@@ -919,8 +945,8 @@ def name(self) -&gt; str:
         return self._name
 
     @property
-    def product_id(self) -&gt; int:
-        return self._product_id
+    def id(self) -&gt; int:
+        return self._id
         
     @property
     def product_group_id(self) -&gt; int:
@@ -936,10 +962,28 @@ def name(self) -&gt; str:
 
     @property
     def barcodes(self) -&gt; List[str]:
-        return self._barcodes</code></pre>
+        return self._barcodes
+
+    @property
+    def amount_missing(self) -&gt; float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -&gt; int:
+        return self._is_partly_in_stock</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.grocy.Product.amount_missing"><code class="name">var <span class="ident">amount_missing</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def amount_missing(self) -&gt; float:
+    return self._amount_missing</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Product.available_amount"><code class="name">var <span class="ident">available_amount</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -970,6 +1014,26 @@ def best_before_date(self) -&gt; datetime:
     return self._best_before_date</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy.Product.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Product.is_partly_in_stock"><code class="name">var <span class="ident">is_partly_in_stock</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def is_partly_in_stock(self) -&gt; int:
+    return self._is_partly_in_stock</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Product.name"><code class="name">var <span class="ident">name</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -990,16 +1054,6 @@ def product_group_id(self) -&gt; int:
     return self._product_group_id</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Product.product_id"><code class="name">var <span class="ident">product_id</span></code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">@property
-def product_id(self) -&gt; int:
-    return self._product_id</code></pre>
-</details>
-</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
@@ -1011,7 +1065,7 @@ def product_id(self) -&gt; int:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
-    details = api_client.get_product(self.product_id)
+    details = api_client.get_product(self.id)
     if details is None:
         return
     self._name = details.product.name
@@ -1038,7 +1092,8 @@ def product_id(self) -&gt; int:
         self._product = None
         
     def get_details(self, api_client: GrocyApiClient):
-        self._product = api_client.get_product(self._product_id).product
+        if self._product_id:
+            self._product = api_client.get_product(self._product_id).product
         
     @property
     def id(self) -&gt; int:
@@ -1049,7 +1104,7 @@ def product_id(self) -&gt; int:
         return self._product_id
         
     @property
-    def amount(self) -&gt; int:
+    def amount(self) -&gt; float:
         return self._amount
         
     @property
@@ -1058,8 +1113,6 @@ def product_id(self) -&gt; int:
         
     @property
     def product(self) -&gt; Product:
-        if self._product_id is None:
-            self.get_details()
         return self._product</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -1070,7 +1123,7 @@ def product_id(self) -&gt; int:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def amount(self) -&gt; int:
+def amount(self) -&gt; float:
     return self._amount</code></pre>
 </details>
 </dd>
@@ -1101,8 +1154,6 @@ def note(self) -&gt; str:
 <summary>Source code</summary>
 <pre><code class="python">@property
 def product(self) -&gt; Product:
-    if self._product_id is None:
-        self.get_details()
     return self._product</code></pre>
 </details>
 </dd>
@@ -1127,7 +1178,8 @@ def product_id(self) -&gt; int:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
-    self._product = api_client.get_product(self._product_id).product</code></pre>
+    if self._product_id:
+        self._product = api_client.get_product(self._product_id).product</code></pre>
 </details>
 </dd>
 </dl>
@@ -1151,8 +1203,8 @@ def product_id(self) -&gt; int:
 <li>
 <h4><code><a title="pygrocy.grocy.Chore" href="#pygrocy.grocy.Chore">Chore</a></code></h4>
 <ul class="">
-<li><code><a title="pygrocy.grocy.Chore.chore_id" href="#pygrocy.grocy.Chore.chore_id">chore_id</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.get_details" href="#pygrocy.grocy.Chore.get_details">get_details</a></code></li>
+<li><code><a title="pygrocy.grocy.Chore.id" href="#pygrocy.grocy.Chore.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.last_done_by" href="#pygrocy.grocy.Chore.last_done_by">last_done_by</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.last_tracked_time" href="#pygrocy.grocy.Chore.last_tracked_time">last_tracked_time</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.name" href="#pygrocy.grocy.Chore.name">name</a></code></li>
@@ -1196,13 +1248,15 @@ def product_id(self) -&gt; int:
 <li>
 <h4><code><a title="pygrocy.grocy.Product" href="#pygrocy.grocy.Product">Product</a></code></h4>
 <ul class="two-column">
+<li><code><a title="pygrocy.grocy.Product.amount_missing" href="#pygrocy.grocy.Product.amount_missing">amount_missing</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.available_amount" href="#pygrocy.grocy.Product.available_amount">available_amount</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.barcodes" href="#pygrocy.grocy.Product.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.best_before_date" href="#pygrocy.grocy.Product.best_before_date">best_before_date</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.get_details" href="#pygrocy.grocy.Product.get_details">get_details</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.id" href="#pygrocy.grocy.Product.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy.Product.is_partly_in_stock" href="#pygrocy.grocy.Product.is_partly_in_stock">is_partly_in_stock</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.name" href="#pygrocy.grocy.Product.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy.Product.product_group_id" href="#pygrocy.grocy.Product.product_group_id">product_group_id</a></code></li>
-<li><code><a title="pygrocy.grocy.Product.product_id" href="#pygrocy.grocy.Product.product_id">product_id</a></code></li>
 </ul>
 </li>
 <li>

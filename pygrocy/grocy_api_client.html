@@ -22,25 +22,25 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from datetime import datetime
+<pre><code class="python">import base64
+import json
+import os
+from datetime import datetime
 from enum import Enum
 from typing import List
-from tzlocal import get_localzone
 from urllib.parse import urljoin
-import os
-import base64
-import json
+
 import pytz
 import requests
-
 from pygrocy.utils import parse_date, parse_float, parse_int
+from tzlocal import get_localzone
 
 DEFAULT_PORT_NUMBER=9192
 
 class ShoppingListItem(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get(&#39;id&#39;))
-        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
+        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;, None))
         self._note = parsed_json.get(&#39;note&#39;,None)
         self._amount = parse_float(parsed_json.get(&#39;amount&#39;),0)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
@@ -220,11 +220,34 @@ class CurrentStockResponse(object):
     def amount_opened(self) -&gt; float:
         return self._amount_opened
 
+class MissingProductResponse(object):
+    def __init__(self, parsed_json):
+        self._product_id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._name = parsed_json.get(&#39;name&#39;)
+        self._amount_missing = parse_float(parsed_json.get(&#39;amount_missing&#39;))
+        self._is_partly_in_stock = bool(parse_int(parsed_json.get(&#39;is_partly_in_stock&#39;)))
+
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def amount_missing(self) -&gt; float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -&gt; bool:
+        return self._is_partly_in_stock
+
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
         self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
         self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expired_products&#39;)]
-        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
+        self._missing_products = [MissingProductResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
 
     @property
     def expiring_products(self) -&gt; List[CurrentStockResponse]:
@@ -235,7 +258,7 @@ class CurrentVolatilStockResponse(object):
         return self._expired_products
 
     @property
-    def missing_products(self) -&gt; List[CurrentStockResponse]:
+    def missing_products(self) -&gt; List[MissingProductResponse]:
         return self._missing_products
 
 
@@ -320,10 +343,13 @@ class GrocyApiClient(object):
         self._base_url = &#39;{}:{}/api/&#39;.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
-        self._headers = {
-            &#34;accept&#34;: &#34;application/json&#34;,
-            &#34;GROCY-API-KEY&#34;: api_key
-        }
+        if self._api_key == &#34;demo_mode&#34;:
+            self._headers = { &#34;accept&#34;: &#34;application/json&#34; }
+        else:
+            self._headers = {
+                &#34;accept&#34;: &#34;application/json&#34;,
+                &#34;GROCY-API-KEY&#34;: api_key
+            }
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
@@ -497,9 +523,7 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, &#34;system/db-changed-time&#34;)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         last_change_timestamp = parse_date(resp.json().get(&#39;changed_time&#39;))
-        return last_change_timestamp
-        
-       </code></pre>
+        return last_change_timestamp</code></pre>
 </details>
 </section>
 <section>
@@ -767,7 +791,7 @@ def product_id(self) -&gt; int:
     def __init__(self, parsed_json):
         self._expiring_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expiring_products&#39;)]
         self._expired_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;expired_products&#39;)]
-        self._missing_products = [CurrentStockResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
+        self._missing_products = [MissingProductResponse(product) for product in parsed_json.get(&#39;missing_products&#39;)]
 
     @property
     def expiring_products(self) -&gt; List[CurrentStockResponse]:
@@ -778,7 +802,7 @@ def product_id(self) -&gt; int:
         return self._expired_products
 
     @property
-    def missing_products(self) -&gt; List[CurrentStockResponse]:
+    def missing_products(self) -&gt; List[MissingProductResponse]:
         return self._missing_products</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -809,7 +833,7 @@ def expiring_products(self) -&gt; List[CurrentStockResponse]:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@property
-def missing_products(self) -&gt; List[CurrentStockResponse]:
+def missing_products(self) -&gt; List[MissingProductResponse]:
     return self._missing_products</code></pre>
 </details>
 </dd>
@@ -828,10 +852,13 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
         self._base_url = &#39;{}:{}/api/&#39;.format(base_url, port)
         self._api_key = api_key
         self._verify_ssl = verify_ssl
-        self._headers = {
-            &#34;accept&#34;: &#34;application/json&#34;,
-            &#34;GROCY-API-KEY&#34;: api_key
-        }
+        if self._api_key == &#34;demo_mode&#34;:
+            self._headers = { &#34;accept&#34;: &#34;application/json&#34; }
+        else:
+            self._headers = {
+                &#34;accept&#34;: &#34;application/json&#34;,
+                &#34;GROCY-API-KEY&#34;: api_key
+            }
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         req_url = urljoin(self._base_url, &#34;stock&#34;)
@@ -1104,7 +1131,7 @@ def missing_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 1, 14, 8, 25, 36, 21007))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 3, 3, 8, 0, 11, 95598))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1397,6 +1424,81 @@ def name(self) -&gt; str:
 </dd>
 </dl>
 </dd>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse"><code class="flex name class">
+<span>class <span class="ident">MissingProductResponse</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MissingProductResponse(object):
+    def __init__(self, parsed_json):
+        self._product_id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._name = parsed_json.get(&#39;name&#39;)
+        self._amount_missing = parse_float(parsed_json.get(&#39;amount_missing&#39;))
+        self._is_partly_in_stock = bool(parse_int(parsed_json.get(&#39;is_partly_in_stock&#39;)))
+
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def amount_missing(self) -&gt; float:
+        return self._amount_missing
+
+    @property
+    def is_partly_in_stock(self) -&gt; bool:
+        return self._is_partly_in_stock</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse.amount_missing"><code class="name">var <span class="ident">amount_missing</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def amount_missing(self) -&gt; float:
+    return self._amount_missing</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock"><code class="name">var <span class="ident">is_partly_in_stock</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def is_partly_in_stock(self) -&gt; bool:
+    return self._is_partly_in_stock</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse.product_id"><code class="name">var <span class="ident">product_id</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@property
+def product_id(self) -&gt; int:
+    return self._product_id</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy_api_client.ProductData"><code class="flex name class">
 <span>class <span class="ident">ProductData</span></span>
 <span>(</span><span>parsed_json)</span>
@@ -1642,7 +1744,7 @@ def stock_amount_opened(self) -&gt; int:
 <pre><code class="python">class ShoppingListItem(object):
     def __init__(self, parsed_json):
         self._id = parse_int(parsed_json.get(&#39;id&#39;))
-        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;))
+        self._product_id = parse_int(parsed_json.get(&#39;product_id&#39;, None))
         self._note = parsed_json.get(&#39;note&#39;,None)
         self._amount = parse_float(parsed_json.get(&#39;amount&#39;),0)
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;, None))
@@ -1925,6 +2027,15 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.LocationData.description" href="#pygrocy.grocy_api_client.LocationData.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.id" href="#pygrocy.grocy_api_client.LocationData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.name" href="#pygrocy.grocy_api_client.LocationData.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.MissingProductResponse" href="#pygrocy.grocy_api_client.MissingProductResponse">MissingProductResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.amount_missing" href="#pygrocy.grocy_api_client.MissingProductResponse.amount_missing">amount_missing</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock" href="#pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock">is_partly_in_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.name" href="#pygrocy.grocy_api_client.MissingProductResponse.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.product_id" href="#pygrocy.grocy_api_client.MissingProductResponse.product_id">product_id</a></code></li>
 </ul>
 </li>
 <li>
