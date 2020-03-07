@@ -11,6 +11,7 @@ services:
   - docker
 
 before_install:
+  - curl -L https://github.com/grocy/grocy-docker/raw/master/Dockerfile-grocy > Dockerfile-grocy
   - docker-compose build grocy
   - docker pull grocy/grocy-docker:nginx
   - docker-compose up -d
