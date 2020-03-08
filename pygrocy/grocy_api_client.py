@@ -358,9 +358,7 @@ class GrocyApiClient(object):
 
     def get_stock(self) -> List[CurrentStockResponse]:
         parsed_json = self._do_request("GET", "stock")
-        if parsed_json:
-            return [CurrentStockResponse(response) for response in parsed_json]
-        return []
+        return [CurrentStockResponse(response) for response in parsed_json]
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         parsed_json = self._do_request("GET", "stock/volatile")
@@ -375,9 +373,7 @@ class GrocyApiClient(object):
 
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_request("GET", "chores")
-        if parsed_json:
-            return [CurrentChoreResponse(chore) for chore in parsed_json]
-        return []
+        return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
         url = f"chores/{chore_id}"
@@ -425,9 +421,7 @@ class GrocyApiClient(object):
         
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_request("GET", "objects/shopping_list")
-        if parsed_json:
-            return [ShoppingListItem(response) for response in parsed_json]
-        return []
+        return [ShoppingListItem(response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         data = {
@@ -461,10 +455,8 @@ class GrocyApiClient(object):
         
     def get_product_groups(self) -> List[LocationData]:
         parsed_json = self._do_request("GET", "objects/product_groups")
-        if parsed_json:
-            return [LocationData(response) for response in parsed_json]
-        return []
-        
+        return [LocationData(response) for response in parsed_json]
+
     def upload_product_picture(self, product_id: int, pic_path: str):
         if not os.path.exists(pic_path):
             return

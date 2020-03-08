@@ -70,12 +70,6 @@ class TestGrocy(TestCase):
             assert isinstance(prod, Product)
 
     @responses.activate
-    def test_get_stock_invalid_no_data(self):
-        responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", status=200)
-
-        assert len(self.grocy.stock()) == 0
-
-    @responses.activate
     def test_get_stock_invalid_missing_data(self):
         resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", json=resp, status=200)
