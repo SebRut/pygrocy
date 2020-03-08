@@ -35,17 +35,11 @@ for entry in grocy.stock():
 ## Development testing
 You need a Grocy instance running in demo mode at localhost with https (docker or a php server)
 You can setup url, port and ssl in test/test_const.py
-Easy case : install docker and docker-compose and run :
-For pre-release Grocy version :
+
 ```
+  curl -L https://github.com/grocy/grocy-docker/raw/master/Dockerfile-grocy > Dockerfile-grocy
   docker-compose build grocy
   docker pull grocy/grocy-docker:nginx
-  docker-compose up -d
-  curl -kX GET https://localhost
-```
-For latest Grocy version :
-```
-  docker pull
   docker-compose up -d
   curl -kX GET https://localhost
 ```
