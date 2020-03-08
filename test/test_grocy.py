@@ -73,13 +73,13 @@ class TestGrocy(TestCase):
     def test_get_stock_invalid_no_data(self):
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", status=200)
 
-        assert self.grocy.stock() is None
+        assert len(self.grocy.stock()) == 0
 
     @responses.activate
     def test_get_stock_invalid_missing_data(self):
         resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", json=resp, status=200)
-        assert self.grocy.stock() is None
+        assert len(self.grocy.stock()) == 0
         
     def test_get_shopping_list_valid(self):
         shopping_list = self.grocy.shopping_list(True)
@@ -98,7 +98,7 @@ class TestGrocy(TestCase):
     def test_get_shopping_list_invalid_missing_data(self):
         resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/shopping_list", json=resp, status=200)
-        assert self.grocy.shopping_list() is None
+        assert len(self.grocy.shopping_list()) == 0
         
     def test_add_missing_product_to_shopping_list_valid(self):
         assert not self.grocy.add_missing_product_to_shopping_list()
@@ -151,7 +151,7 @@ class TestGrocy(TestCase):
     def test_get_product_groups_invalid_missing_data(self):
         resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/product_groups", json=resp, status=200)
-        assert self.grocy.product_groups() is None
+        assert len(self.grocy.product_groups()) == 0
         
     @responses.activate
     def test_upload_product_picture_valid(self):
