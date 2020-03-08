@@ -342,9 +342,11 @@ class GrocyApiClient(object):
             if data:
                 up_header = self._headers.copy()
                 up_header['accept'] = '*/*'
-                up_header['Content-Type'] = 'application/json'
                 if isinstance(data, dict):
+                    up_header['Content-Type'] = 'application/json'
                     data = json.dumps(data)
+                else:
+                    up_header['Content-Type'] = 'application/octet-stream'
                 resp = requests.put(
                     req_url, verify=self._verify_ssl,
                     headers=up_header,
