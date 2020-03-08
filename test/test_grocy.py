@@ -160,7 +160,7 @@ class TestGrocy(TestCase):
                 m_exist.return_value = True
                 api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
                 responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/files/productpictures/MS5qcGc=", status=204)
-                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code == 204
+                assert not api_client.upload_product_picture(1,"/somepath/pic.jpg")
             
     @responses.activate
     def test_upload_product_picture_invalid_missing_data(self):
@@ -177,20 +177,19 @@ class TestGrocy(TestCase):
                 m_exist.return_value = True
                 api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
                 responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/files/productpictures/MS5qcGc=", status=400)
-                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code != 204
+                self.assertRaises(HTTPError, api_client.upload_product_picture, 1,"/somepath/pic.jpg")
                 
     @responses.activate
     def test_update_product_pic_valid(self):
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/products/1", status=204)
-        assert api_client.update_product_pic(1).status_code == 204
+        assert not api_client.update_product_pic(1)
         
     @responses.activate
     def test_update_product_pic_error(self):
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/products/1", status=400)
-        assert api_client.update_product_pic(1).status_code != 204
-        
+        self.assertRaises(HTTPError, api_client.update_product_pic, 1)        
     
     def test_get_expiring_products_valid(self):
         
@@ -286,13 +285,12 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_set_userfields_valid(self):
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/userfields/chores/1", status=204)
-        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code == 204
+        assert not self.grocy.set_userfields("chores",1,"auserfield", "value")
         
     @responses.activate
     def test_set_userfields_error(self):
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/userfields/chores/1", status=400)
-        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code != 204
-        
+        self.assertRaises(HTTPError, self.grocy.set_userfields, "chores",1,"auserfield","value")
 
     def test_get_last_db_changed_valid(self):
 

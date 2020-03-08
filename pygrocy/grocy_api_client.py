@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 from enum import Enum
-from typing import List, Union
+from typing import List
 from urllib.parse import urljoin
 
 import pytz
@@ -327,7 +327,7 @@ class GrocyApiClient(object):
                 "GROCY-API-KEY": api_key
             }
 
-    def _do_request(self, request_type: str, end_url: str, data: Union[dict, str, None] = None):
+    def _do_request(self, request_type: str, end_url: str, data = None):
         req_url = urljoin(self._base_url, end_url)
         if request_type == "GET":
             resp = requests.get(
@@ -343,14 +343,12 @@ class GrocyApiClient(object):
                 up_header = self._headers.copy()
                 up_header['accept'] = '*/*'
                 up_header['Content-Type'] = 'application/json'
+                if isinstance(data, dict):
+                    data = json.dumps(data)
                 resp = requests.put(
                     req_url, verify=self._verify_ssl,
                     headers=up_header,
-                    data=json.dumps(data))
-        if request_type == "DELETE":
-            resp = requests.delete(
-                req_url, verify=self._verify_ssl,
-                headers=self._headers)
+                    data=data)
         resp.raise_for_status()
         if len(resp.content) > 0:
             return resp.json()
@@ -466,24 +464,15 @@ class GrocyApiClient(object):
     def upload_product_picture(self, product_id: int, pic_path: str):
         if not os.path.exists(pic_path):
             return
-        up_header = self._headers.copy()
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/octet-stream'
         b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
-        req_url = urljoin(urljoin(self._base_url, "files/productpictures/" ), str(b64fn, "utf-8"))
+        req_url = "files/productpictures/" + str(b64fn, "utf-8")
         with open(pic_path,'rb') as pic:
-            resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
-            return resp
+            self._do_request("PUT", req_url, pic)
             
     def update_product_pic(self, product_id: int):
-        pic_name = '{}.jpg'.format(product_id)
+        pic_name = f"{product_id}.jpg"
         data = { "picture_file_name":  pic_name }
-        up_header = self._headers.copy()
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/json'
-        req_url = urljoin(urljoin(self._base_url, "objects/products/"), str(product_id))
-        resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
-        return resp
+        self._do_request("PUT", f"objects/products/{product_id}", data)
             
     def get_userfields(self, entity: str, object_id: int):
         url = f"userfields/{entity}/{object_id}"
@@ -493,9 +482,7 @@ class GrocyApiClient(object):
         data = {
             key: value
         }
-        req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
-        resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_request("PUT", f"userfields/{entity}/{object_id}", data)
 
     def get_last_db_changed(self):
         resp = self._do_request("GET", "system/db-changed-time")
