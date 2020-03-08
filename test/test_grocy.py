@@ -101,38 +101,38 @@ class TestGrocy(TestCase):
         assert self.grocy.shopping_list() is None
         
     def test_add_missing_product_to_shopping_list_valid(self):
-        assert self.grocy.add_missing_product_to_shopping_list().status_code == 204
+        assert not self.grocy.add_missing_product_to_shopping_list()
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/add-missing-products", status=400)
-        assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
+        self.assertRaises(HTTPError, self.grocy.add_missing_product_to_shopping_list)
         
     def test_add_product_to_shopping_list_valid(self):
-        assert self.grocy.add_product_to_shopping_list(22).status_code == 204
+        assert not self.grocy.add_product_to_shopping_list(22)
         
     def test_add_product_to_shopping_list_error(self):
-        assert self.grocy.add_product_to_shopping_list(3000).status_code != 204
+        self.assertRaises(HTTPError, self.grocy.add_product_to_shopping_list, 3000)
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/clear", status=204)
-        assert self.grocy.clear_shopping_list().status_code == 204
+        assert not self.grocy.clear_shopping_list()
         
     @responses.activate
     def test_clear_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/clear", status=400)
-        assert self.grocy.clear_shopping_list().status_code != 204
+        self.assertRaises(HTTPError, self.grocy.clear_shopping_list)
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/remove-product", status=204)
-        assert self.grocy.remove_product_in_shopping_list(1).status_code == 204
+        assert not self.grocy.remove_product_in_shopping_list(1)
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/remove-product", status=400)
-        assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
+        self.assertRaises(HTTPError, self.grocy.remove_product_in_shopping_list, 1)
         
     def test_get_product_groups_valid(self):
         product_groups_list = self.grocy.product_groups()

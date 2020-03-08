@@ -396,8 +396,7 @@ class GrocyApiClient(object):
         if done_by is not None:
             data["done_by"] = done_by
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        self._do_request("POST", f"chores/{chore_id}/execute", data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -410,8 +409,7 @@ class GrocyApiClient(object):
         if best_before_date is not None:
             data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        self._do_request("POST", f"stock/products/{product_id}/add", data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -421,9 +419,7 @@ class GrocyApiClient(object):
             "transaction_type": transaction_type.value
         }
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-
+        self._do_request("POST", f"stock/products/{product_id}/consume", data)
         
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_request("GET", "objects/shopping_list")
@@ -435,9 +431,7 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id
         }
 
-        req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_request("POST", "stock/shoppinglist/add-missing-products", data)
     
     def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         data = {
@@ -447,17 +441,14 @@ class GrocyApiClient(object):
         }
 
         req_url = urljoin(self._base_url, "stock/shoppinglist/add-product")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_request("POST", "stock/shoppinglist/add-product", data)
     
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             "list_id": shopping_list_id
         }
 
-        req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_request("POST", "stock/shoppinglist/clear", data)
             
     def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         data = {
@@ -465,9 +456,7 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id,
             "product_amount": amount
         }
-        req_url = urljoin(self._base_url, "stock/shoppinglist/remove-product")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_request("POST", "stock/shoppinglist/remove-product", data)
         
     def get_product_groups(self) -> List[LocationData]:
         parsed_json = self._do_request("GET", "objects/product_groups")
