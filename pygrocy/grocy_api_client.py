@@ -437,8 +437,6 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id,
             "product_amount": amount
         }
-
-        req_url = urljoin(self._base_url, "stock/shoppinglist/add-product")
         self._do_request("POST", "stock/shoppinglist/add-product", data)
     
     def clear_shopping_list(self, shopping_list_id: int = 1):
