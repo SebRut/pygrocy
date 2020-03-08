@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import List, Union
 from urllib.parse import urljoin
 
 import pytz
@@ -327,67 +327,59 @@ class GrocyApiClient(object):
                 "GROCY-API-KEY": api_key
             }
 
-    def _get_request(self, url: str):
-        req_url = urljoin(self._base_url, url)
-        resp = requests.get(
-            req_url, verify=self._verify_ssl, headers=self._headers)
+    def _do_request(self, request_type: str, end_url: str, data: Union[dict, str, None] = None):
+        req_url = urljoin(self._base_url, end_url)
+        if request_type == "GET":
+            resp = requests.get(
+                req_url, verify=self._verify_ssl, headers=self._headers)
+        if request_type == "POST":
+            if data:
+                resp = requests.post(
+                    req_url, verify=self._verify_ssl,
+                    headers=self._headers,
+                    data=data)
+        if request_type == "PUT":
+            if data:
+                up_header = self._headers.copy()
+                up_header['accept'] = '*/*'
+                up_header['Content-Type'] = 'application/json'
+                resp = requests.put(
+                    req_url, verify=self._verify_ssl,
+                    headers=up_header,
+                    data=json.dumps(data))
+        if request_type == "DELETE":
+            resp = requests.delete(
+                req_url, verify=self._verify_ssl,
+                headers=self._headers)
         resp.raise_for_status()
         if len(resp.content) > 0:
             return resp.json()
-
-    def _post_request(self, url: str, data: dict):
-        req_url = urljoin(self._base_url, url)
-        resp = requests.post(
-            req_url, verify=self._verify_ssl,
-            headers=self._headers,
-            data=data)
-        resp.raise_for_status()
-        if len(resp.content) > 0:
-            return resp.json()
-
-    def _delete_request(self, url: str):
-        req_url = urljoin(self._base_url, url)
-        resp = requests.delete(
-            req_url, verify=self._verify_ssl,
-            headers=self._headers)
-        resp.raise_for_status()
-
-    def _put_request(self, url: str, data: dict):
-        up_header = self._headers.copy()
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/json'
-        req_url = urljoin(self._base_url, url)
-        resp = requests.put(
-            req_url, verify=self._verify_ssl,
-            headers=up_header,
-            data=json.dumps(data))
-        resp.raise_for_status()
 
 
     def get_stock(self) -> List[CurrentStockResponse]:
-        parsed_json = self._get_request("stock")
+        parsed_json = self._do_request("GET", "stock")
         if parsed_json:
             return [CurrentStockResponse(response) for response in parsed_json]
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
-        parsed_json = self._get_request("stock/volatile")
+        parsed_json = self._do_request("GET", "stock/volatile")
         if parsed_json:
             return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -> ProductDetailsResponse:
         url = f"stock/products/{product_id}"
-        parsed_json = self._get_request(url)
+        parsed_json = self._do_request("GET", url)
         if parsed_json:
             return ProductDetailsResponse(parsed_json)
 
     def get_chores(self) -> List[CurrentChoreResponse]:
-        parsed_json = self._get_request("chores")
+        parsed_json = self._do_request("GET", "chores")
         if parsed_json:
             return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
         url = f"chores/{chore_id}"
-        parsed_json = self._get_request(url)
+        parsed_json = self._do_request("GET", url)
         if parsed_json:
             return ChoreDetailsResponse(parsed_json)
 
@@ -434,7 +426,7 @@ class GrocyApiClient(object):
 
         
     def get_shopping_list(self) -> List[ShoppingListItem]:
-        parsed_json = self._get_request("objects/shopping_list")
+        parsed_json = self._do_request("GET", "objects/shopping_list")
         if parsed_json:
             return [ShoppingListItem(response) for response in parsed_json]
 
@@ -478,7 +470,7 @@ class GrocyApiClient(object):
         return resp
         
     def get_product_groups(self) -> List[LocationData]:
-        parsed_json = self._get_request("objects/product_groups")
+        parsed_json = self._do_request("GET", "objects/product_groups")
         if parsed_json:
             return [LocationData(response) for response in parsed_json]
         
@@ -506,7 +498,7 @@ class GrocyApiClient(object):
             
     def get_userfields(self, entity: str, object_id: int):
         url = f"userfields/{entity}/{object_id}"
-        return self._get_request(url)
+        return self._do_request("GET", url)
         
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         data = {
@@ -517,6 +509,6 @@ class GrocyApiClient(object):
         return resp
 
     def get_last_db_changed(self):
-        resp = self._get_request("system/db-changed-time")
+        resp = self._do_request("GET", "system/db-changed-time")
         last_change_timestamp = parse_date(resp.get('changed_time'))
         return last_change_timestamp
