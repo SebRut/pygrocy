@@ -163,8 +163,7 @@ class Grocy(object):
 
     def stock(self, get_details: bool = False) -> List[Product]:
         raw_stock = self._api_client.get_stock()
-        if raw_stock is None:
-            return
+
         stock = [Product(resp) for resp in raw_stock]
 
         if get_details:
@@ -238,8 +237,6 @@ class Grocy(object):
     
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
-        if raw_shoppinglist is None:
-            return
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -261,8 +258,6 @@ class Grocy(object):
         
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
-        if raw_groups is None:
-            return
         return [Group(resp) for resp in raw_groups]
         
     def add_product_pic(self, product_id: int, pic_path: str):
