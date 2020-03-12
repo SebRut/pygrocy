@@ -5,7 +5,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/sebrut/pygrocy/badge)](https://www.codefactor.io/repository/github/sebrut/pygrocy)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSebRut%2Fpygrocy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSebRut%2Fpygrocy?ref=badge_shield)
 
-[Documentation](https://sebrut.github.io/pygrocy/pygrocy/grocy.html)
+[Documentation](https://sebrut.github.io/pygrocy/)
 
 ## Installation
 
