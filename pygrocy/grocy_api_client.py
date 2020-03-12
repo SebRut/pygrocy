@@ -368,8 +368,7 @@ class GrocyApiClient(object):
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         parsed_json = self._do_get_request("stock/volatile")
-        if parsed_json:
-            return CurrentVolatilStockResponse(parsed_json)
+        return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -> ProductDetailsResponse:
         url = f"stock/products/{product_id}"
