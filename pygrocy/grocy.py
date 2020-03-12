@@ -161,14 +161,11 @@ class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
-    def stock(self, get_details: bool = False) -> List[Product]:
+    def stock(self) -> List[Product]:
         raw_stock = self._api_client.get_stock()
 
         stock = [Product(resp) for resp in raw_stock]
 
-        if get_details:
-            for item in stock:
-                item.get_details(self._api_client)
         return stock
 
     def volatile_stock(self) -> CurrentVolatilStockResponse:
