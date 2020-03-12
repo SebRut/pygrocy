@@ -25,7 +25,7 @@ install:
 script:
   - coverage run --source=pygrocy setup.py test
   - set -e
-  - pdoc --html pygrocy
+  - pdoc3 --html pygrocy
 
 after_success:
   - coveralls
@@ -41,7 +41,7 @@ deploy:
     skip_existing: true
     skip_cleanup: true
   - provider: script
-    script: doctr deploy . --built-docs html/ --build-tags
+    script: doctr deploy . --built-docs html/pygrocy/ --build-tags
     on:
       tags: true
     skip_existing: true
