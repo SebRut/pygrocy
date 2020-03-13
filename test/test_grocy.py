@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch, mock_open
 
 from datetime import datetime
+from requests.exceptions import HTTPError
 import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Product
@@ -24,7 +25,7 @@ class TestGrocy(TestCase):
         chores = self.grocy.chores(get_details=True)
         
         assert isinstance(chores, list)
-        assert len(chores) == 6
+        self.assertEqual(len(chores), 6)
         assert chores[0].id == 1
         assert chores[1].id == 2
         assert chores[2].id == 3
@@ -50,6 +51,7 @@ class TestGrocy(TestCase):
             "amount": "0.33",
             "best_before_date": "2019-05-02"
         })
+
         product = Product(current_stock_response)
 
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
@@ -69,18 +71,10 @@ class TestGrocy(TestCase):
             assert isinstance(prod, Product)
 
     @responses.activate
-    def test_get_stock_invalid_no_data(self):
-        responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", status=200)
-
-        assert self.grocy.stock() is None
-
-    @responses.activate
     def test_get_stock_invalid_missing_data(self):
-        resp = [
-            {
-            }
-        ]
+        resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock", json=resp, status=200)
+        self.assertEqual(len(self.grocy.stock()) ,0)
         
     def test_get_shopping_list_valid(self):
         shopping_list = self.grocy.shopping_list(True)
@@ -93,49 +87,47 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/shopping_list", status=400)
-        assert self.grocy.shopping_list() is None
+        self.assertRaises(HTTPError, self.grocy.shopping_list)
         
     @responses.activate
     def test_get_shopping_list_invalid_missing_data(self):
-        resp = [
-            {
-            }
-        ]
+        resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/shopping_list", json=resp, status=200)
+        self.assertEqual(len(self.grocy.shopping_list()), 0)
         
     def test_add_missing_product_to_shopping_list_valid(self):
-        assert self.grocy.add_missing_product_to_shopping_list().status_code == 204
+         assert self.grocy.add_missing_product_to_shopping_list() is None
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/add-missing-products", status=400)
-        assert self.grocy.add_missing_product_to_shopping_list().status_code != 204
+        self.assertRaises(HTTPError, self.grocy.add_missing_product_to_shopping_list)
         
     def test_add_product_to_shopping_list_valid(self):
-        assert self.grocy.add_product_to_shopping_list(22).status_code == 204
+        self.grocy.add_product_to_shopping_list(22)
         
     def test_add_product_to_shopping_list_error(self):
-        assert self.grocy.add_product_to_shopping_list(3000).status_code != 204
+        self.assertRaises(HTTPError, self.grocy.add_product_to_shopping_list, 3000)
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/clear", status=204)
-        assert self.grocy.clear_shopping_list().status_code == 204
+        self.grocy.clear_shopping_list()
         
     @responses.activate
     def test_clear_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/clear", status=400)
-        assert self.grocy.clear_shopping_list().status_code != 204
+        self.assertRaises(HTTPError, self.grocy.clear_shopping_list)
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/remove-product", status=204)
-        assert self.grocy.remove_product_in_shopping_list(1).status_code == 204
+        self.grocy.remove_product_in_shopping_list(1)
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
         responses.add(responses.POST, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/shoppinglist/remove-product", status=400)
-        assert self.grocy.remove_product_in_shopping_list(1).status_code != 204
+        self.assertRaises(HTTPError, self.grocy.remove_product_in_shopping_list, 1)
         
     def test_get_product_groups_valid(self):
         product_groups_list = self.grocy.product_groups()
@@ -148,15 +140,13 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/product_groups", status=400)
-        assert self.grocy.product_groups() is None
+        self.assertRaises(HTTPError, self.grocy.product_groups)
         
     @responses.activate
     def test_get_product_groups_invalid_missing_data(self):
-        resp = [
-            {
-            }
-        ]
+        resp = []
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/product_groups", json=resp, status=200)
+        self.assertEqual(len(self.grocy.product_groups()), 0)
         
     @responses.activate
     def test_upload_product_picture_valid(self):
@@ -165,7 +155,7 @@ class TestGrocy(TestCase):
                 m_exist.return_value = True
                 api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
                 responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/files/productpictures/MS5qcGc=", status=204)
-                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code == 204
+                api_client.upload_product_picture(1,"/somepath/pic.jpg")
             
     @responses.activate
     def test_upload_product_picture_invalid_missing_data(self):
@@ -182,20 +172,19 @@ class TestGrocy(TestCase):
                 m_exist.return_value = True
                 api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
                 responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/files/productpictures/MS5qcGc=", status=400)
-                assert api_client.upload_product_picture(1,"/somepath/pic.jpg").status_code != 204
+                self.assertRaises(HTTPError, api_client.upload_product_picture, 1,"/somepath/pic.jpg")
                 
     @responses.activate
     def test_update_product_pic_valid(self):
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/products/1", status=204)
-        assert api_client.update_product_pic(1).status_code == 204
+        api_client.update_product_pic(1)
         
     @responses.activate
     def test_update_product_pic_error(self):
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/objects/products/1", status=400)
-        assert api_client.update_product_pic(1).status_code != 204
-        
+        self.assertRaises(HTTPError, api_client.update_product_pic, 1)        
     
     def test_get_expiring_products_valid(self):
         
@@ -215,7 +204,7 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.expiring_products(True)
+        self.grocy.expiring_products(True)
 
     @responses.activate
     def test_get_expiring_invalid_missing_data(self):
@@ -240,7 +229,7 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.expired_products(True)
+        self.grocy.expired_products(True)
 
     @responses.activate
     def test_get_expired_invalid_missing_data(self):
@@ -265,7 +254,7 @@ class TestGrocy(TestCase):
         }
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/stock/volatile", json=resp, status=200)
 
-        assert not self.grocy.missing_products(True)
+        self.grocy.missing_products(True)
 
     @responses.activate
     def test_get_missing_invalid_missing_data(self):
@@ -286,18 +275,17 @@ class TestGrocy(TestCase):
         assert a_chore_uf['uf1'] == 0
 
     def test_get_userfields_invalid_no_data(self):
-        assert not self.grocy.get_userfields("chores",1) 
+        self.grocy.get_userfields("chores",1)
 
     @responses.activate
     def test_set_userfields_valid(self):
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/userfields/chores/1", status=204)
-        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code == 204
+        self.grocy.set_userfields("chores",1,"auserfield", "value")
         
     @responses.activate
     def test_set_userfields_error(self):
         responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/userfields/chores/1", status=400)
-        assert self.grocy.set_userfields("chores",1,"auserfield","value").status_code != 204
-        
+        self.assertRaises(HTTPError, self.grocy.set_userfields, "chores",1,"auserfield","value")
 
     def test_get_last_db_changed_valid(self):
 

@@ -327,39 +327,64 @@ class GrocyApiClient(object):
                 "GROCY-API-KEY": api_key
             }
 
+    def _do_get_request(self, end_url: str):
+        req_url = urljoin(self._base_url, end_url)
+        resp = requests.get(
+            req_url, verify=self._verify_ssl, headers=self._headers)
+        resp.raise_for_status()
+        if len(resp.content) > 0:
+            return resp.json()
+
+    def _do_post_request(self, end_url: str, data: dict):
+        req_url = urljoin(self._base_url, end_url)
+        resp = requests.post(
+            req_url, verify=self._verify_ssl,
+            headers=self._headers,
+            data=data)
+        resp.raise_for_status()
+        if len(resp.content) > 0:
+            return resp.json()
+
+    def _do_put_request(self, end_url: str, data):
+        req_url = urljoin(self._base_url, end_url)
+        up_header = self._headers.copy()
+        up_header['accept'] = '*/*'
+        if isinstance(data, dict):
+            up_header['Content-Type'] = 'application/json'
+            data = json.dumps(data)
+        else:
+            up_header['Content-Type'] = 'application/octet-stream'
+        resp = requests.put(
+            req_url, verify=self._verify_ssl,
+            headers=up_header,
+            data=data)
+        resp.raise_for_status()
+        if len(resp.content) > 0:
+            return resp.json()
+
     def get_stock(self) -> List[CurrentStockResponse]:
-        req_url = urljoin(self._base_url, "stock")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code != 200 or not resp.text:
-            return
-        parsed_json = resp.json()
+        parsed_json = self._do_get_request("stock")
         return [CurrentStockResponse(response) for response in parsed_json]
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
-        req_url = urljoin(self._base_url, "stock/volatile")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        parsed_json = resp.json()
+        parsed_json = self._do_get_request("stock/volatile")
         return CurrentVolatilStockResponse(parsed_json)
 
     def get_product(self, product_id) -> ProductDetailsResponse:
-        req_url = urljoin(urljoin(self._base_url, "stock/products/"), str(product_id))
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code != 200 or not resp.text:
-            return
-        parsed_json = resp.json()
-        return ProductDetailsResponse(parsed_json)
+        url = f"stock/products/{product_id}"
+        parsed_json = self._do_get_request(url)
+        if parsed_json:
+            return ProductDetailsResponse(parsed_json)
 
     def get_chores(self) -> List[CurrentChoreResponse]:
-        req_url = urljoin(self._base_url, "chores")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        parsed_json = resp.json()
+        parsed_json = self._do_get_request("chores")
         return [CurrentChoreResponse(chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
-        req_url = urljoin(urljoin(self._base_url, "chores/"), str(chore_id))
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        parsed_json = resp.json()
-        return ChoreDetailsResponse(parsed_json)
+        url = f"chores/{chore_id}"
+        parsed_json = self._do_get_request(url)
+        if parsed_json:
+            return ChoreDetailsResponse(parsed_json)
 
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
         # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
@@ -374,8 +399,7 @@ class GrocyApiClient(object):
         if done_by is not None:
             data["done_by"] = done_by
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "chores/"), str(chore_id) + "/"), "execute")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        self._do_post_request(f"chores/{chore_id}/execute", data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -388,8 +412,7 @@ class GrocyApiClient(object):
         if best_before_date is not None:
             data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "add")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
+        self._do_post_request(f"stock/products/{product_id}/add", data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
@@ -399,16 +422,10 @@ class GrocyApiClient(object):
             "transaction_type": transaction_type.value
         }
 
-        req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
-        requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-
+        self._do_post_request(f"stock/products/{product_id}/consume", data)
         
     def get_shopping_list(self) -> List[ShoppingListItem]:
-        req_url = urljoin(self._base_url, "objects/shopping_list")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code != 200:
-            return
-        parsed_json = resp.json()
+        parsed_json = self._do_get_request("objects/shopping_list")
         return [ShoppingListItem(response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
@@ -416,9 +433,7 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id
         }
 
-        req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_post_request("stock/shoppinglist/add-missing-products", data)
     
     def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         data = {
@@ -426,19 +441,14 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id,
             "product_amount": amount
         }
-
-        req_url = urljoin(self._base_url, "stock/shoppinglist/add-product")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_post_request("stock/shoppinglist/add-product", data)
     
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             "list_id": shopping_list_id
         }
 
-        req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_post_request("stock/shoppinglist/clear", data)
             
     def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         data = {
@@ -446,57 +456,36 @@ class GrocyApiClient(object):
             "list_id": shopping_list_id,
             "product_amount": amount
         }
-        req_url = urljoin(self._base_url, "stock/shoppinglist/remove-product")
-        resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_post_request("stock/shoppinglist/remove-product", data)
         
     def get_product_groups(self) -> List[LocationData]:
-        req_url = urljoin(self._base_url, "objects/product_groups")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if resp.status_code != 200 or not resp.text:
-            return
-        parsed_json = resp.json()
+        parsed_json = self._do_get_request("objects/product_groups")
         return [LocationData(response) for response in parsed_json]
-        
+
     def upload_product_picture(self, product_id: int, pic_path: str):
         if not os.path.exists(pic_path):
             return
-        up_header = self._headers.copy()
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/octet-stream'
         b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
-        req_url = urljoin(urljoin(self._base_url, "files/productpictures/" ), str(b64fn, "utf-8"))
+        req_url = "files/productpictures/" + str(b64fn, "utf-8")
         with open(pic_path,'rb') as pic:
-            resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
-            return resp
+            self._do_put_request(req_url, pic)
             
     def update_product_pic(self, product_id: int):
-        pic_name = '{}.jpg'.format(product_id)
+        pic_name = f"{product_id}.jpg"
         data = { "picture_file_name":  pic_name }
-        up_header = self._headers.copy()
-        up_header['accept'] = '*/*'
-        up_header['Content-Type'] = 'application/json'
-        req_url = urljoin(urljoin(self._base_url, "objects/products/"), str(product_id))
-        resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
-        return resp
+        self._do_put_request(f"objects/products/{product_id}", data)
             
     def get_userfields(self, entity: str, object_id: int):
-        req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        if not resp:
-            return resp
-        return resp.json()
+        url = f"userfields/{entity}/{object_id}"
+        return self._do_get_request(url)
         
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         data = {
             key: value
         }
-        req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
-        resp = requests.put(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
-        return resp
+        self._do_put_request(f"userfields/{entity}/{object_id}", data)
 
     def get_last_db_changed(self):
-        req_url = urljoin(self._base_url, "system/db-changed-time")
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        last_change_timestamp = parse_date(resp.json().get('changed_time'))
+        resp = self._do_get_request("system/db-changed-time")
+        last_change_timestamp = parse_date(resp.get('changed_time'))
         return last_change_timestamp
