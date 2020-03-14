@@ -19,19 +19,14 @@ class TestGrocy(TestCase):
         self.grocy = Grocy(CONST_BASE_URL, "demo_mode",  verify_ssl = CONST_SSL, port = CONST_PORT)
 
     def test_init(self):
-        assert isinstance(self.grocy, Grocy)
+        self.assertIsInstance(self.grocy, Grocy)
         
     def test_get_chores_valid(self):
         chores = self.grocy.chores(get_details=True)
         
-        assert isinstance(chores, list)
+        self.assertIsInstance(chores, list)
         self.assertEqual(len(chores), 6)
-        assert chores[0].id == 1
-        assert chores[1].id == 2
-        assert chores[2].id == 3
-        assert chores[3].id == 4
-        assert chores[4].id == 5
-        assert chores[5].id == 6
+        self.assertEqual(chores[0].id, 1)
 
     def test_product_get_details_valid(self):
         stock = self.grocy.stock()
@@ -41,8 +36,8 @@ class TestGrocy(TestCase):
         api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
         product.get_details(api_client)
 
-        assert isinstance(product.name, str)
-        assert isinstance(product.product_group_id, int)
+        self.assertIsInstance(product.name, str)
+        self.assertIsInstance(product.product_group_id, int)
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
@@ -60,15 +55,15 @@ class TestGrocy(TestCase):
 
         product.get_details(api_client)
 
-        assert product.name is None
+        self.assertIsNone(product.name)
 
     def test_get_stock_valid(self):
         stock = self.grocy.stock()
 
-        assert isinstance(stock, list)
-        assert len(stock) >= 10
+        self.assertIsInstance(stock, list)
+        self.assertGreaterEqual(len(stock), 10)
         for prod in stock:
-            assert isinstance(prod, Product)
+            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_stock_invalid_missing_data(self):
@@ -79,10 +74,10 @@ class TestGrocy(TestCase):
     def test_get_shopping_list_valid(self):
         shopping_list = self.grocy.shopping_list(True)
         
-        assert isinstance(shopping_list, list)
-        assert len(shopping_list) >= 1
+        self.assertIsInstance(shopping_list, list)
+        self.assertGreaterEqual(len(shopping_list), 1)
         for item in shopping_list:
-            assert isinstance(item, ShoppingListProduct)
+            self.assertIsInstance(item, ShoppingListProduct)
             
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
@@ -96,7 +91,7 @@ class TestGrocy(TestCase):
         self.assertEqual(len(self.grocy.shopping_list()), 0)
         
     def test_add_missing_product_to_shopping_list_valid(self):
-         assert self.grocy.add_missing_product_to_shopping_list() is None
+         self.assertIsNone(self.grocy.add_missing_product_to_shopping_list())
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
@@ -132,10 +127,10 @@ class TestGrocy(TestCase):
     def test_get_product_groups_valid(self):
         product_groups_list = self.grocy.product_groups()
         
-        assert isinstance(product_groups_list, list)
-        assert len(product_groups_list) >= 1
+        self.assertIsInstance(product_groups_list, list)
+        self.assertGreaterEqual(len(product_groups_list), 1)
         for item in product_groups_list:
-            assert isinstance(item, Group)
+            self.assertIsInstance(item, Group)
             
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
@@ -163,7 +158,7 @@ class TestGrocy(TestCase):
             m_exist.return_value = False
             api_client = GrocyApiClient(CONST_BASE_URL, "demo_mode", port = CONST_PORT, verify_ssl = CONST_SSL)
             responses.add(responses.PUT, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/files/productpictures/MS5qcGc=", status=204)
-            assert api_client.upload_product_picture(1,"/somepath/pic.jpg") is None
+            self.assertIsNone(api_client.upload_product_picture(1,"/somepath/pic.jpg"))
         
     @responses.activate
     def test_upload_product_picture_error(self):
@@ -190,10 +185,10 @@ class TestGrocy(TestCase):
         
         expiring_product = self.grocy.expiring_products(True)
 
-        assert isinstance(expiring_product, list)
-        assert len(expiring_product) >= 1
+        self.assertIsInstance(expiring_product, list)
+        self.assertGreaterEqual(len(expiring_product), 1)
         for prod in expiring_product:
-            assert isinstance(prod, Product)
+            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_expiring_invalid_no_data(self):
@@ -215,10 +210,10 @@ class TestGrocy(TestCase):
         
         expired_product = self.grocy.expired_products(True)
 
-        assert isinstance(expired_product, list)
-        assert len(expired_product) >= 1
+        self.assertIsInstance(expired_product, list)
+        self.assertGreaterEqual(len(expired_product), 1)
         for prod in expired_product:
-            assert isinstance(prod, Product)
+            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_expired_invalid_no_data(self):
@@ -240,10 +235,10 @@ class TestGrocy(TestCase):
 
         missing_product = self.grocy.missing_products(True)
 
-        assert isinstance(missing_product, list)
-        assert len(missing_product) >= 1
+        self.assertIsInstance(missing_product, list)
+        self.assertGreaterEqual(len(missing_product), 1)
         for prod in missing_product:
-            assert isinstance(prod, Product)
+            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_missing_invalid_no_data(self):
@@ -272,7 +267,7 @@ class TestGrocy(TestCase):
 
         a_chore_uf = self.grocy.get_userfields("chores",1)
 
-        assert a_chore_uf['uf1'] == 0
+        self.assertEqual(a_chore_uf['uf1'], 0)
 
     def test_get_userfields_invalid_no_data(self):
         self.grocy.get_userfields("chores",1)
@@ -291,7 +286,7 @@ class TestGrocy(TestCase):
 
         timestamp = self.grocy.get_last_db_changed()
 
-        assert isinstance(timestamp, datetime)
+        self.assertIsInstance(timestamp, datetime)
 
 
     @responses.activate
@@ -299,4 +294,4 @@ class TestGrocy(TestCase):
         resp = {}
         responses.add(responses.GET, '{}:{}'.format(CONST_BASE_URL,CONST_PORT) + "/api/system/db-changed-time", json=resp ,status=200)
 
-        assert self.grocy.get_last_db_changed() is None
+        self.assertIsNone(self.grocy.get_last_db_changed())
