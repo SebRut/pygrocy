@@ -463,8 +463,6 @@ class GrocyApiClient(object):
         return [LocationData(response) for response in parsed_json]
 
     def upload_product_picture(self, product_id: int, pic_path: str):
-        if not os.path.exists(pic_path):
-            return
         b64fn = base64.b64encode('{}.jpg'.format(product_id).encode('ascii'))
         req_url = "files/productpictures/" + str(b64fn, "utf-8")
         with open(pic_path,'rb') as pic:
