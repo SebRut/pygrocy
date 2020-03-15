@@ -295,13 +295,28 @@ class TestGrocy(TestCase):
     def test_add_product_valid(self):
         data = {
             "amount": 1.3,
-            "spoiled": False,
-            "transaction_type": str(TransactionType.CONSUME)
+            "price": 2.44,
+            "transaction_type": str(TransactionType.PURCHASE)
         }
         responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/add", json=data, status=200)
-        self.assertIsNone(self.grocy.add_product(1, 1.3, datetime.now()))
+        self.assertIsNone(self.grocy.add_product(1, 1.3, 2.44, datetime.now()))
 
     @responses.activate
     def test_add_product_error(self):
         responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/add", status=400)
-        self.assertRaises(HTTPError, self.grocy.add_product, 1, 1.3, datetime.now())
+        self.assertRaises(HTTPError, self.grocy.add_product, 1, 1.3, 2.44, datetime.now())
+
+    @responses.activate
+    def test_consume_product_valid(self):
+        data = {
+            "amount": 1.3,
+            "spoiled": False,
+            "transaction_type": str(TransactionType.CONSUME)
+        }
+        responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/consume", json=data, status=200)
+        self.assertIsNone(self.grocy.consume_product(1, 1.3, datetime.now()))
+
+    @responses.activate
+    def test_consume_product_error(self):
+        responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/consume", status=400)
+        self.assertRaises(HTTPError, self.grocy.consume_product, 1, 1.3, datetime.now())
