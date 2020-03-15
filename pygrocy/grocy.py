@@ -163,9 +163,7 @@ class Grocy(object):
 
     def stock(self) -> List[Product]:
         raw_stock = self._api_client.get_stock()
-
         stock = [Product(resp) for resp in raw_stock]
-
         return stock
 
     def volatile_stock(self) -> CurrentVolatilStockResponse:
@@ -173,8 +171,6 @@ class Grocy(object):
 
     def expiring_products(self, get_details: bool = False) -> List[Product]:
         raw_expiring_product = self.volatile_stock().expiring_products
-        if raw_expiring_product is None:
-            return
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -184,8 +180,6 @@ class Grocy(object):
 
     def expired_products(self, get_details: bool = False) -> List[Product]:
         raw_expired_product = self.volatile_stock().expired_products
-        if raw_expired_product is None:
-            return
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -196,8 +190,6 @@ class Grocy(object):
 
     def missing_products(self, get_details: bool = False) -> List[Product]:
         raw_missing_product = self.volatile_stock().missing_products
-        if raw_missing_product is None:
-            return
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
