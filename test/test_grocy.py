@@ -8,7 +8,7 @@ from pygrocy import Grocy
 from pygrocy.grocy import Product
 from pygrocy.grocy import Group
 from pygrocy.grocy import ShoppingListProduct
-from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient
+from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TransactionType
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 class TestGrocy(TestCase):
@@ -290,3 +290,18 @@ class TestGrocy(TestCase):
         responses.add(responses.GET, f"{CONST_BASE_URL}:{CONST_PORT}/api/system/db-changed-time", json=resp ,status=200)
 
         self.assertIsNone(self.grocy.get_last_db_changed())
+
+    @responses.activate
+    def test_add_product_valid(self):
+        data = {
+            "amount": 1.3,
+            "spoiled": False,
+            "transaction_type": str(TransactionType.CONSUME)
+        }
+        responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/add", json=data, status=200)
+        self.assertIsNone(self.grocy.add_product(1, 1.3, datetime.now()))
+
+    @responses.activate
+    def test_add_product_error(self):
+        responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/1/add", status=400)
+        self.assertRaises(HTTPError, self.grocy.add_product, 1, 1.3, datetime.now())
