@@ -37,6 +37,11 @@ class TestGrocy(TestCase):
         product.get_details(api_client)
 
         self.assertIsInstance(product.name, str)
+        self.assertIsInstance(product.id, int)
+        self.assertIsInstance(product.available_amount, float)
+        self.assertIsInstance(product.best_before_date, datetime)
+        if product.barcodes:
+            self.assertIsInstance(product.barcodes, (list, str))
         self.assertIsInstance(product.product_group_id, int)
 
     @responses.activate
