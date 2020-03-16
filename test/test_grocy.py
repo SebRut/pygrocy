@@ -6,10 +6,9 @@ from datetime import datetime
 from requests.exceptions import HTTPError
 import responses
 from pygrocy import Grocy
-from pygrocy.grocy import Product
-from pygrocy.grocy import Group
-from pygrocy.grocy import ShoppingListProduct
-from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TransactionType
+from pygrocy.grocy import Chore, Product, Group, ShoppingListProduct
+
+from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TransactionType, UserDto, ChoreDetailsResponse
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 class TestGrocy(TestCase):
@@ -26,8 +25,53 @@ class TestGrocy(TestCase):
         chores = self.grocy.chores(get_details=True)
         
         self.assertIsInstance(chores, list)
-        self.assertEqual(len(chores), 6)
-        self.assertEqual(chores[0].id, 1)
+        self.assertGreaterEqual(len(chores), 1)
+        for chore in chores:
+            self.assertIsInstance(chore, Chore)
+            self.assertIsInstance(chore.id, int)
+            self.assertIsInstance(chore.last_tracked_time, datetime)
+            self.assertIsInstance(chore.next_estimated_execution_time, datetime)
+            self.assertIsInstance(chore.name, str)
+            self.assertIsInstance(chore.last_done_by, UserDto)
+
+    @responses.activate
+    def test_get_chore_details_valid(self):
+        details_json = """{
+            "chore": {
+                "id": "1",
+                "name": "Changed towels in the bathroom",
+                "description": null,
+                "period_type": "manually",
+                "period_days": "5",
+                "row_created_timestamp": "2020-03-16 00:50:14",
+                "period_config": null,
+                "track_date_only": "0",
+                "rollover": "0",
+                "assignment_type": null,
+                "assignment_config": null,
+                "next_execution_assigned_to_user_id": null,
+                "consume_product_on_execution": "0",
+                "product_id": null,
+                "product_amount": null,
+                "period_interval": "1"
+            },
+            "last_tracked": "2020-03-11 00:50:15",
+            "tracked_count": 3,
+            "last_done_by": {
+                "id": "1",
+                "username": "Demo User",
+                "first_name": null,
+                "last_name": null,
+                "row_created_timestamp": "2020-03-16 00:50:13",
+                "display_name": "Demo User"
+            },
+            "next_estimated_execution_time": "2999-12-31 23:59:59",
+            "next_execution_assigned_user": null
+        }"""
+        details_json = json.loads(details_json)
+        responses.add(responses.GET, f"{CONST_BASE_URL}:{CONST_PORT}/api/chores/1", json=details_json, status=200)
+        chore_details = self.grocy.chore(1)
+        self.assertIsInstance(chore_details, ChoreDetailsResponse)
 
     def test_product_get_details_valid(self):
         stock = self.grocy.stock()
@@ -47,16 +91,8 @@ class TestGrocy(TestCase):
 
     @responses.activate
     def test_product_get_details_invalid_no_data(self):
-        current_stock_response = CurrentStockResponse({
-            "product_id": 0,
-            "amount": "0.33",
-            "best_before_date": "2019-05-02"
-        })
-
         responses.add(responses.GET, f"{CONST_BASE_URL}:{CONST_PORT}/api/stock/products/0", status=200)
-
         product = self.grocy.product(0)
-
         self.assertIsNone(product)
 
     def test_get_stock_valid(self):
@@ -319,6 +355,6 @@ class TestGrocy(TestCase):
         self.assertIsNone(self.grocy.execute_chore(1, 1, date_exec_chore))
 
     @responses.activate
-    def test_execute_choret_error(self):
+    def test_execute_chore_error(self):
         responses.add(responses.POST, f"{CONST_BASE_URL}:{CONST_PORT}/api/chores/1/execute", status=400)
         self.assertRaises(HTTPError, self.grocy.execute_chore, 1, 1, datetime.now())
