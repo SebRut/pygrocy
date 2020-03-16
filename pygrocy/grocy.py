@@ -30,11 +30,10 @@ class Product(object):
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
-        if details is None:
-            return
-        self._name = details.product.name
-        self._barcodes = details.product.barcodes
-        self._product_group_id = details.product.product_group_id
+        if details:
+            self._name = details.product.name
+            self._barcodes = details.product.barcodes
+            self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -> str:

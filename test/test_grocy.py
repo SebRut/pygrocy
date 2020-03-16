@@ -8,7 +8,7 @@ import responses
 from pygrocy import Grocy
 from pygrocy.grocy import Chore, Product, Group, ShoppingListProduct
 
-from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TransactionType, UserDto, ChoreDetailsResponse
+from pygrocy.grocy_api_client import CurrentStockResponse, GrocyApiClient, TransactionType, UserDto, ChoreDetailsResponse, ProductData
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 class TestGrocy(TestCase):
@@ -116,7 +116,15 @@ class TestGrocy(TestCase):
         self.assertGreaterEqual(len(shopping_list), 1)
         for item in shopping_list:
             self.assertIsInstance(item, ShoppingListProduct)
-            
+            self.assertIsInstance(item.id, int)
+            if item.product_id:
+                self.assertIsInstance(item.product_id, int)
+                self.assertIsInstance(item.product, ProductData)
+                self.assertIsInstance(item.product.id, int)
+            self.assertIsInstance(item.amount, float)
+            if item.note:
+                self.assertIsInstance(item.note, str)
+
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
         responses.add(responses.GET, f"{CONST_BASE_URL}:{CONST_PORT}/api/objects/shopping_list", status=400)
@@ -167,8 +175,12 @@ class TestGrocy(TestCase):
         
         self.assertIsInstance(product_groups_list, list)
         self.assertGreaterEqual(len(product_groups_list), 1)
-        for item in product_groups_list:
-            self.assertIsInstance(item, Group)
+        for group in product_groups_list:
+            self.assertIsInstance(group, Group)
+            self.assertIsInstance(group.id, int)
+            self.assertIsInstance(group.name, str)
+            if group.description:
+                self.assertIsInstance(group.description, str)
             
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
@@ -271,6 +283,8 @@ class TestGrocy(TestCase):
         self.assertGreaterEqual(len(missing_product), 1)
         for prod in missing_product:
             self.assertIsInstance(prod, Product)
+            self.assertIsInstance(prod.amount_missing, float)
+            self.assertIsInstance(prod.is_partly_in_stock, bool)
 
     @responses.activate
     def test_get_missing_invalid_no_data(self):
