@@ -14,8 +14,7 @@ from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 class TestGrocy(TestCase):
 
     def setUp(self):
-        self.grocy = Grocy(CONST_BASE_URL, "api_key")
-        self.grocy = None
+        self.grocy_regular = Grocy(CONST_BASE_URL, "api_key")
         self.grocy = Grocy(CONST_BASE_URL, "demo_mode",  verify_ssl = CONST_SSL, port = CONST_PORT)
         self.base_url = f"{CONST_BASE_URL}:{CONST_PORT}/api"
         self.date_test = datetime.strptime("2019-05-04 11:31:04", '%Y-%m-%d %H:%M:%S')
