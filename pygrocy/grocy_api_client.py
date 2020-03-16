@@ -399,7 +399,7 @@ class GrocyApiClient(object):
         if done_by is not None:
             data["done_by"] = done_by
 
-        self._do_post_request(f"chores/{chore_id}/execute", data)
+        return self._do_post_request(f"chores/{chore_id}/execute", data)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -412,7 +412,7 @@ class GrocyApiClient(object):
         if best_before_date is not None:
             data["best_before_date"] = best_before_date.strftime('%Y-%m-%d')
 
-        self._do_post_request(f"stock/products/{product_id}/add", data)
+        return self._do_post_request(f"stock/products/{product_id}/add", data)
 
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
