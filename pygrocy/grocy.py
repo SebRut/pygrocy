@@ -30,11 +30,10 @@ class Product(object):
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
-        if details is None:
-            return
-        self._name = details.product.name
-        self._barcodes = details.product.barcodes
-        self._product_group_id = details.product.product_group_id
+        if details:
+            self._name = details.product.name
+            self._barcodes = details.product.barcodes
+            self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -> str:
@@ -163,9 +162,7 @@ class Grocy(object):
 
     def stock(self) -> List[Product]:
         raw_stock = self._api_client.get_stock()
-
         stock = [Product(resp) for resp in raw_stock]
-
         return stock
 
     def volatile_stock(self) -> CurrentVolatilStockResponse:
@@ -173,8 +170,6 @@ class Grocy(object):
 
     def expiring_products(self, get_details: bool = False) -> List[Product]:
         raw_expiring_product = self.volatile_stock().expiring_products
-        if raw_expiring_product is None:
-            return
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -184,8 +179,6 @@ class Grocy(object):
 
     def expired_products(self, get_details: bool = False) -> List[Product]:
         raw_expired_product = self.volatile_stock().expired_products
-        if raw_expired_product is None:
-            return
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -196,8 +189,6 @@ class Grocy(object):
 
     def missing_products(self, get_details: bool = False) -> List[Product]:
         raw_missing_product = self.volatile_stock().missing_products
-        if raw_missing_product is None:
-            return
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
@@ -258,8 +249,7 @@ class Grocy(object):
         return [Group(resp) for resp in raw_groups]
         
     def add_product_pic(self, product_id: int, pic_path: str):
-        if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
-            return
+        self._api_client.upload_product_picture(product_id, pic_path)
         return self._api_client.update_product_pic(product_id)
         
     def get_userfields(self, entity: str, object_id: int):
