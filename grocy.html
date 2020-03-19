@@ -54,11 +54,10 @@ class Product(object):
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
-        if details is None:
-            return
-        self._name = details.product.name
-        self._barcodes = details.product.barcodes
-        self._product_group_id = details.product.product_group_id
+        if details:
+            self._name = details.product.name
+            self._barcodes = details.product.barcodes
+            self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -&gt; str:
@@ -185,15 +184,9 @@ class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
-    def stock(self, get_details: bool = False) -&gt; List[Product]:
+    def stock(self) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
-        if raw_stock is None:
-            return
         stock = [Product(resp) for resp in raw_stock]
-
-        if get_details:
-            for item in stock:
-                item.get_details(self._api_client)
         return stock
 
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
@@ -201,8 +194,6 @@ class Grocy(object):
 
     def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_expiring_product = self.volatile_stock().expiring_products
-        if raw_expiring_product is None:
-            return
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -212,8 +203,6 @@ class Grocy(object):
 
     def expired_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_expired_product = self.volatile_stock().expired_products
-        if raw_expired_product is None:
-            return
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -224,8 +213,6 @@ class Grocy(object):
 
     def missing_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_missing_product = self.volatile_stock().missing_products
-        if raw_missing_product is None:
-            return
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
@@ -262,8 +249,6 @@ class Grocy(object):
     
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
-        if raw_shoppinglist is None:
-            return
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -285,13 +270,10 @@ class Grocy(object):
         
     def product_groups(self) -&gt; List[Group]:
         raw_groups = self._api_client.get_product_groups()
-        if raw_groups is None:
-            return
         return [Group(resp) for resp in raw_groups]
         
     def add_product_pic(self, product_id: int, pic_path: str):
-        if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
-            return
+        self._api_client.upload_product_picture(product_id, pic_path)
         return self._api_client.update_product_pic(product_id)
         
     def get_userfields(self, entity: str, object_id: int):
@@ -439,15 +421,9 @@ def next_estimated_execution_time(self) -&gt; datetime:
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
-    def stock(self, get_details: bool = False) -&gt; List[Product]:
+    def stock(self) -&gt; List[Product]:
         raw_stock = self._api_client.get_stock()
-        if raw_stock is None:
-            return
         stock = [Product(resp) for resp in raw_stock]
-
-        if get_details:
-            for item in stock:
-                item.get_details(self._api_client)
         return stock
 
     def volatile_stock(self) -&gt; CurrentVolatilStockResponse:
@@ -455,8 +431,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 
     def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_expiring_product = self.volatile_stock().expiring_products
-        if raw_expiring_product is None:
-            return
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -466,8 +440,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 
     def expired_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_expired_product = self.volatile_stock().expired_products
-        if raw_expired_product is None:
-            return
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -478,8 +450,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 
     def missing_products(self, get_details: bool = False) -&gt; List[Product]:
         raw_missing_product = self.volatile_stock().missing_products
-        if raw_missing_product is None:
-            return
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
@@ -516,8 +486,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
     
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
-        if raw_shoppinglist is None:
-            return
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -539,13 +507,10 @@ def next_estimated_execution_time(self) -&gt; datetime:
         
     def product_groups(self) -&gt; List[Group]:
         raw_groups = self._api_client.get_product_groups()
-        if raw_groups is None:
-            return
         return [Group(resp) for resp in raw_groups]
         
     def add_product_pic(self, product_id: int, pic_path: str):
-        if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
-            return
+        self._api_client.upload_product_picture(product_id, pic_path)
         return self._api_client.update_product_pic(product_id)
         
     def get_userfields(self, entity: str, object_id: int):
@@ -590,8 +555,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def add_product_pic(self, product_id: int, pic_path: str):
-    if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
-        return
+    self._api_client.upload_product_picture(product_id, pic_path)
     return self._api_client.update_product_pic(product_id)</code></pre>
 </details>
 </dd>
@@ -658,7 +622,7 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 3, 3, 8, 0, 11, 96222))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id, done_by=None, tracked_time=datetime.datetime(2020, 3, 19, 7, 0, 57, 826651))</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -677,8 +641,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def expired_products(self, get_details: bool = False) -&gt; List[Product]:
     raw_expired_product = self.volatile_stock().expired_products
-    if raw_expired_product is None:
-        return
     expired_product = [Product(resp) for resp in raw_expired_product]
 
     if get_details:
@@ -696,8 +658,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
     raw_expiring_product = self.volatile_stock().expiring_products
-    if raw_expiring_product is None:
-        return
     expiring_product = [Product(resp) for resp in raw_expiring_product]
 
     if get_details:
@@ -737,8 +697,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def missing_products(self, get_details: bool = False) -&gt; List[Product]:
     raw_missing_product = self.volatile_stock().missing_products
-    if raw_missing_product is None:
-        return
     missing_product = [Product(resp) for resp in raw_missing_product]
 
     if get_details:
@@ -767,8 +725,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def product_groups(self) -&gt; List[Group]:
     raw_groups = self._api_client.get_product_groups()
-    if raw_groups is None:
-        return
     return [Group(resp) for resp in raw_groups]</code></pre>
 </details>
 </dd>
@@ -803,8 +759,6 @@ def next_estimated_execution_time(self) -&gt; datetime:
 <summary>Source code</summary>
 <pre><code class="python">def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
     raw_shoppinglist = self._api_client.get_shopping_list()
-    if raw_shoppinglist is None:
-        return
     shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
     if get_details:
@@ -814,21 +768,15 @@ def next_estimated_execution_time(self) -&gt; datetime:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.stock"><code class="name flex">
-<span>def <span class="ident">stock</span></span>(<span>self, get_details=False)</span>
+<span>def <span class="ident">stock</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def stock(self, get_details: bool = False) -&gt; List[Product]:
+<pre><code class="python">def stock(self) -&gt; List[Product]:
     raw_stock = self._api_client.get_stock()
-    if raw_stock is None:
-        return
     stock = [Product(resp) for resp in raw_stock]
-
-    if get_details:
-        for item in stock:
-            item.get_details(self._api_client)
     return stock</code></pre>
 </details>
 </dd>
@@ -934,11 +882,10 @@ def name(self) -&gt; str:
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
-        if details is None:
-            return
-        self._name = details.product.name
-        self._barcodes = details.product.barcodes
-        self._product_group_id = details.product.product_group_id
+        if details:
+            self._name = details.product.name
+            self._barcodes = details.product.barcodes
+            self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -&gt; str:
@@ -1066,11 +1013,10 @@ def product_group_id(self) -&gt; int:
 <summary>Source code</summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
     details = api_client.get_product(self.id)
-    if details is None:
-        return
-    self._name = details.product.name
-    self._barcodes = details.product.barcodes
-    self._product_group_id = details.product.product_group_id</code></pre>
+    if details:
+        self._name = details.product.name
+        self._barcodes = details.product.barcodes
+        self._product_group_id = details.product.product_group_id</code></pre>
 </details>
 </dd>
 </dl>
