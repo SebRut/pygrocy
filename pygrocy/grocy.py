@@ -13,11 +13,14 @@ class Product(object):
     def __init__(self, response):
         if isinstance(response, CurrentStockResponse):
             self._id = response.product_id
-            self._name = None
             self._available_amount = response.amount
             self._best_before_date = response.best_before_date
             self._amount_missing = None
             self._is_partly_in_stock = None
+            if response.product:
+                self._name = response.product.name
+                self._barcodes = response.product.barcodes
+                self._product_group_id = response.product.product_group_id
         elif isinstance(response, MissingProductResponse):
             self._id = response.product_id
             self._name = response.name
@@ -25,8 +28,8 @@ class Product(object):
             self._best_before_date = None
             self._amount_missing = response.amount_missing
             self._is_partly_in_stock = response.is_partly_in_stock
-        self._barcodes = None
-        self._product_group_id = None
+            self._barcodes = None
+            self._product_group_id = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
@@ -94,7 +97,7 @@ class ShoppingListProduct(object):
         self._note = raw_shopping_list.note
         self._amount = raw_shopping_list.amount
         self._product = None
-        
+
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
             self._product = api_client.get_product(self._product_id).product

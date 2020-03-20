@@ -179,6 +179,7 @@ class CurrentStockResponse(object):
         self._amount = parse_float(parsed_json.get('amount'))
         self._best_before_date = parse_date(parsed_json.get('best_before_date'))
         self._amount_opened = parse_float(parsed_json.get('amount_opened'))
+        self._product = ProductData(parsed_json.get('product'))
         
     @property
     def product_id(self) -> int:
@@ -195,6 +196,11 @@ class CurrentStockResponse(object):
     @property
     def amount_opened(self) -> float:
         return self._amount_opened
+
+    @property
+    def product(self) -> ProductData:
+        return self._product
+
 
 class MissingProductResponse(object):
     def __init__(self, parsed_json):
