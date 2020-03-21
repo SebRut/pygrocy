@@ -11,8 +11,8 @@ from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
 
 class Product(object):
     def __init__(self, response):
+        self._id = response.product_id
         if isinstance(response, CurrentStockResponse):
-            self._id = response.product_id
             self._available_amount = response.amount
             self._best_before_date = response.best_before_date
             self._amount_missing = None
@@ -30,13 +30,6 @@ class Product(object):
             self._is_partly_in_stock = response.is_partly_in_stock
             self._barcodes = None
             self._product_group_id = None
-
-    def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_product(self.id)
-        if details:
-            self._name = details.product.name
-            self._barcodes = details.product.barcodes
-            self._product_group_id = details.product.product_group_id
 
     @property
     def name(self) -> str:
@@ -159,46 +152,66 @@ class Chore(object):
         return self._last_done_by
 
 
-class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
-        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
+class Stock():
+    def __init__(self, api_client: GrocyApiClient):
+        self._api_client = api_client
+        self._products_list = self._get_stock()
+        self._volatile_products = self._get_volatile_stock()
+        self._expiring_products = self._get_expiring_products()
+        self._expired_products = self._get_expired_products()
+        self._missing_products = self._get_missing_products()
 
-    def stock(self) -> List[Product]:
+    def _get_stock(self) -> List[Product]:
         raw_stock = self._api_client.get_stock()
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
-    def volatile_stock(self) -> CurrentVolatilStockResponse:
+    def _get_volatile_stock(self) -> CurrentVolatilStockResponse:
         return self._api_client.get_volatile_stock()
 
-    def expiring_products(self, get_details: bool = False) -> List[Product]:
-        raw_expiring_product = self.volatile_stock().expiring_products
-        expiring_product = [Product(resp) for resp in raw_expiring_product]
+    def _get_expiring_products(self) -> List[Product]:
+        raw_expiring_product = self._volatile_products.expiring_products
+        return [Product(resp) for resp in raw_expiring_product]
 
-        if get_details:
-            for item in expiring_product:
-                item.get_details(self._api_client)
-        return expiring_product
+    def _get_expired_products(self) -> List[Product]:
+        raw_expired_product = self._volatile_products.expired_products
+        return [Product(resp) for resp in raw_expired_product]
 
-    def expired_products(self, get_details: bool = False) -> List[Product]:
-        raw_expired_product = self.volatile_stock().expired_products
-        expired_product = [Product(resp) for resp in raw_expired_product]
+    def _get_missing_products(self) -> List[Product]:
+        raw_missing_product = self._volatile_products.missing_products
+        return [Product(resp) for resp in raw_missing_product]
 
-        if get_details:
-            for item in expired_product:
-                item.get_details(self._api_client)
-        return expired_product
+    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
+                    transaction_type: TransactionType = TransactionType.PURCHASE):
+        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+
+    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
+                        transaction_type: TransactionType = TransactionType.CONSUME):
+        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
+
+    @property
+    def products_list(self) -> List[Product]:
+        return self._products_list
+
+    @property
+    def expiring_products(self) -> List[Product]:
+        return self._expiring_products
+
+    @property
+    def expired_products(self) -> List[Product]:
+        return self._expired_products
+
+    @property
+    def missing_products(self) -> List[Product]:
+        return self._missing_products
 
 
-    def missing_products(self, get_details: bool = False) -> List[Product]:
-        raw_missing_product = self.volatile_stock().missing_products
-        missing_product = [Product(resp) for resp in raw_missing_product]
+class Grocy(object):
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
-        if get_details:
-            for item in missing_product:
-                item.get_details(self._api_client)
-        return missing_product
-
+    def stock(self):
+        return Stock(self._api_client)
 
     def product(self, product_id: int) -> ProductDetailsResponse:
         return self._api_client.get_product(product_id)
@@ -218,13 +231,6 @@ class Grocy(object):
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
 
-    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
-                    transaction_type: TransactionType = TransactionType.PURCHASE):
-        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
-
-    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
-                        transaction_type: TransactionType = TransactionType.CONSUME):
-        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
     
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
