@@ -117,7 +117,8 @@ class ShoppingListProduct(object):
 
 
 class Chore(object):
-    def __init__(self, raw_chore: CurrentChoreResponse):
+    def __init__(self, api_client: GrocyApiClient, raw_chore: CurrentChoreResponse):
+        self._api_client = api_client
         self._id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
@@ -125,8 +126,11 @@ class Chore(object):
         self._name = None
         self._last_done_by = None
 
-    def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_chore(self.id)
+    def execute_chore(self, done_by: int = None, tracked_time: datetime = datetime.now()):
+        return self._api_client.execute_chore(self._id, done_by, tracked_time)
+
+    def get_details(self):
+        details = self._api_client.get_chore(self._id)
         self._name = details.chore.name
         self._last_tracked_time = details.last_tracked
         self._last_done_by = details.last_done_by
@@ -150,6 +154,37 @@ class Chore(object):
     @property
     def last_done_by(self) -> UserDto:
         return self._last_done_by
+
+
+class ShoppingList():
+    def __init__(self, api_client: GrocyApiClient):
+        self._api_client = api_client
+        self._list = self._get_shopping_list(True)
+
+    def _get_shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list()
+        shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
+
+        if get_details:
+            for item in shopping_list:
+                item.get_details(self._api_client)
+        return shopping_list
+
+    def add_missing_product_to_shopping_list(self):
+        return self._api_client.add_missing_product_to_shopping_list()
+
+    def add_product_to_shopping_list(self, product_id: int,  amount: int = 1):
+        return self._api_client.add_product_to_shopping_list(product_id, amount)
+
+    def clear_shopping_list(self):
+        return self._api_client.clear_shopping_list()
+
+    def remove_product_in_shopping_list(self, product_id: int,  amount: int = 1):
+        return self._api_client.remove_product_in_shopping_list(product_id, amount)
+
+    @property
+    def list(self) -> List[ShoppingListProduct]:
+        return self._list
 
 
 class Stock():
@@ -210,49 +245,25 @@ class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
-    def stock(self):
+    def stock(self) -> Stock:
         return Stock(self._api_client)
 
     def product(self, product_id: int) -> ProductDetailsResponse:
         return self._api_client.get_product(product_id)
 
-    def chores(self, get_details: bool = False) -> List[Chore]:
+    def chores(self) -> List[Chore]:
         raw_chores = self._api_client.get_chores()
-        chores = [Chore(chore) for chore in raw_chores]
-
-        if get_details:
-            for chore in chores:
-                chore.get_details(self._api_client)
+        chores = [Chore(self._api_client, chore) for chore in raw_chores]
+        for chore in chores:
+            chore.get_details()
         return chores
-
-    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
-        return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
     def chore(self, chore_id: int) -> ChoreDetailsResponse:
         return self._api_client.get_chore(chore_id)
 
-    
-    def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
-        raw_shoppinglist = self._api_client.get_shopping_list()
-        shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
+    def shopping_list(self) -> ShoppingList:
+        return ShoppingList(self._api_client)
 
-        if get_details:
-            for item in shopping_list:
-                item.get_details(self._api_client)
-        return shopping_list
-        
-    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
-        return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
-        
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
-        
-    def clear_shopping_list(self, shopping_list_id: int = 1):
-        return self._api_client.clear_shopping_list(shopping_list_id)
-
-    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
-        
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
         return [Group(resp) for resp in raw_groups]

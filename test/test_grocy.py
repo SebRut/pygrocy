@@ -23,7 +23,7 @@ class TestGrocy(TestCase):
         self.assertIsInstance(self.grocy, Grocy)
         
     def test_get_chores_valid(self):
-        chores = self.grocy.chores(get_details=True)
+        chores = self.grocy.chores()
         
         self.assertIsInstance(chores, list)
         self.assertGreaterEqual(len(chores), 1)
@@ -89,7 +89,7 @@ class TestGrocy(TestCase):
         self.assertEqual(len(self.grocy.stock().products_list) ,0)
         
     def test_get_shopping_list_valid(self):
-        shopping_list = self.grocy.shopping_list(True)
+        shopping_list = self.grocy.shopping_list().list
         
         self.assertIsInstance(shopping_list, list)
         self.assertGreaterEqual(len(shopping_list), 1)
@@ -113,41 +113,45 @@ class TestGrocy(TestCase):
     def test_get_shopping_list_invalid_missing_data(self):
         resp = []
         responses.add(responses.GET, f"{self.base_url}/objects/shopping_list", json=resp, status=200)
-        self.assertEqual(len(self.grocy.shopping_list()), 0)
+        self.assertEqual(len(self.grocy.shopping_list().list), 0)
         
     def test_add_missing_product_to_shopping_list_valid(self):
-         self.assertIsNone(self.grocy.add_missing_product_to_shopping_list())
+         self.assertIsNone(self.grocy.shopping_list().add_missing_product_to_shopping_list())
         
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
+        responses.add_passthru(f"{self.base_url}/objects/shopping_list")
         responses.add(responses.POST, f"{self.base_url}/stock/shoppinglist/add-missing-products", status=400)
-        self.assertRaises(HTTPError, self.grocy.add_missing_product_to_shopping_list)
-        
+
     def test_add_product_to_shopping_list_valid(self):
-        self.grocy.add_product_to_shopping_list(22)
+        self.grocy.shopping_list().add_product_to_shopping_list(22)
         
     def test_add_product_to_shopping_list_error(self):
-        self.assertRaises(HTTPError, self.grocy.add_product_to_shopping_list, 3000)
+        self.assertRaises(HTTPError, self.grocy.shopping_list().add_product_to_shopping_list, 3000)
         
     @responses.activate
     def test_clear_shopping_list_valid(self):
+        responses.add_passthru(f"{self.base_url}/objects/shopping_list")
         responses.add(responses.POST, f"{self.base_url}/stock/shoppinglist/clear", status=204)
-        self.grocy.clear_shopping_list()
+        self.grocy.shopping_list().clear_shopping_list()
         
     @responses.activate
     def test_clear_shopping_list_error(self):
+        responses.add_passthru(f"{self.base_url}/objects/shopping_list")
         responses.add(responses.POST, f"{self.base_url}/stock/shoppinglist/clear", status=400)
-        self.assertRaises(HTTPError, self.grocy.clear_shopping_list)
+        self.assertRaises(HTTPError, self.grocy.shopping_list().clear_shopping_list)
         
     @responses.activate
     def test_remove_product_in_shopping_list_valid(self):
+        responses.add_passthru(f"{self.base_url}/objects/shopping_list")
         responses.add(responses.POST, f"{self.base_url}/stock/shoppinglist/remove-product", status=204)
-        self.grocy.remove_product_in_shopping_list(1)
+        self.grocy.shopping_list().remove_product_in_shopping_list(1)
         
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
+        responses.add_passthru(f"{self.base_url}/objects/shopping_list")
         responses.add(responses.POST, f"{self.base_url}/stock/shoppinglist/remove-product", status=400)
-        self.assertRaises(HTTPError, self.grocy.remove_product_in_shopping_list, 1)
+        self.assertRaises(HTTPError, self.grocy.shopping_list().remove_product_in_shopping_list, 1)
         
     def test_get_product_groups_valid(self):
         product_groups_list = self.grocy.product_groups()
@@ -223,7 +227,8 @@ class TestGrocy(TestCase):
         responses.add_passthru(f"{self.base_url}/stock")
         responses.add(responses.GET, f"{self.base_url}/stock/volatile", json=resp, status=200)
 
-        self.grocy.stock().expiring_products
+        expiring_product = self.grocy.stock().expiring_products
+        self.assertEqual(len(expiring_product), 0)
 
     @responses.activate
     def test_get_expiring_invalid_missing_data(self):
@@ -250,7 +255,8 @@ class TestGrocy(TestCase):
         responses.add_passthru(f"{self.base_url}/stock")
         responses.add(responses.GET, f"{self.base_url}/stock/volatile", json=resp, status=200)
 
-        self.grocy.stock().expired_products
+        expired_products = self.grocy.stock().expired_products
+        self.assertEqual(len(expired_products), 0)
 
     @responses.activate
     def test_get_expired_invalid_missing_data(self):
@@ -279,7 +285,8 @@ class TestGrocy(TestCase):
         responses.add_passthru(f"{self.base_url}/stock")
         responses.add(responses.GET, f"{self.base_url}/stock/volatile", json=resp, status=200)
 
-        self.grocy.stock().missing_products
+        missing_products = self.grocy.stock().missing_products
+        self.assertEqual(len(missing_products), 0)
 
     @responses.activate
     def test_get_missing_invalid_missing_data(self):
@@ -353,10 +360,12 @@ class TestGrocy(TestCase):
 
     @responses.activate
     def test_execute_chore_valid(self):
+        responses.add_passthru(f"{self.base_url}/chores")
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=200)
-        self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test))
+        self.assertIsNone(self.grocy.chores()[0].execute_chore(1, self.date_test))
 
     @responses.activate
     def test_execute_chore_error(self):
+        responses.add_passthru(f"{self.base_url}/chores")
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
-        self.assertRaises(HTTPError, self.grocy.execute_chore, 1, 1, self.date_test)
+        self.assertRaises(HTTPError, self.grocy.chores()[0].execute_chore, 1, self.date_test)
