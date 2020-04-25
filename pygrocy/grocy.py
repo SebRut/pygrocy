@@ -45,7 +45,7 @@ class Product(object):
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_group_id(self) -> int:
         return self._product_group_id
@@ -76,15 +76,15 @@ class Group(object):
         self._id = raw_product_group.id
         self._name = raw_product_group.name
         self._description = raw_product_group.description
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def name(self) -> str:
         return self._name
-        
+
     @property
     def description(self) -> str:
         return self._description
@@ -101,23 +101,23 @@ class ShoppingListProduct(object):
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
             self._product = api_client.get_product(self._product_id).product
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_id(self) -> int:
         return self._product_id
-        
+
     @property
     def amount(self) -> float:
         return self._amount
-        
+
     @property
     def note(self) -> str:
         return self._note
-        
+
     @property
     def product(self) -> Product:
         return self._product
@@ -160,7 +160,7 @@ class Chore(object):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self) -> List[Product]:
@@ -189,7 +189,6 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return expired_product
 
-
     def missing_products(self, get_details: bool = False) -> List[Product]:
         raw_missing_product = self.volatile_stock().missing_products
         missing_product = [Product(resp) for resp in raw_missing_product]
@@ -198,7 +197,6 @@ class Grocy(object):
             for item in missing_product:
                 item.get_details(self._api_client)
         return missing_product
-
 
     def product(self, product_id: int) -> ProductDetailsResponse:
         return self._api_client.get_product(product_id)
@@ -225,7 +223,7 @@ class Grocy(object):
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
-    
+
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
@@ -234,32 +232,32 @@ class Grocy(object):
             for item in shopping_list:
                 item.get_details(self._api_client)
         return shopping_list
-        
+
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
-        
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+
+    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
         return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
-        
+
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
-        
+
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
         return [Group(resp) for resp in raw_groups]
-        
+
     def add_product_pic(self, product_id: int, pic_path: str):
         self._api_client.upload_product_picture(product_id, pic_path)
         return self._api_client.update_product_pic(product_id)
-        
+
     def get_userfields(self, entity: str, object_id: int):
         return self._api_client.get_userfields(entity, object_id)
-        
+
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         return self._api_client.set_userfields(entity, object_id, key, value)
-        
+
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()

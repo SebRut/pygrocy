@@ -434,10 +434,12 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request("objects/shopping_list")
         return [ShoppingListItem(response) for response in parsed_json]
 
-    def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
-        data = {
-            "list_id": shopping_list_id
-        }
+    def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
+        data = None
+        if shopping_list_id:
+            data = {
+                "list_id": shopping_list_id
+            }
 
         self._do_post_request("stock/shoppinglist/add-missing-products", data)
     
