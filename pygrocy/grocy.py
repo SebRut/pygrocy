@@ -218,7 +218,8 @@ class Grocy(object):
 
     def product(self, product_id: int) -> Product:
         resp = self._api_client.get_product(product_id)
-        return Product(resp)
+        if resp:
+            return Product(resp)
 
     def chores(self, get_details: bool = False) -> List[Chore]:
         raw_chores = self._api_client.get_chores()

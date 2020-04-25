@@ -76,7 +76,7 @@ class TestGrocy(TestCase):
         details_json = json.loads(details_json)
         responses.add(responses.GET, f"{self.base_url}/chores/1", json=details_json, status=200)
         chore_details = self.grocy.chore(1)
-        self.assertIsInstance(chore_details, ChoreDetailsResponse)
+        self.assertIsInstance(chore_details, Chore)
 
     @unittest.skip("no stock_current table in current demo data")
     def test_product_get_details_valid(self):
