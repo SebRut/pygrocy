@@ -29,7 +29,7 @@ script:
 
 after_success:
   - coveralls
-  - docker-compose down
+  - cd grocy-docker && docker-compose down
 
 deploy:
   - provider: pypi
