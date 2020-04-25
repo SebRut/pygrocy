@@ -4,10 +4,7 @@ version: '2'
 
 services:
   grocy-nginx:
-    image: grocy/grocy-docker:nginx
-    build:
-      context: .
-      dockerfile: Dockerfile-grocy-nginx
+    image: grocy/nginx:v2.7.1-2
     depends_on:
       - grocy
     ports:
@@ -18,10 +15,7 @@ services:
     container_name: grocy-nginx
 
   grocy:
-    image: grocy/grocy-docker:grocy
-    build:
-      context: .
-      dockerfile: Dockerfile-grocy
+    image: grocy/grocy:v2.7.1-2
     expose:
       - 9000
     volumes:
