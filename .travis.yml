@@ -11,7 +11,7 @@ services:
   - docker
 
 before_install:
-  - git clone --branch v2.6.2 https://github.com/grocy/grocy-docker.git
+  - git clone --branch v2.7.1-2 https://github.com/grocy/grocy-docker.git
   - cd grocy-docker
   - docker-compose pull
   - GROCY_MODE=demo docker-compose up -d
