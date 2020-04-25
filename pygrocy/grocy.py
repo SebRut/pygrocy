@@ -3,33 +3,48 @@ from typing import List
 
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
-                               CurrentVolatilStockResponse, GrocyApiClient,
+                               GrocyApiClient,
                                LocationData, MissingProductResponse,
-                               ProductData, ProductDetailsResponse,
+                               ProductDetailsResponse,
                                ShoppingListItem, TransactionType, UserDto)
 
 
 class Product(object):
     def __init__(self, response):
         if isinstance(response, CurrentStockResponse):
-            self._id = response.product_id
-            self._available_amount = response.amount
-            self._best_before_date = response.best_before_date
-            self._amount_missing = None
-            self._is_partly_in_stock = None
-            if response.product:
-                self._name = response.product.name
-                self._barcodes = response.product.barcodes
-                self._product_group_id = response.product.product_group_id
+            self._init_from_CurrentStockResponse(response)
         elif isinstance(response, MissingProductResponse):
-            self._id = response.product_id
-            self._name = response.name
-            self._available_amount = None
-            self._best_before_date = None
-            self._amount_missing = response.amount_missing
-            self._is_partly_in_stock = response.is_partly_in_stock
-            self._barcodes = None
-            self._product_group_id = None
+            self._init_from_MissingProductResponse(response)
+        elif isinstance(response, ProductDetailsResponse):
+            self._init_from_ProductDetailsResponse(response)
+
+    def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
+        self._id = response.product_id
+        self._available_amount = response.amount
+        self._best_before_date = response.best_before_date
+        self._amount_missing = None
+        self._is_partly_in_stock = None
+        if response.product:
+            self._name = response.product.name
+            self._barcodes = response.product.barcodes
+            self._product_group_id = response.product.product_group_id
+
+    def _init_from_MissingProductResponse(self, response: MissingProductResponse):
+        self._id = response.product_id
+        self._name = response.name
+        self._available_amount = None
+        self._best_before_date = None
+        self._amount_missing = response.amount_missing
+        self._is_partly_in_stock = response.is_partly_in_stock
+        self._barcodes = None
+        self._product_group_id = None
+
+    def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
+        self._id = response.product.id
+        self._available_amount = response.stock_amount
+        self._best_before_date = response.next_best_before_date
+        self._name = response.product.name
+        self._barcodes = response.product.barcodes
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
@@ -124,13 +139,25 @@ class ShoppingListProduct(object):
 
 
 class Chore(object):
-    def __init__(self, raw_chore: CurrentChoreResponse):
-        self._id = raw_chore.chore_id
-        self._last_tracked_time = raw_chore.last_tracked_time
-        self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
+    def __init__(self, response):
+        if isinstance(response, CurrentChoreResponse):
+            self._init_from_CurrentChoreResponse(response)
+        elif isinstance(response, ChoreDetailsResponse):
+            self._init_from_ChoreDetailsResponse(response)
 
+    def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
+        self._id = response.chore_id
+        self._last_tracked_time = response.last_tracked_time
+        self._next_estimated_execution_time = response.next_estimated_execution_time
         self._name = None
         self._last_done_by = None
+
+    def _init_from_ChoreDetailsResponse(self, response):
+        self._id = response.chore.id
+        self._last_tracked_time = response.last_tracked
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = response.chore.name
+        self._last_done_by = response.last_done_by
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.id)
@@ -168,11 +195,8 @@ class Grocy(object):
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
-    def volatile_stock(self) -> CurrentVolatilStockResponse:
-        return self._api_client.get_volatile_stock()
-
     def expiring_products(self, get_details: bool = False) -> List[Product]:
-        raw_expiring_product = self.volatile_stock().expiring_products
+        raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -181,7 +205,7 @@ class Grocy(object):
         return expiring_product
 
     def expired_products(self, get_details: bool = False) -> List[Product]:
-        raw_expired_product = self.volatile_stock().expired_products
+        raw_expired_product = self._api_client.get_volatile_stock().expired_products
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -190,7 +214,7 @@ class Grocy(object):
         return expired_product
 
     def missing_products(self, get_details: bool = False) -> List[Product]:
-        raw_missing_product = self.volatile_stock().missing_products
+        raw_missing_product = self._api_client.get_volatile_stock().missing_products
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
@@ -198,8 +222,10 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return missing_product
 
-    def product(self, product_id: int) -> ProductDetailsResponse:
-        return self._api_client.get_product(product_id)
+    def product(self, product_id: int) -> Product:
+        resp = self._api_client.get_product(product_id)
+        if resp:
+            return Product(resp)
 
     def chores(self, get_details: bool = False) -> List[Chore]:
         raw_chores = self._api_client.get_chores()
@@ -213,8 +239,9 @@ class Grocy(object):
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
-    def chore(self, chore_id: int) -> ChoreDetailsResponse:
-        return self._api_client.get_chore(chore_id)
+    def chore(self, chore_id: int) -> Chore:
+        resp = self._api_client.get_chore(chore_id)
+        return Chore(resp)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
