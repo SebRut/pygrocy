@@ -141,17 +141,23 @@ class ShoppingListProduct(object):
 class Chore(object):
     def __init__(self, response):
         if isinstance(response, CurrentChoreResponse):
-            self._id = response.chore_id
-            self._last_tracked_time = response.last_tracked_time
-            self._next_estimated_execution_time = response.next_estimated_execution_time
-            self._name = None
-            self._last_done_by = None
+            self._init_from_CurrentChoreResponse(response)
         elif isinstance(response, ChoreDetailsResponse):
-            self._id = response.chore.id
-            self._last_tracked_time = response.last_tracked
-            self._next_estimated_execution_time = response.next_estimated_execution_time
-            self._name = response.chore.name
-            self._last_done_by = response.last_done_by
+            self._init_from_ChoreDetailsResponse(response)
+
+    def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
+        self._id = response.chore_id
+        self._last_tracked_time = response.last_tracked_time
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = None
+        self._last_done_by = None
+
+    def _init_from_ChoreDetailsResponse(self, response):
+        self._id = response.chore.id
+        self._last_tracked_time = response.last_tracked
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = response.chore.name
+        self._last_done_by = response.last_done_by
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.id)
