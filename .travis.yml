@@ -12,7 +12,6 @@ services:
 
 before_install:
   - docker-compose up -d
-  - curl -kX GET https://localhost
 
 install:
   - pip install -r requirements.txt
