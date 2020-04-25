@@ -11,7 +11,12 @@ services:
   - docker
 
 before_install:
-  - docker-compose up -d
+  - git clone https://github.com/grocy/grocy-docker.git
+  - (
+      cd grocy-docker
+      docker-compose pull
+      docker-compose up -d
+    )
 
 install:
   - pip install -r requirements.txt
