@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import List
+from enum import Enum
+from typing import List, Dict
 
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
@@ -138,13 +139,56 @@ class ShoppingListProduct(object):
         return self._product
 
 
+class User(object):
+    def __init__(self, user_dto: UserDto):
+        self._id = user_dto.id
+        self._username = user_dto.username
+        self._first_name = user_dto.first_name
+        self._last_name = user_dto.last_name
+        self._display_name = user_dto.display_name
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def first_name(self) -> str:
+        return self._first_name
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name
+
+    @property
+    def display_name(self) -> str:
+        return self._display_name
+
+
 class Chore(object):
+    class PeriodType(Enum):
+        MANUALLY = 'manually'
+        DYNAMIC_REGULAR = 'dynamic-regular'
+        DAILY = 'daily'
+        WEEKLY = 'weekly'
+        MONTHLY = 'monthly'
+
+    class AssignmentType(Enum):
+        NO_ASSIGNMENT = 'no-assignment'
+        WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
+        RANDOM = 'random'
+        IN_ALPHABETICAL_ORDER = 'in-alphabetical-order'
+
     def __init__(self, response):
         if isinstance(response, CurrentChoreResponse):
             self._init_from_CurrentChoreResponse(response)
         elif isinstance(response, ChoreDetailsResponse):
             self._init_from_ChoreDetailsResponse(response)
 
+    # noinspection PyPep8Naming
     def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
         self._id = response.chore_id
         self._last_tracked_time = response.last_tracked_time
@@ -152,22 +196,92 @@ class Chore(object):
         self._name = None
         self._last_done_by = None
 
-    def _init_from_ChoreDetailsResponse(self, response):
-        self._id = response.chore.id
+    # noinspection PyPep8Naming
+    def _init_from_ChoreDetailsResponse(self, response: ChoreDetailsResponse):
+        chore_data = response.chore
+        self._id = chore_data.id
+        self._name = chore_data.name
+        self._description = chore_data.description
+
+        if chore_data.period_type is not None:
+            self._period_type = Chore.PeriodType(chore_data.period_type)
+        else:
+            self._period_type = None
+
+        self._period_config = chore_data.period_config
+        self._period_days = chore_data.period_days
+        self._track_date_only = chore_data.track_date_only
+        self._rollover = chore_data.rollover
+
+        if chore_data.assignment_type is not None:
+            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+        else:
+            self._assignment_type = None
+
+        self._assignment_config = chore_data.assignment_config
+        self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
+        self._userfields = chore_data.userfields
+
         self._last_tracked_time = response.last_tracked
         self._next_estimated_execution_time = response.next_estimated_execution_time
-        self._name = response.chore.name
-        self._last_done_by = response.last_done_by
+        self._last_done_by = User(response.last_done_by)
+        self._track_count = response.track_count
+        if response.next_execution_assigned_user is not None:
+            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+        else:
+            self._next_execution_assigned_user = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.id)
-        self._name = details.chore.name
-        self._last_tracked_time = details.last_tracked
-        self._last_done_by = details.last_done_by
+        self._init_from_ChoreDetailsResponse(details)
 
     @property
     def id(self) -> int:
         return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def period_type(self) -> PeriodType:
+        return self._period_type
+
+    @property
+    def period_config(self) -> str:
+        return self._period_config
+
+    @property
+    def period_days(self) -> int:
+        return self._period_days
+
+    @property
+    def track_date_only(self) -> bool:
+        return self._track_date_only
+
+    @property
+    def rollover(self) -> bool:
+        return self._rollover
+
+    @property
+    def assignment_type(self) -> AssignmentType:
+        return self._assignment_type
+
+    @property
+    def assignment_config(self) -> str:
+        return self._assignment_config
+
+    @property
+    def next_execution_assigned_to_user_id(self) -> int:
+        return self._next_execution_assigned_to_user_id
+    
+    @property
+    def userfields(self) -> Dict[str,str]:
+        return self._userfields
 
     @property
     def last_tracked_time(self) -> datetime:
@@ -178,13 +292,16 @@ class Chore(object):
         return self._next_estimated_execution_time
 
     @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def last_done_by(self) -> UserDto:
+    def last_done_by(self) -> User:
         return self._last_done_by
 
+    @property
+    def track_count(self) -> int:
+        return self._track_count
+
+    @property
+    def next_execution_assigned_user(self) -> User:
+        return self._next_execution_assigned_user
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):

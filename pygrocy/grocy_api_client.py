@@ -111,16 +111,18 @@ class ProductData(object):
 
 class ChoreData(object):
     def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get('id'))
-        self._name = parsed_json.get('name')
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def name(self) -> str:
-        return self._name
+        self.id = parse_int(parsed_json.get('id'))
+        self.name = parsed_json.get('name')
+        self.description = parsed_json.get('description')
+        self.period_type = parsed_json.get('period_type')
+        self.period_config = parsed_json.get('period_config')
+        self.period_days = parse_int(parsed_json.get('period_days'))
+        self.track_date_only = parsed_json.get('track_date_only')
+        self.rollover = parsed_json.get('rollover')
+        self.assignment_type = parsed_json.get('assignment_type')
+        self.assignment_config = parsed_json.get('assignment_config')
+        self.next_execution_assigned_to_user_id = parse_int('next_execution_assigned_to_user_id')
+        self.userfields = parsed_json.get('userfields')
 
 
 class UserDto(object):
@@ -294,6 +296,13 @@ class ChoreDetailsResponse(object):
         self._chore = ChoreData(parsed_json.get('chore'))
         self._last_tracked = parse_date(parsed_json.get('last_tracked'))
         self._next_estimated_execution_time = parse_date(parsed_json.get('next_estimated_execution_time'))
+        self._track_count = parse_int(parsed_json.get('track_count'))
+
+        next_user = parsed_json.get('next_execution_assigned_user')
+        if next_user is not None:
+            self._next_execution_assigned_user = UserDto(next_user)
+        else:
+            self._next_execution_assigned_user = None
 
         if self._last_tracked is None:
             self._last_done_by = None
@@ -315,6 +324,14 @@ class ChoreDetailsResponse(object):
     @property
     def next_estimated_execution_time(self) -> datetime:
         return self._next_estimated_execution_time
+
+    @property
+    def track_count(self) -> int:
+        return self._track_count
+
+    @property
+    def next_execution_assigned_user(self) -> UserDto:
+        return self._next_execution_assigned_user
 
 
 class TransactionType(Enum):
