@@ -345,7 +345,7 @@ class TaskResponse(object):
     def __init__(self, parsed_json):
         self.id = parse_int(parsed_json.get('id'))
         self.name = parsed_json.get('name')
-        self.description = parsed_json.get('descrition')
+        self.description = parsed_json.get('description')
         self.due_date = parse_date(parsed_json.get('due_date'))
         self.done = parse_int(parsed_json.get('done'))
         self.done_timestamp = parse_date(parsed_json.get('done_timestamp'))

@@ -434,4 +434,3 @@ class Grocy(object):
 
     def complete_task(self, task_id):
         return self._api_client.complete_task(task_id)
-    
