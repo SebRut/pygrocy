@@ -1,35 +1,51 @@
 from datetime import datetime
-from typing import List
+from enum import Enum
+from typing import List, Dict
 
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
-                               CurrentVolatilStockResponse, GrocyApiClient,
+                               GrocyApiClient,
                                LocationData, MissingProductResponse,
-                               ProductData, ProductDetailsResponse,
-                               ShoppingListItem, TransactionType, UserDto)
+                               ProductDetailsResponse,
+                               ShoppingListItem, TransactionType, UserDto, TaskResponse)
 
 
 class Product(object):
     def __init__(self, response):
         if isinstance(response, CurrentStockResponse):
-            self._id = response.product_id
-            self._available_amount = response.amount
-            self._best_before_date = response.best_before_date
-            self._amount_missing = None
-            self._is_partly_in_stock = None
-            if response.product:
-                self._name = response.product.name
-                self._barcodes = response.product.barcodes
-                self._product_group_id = response.product.product_group_id
+            self._init_from_CurrentStockResponse(response)
         elif isinstance(response, MissingProductResponse):
-            self._id = response.product_id
-            self._name = response.name
-            self._available_amount = None
-            self._best_before_date = None
-            self._amount_missing = response.amount_missing
-            self._is_partly_in_stock = response.is_partly_in_stock
-            self._barcodes = None
-            self._product_group_id = None
+            self._init_from_MissingProductResponse(response)
+        elif isinstance(response, ProductDetailsResponse):
+            self._init_from_ProductDetailsResponse(response)
+
+    def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
+        self._id = response.product_id
+        self._available_amount = response.amount
+        self._best_before_date = response.best_before_date
+        self._amount_missing = None
+        self._is_partly_in_stock = None
+        if response.product:
+            self._name = response.product.name
+            self._barcodes = response.product.barcodes
+            self._product_group_id = response.product.product_group_id
+
+    def _init_from_MissingProductResponse(self, response: MissingProductResponse):
+        self._id = response.product_id
+        self._name = response.name
+        self._available_amount = None
+        self._best_before_date = None
+        self._amount_missing = response.amount_missing
+        self._is_partly_in_stock = response.is_partly_in_stock
+        self._barcodes = None
+        self._product_group_id = None
+
+    def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
+        self._id = response.product.id
+        self._available_amount = response.stock_amount
+        self._best_before_date = response.next_best_before_date
+        self._name = response.product.name
+        self._barcodes = response.product.barcodes
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
@@ -45,7 +61,7 @@ class Product(object):
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_group_id(self) -> int:
         return self._product_group_id
@@ -76,15 +92,15 @@ class Group(object):
         self._id = raw_product_group.id
         self._name = raw_product_group.name
         self._description = raw_product_group.description
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def name(self) -> str:
         return self._name
-        
+
     @property
     def description(self) -> str:
         return self._description
@@ -101,46 +117,171 @@ class ShoppingListProduct(object):
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
             self._product = api_client.get_product(self._product_id).product
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_id(self) -> int:
         return self._product_id
-        
+
     @property
     def amount(self) -> float:
         return self._amount
-        
+
     @property
     def note(self) -> str:
         return self._note
-        
+
     @property
     def product(self) -> Product:
         return self._product
 
 
-class Chore(object):
-    def __init__(self, raw_chore: CurrentChoreResponse):
-        self._id = raw_chore.chore_id
-        self._last_tracked_time = raw_chore.last_tracked_time
-        self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
-
-        self._name = None
-        self._last_done_by = None
-
-    def get_details(self, api_client: GrocyApiClient):
-        details = api_client.get_chore(self.id)
-        self._name = details.chore.name
-        self._last_tracked_time = details.last_tracked
-        self._last_done_by = details.last_done_by
+class User(object):
+    def __init__(self, user_dto: UserDto):
+        self._id = user_dto.id
+        self._username = user_dto.username
+        self._first_name = user_dto.first_name
+        self._last_name = user_dto.last_name
+        self._display_name = user_dto.display_name
 
     @property
     def id(self) -> int:
         return self._id
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def first_name(self) -> str:
+        return self._first_name
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name
+
+    @property
+    def display_name(self) -> str:
+        return self._display_name
+
+
+class Chore(object):
+    class PeriodType(Enum):
+        MANUALLY = 'manually'
+        DYNAMIC_REGULAR = 'dynamic-regular'
+        DAILY = 'daily'
+        WEEKLY = 'weekly'
+        MONTHLY = 'monthly'
+
+    class AssignmentType(Enum):
+        NO_ASSIGNMENT = 'no-assignment'
+        WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
+        RANDOM = 'random'
+        IN_ALPHABETICAL_ORDER = 'in-alphabetical-order'
+
+    def __init__(self, response):
+        if isinstance(response, CurrentChoreResponse):
+            self._init_from_CurrentChoreResponse(response)
+        elif isinstance(response, ChoreDetailsResponse):
+            self._init_from_ChoreDetailsResponse(response)
+
+    # noinspection PyPep8Naming
+    def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
+        self._id = response.chore_id
+        self._last_tracked_time = response.last_tracked_time
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = None
+        self._last_done_by = None
+
+    # noinspection PyPep8Naming
+    def _init_from_ChoreDetailsResponse(self, response: ChoreDetailsResponse):
+        chore_data = response.chore
+        self._id = chore_data.id
+        self._name = chore_data.name
+        self._description = chore_data.description
+
+        if chore_data.period_type is not None:
+            self._period_type = Chore.PeriodType(chore_data.period_type)
+        else:
+            self._period_type = None
+
+        self._period_config = chore_data.period_config
+        self._period_days = chore_data.period_days
+        self._track_date_only = chore_data.track_date_only
+        self._rollover = chore_data.rollover
+
+        if chore_data.assignment_type is not None:
+            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+        else:
+            self._assignment_type = None
+
+        self._assignment_config = chore_data.assignment_config
+        self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
+        self._userfields = chore_data.userfields
+
+        self._last_tracked_time = response.last_tracked
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._last_done_by = User(response.last_done_by)
+        self._track_count = response.track_count
+        if response.next_execution_assigned_user is not None:
+            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+        else:
+            self._next_execution_assigned_user = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_chore(self.id)
+        self._init_from_ChoreDetailsResponse(details)
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def period_type(self) -> PeriodType:
+        return self._period_type
+
+    @property
+    def period_config(self) -> str:
+        return self._period_config
+
+    @property
+    def period_days(self) -> int:
+        return self._period_days
+
+    @property
+    def track_date_only(self) -> bool:
+        return self._track_date_only
+
+    @property
+    def rollover(self) -> bool:
+        return self._rollover
+
+    @property
+    def assignment_type(self) -> AssignmentType:
+        return self._assignment_type
+
+    @property
+    def assignment_config(self) -> str:
+        return self._assignment_config
+
+    @property
+    def next_execution_assigned_to_user_id(self) -> int:
+        return self._next_execution_assigned_to_user_id
+    
+    @property
+    def userfields(self) -> Dict[str,str]:
+        return self._userfields
 
     @property
     def last_tracked_time(self) -> datetime:
@@ -151,16 +292,41 @@ class Chore(object):
         return self._next_estimated_execution_time
 
     @property
+    def last_done_by(self) -> User:
+        return self._last_done_by
+
+    @property
+    def track_count(self) -> int:
+        return self._track_count
+
+    @property
+    def next_execution_assigned_user(self) -> User:
+        return self._next_execution_assigned_user
+
+
+class Task(object):
+    def __init__(self, response: TaskResponse):
+        self._id = response.id
+        self._name = response.name
+        self._description = response.description
+        self._due_date = response.due_date
+        self._done = response.done
+        self._done_timestamp = response.done_timestamp
+        self._category_id = response.category_id
+        self._assigned_to_user_id = response.assigned_to_user_id
+        self._userfields = response.userfields
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
     def name(self) -> str:
         return self._name
 
-    @property
-    def last_done_by(self) -> UserDto:
-        return self._last_done_by
-
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl = True):
+    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self) -> List[Product]:
@@ -168,11 +334,8 @@ class Grocy(object):
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
-    def volatile_stock(self) -> CurrentVolatilStockResponse:
-        return self._api_client.get_volatile_stock()
-
     def expiring_products(self, get_details: bool = False) -> List[Product]:
-        raw_expiring_product = self.volatile_stock().expiring_products
+        raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
         expiring_product = [Product(resp) for resp in raw_expiring_product]
 
         if get_details:
@@ -181,7 +344,7 @@ class Grocy(object):
         return expiring_product
 
     def expired_products(self, get_details: bool = False) -> List[Product]:
-        raw_expired_product = self.volatile_stock().expired_products
+        raw_expired_product = self._api_client.get_volatile_stock().expired_products
         expired_product = [Product(resp) for resp in raw_expired_product]
 
         if get_details:
@@ -189,9 +352,8 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return expired_product
 
-
     def missing_products(self, get_details: bool = False) -> List[Product]:
-        raw_missing_product = self.volatile_stock().missing_products
+        raw_missing_product = self._api_client.get_volatile_stock().missing_products
         missing_product = [Product(resp) for resp in raw_missing_product]
 
         if get_details:
@@ -199,9 +361,10 @@ class Grocy(object):
                 item.get_details(self._api_client)
         return missing_product
 
-
-    def product(self, product_id: int) -> ProductDetailsResponse:
-        return self._api_client.get_product(product_id)
+    def product(self, product_id: int) -> Product:
+        resp = self._api_client.get_product(product_id)
+        if resp:
+            return Product(resp)
 
     def chores(self, get_details: bool = False) -> List[Chore]:
         raw_chores = self._api_client.get_chores()
@@ -215,8 +378,9 @@ class Grocy(object):
     def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
-    def chore(self, chore_id: int) -> ChoreDetailsResponse:
-        return self._api_client.get_chore(chore_id)
+    def chore(self, chore_id: int) -> Chore:
+        resp = self._api_client.get_chore(chore_id)
+        return Chore(resp)
 
     def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
                     transaction_type: TransactionType = TransactionType.PURCHASE):
@@ -225,7 +389,7 @@ class Grocy(object):
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
-    
+
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
@@ -234,32 +398,39 @@ class Grocy(object):
             for item in shopping_list:
                 item.get_details(self._api_client)
         return shopping_list
-        
+
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
-        
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
+
+    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
         return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
-        
+
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
         return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
-        
+
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
         return [Group(resp) for resp in raw_groups]
-        
+
     def add_product_pic(self, product_id: int, pic_path: str):
         self._api_client.upload_product_picture(product_id, pic_path)
         return self._api_client.update_product_pic(product_id)
-        
+
     def get_userfields(self, entity: str, object_id: int):
         return self._api_client.get_userfields(entity, object_id)
-        
+
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         return self._api_client.set_userfields(entity, object_id, key, value)
-        
+
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
+
+    def tasks(self) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks()
+        return [Task(task) for task in raw_tasks]
+
+    def complete_task(self, task_id):
+        return self._api_client.complete_task(task_id)
