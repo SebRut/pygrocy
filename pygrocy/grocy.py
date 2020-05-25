@@ -226,7 +226,10 @@ class Chore(object):
         self._next_estimated_execution_time = response.next_estimated_execution_time
         self._last_done_by = User(response.last_done_by)
         self._track_count = response.track_count
-        self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+        if response.next_execution_assigned_user is not None:
+            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+        else:
+            self._next_execution_assigned_user = None
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_chore(self.id)
