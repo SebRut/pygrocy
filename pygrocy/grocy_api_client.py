@@ -533,3 +533,7 @@ class GrocyApiClient(object):
     def get_tasks(self) -> List[TaskResponse]:
         parsed_json = self._do_get_request("tasks")
         return [TaskResponse(data) for data in parsed_json]
+
+    def complete_task(self, task_id: int):
+        url = f"tasks/{task_id}/complete"
+        self._do_post_request(url)

@@ -324,6 +324,7 @@ class Task(object):
     def name(self) -> str:
         return self._name
 
+
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
@@ -430,3 +431,7 @@ class Grocy(object):
     def tasks(self) -> List[Task]:
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
+
+    def complete_task(self, task_id):
+        return self._api_client.complete_task(task_id)
+    
