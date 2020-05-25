@@ -202,12 +202,22 @@ class Chore(object):
         self._id = chore_data.id
         self._name = chore_data.name
         self._description = chore_data.description
-        self._period_type = Chore.PeriodType(chore_data.period_type)
+
+        if chore_data.period_type is not None:
+            self._period_type = Chore.PeriodType(chore_data.period_type)
+        else:
+            self._period_type = None
+
         self._period_config = chore_data.period_config
         self._period_days = chore_data.period_days
         self._track_date_only = chore_data.track_date_only
         self._rollover = chore_data.rollover
-        self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+
+        if chore_data.assignment_type is not None:
+            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+        else:
+            self._assignment_type = None
+
         self._assignment_config = chore_data.assignment_config
         self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
         self._userfields = chore_data.userfields
