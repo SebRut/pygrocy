@@ -7,7 +7,7 @@ from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                GrocyApiClient,
                                LocationData, MissingProductResponse,
                                ProductDetailsResponse,
-                               ShoppingListItem, TransactionType, UserDto)
+                               ShoppingListItem, TransactionType, UserDto, TaskResponse)
 
 
 class Product(object):
@@ -303,6 +303,28 @@ class Chore(object):
     def next_execution_assigned_user(self) -> User:
         return self._next_execution_assigned_user
 
+
+class Task(object):
+    def __init__(self, response: TaskResponse):
+        self._id = response.id
+        self._name = response.name
+        self._description = response.description
+        self._due_date = response.due_date
+        self._done = response.done
+        self._done_timestamp = response.done_timestamp
+        self._category_id = response.category_id
+        self._assigned_to_user_id = response.assigned_to_user_id
+        self._userfields = response.userfields
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
@@ -405,3 +427,10 @@ class Grocy(object):
 
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
+
+    def tasks(self) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks()
+        return [Task(task) for task in raw_tasks]
+
+    def complete_task(self, task_id):
+        return self._api_client.complete_task(task_id)

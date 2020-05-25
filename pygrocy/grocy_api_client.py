@@ -341,6 +341,19 @@ class TransactionType(Enum):
     PRODUCT_OPENED = "product-opened"
 
 
+class TaskResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get('id'))
+        self.name = parsed_json.get('name')
+        self.description = parsed_json.get('description')
+        self.due_date = parse_date(parsed_json.get('due_date'))
+        self.done = parse_int(parsed_json.get('done'))
+        self.done_timestamp = parse_date(parsed_json.get('done_timestamp'))
+        self.category_id = parse_int(parsed_json.get('category_id'))
+        self.assigned_to_user_id = parse_int(parsed_json.get('assigned_to_user_id'))
+        self.userfields = parsed_json.get('userfields')
+
+
 class GrocyApiClient(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
         self._base_url = '{}:{}/api/'.format(base_url, port)
@@ -516,3 +529,11 @@ class GrocyApiClient(object):
         resp = self._do_get_request("system/db-changed-time")
         last_change_timestamp = parse_date(resp.get('changed_time'))
         return last_change_timestamp
+
+    def get_tasks(self) -> List[TaskResponse]:
+        parsed_json = self._do_get_request("tasks")
+        return [TaskResponse(data) for data in parsed_json]
+
+    def complete_task(self, task_id: int):
+        url = f"tasks/{task_id}/complete"
+        self._do_post_request(url)
