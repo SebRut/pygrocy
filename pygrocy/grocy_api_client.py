@@ -296,8 +296,13 @@ class ChoreDetailsResponse(object):
         self._chore = ChoreData(parsed_json.get('chore'))
         self._last_tracked = parse_date(parsed_json.get('last_tracked'))
         self._next_estimated_execution_time = parse_date(parsed_json.get('next_estimated_execution_time'))
-        self._next_execution_assigned_user = UserDto(parsed_json.get('next_execution_assigned_user'))
         self._track_count = parse_int(parsed_json.get('track_count'))
+
+        next_user = parsed_json.get('next_execution_assigned_user')
+        if next_user is not None:
+            self._next_execution_assigned_user = UserDto(next_user)
+        else:
+            self._next_execution_assigned_user = None
 
         if self._last_tracked is None:
             self._last_done_by = None
