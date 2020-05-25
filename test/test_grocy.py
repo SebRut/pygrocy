@@ -10,7 +10,7 @@ from requests.exceptions import HTTPError
 from pygrocy import Grocy
 from pygrocy.grocy import Chore, Product, Group, ShoppingListProduct
 from pygrocy.grocy_api_client import GrocyApiClient, UserDto, \
-    ChoreDetailsResponse, ProductData
+    ProductData
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
 
@@ -24,6 +24,14 @@ class TestGrocy(TestCase):
 
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
+
+    @unittest.skip("no tasks_current table in current demo data")
+    def test_get_tasks_valid(self):
+        tasks = self.grocy.tasks()
+
+        assert len(tasks) == 6
+        assert tasks[0].id == 1
+        assert tasks[0].name == 'Repair the garage door'
 
     @unittest.skip("no chores_current table in current demo data")
     def test_get_chores_valid(self):
