@@ -35,7 +35,7 @@ class Product(object):
     @property
     def product_id(self) -> int:
         return self._product_id
-        
+
     @property
     def product_group_id(self) -> int:
         return self._product_group_id
@@ -57,15 +57,15 @@ class Group(object):
         self._id = raw_product_group.id
         self._name = raw_product_group.name
         self._description = raw_product_group.description
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def name(self) -> str:
         return self._name
-        
+
     @property
     def description(self) -> str:
         return self._description
@@ -77,37 +77,38 @@ class ShoppingListProduct(object):
         self._note = raw_shopping_list.note
         self._amount = raw_shopping_list.amount
         self._product = None
-        
+
     def get_details(self, api_client: GrocyApiClient):
         self._product = api_client.get_product(self._product_id).product
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_id(self) -> int:
         return self._product_id
-        
+
     @property
     def amount(self) -> int:
         return self._amount
-        
+
     @property
     def note(self) -> str:
         return self._note
-        
+
     @property
     def product(self) -> Product:
         if self._product_id is None:
             self.get_details()
         return self._product
-    
+
 class Chore(object):
     def __init__(self, raw_chore: CurrentChoreResponse):
         self._chore_id = raw_chore.chore_id
         self._last_tracked_time = raw_chore.last_tracked_time
         self._next_estimated_execution_time = raw_chore.next_estimated_execution_time
+        self._next_execution_assigned_to_user_id = raw_chore.next_execution_assigned_to_user_id
 
         self._name = None
         self._last_done_by = None
@@ -129,6 +130,10 @@ class Chore(object):
     @property
     def next_estimated_execution_time(self) -> datetime:
         return self._next_estimated_execution_time
+
+    @property
+    def next_execution_assigned_to_user_id(self) -> int:
+        return self._next_execution_assigned_to_user_id
 
     @property
     def name(self) -> str:
@@ -217,7 +222,7 @@ class Grocy(object):
     def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
                         transaction_type: TransactionType = TransactionType.CONSUME):
         return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
-    
+
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
         if raw_shoppinglist is None:
@@ -228,33 +233,32 @@ class Grocy(object):
             for item in shopping_list:
                 item.get_details(self._api_client)
         return shopping_list
-        
+
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
-        
+
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(self, shopping_list_product_id: int):
         return self._api_client.remove_product_in_sl(shopping_list_product_id)
-        
+
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
         if raw_groups is None:
             return
         return [Group(resp) for resp in raw_groups]
-        
+
     def add_product_pic(self, product_id: int, pic_path: str):
         if self._api_client.upload_product_picture(product_id, pic_path).status_code != 204:
             return
         return self._api_client.update_product_pic(product_id)
-        
+
     def get_userfields(self, entity: str, object_id: int):
         return self._api_client.get_userfields(entity, object_id)
-        
+
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         return self._api_client.set_userfields(entity, object_id, key, value)
-        
+
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
-        

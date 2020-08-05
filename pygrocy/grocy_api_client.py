@@ -25,7 +25,7 @@ class ShoppingListItem(object):
     @property
     def id(self) -> int:
         return self._id
-    
+
     @property
     def product_id(self) -> int:
         return self._product_id
@@ -53,15 +53,15 @@ class LocationData(object):
         self._name = parsed_json.get('name')
         self._description = parsed_json.get('description')
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
-        
+
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def name(self) -> str:
         return self._name
-        
+
     @property
     def description(self) -> str:
         return self._description
@@ -93,7 +93,7 @@ class ProductData(object):
     @property
     def id(self) -> int:
         return self._id
-        
+
     @property
     def product_group_id(self) -> int:
         return self._product_group_id
@@ -156,6 +156,7 @@ class CurrentChoreResponse(object):
         self._chore_id = parse_int(parsed_json.get('chore_id'), None)
         self._last_tracked_time = parse_date(parsed_json.get('last_tracked_time'))
         self._next_estimated_execution_time = parse_date(parsed_json.get('next_estimated_execution_time'))
+        self._next_execution_assigned_to_user_id = parse_int(parsed_json.get('next_execution_assigned_to_user_id'))
 
     @property
     def chore_id(self) -> int:
@@ -169,6 +170,9 @@ class CurrentChoreResponse(object):
     def next_estimated_execution_time(self) -> datetime:
         return self._next_estimated_execution_time
 
+    @property
+    def next_execution_assigned_to_user_id(self) -> int:
+        return self._next_execution_assigned_to_user_id
 
 
 class CurrentStockResponse(object):
@@ -177,7 +181,7 @@ class CurrentStockResponse(object):
         self._amount = parse_float(parsed_json.get('amount'))
         self._best_before_date = parse_date(parsed_json.get('best_before_date'))
         self._amount_opened = parse_float(parsed_json.get('amount_opened'))
-        
+
     @property
     def product_id(self) -> int:
         return self._product_id
@@ -369,7 +373,7 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(urljoin(self._base_url, "stock/products/"), str(product_id) + "/"), "consume")
         requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
 
-        
+
     def get_shopping_list(self) -> List[ShoppingListItem]:
         req_url = urljoin(self._base_url, "objects/shopping_list")
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
@@ -386,7 +390,7 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, "stock/shoppinglist/add-missing-products")
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
-            
+
     def clear_shopping_list(self, shopping_list_id: int = 1):
         data = {
             "list_id": shopping_list_id
@@ -395,13 +399,13 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, "stock/shoppinglist/clear")
         resp = requests.post(req_url, verify=self._verify_ssl, headers=self._headers, data=data)
         return resp
-            
+
     def remove_product_in_sl(self, sl_product_id: int):
-        
+
         req_url = urljoin(urljoin(self._base_url, "objects/shopping_list/"), str(sl_product_id))
         resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
         return resp
-        
+
     def get_product_groups(self) -> List[LocationData]:
         req_url = urljoin(self._base_url, "objects/product_groups")
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
@@ -409,7 +413,7 @@ class GrocyApiClient(object):
             return
         parsed_json = resp.json()
         return [LocationData(response) for response in parsed_json]
-        
+
     def upload_product_picture(self, product_id: int, pic_path: str):
         if not os.path.exists(pic_path):
             return
@@ -421,7 +425,7 @@ class GrocyApiClient(object):
         with open(pic_path,'rb') as pic:
             resp =requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=pic)
             return resp
-            
+
     def update_product_pic(self, product_id: int):
         pic_name = '{}.jpg'.format(product_id)
         data = { "picture_file_name":  pic_name }
@@ -431,14 +435,14 @@ class GrocyApiClient(object):
         req_url = urljoin(urljoin(self._base_url, "objects/products/"), str(product_id))
         resp = requests.put(req_url, verify=self._verify_ssl, headers=up_header , data=json.dumps(data))
         return resp
-            
+
     def get_userfields(self, entity: str, object_id: int):
         req_url = urljoin(urljoin(urljoin(self._base_url, "userfields/"), entity + "/"), str(object_id))
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         if not resp:
             return resp
         return resp.json()
-        
+
     def set_userfields(self, entity: str, object_id: int, key: str, value):
         data = {
             key: value
@@ -452,4 +456,3 @@ class GrocyApiClient(object):
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
         last_change_timestamp = parse_date(resp.json().get('changed_time'))
         return last_change_timestamp
-        
