@@ -3,6 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Dict
 
+from .base import DataModel
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
                                GrocyApiClient,
@@ -13,7 +14,7 @@ from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                ShoppingListItem, TransactionType, UserDto, TaskResponse)
 
 
-class Product(object):
+class Product(DataModel):
     def __init__(self, response):
         if isinstance(response, CurrentStockResponse):
             self._init_from_CurrentStockResponse(response)
@@ -90,7 +91,7 @@ class Product(object):
         return self._is_partly_in_stock
 
 
-class Group(object):
+class Group(DataModel):
     def __init__(self, raw_product_group: LocationData):
         self._id = raw_product_group.id
         self._name = raw_product_group.name
@@ -109,7 +110,7 @@ class Group(object):
         return self._description
 
 
-class ShoppingListProduct(object):
+class ShoppingListProduct(DataModel):
     def __init__(self, raw_shopping_list: ShoppingListItem):
         self._id = raw_shopping_list.id
         self._product_id = raw_shopping_list.product_id
@@ -142,7 +143,7 @@ class ShoppingListProduct(object):
         return self._product
 
 
-class User(object):
+class User(DataModel):
     def __init__(self, user_dto: UserDto):
         self._id = user_dto.id
         self._username = user_dto.username
@@ -171,15 +172,15 @@ class User(object):
         return self._display_name
 
 
-class Chore(object):
-    class PeriodType(Enum):
+class Chore(DataModel):
+    class PeriodType(str, Enum):
         MANUALLY = 'manually'
         DYNAMIC_REGULAR = 'dynamic-regular'
         DAILY = 'daily'
         WEEKLY = 'weekly'
         MONTHLY = 'monthly'
 
-    class AssignmentType(Enum):
+    class AssignmentType(str, Enum):
         NO_ASSIGNMENT = 'no-assignment'
         WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
         RANDOM = 'random'
@@ -227,7 +228,10 @@ class Chore(object):
 
         self._last_tracked_time = response.last_tracked
         self._next_estimated_execution_time = response.next_estimated_execution_time
-        self._last_done_by = User(response.last_done_by)
+        if response.last_done_by is not None:
+            self._last_done_by = User(response.last_done_by)
+        else:
+            self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
             self._next_execution_assigned_user = User(response.next_execution_assigned_user)
@@ -307,7 +311,7 @@ class Chore(object):
         return self._next_execution_assigned_user
 
 
-class Task(object):
+class Task(DataModel):
     def __init__(self, response: TaskResponse):
         self._id = response.id
         self._name = response.name
@@ -327,7 +331,8 @@ class Task(object):
     def name(self) -> str:
         return self._name
 
-class RecipeItem(object):
+
+class RecipeItem(DataModel):
     def __init__(self, response: RecipeDetailsResponse):
         self._id = response.id
         self._name = response.name
@@ -337,7 +342,7 @@ class RecipeItem(object):
         self._picture_file_name = response.picture_file_name
 
     @property
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     @property
@@ -367,7 +372,8 @@ class RecipeItem(object):
 
             return f"{path}?force_serve_as=picture&best_fit_width={width}"
 
-class MealPlanItem(object):
+
+class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
         self._day = response.day
@@ -376,7 +382,7 @@ class MealPlanItem(object):
         self._note = response.note
 
     @property
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     @property
@@ -403,6 +409,7 @@ class MealPlanItem(object):
         recipe = api_client.get_recipe(self.recipe_id)
         if recipe:
             self._recipe = RecipeItem(recipe)
+
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
