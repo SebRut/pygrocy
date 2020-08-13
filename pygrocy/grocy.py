@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Dict
 
-from base import DataModel
+from .base import DataModel
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
                                GrocyApiClient,
