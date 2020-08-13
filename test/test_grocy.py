@@ -68,16 +68,7 @@ class TestGrocy(TestCase):
                 "product_amount": null,
                 "period_interval": "1"
             },
-            "last_tracked": "2020-03-11 00:50:15",
             "tracked_count": 3,
-            "last_done_by": {
-                "id": "1",
-                "username": "Demo User",
-                "first_name": null,
-                "last_name": null,
-                "row_created_timestamp": "2020-03-16 00:50:13",
-                "display_name": "Demo User"
-            },
             "next_estimated_execution_time": "2999-12-31 23:59:59",
             "next_execution_assigned_user": null
         }"""

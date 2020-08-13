@@ -227,7 +227,8 @@ class Chore(object):
 
         self._last_tracked_time = response.last_tracked
         self._next_estimated_execution_time = response.next_estimated_execution_time
-        self._last_done_by = User(response.last_done_by)
+        if response.last_done_by is not None:
+            self._last_done_by = User(response.last_done_by)
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
             self._next_execution_assigned_user = User(response.next_execution_assigned_user)
