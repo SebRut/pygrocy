@@ -50,7 +50,7 @@ class MealPlanResponse(object):
         self._note = parsed_json.get('note', None)
         self._product_id = parsed_json.get('product_id')
         self._product_amount = parse_float(parsed_json.get('product_amount'), 0)
-        self._product_qu_id = parsed_json.get('product_amount')
+        self._product_qu_id = parsed_json.get('product_qu_id')
         self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
         self._userfields = parsed_json.get('userfields')
 
@@ -89,13 +89,6 @@ class RecipeDetailsResponse(object):
     @property
     def id(self) -> int:
         return self._id
-
-    def picture(self, width: int = 400):
-        if self.picture_file_name:
-            b64name = base64.b64encode(self.picture_file_name.encode('ascii'))
-            path = "files/recipepictures/" + str(b64name, "utf-8")
-
-            return f"{path}?force_serve_as=picture&best_fit_width={width}"
 
     @property
     def name(self) -> str:
