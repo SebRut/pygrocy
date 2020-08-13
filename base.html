@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.4" />
-<title>pygrocy API documentation</title>
-<meta name="description" content="The pygrocy module" />
+<title>pygrocy.base API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin>
@@ -19,49 +19,95 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>pygrocy</code></h1>
+<h1 class="title">Module <code>pygrocy.base</code></h1>
 </header>
 <section id="section-intro">
-<p>The pygrocy module</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-The pygrocy module
-&#34;&#34;&#34;
-from .grocy import Grocy
-from .grocy_api_client import TransactionType
+<pre><code class="python">def get_val(obj):
+    if hasattr(obj, &#39;as_dict&#39;):
+        as_attr = getattr(obj, &#39;as_dict&#39;)
+        return as_attr()
+    return obj
 
-name = &#34;pygrocy&#34;</code></pre>
+
+class DataModel(object):
+    def as_dict(self):
+        return {k: get_val(getattr(self, k)) for k, v in self.__class__.__dict__.items() if isinstance(v, property)}</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="pygrocy.base" href="base.html">pygrocy.base</a></code></dt>
+<dt id="pygrocy.base.get_val"><code class="name flex">
+<span>def <span class="ident">get_val</span></span>(<span>obj)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="pygrocy.grocy" href="grocy.html">pygrocy.grocy</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="pygrocy.grocy_api_client" href="grocy_api_client.html">pygrocy.grocy_api_client</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="pygrocy.utils" href="utils.html">pygrocy.utils</a></code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_val(obj):
+    if hasattr(obj, &#39;as_dict&#39;):
+        as_attr = getattr(obj, &#39;as_dict&#39;)
+        return as_attr()
+    return obj</code></pre>
+</details>
 </dd>
 </dl>
 </section>
 <section>
-</section>
-<section>
-</section>
-<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygrocy.base.DataModel"><code class="flex name class">
+<span>class <span class="ident">DataModel</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataModel(object):
+    def as_dict(self):
+        return {k: get_val(getattr(self, k)) for k, v in self.__class__.__dict__.items() if isinstance(v, property)}</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygrocy.grocy.Chore" href="grocy.html#pygrocy.grocy.Chore">Chore</a></li>
+<li><a title="pygrocy.grocy.Group" href="grocy.html#pygrocy.grocy.Group">Group</a></li>
+<li><a title="pygrocy.grocy.MealPlanItem" href="grocy.html#pygrocy.grocy.MealPlanItem">MealPlanItem</a></li>
+<li><a title="pygrocy.grocy.Product" href="grocy.html#pygrocy.grocy.Product">Product</a></li>
+<li><a title="pygrocy.grocy.RecipeItem" href="grocy.html#pygrocy.grocy.RecipeItem">RecipeItem</a></li>
+<li><a title="pygrocy.grocy.ShoppingListProduct" href="grocy.html#pygrocy.grocy.ShoppingListProduct">ShoppingListProduct</a></li>
+<li><a title="pygrocy.grocy.Task" href="grocy.html#pygrocy.grocy.Task">Task</a></li>
+<li><a title="pygrocy.grocy.User" href="grocy.html#pygrocy.grocy.User">User</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.base.DataModel.as_dict"><code class="name flex">
+<span>def <span class="ident">as_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_dict(self):
+    return {k: get_val(getattr(self, k)) for k, v in self.__class__.__dict__.items() if isinstance(v, property)}</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -70,12 +116,24 @@ name = &#34;pygrocy&#34;</code></pre>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="pygrocy.base" href="base.html">pygrocy.base</a></code></li>
-<li><code><a title="pygrocy.grocy" href="grocy.html">pygrocy.grocy</a></code></li>
-<li><code><a title="pygrocy.grocy_api_client" href="grocy_api_client.html">pygrocy.grocy_api_client</a></code></li>
-<li><code><a title="pygrocy.utils" href="utils.html">pygrocy.utils</a></code></li>
+<li><code><a title="pygrocy" href="index.html">pygrocy</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pygrocy.base.get_val" href="#pygrocy.base.get_val">get_val</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygrocy.base.DataModel" href="#pygrocy.base.DataModel">DataModel</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.base.DataModel.as_dict" href="#pygrocy.base.DataModel.as_dict">as_dict</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

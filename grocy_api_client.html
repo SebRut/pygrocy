@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.8.1" />
+<meta name="generator" content="pdoc 0.8.4" />
 <title>pygrocy.grocy_api_client API documentation</title>
 <meta name="description" content="" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -66,6 +68,75 @@ class ShoppingListItem(object):
     def amount(self) -&gt; float:
         return self._amount
 
+class MealPlanResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._day = parse_date(parsed_json.get(&#39;day&#39;))
+        self._type = parsed_json.get(&#39;type&#39;)
+        self._recipe_id = parse_int(parsed_json.get(&#39;recipe_id&#39;))
+        self._recipe_servings = parse_int(parsed_json.get(&#39;recipe_servings&#39;))
+        self._note = parsed_json.get(&#39;note&#39;, None)
+        self._product_id = parsed_json.get(&#39;product_id&#39;)
+        self._product_amount = parse_float(parsed_json.get(&#39;product_amount&#39;), 0)
+        self._product_qu_id = parsed_json.get(&#39;product_qu_id&#39;)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        self._userfields = parsed_json.get(&#39;userfields&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def day(self) -&gt; datetime:
+        return self._day
+
+    @property
+    def recipe_id(self) -&gt; int:
+        return self._recipe_id
+
+    @property
+    def recipe_servings(self) -&gt; int:
+        return self._recipe_servings
+
+    @property
+    def note(self) -&gt; str:
+        return self._note
+
+
+class RecipeDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._name = parsed_json.get(&#39;name&#39;)
+        self._description = parsed_json.get(&#39;description&#39;)
+        self._base_servings = parse_int(parsed_json.get(&#39;base_servings&#39;))
+        self._desired_servings = parse_int(parsed_json.get(&#39;desired_servings&#39;))
+        self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        self._userfields = parsed_json.get(&#39;userfields&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def base_servings(self) -&gt; int:
+        return self._base_servings
+
+    @property
+    def desired_servings(self) -&gt; int:
+        return self._desired_servings
+
+    @property
+    def picture_file_name(self) -&gt; str:
+        return self._picture_file_name
 
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
@@ -562,7 +633,16 @@ class GrocyApiClient(object):
 
     def complete_task(self, task_id: int):
         url = f&#34;tasks/{task_id}/complete&#34;
-        self._do_post_request(url)</code></pre>
+        self._do_post_request(url)
+
+    def get_meal_plan(self) -&gt; List[MealPlanResponse]:
+        parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
+        return [MealPlanResponse(data) for data in parsed_json]
+
+    def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
+        parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
+        if parsed_json:
+            return RecipeDetailsResponse(parsed_json)</code></pre>
 </details>
 </section>
 <section>
@@ -1158,7 +1238,16 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 
     def complete_task(self, task_id: int):
         url = f&#34;tasks/{task_id}/complete&#34;
-        self._do_post_request(url)</code></pre>
+        self._do_post_request(url)
+
+    def get_meal_plan(self) -&gt; List[MealPlanResponse]:
+        parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
+        return [MealPlanResponse(data) for data in parsed_json]
+
+    def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
+        parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
+        if parsed_json:
+            return RecipeDetailsResponse(parsed_json)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1274,7 +1363,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 5, 25, 12, 59, 53, 797548))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 13, 19, 23, 51, 162374))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1299,7 +1388,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
-<span>def <span class="ident">get_chore</span></span>(<span>self, chore_id: int) -> <a title="pygrocy.grocy_api_client.ChoreDetailsResponse" href="#pygrocy.grocy_api_client.ChoreDetailsResponse">ChoreDetailsResponse</a></span>
+<span>def <span class="ident">get_chore</span></span>(<span>self, chore_id: int) ‑> <a title="pygrocy.grocy_api_client.ChoreDetailsResponse" href="#pygrocy.grocy_api_client.ChoreDetailsResponse">ChoreDetailsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1315,7 +1404,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chores"><code class="name flex">
-<span>def <span class="ident">get_chores</span></span>(<span>self) -> List[<a title="pygrocy.grocy_api_client.CurrentChoreResponse" href="#pygrocy.grocy_api_client.CurrentChoreResponse">CurrentChoreResponse</a>]</span>
+<span>def <span class="ident">get_chores</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.CurrentChoreResponse" href="#pygrocy.grocy_api_client.CurrentChoreResponse">CurrentChoreResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1343,8 +1432,22 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
     return last_change_timestamp</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan"><code class="name flex">
+<span>def <span class="ident">get_meal_plan</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.MealPlanResponse" href="#pygrocy.grocy_api_client.MealPlanResponse">MealPlanResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_meal_plan(self) -&gt; List[MealPlanResponse]:
+    parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
+    return [MealPlanResponse(data) for data in parsed_json]</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product"><code class="name flex">
-<span>def <span class="ident">get_product</span></span>(<span>self, product_id) -> <a title="pygrocy.grocy_api_client.ProductDetailsResponse" href="#pygrocy.grocy_api_client.ProductDetailsResponse">ProductDetailsResponse</a></span>
+<span>def <span class="ident">get_product</span></span>(<span>self, product_id) ‑> <a title="pygrocy.grocy_api_client.ProductDetailsResponse" href="#pygrocy.grocy_api_client.ProductDetailsResponse">ProductDetailsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1360,7 +1463,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups"><code class="name flex">
-<span>def <span class="ident">get_product_groups</span></span>(<span>self) -> List[<a title="pygrocy.grocy_api_client.LocationData" href="#pygrocy.grocy_api_client.LocationData">LocationData</a>]</span>
+<span>def <span class="ident">get_product_groups</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.LocationData" href="#pygrocy.grocy_api_client.LocationData">LocationData</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1373,8 +1476,23 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
     return [LocationData(response) for response in parsed_json]</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_recipe"><code class="name flex">
+<span>def <span class="ident">get_recipe</span></span>(<span>self, object_id: int) ‑> <a title="pygrocy.grocy_api_client.RecipeDetailsResponse" href="#pygrocy.grocy_api_client.RecipeDetailsResponse">RecipeDetailsResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
+    parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
+    if parsed_json:
+        return RecipeDetailsResponse(parsed_json)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list"><code class="name flex">
-<span>def <span class="ident">get_shopping_list</span></span>(<span>self) -> List[<a title="pygrocy.grocy_api_client.ShoppingListItem" href="#pygrocy.grocy_api_client.ShoppingListItem">ShoppingListItem</a>]</span>
+<span>def <span class="ident">get_shopping_list</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.ShoppingListItem" href="#pygrocy.grocy_api_client.ShoppingListItem">ShoppingListItem</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1388,7 +1506,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_stock"><code class="name flex">
-<span>def <span class="ident">get_stock</span></span>(<span>self) -> List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</span>
+<span>def <span class="ident">get_stock</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1402,7 +1520,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_tasks"><code class="name flex">
-<span>def <span class="ident">get_tasks</span></span>(<span>self) -> List[<a title="pygrocy.grocy_api_client.TaskResponse" href="#pygrocy.grocy_api_client.TaskResponse">TaskResponse</a>]</span>
+<span>def <span class="ident">get_tasks</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.TaskResponse" href="#pygrocy.grocy_api_client.TaskResponse">TaskResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1430,7 +1548,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock"><code class="name flex">
-<span>def <span class="ident">get_volatile_stock</span></span>(<span>self) -> <a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse">CurrentVolatilStockResponse</a></span>
+<span>def <span class="ident">get_volatile_stock</span></span>(<span>self) ‑> <a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse">CurrentVolatilStockResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1575,6 +1693,114 @@ def id(self) -&gt; int:
 <pre><code class="python">@property
 def name(self) -&gt; str:
     return self._name</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse"><code class="flex name class">
+<span>class <span class="ident">MealPlanResponse</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MealPlanResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._day = parse_date(parsed_json.get(&#39;day&#39;))
+        self._type = parsed_json.get(&#39;type&#39;)
+        self._recipe_id = parse_int(parsed_json.get(&#39;recipe_id&#39;))
+        self._recipe_servings = parse_int(parsed_json.get(&#39;recipe_servings&#39;))
+        self._note = parsed_json.get(&#39;note&#39;, None)
+        self._product_id = parsed_json.get(&#39;product_id&#39;)
+        self._product_amount = parse_float(parsed_json.get(&#39;product_amount&#39;), 0)
+        self._product_qu_id = parsed_json.get(&#39;product_qu_id&#39;)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        self._userfields = parsed_json.get(&#39;userfields&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def day(self) -&gt; datetime:
+        return self._day
+
+    @property
+    def recipe_id(self) -&gt; int:
+        return self._recipe_id
+
+    @property
+    def recipe_servings(self) -&gt; int:
+        return self._recipe_servings
+
+    @property
+    def note(self) -&gt; str:
+        return self._note</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.day"><code class="name">var <span class="ident">day</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def day(self) -&gt; datetime:
+    return self._day</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.note"><code class="name">var <span class="ident">note</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def note(self) -&gt; str:
+    return self._note</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_id"><code class="name">var <span class="ident">recipe_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def recipe_id(self) -&gt; int:
+    return self._recipe_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_servings"><code class="name">var <span class="ident">recipe_servings</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def recipe_servings(self) -&gt; int:
+    return self._recipe_servings</code></pre>
 </details>
 </dd>
 </dl>
@@ -1925,6 +2151,127 @@ def stock_amount_opened(self) -&gt; int:
         self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse"><code class="flex name class">
+<span>class <span class="ident">RecipeDetailsResponse</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RecipeDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get(&#39;id&#39;))
+        self._name = parsed_json.get(&#39;name&#39;)
+        self._description = parsed_json.get(&#39;description&#39;)
+        self._base_servings = parse_int(parsed_json.get(&#39;base_servings&#39;))
+        self._desired_servings = parse_int(parsed_json.get(&#39;desired_servings&#39;))
+        self._picture_file_name = parsed_json.get(&#39;picture_file_name&#39;)
+        self._row_created_timestamp = parse_date(parsed_json.get(&#39;row_created_timestamp&#39;))
+        self._userfields = parsed_json.get(&#39;userfields&#39;)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def base_servings(self) -&gt; int:
+        return self._base_servings
+
+    @property
+    def desired_servings(self) -&gt; int:
+        return self._desired_servings
+
+    @property
+    def picture_file_name(self) -&gt; str:
+        return self._picture_file_name</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings"><code class="name">var <span class="ident">base_servings</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def base_servings(self) -&gt; int:
+    return self._base_servings</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings"><code class="name">var <span class="ident">desired_servings</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def desired_servings(self) -&gt; int:
+    return self._desired_servings</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name"><code class="name">var <span class="ident">picture_file_name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def picture_file_name(self) -&gt; str:
+    return self._picture_file_name</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy_api_client.ShoppingListItem"><code class="flex name class">
 <span>class <span class="ident">ShoppingListItem</span></span>
 <span>(</span><span>parsed_json)</span>
@@ -2248,8 +2595,10 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed" href="#pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed">get_last_db_changed</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan" href="#pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan">get_meal_plan</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product_groups">get_product_groups</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_recipe" href="#pygrocy.grocy_api_client.GrocyApiClient.get_recipe">get_recipe</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list">get_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_tasks" href="#pygrocy.grocy_api_client.GrocyApiClient.get_tasks">get_tasks</a></code></li>
@@ -2267,6 +2616,16 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.LocationData.description" href="#pygrocy.grocy_api_client.LocationData.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.id" href="#pygrocy.grocy_api_client.LocationData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.name" href="#pygrocy.grocy_api_client.LocationData.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.MealPlanResponse" href="#pygrocy.grocy_api_client.MealPlanResponse">MealPlanResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.day" href="#pygrocy.grocy_api_client.MealPlanResponse.day">day</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.id" href="#pygrocy.grocy_api_client.MealPlanResponse.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.note" href="#pygrocy.grocy_api_client.MealPlanResponse.note">note</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.recipe_id" href="#pygrocy.grocy_api_client.MealPlanResponse.recipe_id">recipe_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.recipe_servings" href="#pygrocy.grocy_api_client.MealPlanResponse.recipe_servings">recipe_servings</a></code></li>
 </ul>
 </li>
 <li>
@@ -2301,6 +2660,17 @@ def username(self) -&gt; str:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.QuantityUnitData" href="#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse" href="#pygrocy.grocy_api_client.RecipeDetailsResponse">RecipeDetailsResponse</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings">base_servings</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.description" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings">desired_servings</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.id" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.name" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name">picture_file_name</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ShoppingListItem" href="#pygrocy.grocy_api_client.ShoppingListItem">ShoppingListItem</a></code></h4>
@@ -2339,9 +2709,7 @@ def username(self) -&gt; str:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.4</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>
