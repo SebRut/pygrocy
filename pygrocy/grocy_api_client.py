@@ -90,6 +90,13 @@ class RecipeDetailsResponse(object):
     def id(self) -> int:
         return self._id
 
+    def picture(self, width: int = 400):
+        if self.picture_file_name:
+            b64name = base64.b64encode(self.picture_file_name.encode('ascii'))
+            path = "files/recipepictures/" + str(b64name, "utf-8")
+
+            return f"{path}?force_serve_as=picture&best_fit_width={width}"
+
     @property
     def name(self) -> str:
         return self._name

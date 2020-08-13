@@ -481,3 +481,6 @@ class Grocy(object):
             for item in meal_plan:
                 item.get_details(self._api_client)
         return meal_plan
+
+    def recipe(self, recipe_id: int) -> RecipeDetailsResponse:
+        return self._api_client.get_recipe(recipe_id)
