@@ -40,6 +40,75 @@ class ShoppingListItem(object):
     def amount(self) -> float:
         return self._amount
 
+class MealPlanResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get('id'))
+        self._day = parse_date(parsed_json.get('day'))
+        self._type = parsed_json.get('type')
+        self._recipe_id = parse_int(parsed_json.get('recipe_id'))
+        self._recipe_servings = parse_int(parsed_json.get('recipe_servings'))
+        self._note = parsed_json.get('note', None)
+        self._product_id = parsed_json.get('product_id')
+        self._product_amount = parse_float(parsed_json.get('product_amount'), 0)
+        self._product_qu_id = parsed_json.get('product_qu_id')
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
+        self._userfields = parsed_json.get('userfields')
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def day(self) -> datetime:
+        return self._day
+
+    @property
+    def recipe_id(self) -> int:
+        return self._recipe_id
+
+    @property
+    def recipe_servings(self) -> int:
+        return self._recipe_servings
+
+    @property
+    def note(self) -> str:
+        return self._note
+
+
+class RecipeDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self._id = parse_int(parsed_json.get('id'))
+        self._name = parsed_json.get('name')
+        self._description = parsed_json.get('description')
+        self._base_servings = parse_int(parsed_json.get('base_servings'))
+        self._desired_servings = parse_int(parsed_json.get('desired_servings'))
+        self._picture_file_name = parsed_json.get('picture_file_name')
+        self._row_created_timestamp = parse_date(parsed_json.get('row_created_timestamp'))
+        self._userfields = parsed_json.get('userfields')
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def base_servings(self) -> int:
+        return self._base_servings
+
+    @property
+    def desired_servings(self) -> int:
+        return self._desired_servings
+
+    @property
+    def picture_file_name(self) -> str:
+        return self._picture_file_name
 
 class QuantityUnitData(object):
     def __init__(self, parsed_json):
@@ -537,3 +606,12 @@ class GrocyApiClient(object):
     def complete_task(self, task_id: int):
         url = f"tasks/{task_id}/complete"
         self._do_post_request(url)
+
+    def get_meal_plan(self) -> List[MealPlanResponse]:
+        parsed_json = self._do_get_request("objects/meal_plan")
+        return [MealPlanResponse(data) for data in parsed_json]
+
+    def get_recipe(self, object_id: int) -> RecipeDetailsResponse:
+        parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
+        if parsed_json:
+            return RecipeDetailsResponse(parsed_json)

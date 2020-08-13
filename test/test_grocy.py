@@ -393,3 +393,48 @@ class TestGrocy(TestCase):
     def test_execute_chore_error(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
         self.assertRaises(HTTPError, self.grocy.execute_chore, 1, 1, self.date_test)
+
+    @responses.activate
+    def test_get_meal_plan(self):
+        resp_json = json.loads("""[
+              {
+                "id": "1",
+                "day": "2020-08-10",
+                "type": "recipe",
+                "recipe_id": "1",
+                "recipe_servings": "1",
+                "note": null,
+                "product_id": null,
+                "product_amount": "0.0",
+                "product_qu_id": null,
+                "row_created_timestamp": "2020-08-12 19:59:30",
+                "userfields": null
+              }
+          ]""")
+        responses.add(responses.GET, f"{self.base_url}/objects/meal_plan", json=resp_json, status=200)
+        meal_plan = self.grocy.meal_plan()
+        self.assertEqual(len(meal_plan), 1)
+        self.assertEqual(meal_plan[0].id, 1)
+        self.assertEqual(meal_plan[0].recipe_id, 1)
+
+    @responses.activate
+    def test_get_recipe(self):
+        resp_json = json.loads("""{
+          "id": "1",
+          "name": "Pizza",
+          "description": "<p>Mix everything</p>",
+          "row_created_timestamp": "2020-08-12 11:37:34",
+          "picture_file_name": "51si0q0wsiq5imo4f8wbIMG_5709.jpeg",
+          "base_servings": "4",
+          "desired_servings": "4",
+          "not_check_shoppinglist": "0",
+          "type": "normal",
+          "product_id": "",
+          "userfields": null
+        }""")
+        responses.add(responses.GET, f"{self.base_url}/objects/recipes/1", json=resp_json, status=200)
+        recipe = self.grocy.recipe(1)
+        self.assertEqual(recipe.id, 1)
+        self.assertEqual(recipe.name, "Pizza")
+        self.assertEqual(recipe.base_servings, 4)
+        self.assertIsInstance(recipe.get_picture_url_path(400), str)

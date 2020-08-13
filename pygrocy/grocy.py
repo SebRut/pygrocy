@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 from enum import Enum
 from typing import List, Dict
@@ -7,6 +8,8 @@ from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                GrocyApiClient,
                                LocationData, MissingProductResponse,
                                ProductDetailsResponse,
+                               MealPlanResponse,
+                               RecipeDetailsResponse,
                                ShoppingListItem, TransactionType, UserDto, TaskResponse)
 
 
@@ -324,6 +327,82 @@ class Task(object):
     def name(self) -> str:
         return self._name
 
+class RecipeItem(object):
+    def __init__(self, response: RecipeDetailsResponse):
+        self._id = response.id
+        self._name = response.name
+        self._description = response.description
+        self._base_servings = response.base_servings
+        self._desired_servings = response.desired_servings
+        self._picture_file_name = response.picture_file_name
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def base_servings(self) -> int:
+        return self._base_servings
+
+    @property
+    def desired_servings(self) -> int:
+        return self._desired_servings
+
+    @property
+    def picture_file_name(self) -> str:
+        return self._picture_file_name
+
+    def get_picture_url_path(self, width: int = 400):
+        if self.picture_file_name:
+            b64name = base64.b64encode(self.picture_file_name.encode('ascii'))
+            path = "files/recipepictures/" + str(b64name, "utf-8")
+
+            return f"{path}?force_serve_as=picture&best_fit_width={width}"
+
+class MealPlanItem(object):
+    def __init__(self, response: MealPlanResponse):
+        self._id = response.id
+        self._day = response.day
+        self._recipe_id = response.recipe_id
+        self._recipe_servings = response.recipe_servings
+        self._note = response.note
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
+    def day(self) -> datetime:
+        return self._day
+
+    @property
+    def recipe_id(self) -> int:
+        return self._recipe_id
+
+    @property
+    def recipe_servings(self) -> int:
+        return self._recipe_servings
+
+    @property
+    def note(self) -> str:
+        return self._note
+
+    @property
+    def recipe(self) -> RecipeItem:
+        return self._recipe
+
+    def get_details(self, api_client: GrocyApiClient):
+        recipe = api_client.get_recipe(self.recipe_id)
+        if recipe:
+            self._recipe = RecipeItem(recipe)
 
 class Grocy(object):
     def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
@@ -434,3 +513,17 @@ class Grocy(object):
 
     def complete_task(self, task_id):
         return self._api_client.complete_task(task_id)
+
+    def meal_plan(self, get_details: bool = False) -> List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan()
+        meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
+
+        if get_details:
+            for item in meal_plan:
+                item.get_details(self._api_client)
+        return meal_plan
+
+    def recipe(self, recipe_id: int) -> RecipeItem:
+        recipe = self._api_client.get_recipe(recipe_id)
+        if recipe:
+            return RecipeItem(recipe)
