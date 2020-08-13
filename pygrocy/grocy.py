@@ -1,16 +1,20 @@
+import base64
 from datetime import datetime
 from enum import Enum
 from typing import List, Dict
 
+from .base import DataModel
 from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
                                CurrentChoreResponse, CurrentStockResponse,
                                GrocyApiClient,
                                LocationData, MissingProductResponse,
                                ProductDetailsResponse,
+                               MealPlanResponse,
+                               RecipeDetailsResponse,
                                ShoppingListItem, TransactionType, UserDto, TaskResponse)
 
 
-class Product(object):
+class Product(DataModel):
     def __init__(self, response):
         if isinstance(response, CurrentStockResponse):
             self._init_from_CurrentStockResponse(response)
@@ -87,7 +91,7 @@ class Product(object):
         return self._is_partly_in_stock
 
 
-class Group(object):
+class Group(DataModel):
     def __init__(self, raw_product_group: LocationData):
         self._id = raw_product_group.id
         self._name = raw_product_group.name
@@ -106,7 +110,7 @@ class Group(object):
         return self._description
 
 
-class ShoppingListProduct(object):
+class ShoppingListProduct(DataModel):
     def __init__(self, raw_shopping_list: ShoppingListItem):
         self._id = raw_shopping_list.id
         self._product_id = raw_shopping_list.product_id
@@ -139,7 +143,7 @@ class ShoppingListProduct(object):
         return self._product
 
 
-class User(object):
+class User(DataModel):
     def __init__(self, user_dto: UserDto):
         self._id = user_dto.id
         self._username = user_dto.username
@@ -168,15 +172,15 @@ class User(object):
         return self._display_name
 
 
-class Chore(object):
-    class PeriodType(Enum):
+class Chore(DataModel):
+    class PeriodType(str, Enum):
         MANUALLY = 'manually'
         DYNAMIC_REGULAR = 'dynamic-regular'
         DAILY = 'daily'
         WEEKLY = 'weekly'
         MONTHLY = 'monthly'
 
-    class AssignmentType(Enum):
+    class AssignmentType(str, Enum):
         NO_ASSIGNMENT = 'no-assignment'
         WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
         RANDOM = 'random'
@@ -224,7 +228,10 @@ class Chore(object):
 
         self._last_tracked_time = response.last_tracked
         self._next_estimated_execution_time = response.next_estimated_execution_time
-        self._last_done_by = User(response.last_done_by)
+        if response.last_done_by is not None:
+            self._last_done_by = User(response.last_done_by)
+        else:
+            self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
             self._next_execution_assigned_user = User(response.next_execution_assigned_user)
@@ -304,7 +311,7 @@ class Chore(object):
         return self._next_execution_assigned_user
 
 
-class Task(object):
+class Task(DataModel):
     def __init__(self, response: TaskResponse):
         self._id = response.id
         self._name = response.name
@@ -323,6 +330,85 @@ class Task(object):
     @property
     def name(self) -> str:
         return self._name
+
+
+class RecipeItem(DataModel):
+    def __init__(self, response: RecipeDetailsResponse):
+        self._id = response.id
+        self._name = response.name
+        self._description = response.description
+        self._base_servings = response.base_servings
+        self._desired_servings = response.desired_servings
+        self._picture_file_name = response.picture_file_name
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def base_servings(self) -> int:
+        return self._base_servings
+
+    @property
+    def desired_servings(self) -> int:
+        return self._desired_servings
+
+    @property
+    def picture_file_name(self) -> str:
+        return self._picture_file_name
+
+    def get_picture_url_path(self, width: int = 400):
+        if self.picture_file_name:
+            b64name = base64.b64encode(self.picture_file_name.encode('ascii'))
+            path = "files/recipepictures/" + str(b64name, "utf-8")
+
+            return f"{path}?force_serve_as=picture&best_fit_width={width}"
+
+
+class MealPlanItem(DataModel):
+    def __init__(self, response: MealPlanResponse):
+        self._id = response.id
+        self._day = response.day
+        self._recipe_id = response.recipe_id
+        self._recipe_servings = response.recipe_servings
+        self._note = response.note
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def day(self) -> datetime:
+        return self._day
+
+    @property
+    def recipe_id(self) -> int:
+        return self._recipe_id
+
+    @property
+    def recipe_servings(self) -> int:
+        return self._recipe_servings
+
+    @property
+    def note(self) -> str:
+        return self._note
+
+    @property
+    def recipe(self) -> RecipeItem:
+        return self._recipe
+
+    def get_details(self, api_client: GrocyApiClient):
+        recipe = api_client.get_recipe(self.recipe_id)
+        if recipe:
+            self._recipe = RecipeItem(recipe)
 
 
 class Grocy(object):
@@ -434,3 +520,17 @@ class Grocy(object):
 
     def complete_task(self, task_id):
         return self._api_client.complete_task(task_id)
+
+    def meal_plan(self, get_details: bool = False) -> List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan()
+        meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
+
+        if get_details:
+            for item in meal_plan:
+                item.get_details(self._api_client)
+        return meal_plan
+
+    def recipe(self, recipe_id: int) -> RecipeItem:
+        recipe = self._api_client.get_recipe(recipe_id)
+        if recipe:
+            return RecipeItem(recipe)
