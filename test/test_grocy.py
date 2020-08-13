@@ -393,3 +393,26 @@ class TestGrocy(TestCase):
     def test_execute_chore_error(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
         self.assertRaises(HTTPError, self.grocy.execute_chore, 1, 1, self.date_test)
+
+    @responses.activate
+    def test_get_meal_plan(self):
+        resp_json = json.loads("""[
+              {
+                "id": "1",
+                "day": "2020-08-10",
+                "type": "recipe",
+                "recipe_id": "1",
+                "recipe_servings": "1",
+                "note": null,
+                "product_id": null,
+                "product_amount": "0.0",
+                "product_qu_id": null,
+                "row_created_timestamp": "2020-08-12 19:59:30",
+                "userfields": null
+              }
+          ]""")
+        responses.add(responses.GET, f"{self.base_url}/objects/meal_plan", json=resp_json, status=200)
+        meal_plan = self.grocy.meal_plan()
+        self.assertEqual(len(meal_plan), 1)
+        self.assertEqual(meal_plan[0].id, 1)
+        self.assertEqual(meal_plan[0].recipe_id, 1)
