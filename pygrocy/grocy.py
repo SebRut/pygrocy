@@ -172,14 +172,14 @@ class User(object):
 
 
 class Chore(object):
-    class PeriodType(Enum):
+    class PeriodType(str, Enum):
         MANUALLY = 'manually'
         DYNAMIC_REGULAR = 'dynamic-regular'
         DAILY = 'daily'
         WEEKLY = 'weekly'
         MONTHLY = 'monthly'
 
-    class AssignmentType(Enum):
+    class AssignmentType(str, Enum):
         NO_ASSIGNMENT = 'no-assignment'
         WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
         RANDOM = 'random'
@@ -229,6 +229,8 @@ class Chore(object):
         self._next_estimated_execution_time = response.next_estimated_execution_time
         if response.last_done_by is not None:
             self._last_done_by = User(response.last_done_by)
+        else:
+            self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
             self._next_execution_assigned_user = User(response.next_execution_assigned_user)
