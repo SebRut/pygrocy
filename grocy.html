@@ -355,6 +355,7 @@ class Chore(DataModel):
 
 class Task(DataModel):
     def __init__(self, response: TaskResponse):
+
         self._id = response.id
         self._name = response.name
         self._description = response.description
@@ -372,6 +373,34 @@ class Task(DataModel):
     @property
     def name(self) -&gt; str:
         return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def due_date(self) -&gt; datetime:
+        return self._due_date
+
+    @property
+    def done(self) -&gt; int:
+        return self._done
+
+    @property
+    def done_timestamp(self) -&gt; datetime:
+        return self._done_timestamp
+
+    @property
+    def category_id(self) -&gt; int:
+        return self._category_id
+
+    @property
+    def assigned_to_user_id(self) -&gt; int:
+        return self._assigned_to_user_id
+
+    @property
+    def userfields(self) -&gt; Dict[str, str]:
+        return self._userfields
 
 
 class RecipeItem(DataModel):
@@ -590,8 +619,8 @@ class Grocy(object):
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
 
-    def complete_task(self, task_id):
-        return self._api_client.complete_task(task_id)
+    def complete_task(self, task_id, done_time):
+        return self._api_client.complete_task(task_id, done_time)
 
     def meal_plan(self, get_details: bool = False) -&gt; List[MealPlanItem]:
         raw_meal_plan = self._api_client.get_meal_plan()
@@ -1173,8 +1202,8 @@ def userfields(self) -&gt; Dict[str, str]:
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
 
-    def complete_task(self, task_id):
-        return self._api_client.complete_task(task_id)
+    def complete_task(self, task_id, done_time):
+        return self._api_client.complete_task(task_id, done_time)
 
     def meal_plan(self, get_details: bool = False) -&gt; List[MealPlanItem]:
         raw_meal_plan = self._api_client.get_meal_plan()
@@ -1305,7 +1334,7 @@ def userfields(self) -&gt; Dict[str, str]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id)</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1313,8 +1342,8 @@ def userfields(self) -&gt; Dict[str, str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def complete_task(self, task_id):
-    return self._api_client.complete_task(task_id)</code></pre>
+<pre><code class="python">def complete_task(self, task_id, done_time):
+    return self._api_client.complete_task(task_id, done_time)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.consume_product"><code class="name flex">
@@ -1339,7 +1368,7 @@ def userfields(self) -&gt; Dict[str, str]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 9, 55, 10, 345630))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 15, 53, 30, 361666))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2344,6 +2373,7 @@ def product_id(self) -&gt; int:
 </summary>
 <pre><code class="python">class Task(DataModel):
     def __init__(self, response: TaskResponse):
+
         self._id = response.id
         self._name = response.name
         self._description = response.description
@@ -2360,7 +2390,35 @@ def product_id(self) -&gt; int:
 
     @property
     def name(self) -&gt; str:
-        return self._name</code></pre>
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def due_date(self) -&gt; datetime:
+        return self._due_date
+
+    @property
+    def done(self) -&gt; int:
+        return self._done
+
+    @property
+    def done_timestamp(self) -&gt; datetime:
+        return self._done_timestamp
+
+    @property
+    def category_id(self) -&gt; int:
+        return self._category_id
+
+    @property
+    def assigned_to_user_id(self) -&gt; int:
+        return self._assigned_to_user_id
+
+    @property
+    def userfields(self) -&gt; Dict[str, str]:
+        return self._userfields</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2368,6 +2426,78 @@ def product_id(self) -&gt; int:
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.grocy.Task.assigned_to_user_id"><code class="name">var <span class="ident">assigned_to_user_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def assigned_to_user_id(self) -&gt; int:
+    return self._assigned_to_user_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.category_id"><code class="name">var <span class="ident">category_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def category_id(self) -&gt; int:
+    return self._category_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.done"><code class="name">var <span class="ident">done</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def done(self) -&gt; int:
+    return self._done</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.done_timestamp"><code class="name">var <span class="ident">done_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def done_timestamp(self) -&gt; datetime:
+    return self._done_timestamp</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.due_date"><code class="name">var <span class="ident">due_date</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def due_date(self) -&gt; datetime:
+    return self._due_date</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Task.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
@@ -2390,6 +2520,18 @@ def id(self) -&gt; str:
 <pre><code class="python">@property
 def name(self) -&gt; str:
     return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Task.userfields"><code class="name">var <span class="ident">userfields</span> : Dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def userfields(self) -&gt; Dict[str, str]:
+    return self._userfields</code></pre>
 </details>
 </dd>
 </dl>
@@ -2646,9 +2788,16 @@ def username(self) -&gt; str:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy.Task" href="#pygrocy.grocy.Task">Task</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="pygrocy.grocy.Task.assigned_to_user_id" href="#pygrocy.grocy.Task.assigned_to_user_id">assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.category_id" href="#pygrocy.grocy.Task.category_id">category_id</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.description" href="#pygrocy.grocy.Task.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.done" href="#pygrocy.grocy.Task.done">done</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.done_timestamp" href="#pygrocy.grocy.Task.done_timestamp">done_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.due_date" href="#pygrocy.grocy.Task.due_date">due_date</a></code></li>
 <li><code><a title="pygrocy.grocy.Task.id" href="#pygrocy.grocy.Task.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy.Task.name" href="#pygrocy.grocy.Task.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy.Task.userfields" href="#pygrocy.grocy.Task.userfields">userfields</a></code></li>
 </ul>
 </li>
 <li>
