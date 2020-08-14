@@ -607,3 +607,6 @@ class Grocy(object):
         recipe = self._api_client.get_recipe(recipe_id)
         if recipe:
             return RecipeItem(recipe)
+
+    def add_generic(self, entity_type, data):
+        return self._api_client.add_generic(entity_type, data)
