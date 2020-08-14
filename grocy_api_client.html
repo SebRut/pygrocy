@@ -699,7 +699,10 @@ class GrocyApiClient(object):
     def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
         parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
         if parsed_json:
-            return RecipeDetailsResponse(parsed_json)</code></pre>
+            return RecipeDetailsResponse(parsed_json)
+
+    def add_generic(self, entity_type: str, data: object):
+        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)</code></pre>
 </details>
 </section>
 <section>
@@ -1333,10 +1336,26 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
     def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
         parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
         if parsed_json:
-            return RecipeDetailsResponse(parsed_json)</code></pre>
+            return RecipeDetailsResponse(parsed_json)
+
+    def add_generic(self, entity_type: str, data: object):
+        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.add_generic"><code class="name flex">
+<span>def <span class="ident">add_generic</span></span>(<span>self, entity_type: str, data: object)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_generic(self, entity_type: str, data: object):
+    self._do_post_request(f&#34;objects/{entity_type}&#34;, data)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list"><code class="name flex">
 <span>def <span class="ident">add_missing_product_to_shopping_list</span></span>(<span>self, shopping_list_id: int = None)</span>
 </code></dt>
@@ -1419,7 +1438,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 8, 14, 15, 53, 30, 360709))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 8, 14, 19, 57, 8, 780108))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1464,7 +1483,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 15, 53, 30, 360350))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 19, 57, 8, 779751))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2715,6 +2734,7 @@ def username(self) -&gt; str:
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.GrocyApiClient" href="#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_generic" href="#pygrocy.grocy_api_client.GrocyApiClient.add_generic">add_generic</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list">add_missing_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product">add_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list">add_product_to_shopping_list</a></code></li>
