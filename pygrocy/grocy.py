@@ -591,8 +591,8 @@ class Grocy(object):
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
 
-    def complete_task(self, task_id):
-        return self._api_client.complete_task(task_id)
+    def complete_task(self, task_id, done_time):
+        return self._api_client.complete_task(task_id, done_time)
 
     def meal_plan(self, get_details: bool = False) -> List[MealPlanItem]:
         raw_meal_plan = self._api_client.get_meal_plan()
