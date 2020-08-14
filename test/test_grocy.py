@@ -21,6 +21,7 @@ class TestGrocy(TestCase):
         )
         self.base_url = f"{CONST_BASE_URL}:{CONST_PORT}/api"
         self.date_test = datetime.strptime("2019-05-04 11:31:04", "%Y-%m-%d %H:%M:%S")
+        self.add_generic_data = {"name": "This is a task"}
 
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
@@ -430,6 +431,22 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(
             HTTPError, self.grocy.add_product, 1, 1.3, 2.44, self.date_test
+        )
+
+    @responses.activate
+    def test_add_generic_valid(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/objects/tasks", status=200
+        )
+        self.assertIsNone(self.grocy.add_generic("tasks", self.add_generic_data))
+
+    @responses.activate
+    def test_add_generic_error(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/objects/tasks", status=400
+        )
+        self.assertRaises(
+            HTTPError, self.grocy.add_generic, "tasks", self.add_generic_data
         )
 
     @responses.activate

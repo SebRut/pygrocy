@@ -672,3 +672,6 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
         if parsed_json:
             return RecipeDetailsResponse(parsed_json)
+
+    def add_generic(self, entity_type: str, data: object):
+        self._do_post_request(f"objects/{entity_type}", data)
