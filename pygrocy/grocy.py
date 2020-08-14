@@ -327,6 +327,7 @@ class Chore(DataModel):
 
 class Task(DataModel):
     def __init__(self, response: TaskResponse):
+
         self._id = response.id
         self._name = response.name
         self._description = response.description
@@ -344,6 +345,34 @@ class Task(DataModel):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def due_date(self) -> datetime:
+        return self._due_date
+
+    @property
+    def done(self) -> int:
+        return self._done
+
+    @property
+    def done_timestamp(self) -> datetime:
+        return self._done_timestamp
+
+    @property
+    def category_id(self) -> int:
+        return self._category_id
+
+    @property
+    def assigned_to_user_id(self) -> int:
+        return self._assigned_to_user_id
+
+    @property
+    def userfields(self) -> Dict[str, str]:
+        return self._userfields
 
 
 class RecipeItem(DataModel):
