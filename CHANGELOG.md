@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.18.0](https://github.com/SebRut/pygrocy/tree/v0.18.0) (2020-08-14)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.17.0...v0.18.0)
+
+**Merged pull requests:**
+
+- Add details for tasks [\#114](https://github.com/SebRut/pygrocy/pull/114) ([isabellaalstrom](https://github.com/isabellaalstrom))
+
 ## [v0.17.0](https://github.com/SebRut/pygrocy/tree/v0.17.0) (2020-08-14)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.16.0...v0.17.0)
@@ -28,10 +36,6 @@
 - Update coveralls requirement from ~=2.0.0 to ~=2.1.1 [\#104](https://github.com/SebRut/pygrocy/pull/104) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.1 to ~=0.8.3 [\#102](https://github.com/SebRut/pygrocy/pull/102) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update responses requirement from ~=0.10.14 to ~=0.10.15 [\#101](https://github.com/SebRut/pygrocy/pull/101) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-<<<<<<< HEAD
-- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
-=======
->>>>>>> release/0.17.0
 
 ## [v0.15.0](https://github.com/SebRut/pygrocy/tree/v0.15.0) (2020-05-25)
 
@@ -55,10 +59,12 @@
 
 - upgrade used grocy version [\#100](https://github.com/SebRut/pygrocy/pull/100) ([SebRut](https://github.com/SebRut))
 - Feature/91 task api [\#99](https://github.com/SebRut/pygrocy/pull/99) ([SebRut](https://github.com/SebRut))
+- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
 - finish abstraction from api [\#96](https://github.com/SebRut/pygrocy/pull/96) ([SebRut](https://github.com/SebRut))
 - fix travis build [\#93](https://github.com/SebRut/pygrocy/pull/93) ([SebRut](https://github.com/SebRut))
 - Update responses requirement from ~=0.10.12 to ~=0.10.14 [\#89](https://github.com/SebRut/pygrocy/pull/89) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.6.4 to ~=0.8.1 [\#88](https://github.com/SebRut/pygrocy/pull/88) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update coveralls requirement from ~=1.11.1 to ~=2.0.0 [\#86](https://github.com/SebRut/pygrocy/pull/86) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Fix \#81 [\#82](https://github.com/SebRut/pygrocy/pull/82) ([BlueBlueBlob](https://github.com/BlueBlueBlob))
 
 
