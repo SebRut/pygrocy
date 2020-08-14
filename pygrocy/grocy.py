@@ -4,14 +4,22 @@ from enum import Enum
 from typing import List, Dict
 
 from .base import DataModel
-from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
-                               CurrentChoreResponse, CurrentStockResponse,
-                               GrocyApiClient,
-                               LocationData, MissingProductResponse,
-                               ProductDetailsResponse,
-                               MealPlanResponse,
-                               RecipeDetailsResponse,
-                               ShoppingListItem, TransactionType, UserDto, TaskResponse)
+from .grocy_api_client import (
+    DEFAULT_PORT_NUMBER,
+    ChoreDetailsResponse,
+    CurrentChoreResponse,
+    CurrentStockResponse,
+    GrocyApiClient,
+    LocationData,
+    MissingProductResponse,
+    ProductDetailsResponse,
+    MealPlanResponse,
+    RecipeDetailsResponse,
+    ShoppingListItem,
+    TransactionType,
+    UserDto,
+    TaskResponse,
+)
 
 
 class Product(DataModel):
@@ -172,20 +180,22 @@ class User(DataModel):
         return self._display_name
 
 
+class PeriodType(str, Enum):
+    MANUALLY = "manually"
+    DYNAMIC_REGULAR = "dynamic-regular"
+    DAILY = "daily"
+    WEEKLY = "weekly"
+    MONTHLY = "monthly"
+
+
+class AssignmentType(str, Enum):
+    NO_ASSIGNMENT = "no-assignment"
+    WHO_LEAST_DID_FIRST = "who-least-did-first"
+    RANDOM = "random"
+    IN_ALPHABETICAL_ORDER = "in-alphabetical-order"
+
+
 class Chore(DataModel):
-    class PeriodType(str, Enum):
-        MANUALLY = 'manually'
-        DYNAMIC_REGULAR = 'dynamic-regular'
-        DAILY = 'daily'
-        WEEKLY = 'weekly'
-        MONTHLY = 'monthly'
-
-    class AssignmentType(str, Enum):
-        NO_ASSIGNMENT = 'no-assignment'
-        WHO_DID_LEAST_DID_FIRST = 'who-did-least-did-first'
-        RANDOM = 'random'
-        IN_ALPHABETICAL_ORDER = 'in-alphabetical-order'
-
     def __init__(self, response):
         if isinstance(response, CurrentChoreResponse):
             self._init_from_CurrentChoreResponse(response)
@@ -208,7 +218,7 @@ class Chore(DataModel):
         self._description = chore_data.description
 
         if chore_data.period_type is not None:
-            self._period_type = Chore.PeriodType(chore_data.period_type)
+            self._period_type = PeriodType(chore_data.period_type)
         else:
             self._period_type = None
 
@@ -218,12 +228,14 @@ class Chore(DataModel):
         self._rollover = chore_data.rollover
 
         if chore_data.assignment_type is not None:
-            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+            self._assignment_type = AssignmentType(chore_data.assignment_type)
         else:
             self._assignment_type = None
 
         self._assignment_config = chore_data.assignment_config
-        self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
+        self._next_execution_assigned_to_user_id = (
+            chore_data.next_execution_assigned_to_user_id
+        )
         self._userfields = chore_data.userfields
 
         self._last_tracked_time = response.last_tracked
@@ -234,7 +246,9 @@ class Chore(DataModel):
             self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
-            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+            self._next_execution_assigned_user = User(
+                response.next_execution_assigned_user
+            )
         else:
             self._next_execution_assigned_user = None
 
@@ -285,9 +299,9 @@ class Chore(DataModel):
     @property
     def next_execution_assigned_to_user_id(self) -> int:
         return self._next_execution_assigned_to_user_id
-    
+
     @property
-    def userfields(self) -> Dict[str,str]:
+    def userfields(self) -> Dict[str, str]:
         return self._userfields
 
     @property
@@ -367,7 +381,7 @@ class RecipeItem(DataModel):
 
     def get_picture_url_path(self, width: int = 400):
         if self.picture_file_name:
-            b64name = base64.b64encode(self.picture_file_name.encode('ascii'))
+            b64name = base64.b64encode(self.picture_file_name.encode("ascii"))
             path = "files/recipepictures/" + str(b64name, "utf-8")
 
             return f"{path}?force_serve_as=picture&best_fit_width={width}"
@@ -412,7 +426,9 @@ class MealPlanItem(DataModel):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
+    def __init__(
+        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+    ):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self) -> List[Product]:
@@ -461,20 +477,40 @@ class Grocy(object):
                 chore.get_details(self._api_client)
         return chores
 
-    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+    def execute_chore(
+        self,
+        chore_id: int,
+        done_by: int = None,
+        tracked_time: datetime = datetime.now(),
+    ):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
     def chore(self, chore_id: int) -> Chore:
         resp = self._api_client.get_chore(chore_id)
         return Chore(resp)
 
-    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
-                    transaction_type: TransactionType = TransactionType.PURCHASE):
-        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+    def add_product(
+        self,
+        product_id,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        transaction_type: TransactionType = TransactionType.PURCHASE,
+    ):
+        return self._api_client.add_product(
+            product_id, amount, price, best_before_date, transaction_type
+        )
 
-    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
-                        transaction_type: TransactionType = TransactionType.CONSUME):
-        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
+    def consume_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        spoiled: bool = False,
+        transaction_type: TransactionType = TransactionType.CONSUME,
+    ):
+        return self._api_client.consume_product(
+            product_id, amount, spoiled, transaction_type
+        )
 
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
@@ -488,14 +524,22 @@ class Grocy(object):
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
-        return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
+    def add_product_to_shopping_list(
+        self, product_id: int, shopping_list_id: int = None, amount: int = None
+    ):
+        return self._api_client.add_product_to_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
-    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
+    def remove_product_in_shopping_list(
+        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+    ):
+        return self._api_client.remove_product_in_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def product_groups(self) -> List[Group]:
         raw_groups = self._api_client.get_product_groups()
