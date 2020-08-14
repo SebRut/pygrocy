@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.19.0](https://github.com/SebRut/pygrocy/tree/v0.19.0) (2020-08-14)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.18.0...v0.19.0)
+
+**Merged pull requests:**
+
+- Add endpoint for adding generic entity [\#115](https://github.com/SebRut/pygrocy/pull/115) ([isabellaalstrom](https://github.com/isabellaalstrom))
+
 ## [v0.18.0](https://github.com/SebRut/pygrocy/tree/v0.18.0) (2020-08-14)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.17.0...v0.18.0)
