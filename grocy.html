@@ -32,14 +32,22 @@ from enum import Enum
 from typing import List, Dict
 
 from .base import DataModel
-from .grocy_api_client import (DEFAULT_PORT_NUMBER, ChoreDetailsResponse,
-                               CurrentChoreResponse, CurrentStockResponse,
-                               GrocyApiClient,
-                               LocationData, MissingProductResponse,
-                               ProductDetailsResponse,
-                               MealPlanResponse,
-                               RecipeDetailsResponse,
-                               ShoppingListItem, TransactionType, UserDto, TaskResponse)
+from .grocy_api_client import (
+    DEFAULT_PORT_NUMBER,
+    ChoreDetailsResponse,
+    CurrentChoreResponse,
+    CurrentStockResponse,
+    GrocyApiClient,
+    LocationData,
+    MissingProductResponse,
+    ProductDetailsResponse,
+    MealPlanResponse,
+    RecipeDetailsResponse,
+    ShoppingListItem,
+    TransactionType,
+    UserDto,
+    TaskResponse,
+)
 
 
 class Product(DataModel):
@@ -200,20 +208,22 @@ class User(DataModel):
         return self._display_name
 
 
+class PeriodType(str, Enum):
+    MANUALLY = &#34;manually&#34;
+    DYNAMIC_REGULAR = &#34;dynamic-regular&#34;
+    DAILY = &#34;daily&#34;
+    WEEKLY = &#34;weekly&#34;
+    MONTHLY = &#34;monthly&#34;
+
+
+class AssignmentType(str, Enum):
+    NO_ASSIGNMENT = &#34;no-assignment&#34;
+    WHO_LEAST_DID_FIRST = &#34;who-least-did-first&#34;
+    RANDOM = &#34;random&#34;
+    IN_ALPHABETICAL_ORDER = &#34;in-alphabetical-order&#34;
+
+
 class Chore(DataModel):
-    class PeriodType(str, Enum):
-        MANUALLY = &#39;manually&#39;
-        DYNAMIC_REGULAR = &#39;dynamic-regular&#39;
-        DAILY = &#39;daily&#39;
-        WEEKLY = &#39;weekly&#39;
-        MONTHLY = &#39;monthly&#39;
-
-    class AssignmentType(str, Enum):
-        NO_ASSIGNMENT = &#39;no-assignment&#39;
-        WHO_DID_LEAST_DID_FIRST = &#39;who-did-least-did-first&#39;
-        RANDOM = &#39;random&#39;
-        IN_ALPHABETICAL_ORDER = &#39;in-alphabetical-order&#39;
-
     def __init__(self, response):
         if isinstance(response, CurrentChoreResponse):
             self._init_from_CurrentChoreResponse(response)
@@ -236,7 +246,7 @@ class Chore(DataModel):
         self._description = chore_data.description
 
         if chore_data.period_type is not None:
-            self._period_type = Chore.PeriodType(chore_data.period_type)
+            self._period_type = PeriodType(chore_data.period_type)
         else:
             self._period_type = None
 
@@ -246,12 +256,14 @@ class Chore(DataModel):
         self._rollover = chore_data.rollover
 
         if chore_data.assignment_type is not None:
-            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+            self._assignment_type = AssignmentType(chore_data.assignment_type)
         else:
             self._assignment_type = None
 
         self._assignment_config = chore_data.assignment_config
-        self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
+        self._next_execution_assigned_to_user_id = (
+            chore_data.next_execution_assigned_to_user_id
+        )
         self._userfields = chore_data.userfields
 
         self._last_tracked_time = response.last_tracked
@@ -262,7 +274,9 @@ class Chore(DataModel):
             self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
-            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+            self._next_execution_assigned_user = User(
+                response.next_execution_assigned_user
+            )
         else:
             self._next_execution_assigned_user = None
 
@@ -313,9 +327,9 @@ class Chore(DataModel):
     @property
     def next_execution_assigned_to_user_id(self) -&gt; int:
         return self._next_execution_assigned_to_user_id
-    
+
     @property
-    def userfields(self) -&gt; Dict[str,str]:
+    def userfields(self) -&gt; Dict[str, str]:
         return self._userfields
 
     @property
@@ -395,7 +409,7 @@ class RecipeItem(DataModel):
 
     def get_picture_url_path(self, width: int = 400):
         if self.picture_file_name:
-            b64name = base64.b64encode(self.picture_file_name.encode(&#39;ascii&#39;))
+            b64name = base64.b64encode(self.picture_file_name.encode(&#34;ascii&#34;))
             path = &#34;files/recipepictures/&#34; + str(b64name, &#34;utf-8&#34;)
 
             return f&#34;{path}?force_serve_as=picture&amp;best_fit_width={width}&#34;
@@ -440,7 +454,9 @@ class MealPlanItem(DataModel):
 
 
 class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
+    def __init__(
+        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+    ):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self) -&gt; List[Product]:
@@ -489,20 +505,40 @@ class Grocy(object):
                 chore.get_details(self._api_client)
         return chores
 
-    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+    def execute_chore(
+        self,
+        chore_id: int,
+        done_by: int = None,
+        tracked_time: datetime = datetime.now(),
+    ):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
     def chore(self, chore_id: int) -&gt; Chore:
         resp = self._api_client.get_chore(chore_id)
         return Chore(resp)
 
-    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
-                    transaction_type: TransactionType = TransactionType.PURCHASE):
-        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+    def add_product(
+        self,
+        product_id,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        transaction_type: TransactionType = TransactionType.PURCHASE,
+    ):
+        return self._api_client.add_product(
+            product_id, amount, price, best_before_date, transaction_type
+        )
 
-    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
-                        transaction_type: TransactionType = TransactionType.CONSUME):
-        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
+    def consume_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        spoiled: bool = False,
+        transaction_type: TransactionType = TransactionType.CONSUME,
+    ):
+        return self._api_client.consume_product(
+            product_id, amount, spoiled, transaction_type
+        )
 
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
@@ -516,14 +552,22 @@ class Grocy(object):
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
-        return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
+    def add_product_to_shopping_list(
+        self, product_id: int, shopping_list_id: int = None, amount: int = None
+    ):
+        return self._api_client.add_product_to_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
-    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
+    def remove_product_in_shopping_list(
+        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+    ):
+        return self._api_client.remove_product_in_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def product_groups(self) -&gt; List[Group]:
         raw_groups = self._api_client.get_product_groups()
@@ -573,6 +617,47 @@ class Grocy(object):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="pygrocy.grocy.AssignmentType"><code class="flex name class">
+<span>class <span class="ident">AssignmentType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AssignmentType(str, Enum):
+    NO_ASSIGNMENT = &#34;no-assignment&#34;
+    WHO_LEAST_DID_FIRST = &#34;who-least-did-first&#34;
+    RANDOM = &#34;random&#34;
+    IN_ALPHABETICAL_ORDER = &#34;in-alphabetical-order&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy.AssignmentType.IN_ALPHABETICAL_ORDER"><code class="name">var <span class="ident">IN_ALPHABETICAL_ORDER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.AssignmentType.NO_ASSIGNMENT"><code class="name">var <span class="ident">NO_ASSIGNMENT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.AssignmentType.RANDOM"><code class="name">var <span class="ident">RANDOM</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.AssignmentType.WHO_LEAST_DID_FIRST"><code class="name">var <span class="ident">WHO_LEAST_DID_FIRST</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy.Chore"><code class="flex name class">
 <span>class <span class="ident">Chore</span></span>
 <span>(</span><span>response)</span>
@@ -584,19 +669,6 @@ class Grocy(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Chore(DataModel):
-    class PeriodType(str, Enum):
-        MANUALLY = &#39;manually&#39;
-        DYNAMIC_REGULAR = &#39;dynamic-regular&#39;
-        DAILY = &#39;daily&#39;
-        WEEKLY = &#39;weekly&#39;
-        MONTHLY = &#39;monthly&#39;
-
-    class AssignmentType(str, Enum):
-        NO_ASSIGNMENT = &#39;no-assignment&#39;
-        WHO_DID_LEAST_DID_FIRST = &#39;who-did-least-did-first&#39;
-        RANDOM = &#39;random&#39;
-        IN_ALPHABETICAL_ORDER = &#39;in-alphabetical-order&#39;
-
     def __init__(self, response):
         if isinstance(response, CurrentChoreResponse):
             self._init_from_CurrentChoreResponse(response)
@@ -619,7 +691,7 @@ class Grocy(object):
         self._description = chore_data.description
 
         if chore_data.period_type is not None:
-            self._period_type = Chore.PeriodType(chore_data.period_type)
+            self._period_type = PeriodType(chore_data.period_type)
         else:
             self._period_type = None
 
@@ -629,12 +701,14 @@ class Grocy(object):
         self._rollover = chore_data.rollover
 
         if chore_data.assignment_type is not None:
-            self._assignment_type = Chore.AssignmentType(chore_data.assignment_type)
+            self._assignment_type = AssignmentType(chore_data.assignment_type)
         else:
             self._assignment_type = None
 
         self._assignment_config = chore_data.assignment_config
-        self._next_execution_assigned_to_user_id = chore_data.next_execution_assigned_to_user_id
+        self._next_execution_assigned_to_user_id = (
+            chore_data.next_execution_assigned_to_user_id
+        )
         self._userfields = chore_data.userfields
 
         self._last_tracked_time = response.last_tracked
@@ -645,7 +719,9 @@ class Grocy(object):
             self._last_done_by = None
         self._track_count = response.track_count
         if response.next_execution_assigned_user is not None:
-            self._next_execution_assigned_user = User(response.next_execution_assigned_user)
+            self._next_execution_assigned_user = User(
+                response.next_execution_assigned_user
+            )
         else:
             self._next_execution_assigned_user = None
 
@@ -696,9 +772,9 @@ class Grocy(object):
     @property
     def next_execution_assigned_to_user_id(self) -&gt; int:
         return self._next_execution_assigned_to_user_id
-    
+
     @property
-    def userfields(self) -&gt; Dict[str,str]:
+    def userfields(self) -&gt; Dict[str, str]:
         return self._userfields
 
     @property
@@ -725,17 +801,6 @@ class Grocy(object):
 <ul class="hlist">
 <li><a title="pygrocy.base.DataModel" href="base.html#pygrocy.base.DataModel">DataModel</a></li>
 </ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="pygrocy.grocy.Chore.AssignmentType"><code class="name">var <span class="ident">AssignmentType</span></code></dt>
-<dd>
-<div class="desc"><p>An enumeration.</p></div>
-</dd>
-<dt id="pygrocy.grocy.Chore.PeriodType"><code class="name">var <span class="ident">PeriodType</span></code></dt>
-<dd>
-<div class="desc"><p>An enumeration.</p></div>
-</dd>
-</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pygrocy.grocy.Chore.assignment_config"><code class="name">var <span class="ident">assignment_config</span> : str</code></dt>
@@ -750,7 +815,7 @@ def assignment_config(self) -&gt; str:
     return self._assignment_config</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Chore.assignment_type"><code class="name">var <span class="ident">assignment_type</span> : <a title="pygrocy.grocy.Chore.AssignmentType" href="#pygrocy.grocy.Chore.AssignmentType">Chore.AssignmentType</a></code></dt>
+<dt id="pygrocy.grocy.Chore.assignment_type"><code class="name">var <span class="ident">assignment_type</span> : <a title="pygrocy.grocy.AssignmentType" href="#pygrocy.grocy.AssignmentType">AssignmentType</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -882,7 +947,7 @@ def period_days(self) -&gt; int:
     return self._period_days</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy.Chore.period_type"><code class="name">var <span class="ident">period_type</span> : <a title="pygrocy.grocy.Chore.PeriodType" href="#pygrocy.grocy.Chore.PeriodType">Chore.PeriodType</a></code></dt>
+<dt id="pygrocy.grocy.Chore.period_type"><code class="name">var <span class="ident">period_type</span> : <a title="pygrocy.grocy.PeriodType" href="#pygrocy.grocy.PeriodType">PeriodType</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -938,7 +1003,7 @@ def track_date_only(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def userfields(self) -&gt; Dict[str,str]:
+def userfields(self) -&gt; Dict[str, str]:
     return self._userfields</code></pre>
 </details>
 </dd>
@@ -972,7 +1037,9 @@ def userfields(self) -&gt; Dict[str,str]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Grocy(object):
-    def __init__(self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True):
+    def __init__(
+        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+    ):
         self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
 
     def stock(self) -&gt; List[Product]:
@@ -1021,20 +1088,40 @@ def userfields(self) -&gt; Dict[str,str]:
                 chore.get_details(self._api_client)
         return chores
 
-    def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+    def execute_chore(
+        self,
+        chore_id: int,
+        done_by: int = None,
+        tracked_time: datetime = datetime.now(),
+    ):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time)
 
     def chore(self, chore_id: int) -&gt; Chore:
         resp = self._api_client.get_chore(chore_id)
         return Chore(resp)
 
-    def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
-                    transaction_type: TransactionType = TransactionType.PURCHASE):
-        return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)
+    def add_product(
+        self,
+        product_id,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        transaction_type: TransactionType = TransactionType.PURCHASE,
+    ):
+        return self._api_client.add_product(
+            product_id, amount, price, best_before_date, transaction_type
+        )
 
-    def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
-                        transaction_type: TransactionType = TransactionType.CONSUME):
-        return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)
+    def consume_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        spoiled: bool = False,
+        transaction_type: TransactionType = TransactionType.CONSUME,
+    ):
+        return self._api_client.consume_product(
+            product_id, amount, spoiled, transaction_type
+        )
 
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
@@ -1048,14 +1135,22 @@ def userfields(self) -&gt; Dict[str,str]:
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
-    def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
-        return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)
+    def add_product_to_shopping_list(
+        self, product_id: int, shopping_list_id: int = None, amount: int = None
+    ):
+        return self._api_client.add_product_to_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
-    def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-        return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)
+    def remove_product_in_shopping_list(
+        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+    ):
+        return self._api_client.remove_product_in_shopping_list(
+            product_id, shopping_list_id, amount
+        )
 
     def product_groups(self) -&gt; List[Group]:
         raw_groups = self._api_client.get_product_groups()
@@ -1119,9 +1214,17 @@ def userfields(self) -&gt; Dict[str,str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_product(self, product_id, amount: float, price: float, best_before_date: datetime = None,
-                transaction_type: TransactionType = TransactionType.PURCHASE):
-    return self._api_client.add_product(product_id, amount, price, best_before_date, transaction_type)</code></pre>
+<pre><code class="python">def add_product(
+    self,
+    product_id,
+    amount: float,
+    price: float,
+    best_before_date: datetime = None,
+    transaction_type: TransactionType = TransactionType.PURCHASE,
+):
+    return self._api_client.add_product(
+        product_id, amount, price, best_before_date, transaction_type
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.add_product_pic"><code class="name flex">
@@ -1147,8 +1250,12 @@ def userfields(self) -&gt; Dict[str,str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_product_to_shopping_list(self, product_id: int, shopping_list_id: int = None, amount: int = None):
-    return self._api_client.add_product_to_shopping_list(product_id, shopping_list_id, amount)</code></pre>
+<pre><code class="python">def add_product_to_shopping_list(
+    self, product_id: int, shopping_list_id: int = None, amount: int = None
+):
+    return self._api_client.add_product_to_shopping_list(
+        product_id, shopping_list_id, amount
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.chore"><code class="name flex">
@@ -1219,13 +1326,20 @@ def userfields(self) -&gt; Dict[str,str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def consume_product(self, product_id: int, amount: float = 1, spoiled: bool = False,
-                    transaction_type: TransactionType = TransactionType.CONSUME):
-    return self._api_client.consume_product(product_id, amount, spoiled, transaction_type)</code></pre>
+<pre><code class="python">def consume_product(
+    self,
+    product_id: int,
+    amount: float = 1,
+    spoiled: bool = False,
+    transaction_type: TransactionType = TransactionType.CONSUME,
+):
+    return self._api_client.consume_product(
+        product_id, amount, spoiled, transaction_type
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 13, 19, 23, 51, 163690))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 9, 55, 10, 345630))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1233,7 +1347,12 @@ def userfields(self) -&gt; Dict[str,str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def execute_chore(self, chore_id: int, done_by: int = None, tracked_time: datetime = datetime.now()):
+<pre><code class="python">def execute_chore(
+    self,
+    chore_id: int,
+    done_by: int = None,
+    tracked_time: datetime = datetime.now(),
+):
     return self._api_client.execute_chore(chore_id, done_by, tracked_time)</code></pre>
 </details>
 </dd>
@@ -1392,8 +1511,12 @@ def userfields(self) -&gt; Dict[str,str]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def remove_product_in_shopping_list(self, product_id: int, shopping_list_id: int = 1, amount: int = 1):
-    return self._api_client.remove_product_in_shopping_list(product_id, shopping_list_id, amount)</code></pre>
+<pre><code class="python">def remove_product_in_shopping_list(
+    self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+):
+    return self._api_client.remove_product_in_shopping_list(
+        product_id, shopping_list_id, amount
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.set_userfields"><code class="name flex">
@@ -1676,6 +1799,52 @@ def recipe_servings(self) -&gt; int:
 </dd>
 </dl>
 </dd>
+<dt id="pygrocy.grocy.PeriodType"><code class="flex name class">
+<span>class <span class="ident">PeriodType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PeriodType(str, Enum):
+    MANUALLY = &#34;manually&#34;
+    DYNAMIC_REGULAR = &#34;dynamic-regular&#34;
+    DAILY = &#34;daily&#34;
+    WEEKLY = &#34;weekly&#34;
+    MONTHLY = &#34;monthly&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy.PeriodType.DAILY"><code class="name">var <span class="ident">DAILY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.PeriodType.DYNAMIC_REGULAR"><code class="name">var <span class="ident">DYNAMIC_REGULAR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.PeriodType.MANUALLY"><code class="name">var <span class="ident">MANUALLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.PeriodType.MONTHLY"><code class="name">var <span class="ident">MONTHLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy.PeriodType.WEEKLY"><code class="name">var <span class="ident">WEEKLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy.Product"><code class="flex name class">
 <span>class <span class="ident">Product</span></span>
 <span>(</span><span>response)</span>
@@ -1931,7 +2100,7 @@ def product_group_id(self) -&gt; int:
 
     def get_picture_url_path(self, width: int = 400):
         if self.picture_file_name:
-            b64name = base64.b64encode(self.picture_file_name.encode(&#39;ascii&#39;))
+            b64name = base64.b64encode(self.picture_file_name.encode(&#34;ascii&#34;))
             path = &#34;files/recipepictures/&#34; + str(b64name, &#34;utf-8&#34;)
 
             return f&#34;{path}?force_serve_as=picture&amp;best_fit_width={width}&#34;</code></pre>
@@ -2028,7 +2197,7 @@ def picture_file_name(self) -&gt; str:
 </summary>
 <pre><code class="python">def get_picture_url_path(self, width: int = 400):
     if self.picture_file_name:
-        b64name = base64.b64encode(self.picture_file_name.encode(&#39;ascii&#39;))
+        b64name = base64.b64encode(self.picture_file_name.encode(&#34;ascii&#34;))
         path = &#34;files/recipepictures/&#34; + str(b64name, &#34;utf-8&#34;)
 
         return f&#34;{path}?force_serve_as=picture&amp;best_fit_width={width}&#34;</code></pre>
@@ -2348,10 +2517,17 @@ def username(self) -&gt; str:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="pygrocy.grocy.AssignmentType" href="#pygrocy.grocy.AssignmentType">AssignmentType</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy.AssignmentType.IN_ALPHABETICAL_ORDER" href="#pygrocy.grocy.AssignmentType.IN_ALPHABETICAL_ORDER">IN_ALPHABETICAL_ORDER</a></code></li>
+<li><code><a title="pygrocy.grocy.AssignmentType.NO_ASSIGNMENT" href="#pygrocy.grocy.AssignmentType.NO_ASSIGNMENT">NO_ASSIGNMENT</a></code></li>
+<li><code><a title="pygrocy.grocy.AssignmentType.RANDOM" href="#pygrocy.grocy.AssignmentType.RANDOM">RANDOM</a></code></li>
+<li><code><a title="pygrocy.grocy.AssignmentType.WHO_LEAST_DID_FIRST" href="#pygrocy.grocy.AssignmentType.WHO_LEAST_DID_FIRST">WHO_LEAST_DID_FIRST</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="pygrocy.grocy.Chore" href="#pygrocy.grocy.Chore">Chore</a></code></h4>
 <ul class="">
-<li><code><a title="pygrocy.grocy.Chore.AssignmentType" href="#pygrocy.grocy.Chore.AssignmentType">AssignmentType</a></code></li>
-<li><code><a title="pygrocy.grocy.Chore.PeriodType" href="#pygrocy.grocy.Chore.PeriodType">PeriodType</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.assignment_config" href="#pygrocy.grocy.Chore.assignment_config">assignment_config</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.assignment_type" href="#pygrocy.grocy.Chore.assignment_type">assignment_type</a></code></li>
 <li><code><a title="pygrocy.grocy.Chore.description" href="#pygrocy.grocy.Chore.description">description</a></code></li>
@@ -2419,6 +2595,16 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy.MealPlanItem.recipe" href="#pygrocy.grocy.MealPlanItem.recipe">recipe</a></code></li>
 <li><code><a title="pygrocy.grocy.MealPlanItem.recipe_id" href="#pygrocy.grocy.MealPlanItem.recipe_id">recipe_id</a></code></li>
 <li><code><a title="pygrocy.grocy.MealPlanItem.recipe_servings" href="#pygrocy.grocy.MealPlanItem.recipe_servings">recipe_servings</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy.PeriodType" href="#pygrocy.grocy.PeriodType">PeriodType</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy.PeriodType.DAILY" href="#pygrocy.grocy.PeriodType.DAILY">DAILY</a></code></li>
+<li><code><a title="pygrocy.grocy.PeriodType.DYNAMIC_REGULAR" href="#pygrocy.grocy.PeriodType.DYNAMIC_REGULAR">DYNAMIC_REGULAR</a></code></li>
+<li><code><a title="pygrocy.grocy.PeriodType.MANUALLY" href="#pygrocy.grocy.PeriodType.MANUALLY">MANUALLY</a></code></li>
+<li><code><a title="pygrocy.grocy.PeriodType.MONTHLY" href="#pygrocy.grocy.PeriodType.MONTHLY">MONTHLY</a></code></li>
+<li><code><a title="pygrocy.grocy.PeriodType.WEEKLY" href="#pygrocy.grocy.PeriodType.WEEKLY">WEEKLY</a></code></li>
 </ul>
 </li>
 <li>
