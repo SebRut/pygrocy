@@ -128,7 +128,7 @@ class ShoppingListProduct(DataModel):
 
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
-            self._product = api_client.get_product(self._product_id).product
+            self._product = Product(api_client.get_product(self._product_id))
 
     @property
     def id(self) -> int:
