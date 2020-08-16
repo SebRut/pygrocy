@@ -1,15 +1,12 @@
 import base64
 import json
-import os
 from datetime import datetime
 from enum import Enum
 from typing import List
 from urllib.parse import urljoin
 
-import pytz
 import requests
-from pygrocy.utils import parse_date, parse_float, parse_int
-from tzlocal import get_localzone
+from pygrocy.utils import parse_date, parse_float, parse_int, localize_datetime
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -540,10 +537,7 @@ class GrocyApiClient(object):
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
     ):
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_tracked_time = local_tz.localize(tracked_time)
+        localized_tracked_time = localize_datetime(tracked_time)
 
         data = {"tracked_time": localized_tracked_time.isoformat()}
 
@@ -656,10 +650,8 @@ class GrocyApiClient(object):
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_done_time = local_tz.localize(done_time)
+
+        localized_done_time = localize_datetime(done_time)
 
         data = {"done_time": localized_done_time.isoformat()}
         self._do_post_request(url, data)
