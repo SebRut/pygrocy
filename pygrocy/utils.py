@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 def parse_date(input_value):
-    if input_value is None:
+    if input_value is "" or input_value is None:
         return None
     return iso8601.parse_date(input_value)
 
