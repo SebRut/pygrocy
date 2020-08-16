@@ -27,6 +27,9 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import iso8601
+import pytz
+from tzlocal import get_localzone
+from datetime import datetime
 
 
 def parse_date(input_value):
@@ -50,7 +53,15 @@ def parse_float(input_value, default_value=None):
     try:
         return float(input_value)
     except ValueError:
-        return default_value</code></pre>
+        return default_value
+
+
+def localize_datetime(timestamp: datetime) -&gt; datetime:
+    if timestamp.tzinfo is not None:
+        return timestamp
+
+    local_tz = get_localzone()
+    return local_tz.localize(timestamp).astimezone(pytz.utc)</code></pre>
 </details>
 </section>
 <section>
@@ -60,6 +71,23 @@ def parse_float(input_value, default_value=None):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="pygrocy.utils.localize_datetime"><code class="name flex">
+<span>def <span class="ident">localize_datetime</span></span>(<span>timestamp: datetime.datetime) ‑> datetime.datetime</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def localize_datetime(timestamp: datetime) -&gt; datetime:
+    if timestamp.tzinfo is not None:
+        return timestamp
+
+    local_tz = get_localzone()
+    return local_tz.localize(timestamp).astimezone(pytz.utc)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.utils.parse_date"><code class="name flex">
 <span>def <span class="ident">parse_date</span></span>(<span>input_value)</span>
 </code></dt>
@@ -129,6 +157,7 @@ def parse_float(input_value, default_value=None):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="pygrocy.utils.localize_datetime" href="#pygrocy.utils.localize_datetime">localize_datetime</a></code></li>
 <li><code><a title="pygrocy.utils.parse_date" href="#pygrocy.utils.parse_date">parse_date</a></code></li>
 <li><code><a title="pygrocy.utils.parse_float" href="#pygrocy.utils.parse_float">parse_float</a></code></li>
 <li><code><a title="pygrocy.utils.parse_int" href="#pygrocy.utils.parse_int">parse_int</a></code></li>

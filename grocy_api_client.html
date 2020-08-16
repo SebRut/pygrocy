@@ -28,16 +28,13 @@
 </summary>
 <pre><code class="python">import base64
 import json
-import os
 from datetime import datetime
 from enum import Enum
 from typing import List
 from urllib.parse import urljoin
 
-import pytz
 import requests
-from pygrocy.utils import parse_date, parse_float, parse_int
-from tzlocal import get_localzone
+from pygrocy.utils import parse_date, parse_float, parse_int, localize_datetime
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -568,10 +565,7 @@ class GrocyApiClient(object):
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
     ):
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_tracked_time = local_tz.localize(tracked_time)
+        localized_tracked_time = localize_datetime(tracked_time)
 
         data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
 
@@ -684,10 +678,8 @@ class GrocyApiClient(object):
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_done_time = local_tz.localize(done_time)
+
+        localized_done_time = localize_datetime(done_time)
 
         data = {&#34;done_time&#34;: localized_done_time.isoformat()}
         self._do_post_request(url, data)
@@ -1205,10 +1197,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
     ):
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_tracked_time = local_tz.localize(tracked_time)
+        localized_tracked_time = localize_datetime(tracked_time)
 
         data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
 
@@ -1321,10 +1310,8 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
-        # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-        # information, so timezone information must be attached.
-        local_tz = get_localzone()
-        localized_done_time = local_tz.localize(done_time)
+
+        localized_done_time = localize_datetime(done_time)
 
         data = {&#34;done_time&#34;: localized_done_time.isoformat()}
         self._do_post_request(url, data)
@@ -1438,7 +1425,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 8, 14, 19, 57, 8, 780108))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 8, 16, 7, 30, 0, 311697))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1448,10 +1435,8 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </summary>
 <pre><code class="python">def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
     url = f&#34;tasks/{task_id}/complete&#34;
-    # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-    # information, so timezone information must be attached.
-    local_tz = get_localzone()
-    localized_done_time = local_tz.localize(done_time)
+
+    localized_done_time = localize_datetime(done_time)
 
     data = {&#34;done_time&#34;: localized_done_time.isoformat()}
     self._do_post_request(url, data)</code></pre>
@@ -1483,7 +1468,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 19, 57, 8, 779751))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 16, 7, 30, 0, 311339))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1497,10 +1482,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
     done_by: int = None,
     tracked_time: datetime = datetime.now(),
 ):
-    # Grocy API expects UTC time; time returned from datetime.now() is local time without timezone
-    # information, so timezone information must be attached.
-    local_tz = get_localzone()
-    localized_tracked_time = local_tz.localize(tracked_time)
+    localized_tracked_time = localize_datetime(tracked_time)
 
     data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
 

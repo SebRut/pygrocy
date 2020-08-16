@@ -156,7 +156,7 @@ class ShoppingListProduct(DataModel):
 
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
-            self._product = api_client.get_product(self._product_id).product
+            self._product = Product(api_client.get_product(self._product_id))
 
     @property
     def id(self) -&gt; int:
@@ -1387,7 +1387,7 @@ def userfields(self) -&gt; Dict[str, str]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 14, 19, 57, 8, 781069))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 16, 7, 30, 0, 312683))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2273,7 +2273,7 @@ def picture_file_name(self) -&gt; str:
 
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
-            self._product = api_client.get_product(self._product_id).product
+            self._product = Product(api_client.get_product(self._product_id))
 
     @property
     def id(self) -&gt; int:
@@ -2375,7 +2375,7 @@ def product_id(self) -&gt; int:
 </summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
     if self._product_id:
-        self._product = api_client.get_product(self._product_id).product</code></pre>
+        self._product = Product(api_client.get_product(self._product_id))</code></pre>
 </details>
 </dd>
 </dl>
