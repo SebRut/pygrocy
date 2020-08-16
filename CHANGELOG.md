@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.20.0](https://github.com/SebRut/pygrocy/tree/v0.20.0) (2020-08-16)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.19.0...v0.20.0)
+
+**Closed issues:**
+
+- Use Product instead of ProductDate in ShoppingListProduct [\#116](https://github.com/SebRut/pygrocy/issues/116)
+
+**Merged pull requests:**
+
+- only localize datetimes not already containing tz info [\#118](https://github.com/SebRut/pygrocy/pull/118) ([SebRut](https://github.com/SebRut))
+- Use Product instead of ProductData [\#117](https://github.com/SebRut/pygrocy/pull/117) ([SebRut](https://github.com/SebRut))
+
 ## [v0.19.0](https://github.com/SebRut/pygrocy/tree/v0.19.0) (2020-08-14)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.18.0...v0.19.0)
