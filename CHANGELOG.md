@@ -1,5 +1,28 @@
 # Changelog
 
+## [v0.21.0](https://github.com/SebRut/pygrocy/tree/v0.21.0) (2020-08-18)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.20.0...v0.21.0)
+
+**Implemented enhancements:**
+
+- consider using ciso8601 instead of iso8601 [\#84](https://github.com/SebRut/pygrocy/issues/84)
+
+**Fixed bugs:**
+
+- Not all fields of Product are set in all cases [\#122](https://github.com/SebRut/pygrocy/issues/122)
+
+**Closed issues:**
+
+- Task without due date gives error [\#119](https://github.com/SebRut/pygrocy/issues/119)
+
+**Merged pull requests:**
+
+- init all Product fields with None by default [\#123](https://github.com/SebRut/pygrocy/pull/123) ([SebRut](https://github.com/SebRut))
+- Check for empty string in parse\_date [\#120](https://github.com/SebRut/pygrocy/pull/120) ([isabellaalstrom](https://github.com/isabellaalstrom))
+- Update coveralls requirement from ~=2.1.1 to ~=2.1.2 [\#108](https://github.com/SebRut/pygrocy/pull/108) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update responses requirement from ~=0.10.15 to ~=0.10.16 [\#107](https://github.com/SebRut/pygrocy/pull/107) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.20.0](https://github.com/SebRut/pygrocy/tree/v0.20.0) (2020-08-16)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.19.0...v0.20.0)
