@@ -52,6 +52,7 @@ from .grocy_api_client import (
 
 class Product(DataModel):
     def __init__(self, response):
+        self._init_empty()
         if isinstance(response, CurrentStockResponse):
             self._init_from_CurrentStockResponse(response)
         elif isinstance(response, MissingProductResponse):
@@ -59,12 +60,22 @@ class Product(DataModel):
         elif isinstance(response, ProductDetailsResponse):
             self._init_from_ProductDetailsResponse(response)
 
+    def _init_empty(self):
+        self._name = None
+        self._id = None
+        self._amount_missing = None
+        self._is_partly_in_stock = None
+
+        self._available_amount = None
+        self._best_before_date = None
+
+        self._barcodes = None
+        self._product_group_id = None
+
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
         self._best_before_date = response.best_before_date
-        self._amount_missing = None
-        self._is_partly_in_stock = None
         if response.product:
             self._name = response.product.name
             self._barcodes = response.product.barcodes
@@ -73,12 +84,8 @@ class Product(DataModel):
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
         self._id = response.product_id
         self._name = response.name
-        self._available_amount = None
-        self._best_before_date = None
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock
-        self._barcodes = None
-        self._product_group_id = None
 
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._id = response.product.id
@@ -1387,7 +1394,7 @@ def userfields(self) -&gt; Dict[str, str]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 16, 7, 30, 0, 312683))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 8, 18, 15, 43, 50, 914054))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1905,6 +1912,7 @@ def recipe_servings(self) -&gt; int:
 </summary>
 <pre><code class="python">class Product(DataModel):
     def __init__(self, response):
+        self._init_empty()
         if isinstance(response, CurrentStockResponse):
             self._init_from_CurrentStockResponse(response)
         elif isinstance(response, MissingProductResponse):
@@ -1912,12 +1920,22 @@ def recipe_servings(self) -&gt; int:
         elif isinstance(response, ProductDetailsResponse):
             self._init_from_ProductDetailsResponse(response)
 
+    def _init_empty(self):
+        self._name = None
+        self._id = None
+        self._amount_missing = None
+        self._is_partly_in_stock = None
+
+        self._available_amount = None
+        self._best_before_date = None
+
+        self._barcodes = None
+        self._product_group_id = None
+
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
         self._best_before_date = response.best_before_date
-        self._amount_missing = None
-        self._is_partly_in_stock = None
         if response.product:
             self._name = response.product.name
             self._barcodes = response.product.barcodes
@@ -1926,12 +1944,8 @@ def recipe_servings(self) -&gt; int:
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
         self._id = response.product_id
         self._name = response.name
-        self._available_amount = None
-        self._best_before_date = None
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock
-        self._barcodes = None
-        self._product_group_id = None
 
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._id = response.product.id

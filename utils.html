@@ -33,7 +33,7 @@ from datetime import datetime
 
 
 def parse_date(input_value):
-    if input_value is None:
+    if input_value is &#34;&#34; or input_value is None:
         return None
     return iso8601.parse_date(input_value)
 
@@ -98,7 +98,7 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def parse_date(input_value):
-    if input_value is None:
+    if input_value is &#34;&#34; or input_value is None:
         return None
     return iso8601.parse_date(input_value)</code></pre>
 </details>
