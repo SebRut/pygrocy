@@ -24,6 +24,7 @@ from .grocy_api_client import (
 
 class Product(DataModel):
     def __init__(self, response):
+        self._init_empty()
         if isinstance(response, CurrentStockResponse):
             self._init_from_CurrentStockResponse(response)
         elif isinstance(response, MissingProductResponse):
@@ -31,12 +32,22 @@ class Product(DataModel):
         elif isinstance(response, ProductDetailsResponse):
             self._init_from_ProductDetailsResponse(response)
 
+    def _init_empty(self):
+        self._name = None
+        self._id = None
+        self._amount_missing = None
+        self._is_partly_in_stock = None
+
+        self._available_amount = None
+        self._best_before_date = None
+
+        self._barcodes = None
+        self._product_group_id = None
+
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
         self._best_before_date = response.best_before_date
-        self._amount_missing = None
-        self._is_partly_in_stock = None
         if response.product:
             self._name = response.product.name
             self._barcodes = response.product.barcodes
@@ -45,12 +56,8 @@ class Product(DataModel):
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
         self._id = response.product_id
         self._name = response.name
-        self._available_amount = None
-        self._best_before_date = None
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock
-        self._barcodes = None
-        self._product_group_id = None
 
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._id = response.product.id
