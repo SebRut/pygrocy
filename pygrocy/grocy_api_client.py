@@ -367,7 +367,11 @@ class ProductDetailsResponse(object):
             parsed_json.get("quantity_unit_stock")
         )
 
-        self._location = LocationData(parsed_json.get("location"))
+        raw_location = parsed_json.get("location")
+        if raw_location is None:
+            self._location = None
+        else:
+            self._location = LocationData(raw_location)
 
     @property
     def last_purchased(self) -> datetime:
