@@ -489,7 +489,7 @@ class GrocyApiClient(object):
     def _do_post_request(self, end_url: str, data: dict):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.post(
-            req_url, verify=self._verify_ssl, headers=self._headers, data=data
+            req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
         resp.raise_for_status()
         if len(resp.content) > 0:

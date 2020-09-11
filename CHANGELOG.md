@@ -1,5 +1,21 @@
 # Changelog
 
+## [v0.23.0](https://github.com/SebRut/pygrocy/tree/v0.23.0) (2020-09-11)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.22.0...v0.23.0)
+
+**Implemented enhancements:**
+
+- add "get all products" method [\#97](https://github.com/SebRut/pygrocy/issues/97)
+
+**Closed issues:**
+
+- 400 response when posting [\#131](https://github.com/SebRut/pygrocy/issues/131)
+
+**Merged pull requests:**
+
+- switch to json instead of data in post requests [\#132](https://github.com/SebRut/pygrocy/pull/132) ([SebRut](https://github.com/SebRut))
+
 ## [v0.22.0](https://github.com/SebRut/pygrocy/tree/v0.22.0) (2020-09-07)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.21.0...v0.22.0)
@@ -128,6 +144,7 @@
 - finish abstraction from api [\#96](https://github.com/SebRut/pygrocy/pull/96) ([SebRut](https://github.com/SebRut))
 - fix travis build [\#93](https://github.com/SebRut/pygrocy/pull/93) ([SebRut](https://github.com/SebRut))
 - Update responses requirement from ~=0.10.12 to ~=0.10.14 [\#89](https://github.com/SebRut/pygrocy/pull/89) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update pdoc3 requirement from ~=0.6.4 to ~=0.8.1 [\#88](https://github.com/SebRut/pygrocy/pull/88) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update coveralls requirement from ~=1.11.1 to ~=2.0.0 [\#86](https://github.com/SebRut/pygrocy/pull/86) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Fix \#81 [\#82](https://github.com/SebRut/pygrocy/pull/82) ([BlueBlueBlob](https://github.com/BlueBlueBlob))
 
