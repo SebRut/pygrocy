@@ -517,7 +517,7 @@ class GrocyApiClient(object):
     def _do_post_request(self, end_url: str, data: dict):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.post(
-            req_url, verify=self._verify_ssl, headers=self._headers, data=data
+            req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
         resp.raise_for_status()
         if len(resp.content) &gt; 0:
@@ -1149,7 +1149,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
     def _do_post_request(self, end_url: str, data: dict):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.post(
-            req_url, verify=self._verify_ssl, headers=self._headers, data=data
+            req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
         resp.raise_for_status()
         if len(resp.content) &gt; 0:
@@ -1429,7 +1429,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 9, 7, 13, 35, 54, 437576))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 9, 11, 16, 23, 50, 436438))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1472,7 +1472,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 9, 7, 13, 35, 54, 437081))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 9, 11, 16, 23, 50, 436013))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
