@@ -435,16 +435,12 @@ class TestGrocy(TestCase):
 
     @responses.activate
     def test_add_generic_valid(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/objects/tasks", status=200
-        )
+        responses.add(responses.POST, f"{self.base_url}/objects/tasks", status=200)
         self.assertIsNone(self.grocy.add_generic("tasks", self.add_generic_data))
 
     @responses.activate
     def test_add_generic_error(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/objects/tasks", status=400
-        )
+        responses.add(responses.POST, f"{self.base_url}/objects/tasks", status=400)
         self.assertRaises(
             HTTPError, self.grocy.add_generic, "tasks", self.add_generic_data
         )
@@ -454,14 +450,14 @@ class TestGrocy(TestCase):
         responses.add(
             responses.POST, f"{self.base_url}/stock/products/1/consume", status=200
         )
-        self.assertIsNone(self.grocy.consume_product(1, 1.3, self.date_test))
+        self.assertIsNone(self.grocy.consume_product(1, 1.3))
 
     @responses.activate
     def test_consume_product_error(self):
         responses.add(
             responses.POST, f"{self.base_url}/stock/products/1/consume", status=400
         )
-        self.assertRaises(HTTPError, self.grocy.consume_product, 1, 1.3, self.date_test)
+        self.assertRaises(HTTPError, self.grocy.consume_product, 1, 1.3)
 
     @responses.activate
     def test_execute_chore_valid(self):
