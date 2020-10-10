@@ -8,7 +8,8 @@ import responses
 from requests.exceptions import HTTPError
 
 from pygrocy import Grocy
-from pygrocy.grocy import Chore, Product, Group, ShoppingListProduct, AssignmentType
+from pygrocy.data_models.chore import AssignmentType, Chore
+from pygrocy.data_models.product import Product, Group, ShoppingListProduct
 from pygrocy.grocy_api_client import GrocyApiClient, UserDto, ProductData
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 
