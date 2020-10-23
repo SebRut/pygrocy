@@ -3,3 +3,4 @@ exemptLabels:
   - security
   - "[Status] Maybe Later"
   - enhancement
+  - tests
