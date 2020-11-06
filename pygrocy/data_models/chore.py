@@ -12,6 +12,7 @@ class PeriodType(str, Enum):
     DAILY = "daily"
     WEEKLY = "weekly"
     MONTHLY = "monthly"
+    YEARLY = "yearly"
 
 
 class AssignmentType(str, Enum):
