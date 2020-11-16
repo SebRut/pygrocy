@@ -1,12 +1,25 @@
 # Changelog
 
-## [v0.23.0](https://github.com/SebRut/pygrocy/tree/v0.23.0) (2020-09-11)
+## [v0.24.0](https://github.com/SebRut/pygrocy/tree/v0.24.0) (2020-11-16)
 
-[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.22.0...v0.23.0)
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.23.0...v0.24.0)
 
 **Implemented enhancements:**
 
-- add "get all products" method [\#97](https://github.com/SebRut/pygrocy/issues/97)
+- Add "yearly" PeriodType [\#137](https://github.com/SebRut/pygrocy/pull/137) ([mdallaire](https://github.com/mdallaire))
+
+**Closed issues:**
+
+- Dependabot couldn't authenticate with https://pypi.python.org/simple/ [\#134](https://github.com/SebRut/pygrocy/issues/134)
+- Split up main file [\#110](https://github.com/SebRut/pygrocy/issues/110)
+
+**Merged pull requests:**
+
+- Fix example [\#136](https://github.com/SebRut/pygrocy/pull/136) ([basxto](https://github.com/basxto))
+
+## [v0.23.0](https://github.com/SebRut/pygrocy/tree/v0.23.0) (2020-09-11)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.22.0...v0.23.0)
 
 **Closed issues:**
 
@@ -31,11 +44,13 @@
 
 **Merged pull requests:**
 
+- split up the main file [\#135](https://github.com/SebRut/pygrocy/pull/135) ([yellalena](https://github.com/yellalena))
 - check if location field exists before parsing [\#130](https://github.com/SebRut/pygrocy/pull/130) ([SebRut](https://github.com/SebRut))
 - Update responses requirement from ~=0.11.0 to ~=0.12.0 [\#128](https://github.com/SebRut/pygrocy/pull/128) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.9.0 to ~=0.9.1 [\#126](https://github.com/SebRut/pygrocy/pull/126) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.4 to ~=0.9.0 [\#125](https://github.com/SebRut/pygrocy/pull/125) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update responses requirement from ~=0.10.16 to ~=0.11.0 [\#124](https://github.com/SebRut/pygrocy/pull/124) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Check for empty string in parse\_date [\#120](https://github.com/SebRut/pygrocy/pull/120) ([isabellaalstrom](https://github.com/isabellaalstrom))
 
 ## [v0.21.0](https://github.com/SebRut/pygrocy/tree/v0.21.0) (2020-08-18)
 
@@ -56,8 +71,8 @@
 **Merged pull requests:**
 
 - init all Product fields with None by default [\#123](https://github.com/SebRut/pygrocy/pull/123) ([SebRut](https://github.com/SebRut))
-- Check for empty string in parse\_date [\#120](https://github.com/SebRut/pygrocy/pull/120) ([isabellaalstrom](https://github.com/isabellaalstrom))
 - Update coveralls requirement from ~=2.1.1 to ~=2.1.2 [\#108](https://github.com/SebRut/pygrocy/pull/108) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update responses requirement from ~=0.10.15 to ~=0.10.16 [\#107](https://github.com/SebRut/pygrocy/pull/107) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [v0.20.0](https://github.com/SebRut/pygrocy/tree/v0.20.0) (2020-08-16)
 
@@ -96,10 +111,6 @@
 
 - Misnaming in enum [\#112](https://github.com/SebRut/pygrocy/issues/112)
 
-**Merged pull requests:**
-
-- fix issue \#112 [\#113](https://github.com/SebRut/pygrocy/pull/113) ([SebRut](https://github.com/SebRut))
-
 ## [v0.16.0](https://github.com/SebRut/pygrocy/tree/v0.16.0) (2020-08-13)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.15.0...v0.16.0)
@@ -110,9 +121,9 @@
 
 **Merged pull requests:**
 
+- fix issue \#112 [\#113](https://github.com/SebRut/pygrocy/pull/113) ([SebRut](https://github.com/SebRut))
 - Bugfix/bug smashing [\#111](https://github.com/SebRut/pygrocy/pull/111) ([SebRut](https://github.com/SebRut))
 -  Add meal plan / recipe interfaces. \#90  [\#109](https://github.com/SebRut/pygrocy/pull/109) ([nervetattoo](https://github.com/nervetattoo))
-- Update responses requirement from ~=0.10.15 to ~=0.10.16 [\#107](https://github.com/SebRut/pygrocy/pull/107) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.3 to ~=0.8.4 [\#105](https://github.com/SebRut/pygrocy/pull/105) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update coveralls requirement from ~=2.0.0 to ~=2.1.1 [\#104](https://github.com/SebRut/pygrocy/pull/104) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.1 to ~=0.8.3 [\#102](https://github.com/SebRut/pygrocy/pull/102) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
