@@ -30,7 +30,7 @@ grocy = Grocy("https://example.com", "GROCY_API_KEY", port = 9192, verify_ssl = 
 Get current stock:
 ```python
 for entry in grocy.stock():
-    print("{} in stock for product id {}".format(entry.id, entry.amount))
+    print("{} in stock for product id {}".format(entry.available_amount, entry.id))
 ```
 
 ## Development testing
