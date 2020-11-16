@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>pygrocy.data_models.chore API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygrocy.data_models.chore</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from datetime import datetime
+from enum import Enum
+from typing import List, Dict
+from pygrocy.base import DataModel
+from pygrocy.data_models.user import User
+from pygrocy.grocy_api_client import CurrentChoreResponse, ChoreDetailsResponse, GrocyApiClient
+
+
+class PeriodType(str, Enum):
+    MANUALLY = &#34;manually&#34;
+    DYNAMIC_REGULAR = &#34;dynamic-regular&#34;
+    DAILY = &#34;daily&#34;
+    WEEKLY = &#34;weekly&#34;
+    MONTHLY = &#34;monthly&#34;
+    YEARLY = &#34;yearly&#34;
+
+
+class AssignmentType(str, Enum):
+    NO_ASSIGNMENT = &#34;no-assignment&#34;
+    WHO_LEAST_DID_FIRST = &#34;who-least-did-first&#34;
+    RANDOM = &#34;random&#34;
+    IN_ALPHABETICAL_ORDER = &#34;in-alphabetical-order&#34;
+
+
+class Chore(DataModel):
+    def __init__(self, response):
+        if isinstance(response, CurrentChoreResponse):
+            self._init_from_CurrentChoreResponse(response)
+        elif isinstance(response, ChoreDetailsResponse):
+            self._init_from_ChoreDetailsResponse(response)
+
+    # noinspection PyPep8Naming
+    def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
+        self._id = response.chore_id
+        self._last_tracked_time = response.last_tracked_time
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = None
+        self._last_done_by = None
+
+    # noinspection PyPep8Naming
+    def _init_from_ChoreDetailsResponse(self, response: ChoreDetailsResponse):
+        chore_data = response.chore
+        self._id = chore_data.id
+        self._name = chore_data.name
+        self._description = chore_data.description
+
+        if chore_data.period_type is not None:
+            self._period_type = PeriodType(chore_data.period_type)
+        else:
+            self._period_type = None
+
+        self._period_config = chore_data.period_config
+        self._period_days = chore_data.period_days
+        self._track_date_only = chore_data.track_date_only
+        self._rollover = chore_data.rollover
+
+        if chore_data.assignment_type is not None:
+            self._assignment_type = AssignmentType(chore_data.assignment_type)
+        else:
+            self._assignment_type = None
+
+        self._assignment_config = chore_data.assignment_config
+        self._next_execution_assigned_to_user_id = (
+            chore_data.next_execution_assigned_to_user_id
+        )
+        self._userfields = chore_data.userfields
+
+        self._last_tracked_time = response.last_tracked
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        if response.last_done_by is not None:
+            self._last_done_by = User(response.last_done_by)
+        else:
+            self._last_done_by = None
+        self._track_count = response.track_count
+        if response.next_execution_assigned_user is not None:
+            self._next_execution_assigned_user = User(
+                response.next_execution_assigned_user
+            )
+        else:
+            self._next_execution_assigned_user = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_chore(self.id)
+        self._init_from_ChoreDetailsResponse(details)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def period_type(self) -&gt; PeriodType:
+        return self._period_type
+
+    @property
+    def period_config(self) -&gt; str:
+        return self._period_config
+
+    @property
+    def period_days(self) -&gt; int:
+        return self._period_days
+
+    @property
+    def track_date_only(self) -&gt; bool:
+        return self._track_date_only
+
+    @property
+    def rollover(self) -&gt; bool:
+        return self._rollover
+
+    @property
+    def assignment_type(self) -&gt; AssignmentType:
+        return self._assignment_type
+
+    @property
+    def assignment_config(self) -&gt; str:
+        return self._assignment_config
+
+    @property
+    def next_execution_assigned_to_user_id(self) -&gt; int:
+        return self._next_execution_assigned_to_user_id
+
+    @property
+    def userfields(self) -&gt; Dict[str, str]:
+        return self._userfields
+
+    @property
+    def last_tracked_time(self) -&gt; datetime:
+        return self._last_tracked_time
+
+    @property
+    def next_estimated_execution_time(self) -&gt; datetime:
+        return self._next_estimated_execution_time
+
+    @property
+    def last_done_by(self) -&gt; User:
+        return self._last_done_by
+
+    @property
+    def track_count(self) -&gt; int:
+        return self._track_count
+
+    @property
+    def next_execution_assigned_user(self) -&gt; User:
+        return self._next_execution_assigned_user</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygrocy.data_models.chore.AssignmentType"><code class="flex name class">
+<span>class <span class="ident">AssignmentType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AssignmentType(str, Enum):
+    NO_ASSIGNMENT = &#34;no-assignment&#34;
+    WHO_LEAST_DID_FIRST = &#34;who-least-did-first&#34;
+    RANDOM = &#34;random&#34;
+    IN_ALPHABETICAL_ORDER = &#34;in-alphabetical-order&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.data_models.chore.AssignmentType.IN_ALPHABETICAL_ORDER"><code class="name">var <span class="ident">IN_ALPHABETICAL_ORDER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.AssignmentType.NO_ASSIGNMENT"><code class="name">var <span class="ident">NO_ASSIGNMENT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.AssignmentType.RANDOM"><code class="name">var <span class="ident">RANDOM</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.AssignmentType.WHO_LEAST_DID_FIRST"><code class="name">var <span class="ident">WHO_LEAST_DID_FIRST</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore"><code class="flex name class">
+<span>class <span class="ident">Chore</span></span>
+<span>(</span><span>response)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Chore(DataModel):
+    def __init__(self, response):
+        if isinstance(response, CurrentChoreResponse):
+            self._init_from_CurrentChoreResponse(response)
+        elif isinstance(response, ChoreDetailsResponse):
+            self._init_from_ChoreDetailsResponse(response)
+
+    # noinspection PyPep8Naming
+    def _init_from_CurrentChoreResponse(self, response: CurrentChoreResponse):
+        self._id = response.chore_id
+        self._last_tracked_time = response.last_tracked_time
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        self._name = None
+        self._last_done_by = None
+
+    # noinspection PyPep8Naming
+    def _init_from_ChoreDetailsResponse(self, response: ChoreDetailsResponse):
+        chore_data = response.chore
+        self._id = chore_data.id
+        self._name = chore_data.name
+        self._description = chore_data.description
+
+        if chore_data.period_type is not None:
+            self._period_type = PeriodType(chore_data.period_type)
+        else:
+            self._period_type = None
+
+        self._period_config = chore_data.period_config
+        self._period_days = chore_data.period_days
+        self._track_date_only = chore_data.track_date_only
+        self._rollover = chore_data.rollover
+
+        if chore_data.assignment_type is not None:
+            self._assignment_type = AssignmentType(chore_data.assignment_type)
+        else:
+            self._assignment_type = None
+
+        self._assignment_config = chore_data.assignment_config
+        self._next_execution_assigned_to_user_id = (
+            chore_data.next_execution_assigned_to_user_id
+        )
+        self._userfields = chore_data.userfields
+
+        self._last_tracked_time = response.last_tracked
+        self._next_estimated_execution_time = response.next_estimated_execution_time
+        if response.last_done_by is not None:
+            self._last_done_by = User(response.last_done_by)
+        else:
+            self._last_done_by = None
+        self._track_count = response.track_count
+        if response.next_execution_assigned_user is not None:
+            self._next_execution_assigned_user = User(
+                response.next_execution_assigned_user
+            )
+        else:
+            self._next_execution_assigned_user = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_chore(self.id)
+        self._init_from_ChoreDetailsResponse(details)
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def period_type(self) -&gt; PeriodType:
+        return self._period_type
+
+    @property
+    def period_config(self) -&gt; str:
+        return self._period_config
+
+    @property
+    def period_days(self) -&gt; int:
+        return self._period_days
+
+    @property
+    def track_date_only(self) -&gt; bool:
+        return self._track_date_only
+
+    @property
+    def rollover(self) -&gt; bool:
+        return self._rollover
+
+    @property
+    def assignment_type(self) -&gt; AssignmentType:
+        return self._assignment_type
+
+    @property
+    def assignment_config(self) -&gt; str:
+        return self._assignment_config
+
+    @property
+    def next_execution_assigned_to_user_id(self) -&gt; int:
+        return self._next_execution_assigned_to_user_id
+
+    @property
+    def userfields(self) -&gt; Dict[str, str]:
+        return self._userfields
+
+    @property
+    def last_tracked_time(self) -&gt; datetime:
+        return self._last_tracked_time
+
+    @property
+    def next_estimated_execution_time(self) -&gt; datetime:
+        return self._next_estimated_execution_time
+
+    @property
+    def last_done_by(self) -&gt; User:
+        return self._last_done_by
+
+    @property
+    def track_count(self) -&gt; int:
+        return self._track_count
+
+    @property
+    def next_execution_assigned_user(self) -&gt; User:
+        return self._next_execution_assigned_user</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygrocy.base.DataModel" href="../base.html#pygrocy.base.DataModel">DataModel</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.data_models.chore.Chore.assignment_config"><code class="name">var <span class="ident">assignment_config</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def assignment_config(self) -&gt; str:
+    return self._assignment_config</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.assignment_type"><code class="name">var <span class="ident">assignment_type</span> : <a title="pygrocy.data_models.chore.AssignmentType" href="#pygrocy.data_models.chore.AssignmentType">AssignmentType</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def assignment_type(self) -&gt; AssignmentType:
+    return self._assignment_type</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.last_done_by"><code class="name">var <span class="ident">last_done_by</span> : <a title="pygrocy.data_models.user.User" href="user.html#pygrocy.data_models.user.User">User</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def last_done_by(self) -&gt; User:
+    return self._last_done_by</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.last_tracked_time"><code class="name">var <span class="ident">last_tracked_time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def last_tracked_time(self) -&gt; datetime:
+    return self._last_tracked_time</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def next_estimated_execution_time(self) -&gt; datetime:
+    return self._next_estimated_execution_time</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.next_execution_assigned_to_user_id"><code class="name">var <span class="ident">next_execution_assigned_to_user_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def next_execution_assigned_to_user_id(self) -&gt; int:
+    return self._next_execution_assigned_to_user_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.next_execution_assigned_user"><code class="name">var <span class="ident">next_execution_assigned_user</span> : <a title="pygrocy.data_models.user.User" href="user.html#pygrocy.data_models.user.User">User</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def next_execution_assigned_user(self) -&gt; User:
+    return self._next_execution_assigned_user</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.period_config"><code class="name">var <span class="ident">period_config</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def period_config(self) -&gt; str:
+    return self._period_config</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.period_days"><code class="name">var <span class="ident">period_days</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def period_days(self) -&gt; int:
+    return self._period_days</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.period_type"><code class="name">var <span class="ident">period_type</span> : <a title="pygrocy.data_models.chore.PeriodType" href="#pygrocy.data_models.chore.PeriodType">PeriodType</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def period_type(self) -&gt; PeriodType:
+    return self._period_type</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.rollover"><code class="name">var <span class="ident">rollover</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def rollover(self) -&gt; bool:
+    return self._rollover</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.track_count"><code class="name">var <span class="ident">track_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def track_count(self) -&gt; int:
+    return self._track_count</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.track_date_only"><code class="name">var <span class="ident">track_date_only</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def track_date_only(self) -&gt; bool:
+    return self._track_date_only</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.chore.Chore.userfields"><code class="name">var <span class="ident">userfields</span> : Dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def userfields(self) -&gt; Dict[str, str]:
+    return self._userfields</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.data_models.chore.Chore.get_details"><code class="name flex">
+<span>def <span class="ident">get_details</span></span>(<span>self, api_client: <a title="pygrocy.grocy_api_client.GrocyApiClient" href="../grocy_api_client.html#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_details(self, api_client: GrocyApiClient):
+    details = api_client.get_chore(self.id)
+    self._init_from_ChoreDetailsResponse(details)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType"><code class="flex name class">
+<span>class <span class="ident">PeriodType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PeriodType(str, Enum):
+    MANUALLY = &#34;manually&#34;
+    DYNAMIC_REGULAR = &#34;dynamic-regular&#34;
+    DAILY = &#34;daily&#34;
+    WEEKLY = &#34;weekly&#34;
+    MONTHLY = &#34;monthly&#34;
+    YEARLY = &#34;yearly&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.data_models.chore.PeriodType.DAILY"><code class="name">var <span class="ident">DAILY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR"><code class="name">var <span class="ident">DYNAMIC_REGULAR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.MANUALLY"><code class="name">var <span class="ident">MANUALLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.MONTHLY"><code class="name">var <span class="ident">MONTHLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.WEEKLY"><code class="name">var <span class="ident">WEEKLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.YEARLY"><code class="name">var <span class="ident">YEARLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygrocy.data_models" href="index.html">pygrocy.data_models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygrocy.data_models.chore.AssignmentType" href="#pygrocy.data_models.chore.AssignmentType">AssignmentType</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.chore.AssignmentType.IN_ALPHABETICAL_ORDER" href="#pygrocy.data_models.chore.AssignmentType.IN_ALPHABETICAL_ORDER">IN_ALPHABETICAL_ORDER</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.AssignmentType.NO_ASSIGNMENT" href="#pygrocy.data_models.chore.AssignmentType.NO_ASSIGNMENT">NO_ASSIGNMENT</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.AssignmentType.RANDOM" href="#pygrocy.data_models.chore.AssignmentType.RANDOM">RANDOM</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.AssignmentType.WHO_LEAST_DID_FIRST" href="#pygrocy.data_models.chore.AssignmentType.WHO_LEAST_DID_FIRST">WHO_LEAST_DID_FIRST</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.chore.Chore" href="#pygrocy.data_models.chore.Chore">Chore</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.chore.Chore.assignment_config" href="#pygrocy.data_models.chore.Chore.assignment_config">assignment_config</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.assignment_type" href="#pygrocy.data_models.chore.Chore.assignment_type">assignment_type</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.description" href="#pygrocy.data_models.chore.Chore.description">description</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.get_details" href="#pygrocy.data_models.chore.Chore.get_details">get_details</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.id" href="#pygrocy.data_models.chore.Chore.id">id</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.last_done_by" href="#pygrocy.data_models.chore.Chore.last_done_by">last_done_by</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.last_tracked_time" href="#pygrocy.data_models.chore.Chore.last_tracked_time">last_tracked_time</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.name" href="#pygrocy.data_models.chore.Chore.name">name</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.next_estimated_execution_time" href="#pygrocy.data_models.chore.Chore.next_estimated_execution_time">next_estimated_execution_time</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.next_execution_assigned_to_user_id" href="#pygrocy.data_models.chore.Chore.next_execution_assigned_to_user_id">next_execution_assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.next_execution_assigned_user" href="#pygrocy.data_models.chore.Chore.next_execution_assigned_user">next_execution_assigned_user</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.period_config" href="#pygrocy.data_models.chore.Chore.period_config">period_config</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.period_days" href="#pygrocy.data_models.chore.Chore.period_days">period_days</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.period_type" href="#pygrocy.data_models.chore.Chore.period_type">period_type</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.rollover" href="#pygrocy.data_models.chore.Chore.rollover">rollover</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.track_count" href="#pygrocy.data_models.chore.Chore.track_count">track_count</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.track_date_only" href="#pygrocy.data_models.chore.Chore.track_date_only">track_date_only</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.Chore.userfields" href="#pygrocy.data_models.chore.Chore.userfields">userfields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.chore.PeriodType" href="#pygrocy.data_models.chore.PeriodType">PeriodType</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygrocy.data_models.chore.PeriodType.DAILY" href="#pygrocy.data_models.chore.PeriodType.DAILY">DAILY</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR" href="#pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR">DYNAMIC_REGULAR</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.MANUALLY" href="#pygrocy.data_models.chore.PeriodType.MANUALLY">MANUALLY</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.MONTHLY" href="#pygrocy.data_models.chore.PeriodType.MONTHLY">MONTHLY</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.WEEKLY" href="#pygrocy.data_models.chore.PeriodType.WEEKLY">WEEKLY</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.YEARLY" href="#pygrocy.data_models.chore.PeriodType.YEARLY">YEARLY</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>

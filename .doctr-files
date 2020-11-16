@@ -1,4 +1,10 @@
 ./base.html
+./data_models/chore.html
+./data_models/index.html
+./data_models/meal_items.html
+./data_models/product.html
+./data_models/task.html
+./data_models/user.html
 ./grocy.html
 ./grocy_api_client.html
 ./index.html
