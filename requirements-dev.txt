@@ -4,3 +4,4 @@ pdoc3~=0.9.1
 responses~=0.12.1
 tzlocal~=2.1
 iso8601~=0.1.13
+pytest
