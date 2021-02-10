@@ -15,7 +15,7 @@ before_install:
   - cd grocy-docker
   - docker-compose pull
   - GROCY_MODE=demo docker-compose up -d
-  - curl http://localhost/stockoverview
+  - curl http://localhost
   - cd ..
 
 install:
