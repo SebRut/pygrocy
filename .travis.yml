@@ -16,6 +16,7 @@ addons:
       - python3-setuptools
       - python3-wheel
       - tox
+      - python3-virtualenv
 
 services:
   - docker
