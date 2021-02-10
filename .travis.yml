@@ -9,8 +9,8 @@ services:
   - docker
 
 before_install:
-  - sudo add-apt-repository ppa:deadsnakes/ppa
-  - sudo apt update
+  - sudo add-apt-repository ppa:deadsnakes/ppa -y
+  - sudo apt update -y
   - sudo apt install -y python3 python3.8
   - git clone --branch v3.0.1-8 https://github.com/grocy/grocy-docker.git
   - cd grocy-docker
