@@ -28,7 +28,7 @@ before_install:
   - docker-compose up -d
   - curl http://localhost
   - cd ..
-  - pip3 install virtualenv --force-reinstall
+  - pip3 install virtualenv==20.0.23 --force-reinstall
 
 install:
   - pip3 install -r requirements.txt
