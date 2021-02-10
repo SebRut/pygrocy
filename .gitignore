@@ -97,3 +97,6 @@ html/
 build/
 pygrocy.egg-info/
 
+
+.tox/
+.coverage

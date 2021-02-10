@@ -6,3 +6,5 @@ tzlocal~=2.1
 iso8601~=0.1.14
 pre-commit
 isort
+pytest
+pytest-cov
