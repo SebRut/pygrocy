@@ -383,17 +383,23 @@ class ProductDetailsResponse(object):
             parsed_json.get("quantity_unit_stock")
         )
 
-        raw_location = parsed_json.get("location")
-        if raw_location is None:
-            self._location = None
-        else:
-            self._location = LocationData(raw_location)
+        self._parse_location(parsed_json)
 
+        self._parse_barcodes(parsed_json)
+
+    def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get("product_barcodes", "")
         if barcodes_raw is None:
             self._barcodes = None
         else:
             self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+
+    def _parse_location(self, parsed_json):
+        raw_location = parsed_json.get("location")
+        if raw_location is None:
+            self._location = None
+        else:
+            self._location = LocationData(raw_location)
 
     @property
     def last_purchased(self) -> datetime:
