@@ -1,6 +1,5 @@
 language: python
 python:
-  - '3.8'
   - '3.9'
 
 env:
@@ -12,10 +11,11 @@ services:
   - docker
 
 before_install:
-  - git clone --branch v2.7.1-4 https://github.com/grocy/grocy-docker.git
+  - git clone --branch v3.0.1-8 https://github.com/grocy/grocy-docker.git
   - cd grocy-docker
   - docker-compose pull
   - GROCY_MODE=demo docker-compose up -d
+  - curl http://localhost
   - cd ..
 
 install:
