@@ -7,3 +7,4 @@ iso8601~=0.1.13
 pytest
 pre-commit
 isort
+pytest-cov
