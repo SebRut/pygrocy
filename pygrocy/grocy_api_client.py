@@ -6,7 +6,8 @@ from typing import List
 from urllib.parse import urljoin
 
 import requests
-from pygrocy.utils import parse_date, parse_float, parse_int, localize_datetime
+
+from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -172,12 +173,6 @@ class ProductData(object):
             parsed_json.get("default_best_before_days", None)
         )
 
-        barcodes_raw = parsed_json.get("barcode", "")
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
-            self._barcodes = barcodes_raw.split(",")
-
     @property
     def id(self) -> int:
         return self._id
@@ -189,10 +184,6 @@ class ProductData(object):
     @property
     def name(self) -> str:
         return self._name
-
-    @property
-    def barcodes(self) -> List[str]:
-        return self._barcodes
 
 
 class ChoreData(object):
@@ -321,22 +312,41 @@ class MissingProductResponse(object):
 
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        self._expiring_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get("expiring_products")
-        ]
-        self._expired_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get("expired_products")
-        ]
-        self._missing_products = [
-            MissingProductResponse(product)
-            for product in parsed_json.get("missing_products")
-        ]
+        self._due_products = []
+        if "due_products" in parsed_json:
+            self._due_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get("due_products")
+            ]
+
+        self._overdue_products = []
+        if "overdue_products" in parsed_json:
+            self._overdue_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get("overdue_products")
+            ]
+
+        self._expired_products = []
+        if "expired_products" in parsed_json:
+            self._expired_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get("expired_products")
+            ]
+
+        self._missing_products = []
+        if "missing_products" in parsed_json:
+            self._missing_products = [
+                MissingProductResponse(product)
+                for product in parsed_json.get("missing_products")
+            ]
 
     @property
-    def expiring_products(self) -> List[CurrentStockResponse]:
-        return self._expiring_products
+    def due_products(self) -> List[CurrentStockResponse]:
+        return self._due_products
+
+    @property
+    def overdue_products(self) -> List[CurrentStockResponse]:
+        return self._overdue_products
 
     @property
     def expired_products(self) -> List[CurrentStockResponse]:
@@ -345,6 +355,15 @@ class CurrentVolatilStockResponse(object):
     @property
     def missing_products(self) -> List[MissingProductResponse]:
         return self._missing_products
+
+
+class ProductBarcode(object):
+    def __init__(self, parsed_json):
+        self._barcode = parsed_json.get("barcode")
+
+    @property
+    def barcode(self) -> str:
+        return self._barcode
 
 
 class ProductDetailsResponse(object):
@@ -360,9 +379,6 @@ class ProductDetailsResponse(object):
 
         self._product = ProductData(parsed_json.get("product"))
 
-        self._quantity_unit_purchase = QuantityUnitData(
-            parsed_json.get("quantity_unit_purchase")
-        )
         self._quantity_unit_stock = QuantityUnitData(
             parsed_json.get("quantity_unit_stock")
         )
@@ -372,6 +388,12 @@ class ProductDetailsResponse(object):
             self._location = None
         else:
             self._location = LocationData(raw_location)
+
+        barcodes_raw = parsed_json.get("product_barcodes", "")
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
 
     @property
     def last_purchased(self) -> datetime:
@@ -396,6 +418,10 @@ class ProductDetailsResponse(object):
     @property
     def last_price(self) -> float:
         return self._last_price
+
+    @property
+    def barcodes(self) -> List[ProductBarcode]:
+        return self._barcodes
 
     @property
     def product(self) -> ProductData:

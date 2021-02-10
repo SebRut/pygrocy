@@ -1,0 +1,90 @@
+action: GLOB, msg: packaging
+cwd: /home/sebastian/projects/pygrocy
+cmd: /usr/bin/python setup.py sdist --formats=zip --dist-dir .tox/dist
+running sdist
+running egg_info
+writing pygrocy.egg-info/PKG-INFO
+writing dependency_links to pygrocy.egg-info/dependency_links.txt
+writing requirements to pygrocy.egg-info/requires.txt
+writing top-level names to pygrocy.egg-info/top_level.txt
+reading manifest file 'pygrocy.egg-info/SOURCES.txt'
+writing manifest file 'pygrocy.egg-info/SOURCES.txt'
+running check
+creating pygrocy-0.24.1
+creating pygrocy-0.24.1/pygrocy
+creating pygrocy-0.24.1/pygrocy.egg-info
+creating pygrocy-0.24.1/pygrocy/data_models
+creating pygrocy-0.24.1/test
+copying files to pygrocy-0.24.1...
+copying README.md -> pygrocy-0.24.1
+copying setup.py -> pygrocy-0.24.1
+copying pygrocy/__init__.py -> pygrocy-0.24.1/pygrocy
+copying pygrocy/base.py -> pygrocy-0.24.1/pygrocy
+copying pygrocy/grocy.py -> pygrocy-0.24.1/pygrocy
+copying pygrocy/grocy_api_client.py -> pygrocy-0.24.1/pygrocy
+copying pygrocy/utils.py -> pygrocy-0.24.1/pygrocy
+copying pygrocy.egg-info/PKG-INFO -> pygrocy-0.24.1/pygrocy.egg-info
+copying pygrocy.egg-info/SOURCES.txt -> pygrocy-0.24.1/pygrocy.egg-info
+copying pygrocy.egg-info/dependency_links.txt -> pygrocy-0.24.1/pygrocy.egg-info
+copying pygrocy.egg-info/requires.txt -> pygrocy-0.24.1/pygrocy.egg-info
+copying pygrocy.egg-info/top_level.txt -> pygrocy-0.24.1/pygrocy.egg-info
+copying pygrocy/data_models/__init__.py -> pygrocy-0.24.1/pygrocy/data_models
+copying pygrocy/data_models/chore.py -> pygrocy-0.24.1/pygrocy/data_models
+copying pygrocy/data_models/meal_items.py -> pygrocy-0.24.1/pygrocy/data_models
+copying pygrocy/data_models/product.py -> pygrocy-0.24.1/pygrocy/data_models
+copying pygrocy/data_models/task.py -> pygrocy-0.24.1/pygrocy/data_models
+copying pygrocy/data_models/user.py -> pygrocy-0.24.1/pygrocy/data_models
+copying test/__init__.py -> pygrocy-0.24.1/test
+copying test/test_LocationData.py -> pygrocy-0.24.1/test
+copying test/test_MealPlanResponse.py -> pygrocy-0.24.1/test
+copying test/test_ShoppingListItem.py -> pygrocy-0.24.1/test
+copying test/test_UserDto.py -> pygrocy-0.24.1/test
+copying test/test_choreDetailsResponse.py -> pygrocy-0.24.1/test
+copying test/test_const.py -> pygrocy-0.24.1/test
+copying test/test_currentChoreResponse.py -> pygrocy-0.24.1/test
+copying test/test_currentStockResponse.py -> pygrocy-0.24.1/test
+copying test/test_grocy.py -> pygrocy-0.24.1/test
+copying test/test_missingProductResponse.py -> pygrocy-0.24.1/test
+copying test/test_productDetailsResponse.py -> pygrocy-0.24.1/test
+copying test/test_utils.py -> pygrocy-0.24.1/test
+Writing pygrocy-0.24.1/setup.cfg
+creating '.tox/dist/pygrocy-0.24.1.zip' and adding 'pygrocy-0.24.1' to it
+adding 'pygrocy-0.24.1'
+adding 'pygrocy-0.24.1/pygrocy'
+adding 'pygrocy-0.24.1/pygrocy.egg-info'
+adding 'pygrocy-0.24.1/test'
+adding 'pygrocy-0.24.1/PKG-INFO'
+adding 'pygrocy-0.24.1/setup.cfg'
+adding 'pygrocy-0.24.1/setup.py'
+adding 'pygrocy-0.24.1/README.md'
+adding 'pygrocy-0.24.1/pygrocy/data_models'
+adding 'pygrocy-0.24.1/pygrocy/grocy_api_client.py'
+adding 'pygrocy-0.24.1/pygrocy/__init__.py'
+adding 'pygrocy-0.24.1/pygrocy/grocy.py'
+adding 'pygrocy-0.24.1/pygrocy/base.py'
+adding 'pygrocy-0.24.1/pygrocy/utils.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/meal_items.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/__init__.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/user.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/chore.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/task.py'
+adding 'pygrocy-0.24.1/pygrocy/data_models/product.py'
+adding 'pygrocy-0.24.1/pygrocy.egg-info/top_level.txt'
+adding 'pygrocy-0.24.1/pygrocy.egg-info/PKG-INFO'
+adding 'pygrocy-0.24.1/pygrocy.egg-info/SOURCES.txt'
+adding 'pygrocy-0.24.1/pygrocy.egg-info/dependency_links.txt'
+adding 'pygrocy-0.24.1/pygrocy.egg-info/requires.txt'
+adding 'pygrocy-0.24.1/test/test_MealPlanResponse.py'
+adding 'pygrocy-0.24.1/test/test_choreDetailsResponse.py'
+adding 'pygrocy-0.24.1/test/test_LocationData.py'
+adding 'pygrocy-0.24.1/test/test_currentChoreResponse.py'
+adding 'pygrocy-0.24.1/test/__init__.py'
+adding 'pygrocy-0.24.1/test/test_productDetailsResponse.py'
+adding 'pygrocy-0.24.1/test/test_utils.py'
+adding 'pygrocy-0.24.1/test/test_grocy.py'
+adding 'pygrocy-0.24.1/test/test_ShoppingListItem.py'
+adding 'pygrocy-0.24.1/test/test_UserDto.py'
+adding 'pygrocy-0.24.1/test/test_missingProductResponse.py'
+adding 'pygrocy-0.24.1/test/test_currentStockResponse.py'
+adding 'pygrocy-0.24.1/test/test_const.py'
+removing 'pygrocy-0.24.1' (and everything under it)

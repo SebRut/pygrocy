@@ -1,8 +1,16 @@
 from datetime import datetime
 from typing import List
+
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import CurrentStockResponse, MissingProductResponse, ProductDetailsResponse, \
-    GrocyApiClient, LocationData, ShoppingListItem
+from pygrocy.grocy_api_client import (
+    CurrentStockResponse,
+    GrocyApiClient,
+    LocationData,
+    MissingProductResponse,
+    ProductBarcode,
+    ProductDetailsResponse,
+    ShoppingListItem,
+)
 
 
 class Product(DataModel):
@@ -33,7 +41,6 @@ class Product(DataModel):
         self._best_before_date = response.best_before_date
         if response.product:
             self._name = response.product.name
-            self._barcodes = response.product.barcodes
             self._product_group_id = response.product.product_group_id
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
@@ -47,13 +54,13 @@ class Product(DataModel):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._name = response.product.name
-        self._barcodes = response.product.barcodes
+        self._barcodes = response.barcodes
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.product.barcodes
+            self._barcodes = details.barcodes
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -78,6 +85,10 @@ class Product(DataModel):
 
     @property
     def barcodes(self) -> List[str]:
+        return [barcode.barcode for barcode in self.product_barcodes]
+
+    @property
+    def product_barcodes(self) -> List[ProductBarcode]:
         return self._barcodes
 
     @property
