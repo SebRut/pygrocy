@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.25.0](https://github.com/SebRut/pygrocy/tree/v0.25.0) (2021-02-10)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.24.1...v0.25.0)
+
+**Merged pull requests:**
+
+- Grocy 3.0.0+ support [\#146](https://github.com/SebRut/pygrocy/pull/146) ([SebRut](https://github.com/SebRut))
+- Update iso8601 requirement from ~=0.1.13 to ~=0.1.14 [\#144](https://github.com/SebRut/pygrocy/pull/144) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- use tox [\#143](https://github.com/SebRut/pygrocy/pull/143) ([SebRut](https://github.com/SebRut))
+- Update coveralls requirement from ~=2.1.2 to ~=3.0.0 [\#142](https://github.com/SebRut/pygrocy/pull/142) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update pdoc3 requirement from ~=0.9.1 to ~=0.9.2 [\#141](https://github.com/SebRut/pygrocy/pull/141) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.24.1](https://github.com/SebRut/pygrocy/tree/v0.24.1) (2020-11-16)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.24.0...v0.24.1)

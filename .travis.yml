@@ -1,29 +1,42 @@
-language: python
-python:
-  - '3.8'
+language: minimal
+dist: focal
 
 env:
   global:
     # Doctr deploy key for SebRut/pygrocy
     - secure: "YoHepp7ZFuwmdlghnhwT7aczFamnuwTrAuOyXuhxV9bX9eqziurL5K39R04OD5hdPcbNXoVos1YbE4hBGFQpAk6ReiBqqhh+3qDw/HeEpZxRX9dISw+74Nu9kAYXNR8Ab5Zcov85IV3xvTqpawMeBpiXBuJFTbdvZbWhN1jglpR4D9VG//LaNjR/FbCH/41xzpuK3L1mSCQM3jJSSxPU7ZfkWzNvsGj1X///m3la3gR7DL1M4QC9hnzKF6KRNl0kVUuNnK8GhT66ZBGaCVDTqQeDQGTrjsCGuCsQnoydVV2XFwljZ3B6qE27ZqhehlloK2s8/go18zAuj9HpdkTx0RzeUOkxIDp9hAnAys4iGz7Ltk+sx0jGbNsv2Z8oHBgDhv6mu/0UMwD1dL83ZL3L0qWDJfDY3NZSlV0oW9ZPz5ZG8ObnnKKh4vHfp7HUpp/ElYEio7JzQit4FI7gnZRDFEAeH/NvwX8+t0SGXITyyn2U2X5Hz7TUe3laNaDe6Bq59+jebnRdTttuhyoXcMHtjm9HerqRussV+2jyTUf+ktWOFZFjavqUSj6k3iV9yKrgYwfW2+tsaOBZqEHwkRkd5DbNFLvkd0+NEBRfsJV4v51z9QdES3FlPpY/nPqORVkPCLxriCWLf+lTtYi6rtjixvvc4poFFz6WTNILwuOLqrs="
+    - GROCY_MODE=demo
+
+addons:
+  apt:
+    update: true
+    packages:
+      - python3.8
+      - python3
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+      - tox
 
 services:
   - docker
 
 before_install:
-  - git clone --branch v2.7.1-4 https://github.com/grocy/grocy-docker.git
+  - git clone --branch v3.0.1-8 https://github.com/grocy/grocy-docker.git
   - cd grocy-docker
   - docker-compose pull
-  - GROCY_MODE=demo docker-compose up -d
+  - docker-compose up -d
+  - curl http://localhost
   - cd ..
+  - pip3 install virtualenv==20.0.23 --force-reinstall
 
 install:
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
-  - pip install coveralls
+  - pip3 install -r requirements.txt
+  - pip3 install -r requirements-dev.txt
+  - pip3 install coveralls
 
 script:
-  - coverage run --source=pygrocy setup.py test
+  - tox
   - set -e
   - pdoc3 --html pygrocy
 
