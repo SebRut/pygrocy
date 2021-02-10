@@ -1,29 +1,26 @@
 from datetime import datetime
-from enum import Enum
-from typing import List, Dict
+from typing import List
 
-from .base import DataModel
+import deprecation
+
+from .base import DataModel  # noqa: F401
 from .data_models.chore import Chore
-from .data_models.meal_items import RecipeItem, MealPlanItem
-from .data_models.product import Product, Group, ShoppingListProduct
+from .data_models.meal_items import MealPlanItem, RecipeItem
+from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
-from .data_models.user import User
-from .grocy_api_client import (
-    DEFAULT_PORT_NUMBER,
-    ChoreDetailsResponse,
-    CurrentChoreResponse,
-    CurrentStockResponse,
-    GrocyApiClient,
-    LocationData,
-    MissingProductResponse,
-    ProductDetailsResponse,
-    MealPlanResponse,
-    RecipeDetailsResponse,
-    ShoppingListItem,
-    TransactionType,
-    UserDto,
-    TaskResponse,
-)
+from .data_models.user import User  # noqa: F401
+from .grocy_api_client import ChoreDetailsResponse  # noqa: F401
+from .grocy_api_client import CurrentChoreResponse  # noqa: F401
+from .grocy_api_client import CurrentStockResponse  # noqa: F401
+from .grocy_api_client import LocationData  # noqa: F401
+from .grocy_api_client import MealPlanResponse  # noqa: F401
+from .grocy_api_client import MissingProductResponse  # noqa: F401
+from .grocy_api_client import ProductDetailsResponse  # noqa: F401
+from .grocy_api_client import RecipeDetailsResponse  # noqa: F401
+from .grocy_api_client import ShoppingListItem  # noqa: F401
+from .grocy_api_client import TaskResponse  # noqa: F401
+from .grocy_api_client import UserDto  # noqa: F401
+from .grocy_api_client import DEFAULT_PORT_NUMBER, GrocyApiClient, TransactionType
 
 
 class Grocy(object):
@@ -37,32 +34,45 @@ class Grocy(object):
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
+    @deprecation.deprecated(details="Use due_products instead")
     def expiring_products(self, get_details: bool = False) -> List[Product]:
-        raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
-        expiring_product = [Product(resp) for resp in raw_expiring_product]
+        return self.due_products(get_details)
+
+    def due_products(self, get_details: bool = False) -> List[Product]:
+        raw_due_prodcuts = self._api_client.get_volatile_stock().due_products
+        due_products = [Product(resp) for resp in raw_due_prodcuts]
 
         if get_details:
-            for item in expiring_product:
+            for item in due_products:
                 item.get_details(self._api_client)
-        return expiring_product
+        return due_products
+
+    def overdue_products(self, get_details: bool = False) -> List[Product]:
+        raw_overdue_products = self._api_client.get_volatile_stock().overdue_products
+        overdue_products = [Product(resp) for resp in raw_overdue_products]
+
+        if get_details:
+            for item in overdue_products:
+                item.get_details(self._api_client)
+        return overdue_products
 
     def expired_products(self, get_details: bool = False) -> List[Product]:
-        raw_expired_product = self._api_client.get_volatile_stock().expired_products
-        expired_product = [Product(resp) for resp in raw_expired_product]
+        raw_expired_products = self._api_client.get_volatile_stock().expired_products
+        expired_products = [Product(resp) for resp in raw_expired_products]
 
         if get_details:
-            for item in expired_product:
+            for item in expired_products:
                 item.get_details(self._api_client)
-        return expired_product
+        return expired_products
 
     def missing_products(self, get_details: bool = False) -> List[Product]:
-        raw_missing_product = self._api_client.get_volatile_stock().missing_products
-        missing_product = [Product(resp) for resp in raw_missing_product]
+        raw_missing_products = self._api_client.get_volatile_stock().missing_products
+        missing_products = [Product(resp) for resp in raw_missing_products]
 
         if get_details:
-            for item in missing_product:
+            for item in missing_products:
                 item.get_details(self._api_client)
-        return missing_product
+        return missing_products
 
     def product(self, product_id: int) -> Product:
         resp = self._api_client.get_product(product_id)
