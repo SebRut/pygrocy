@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>pygrocy.grocy_api_client API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -34,7 +34,8 @@ from typing import List
 from urllib.parse import urljoin
 
 import requests
-from pygrocy.utils import parse_date, parse_float, parse_int, localize_datetime
+
+from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -200,12 +201,6 @@ class ProductData(object):
             parsed_json.get(&#34;default_best_before_days&#34;, None)
         )
 
-        barcodes_raw = parsed_json.get(&#34;barcode&#34;, &#34;&#34;)
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
-            self._barcodes = barcodes_raw.split(&#34;,&#34;)
-
     @property
     def id(self) -&gt; int:
         return self._id
@@ -217,10 +212,6 @@ class ProductData(object):
     @property
     def name(self) -&gt; str:
         return self._name
-
-    @property
-    def barcodes(self) -&gt; List[str]:
-        return self._barcodes
 
 
 class ChoreData(object):
@@ -349,22 +340,41 @@ class MissingProductResponse(object):
 
 class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        self._expiring_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get(&#34;expiring_products&#34;)
-        ]
-        self._expired_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get(&#34;expired_products&#34;)
-        ]
-        self._missing_products = [
-            MissingProductResponse(product)
-            for product in parsed_json.get(&#34;missing_products&#34;)
-        ]
+        self._due_products = []
+        if &#34;due_products&#34; in parsed_json:
+            self._due_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;due_products&#34;)
+            ]
+
+        self._overdue_products = []
+        if &#34;overdue_products&#34; in parsed_json:
+            self._overdue_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;overdue_products&#34;)
+            ]
+
+        self._expired_products = []
+        if &#34;expired_products&#34; in parsed_json:
+            self._expired_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;expired_products&#34;)
+            ]
+
+        self._missing_products = []
+        if &#34;missing_products&#34; in parsed_json:
+            self._missing_products = [
+                MissingProductResponse(product)
+                for product in parsed_json.get(&#34;missing_products&#34;)
+            ]
 
     @property
-    def expiring_products(self) -&gt; List[CurrentStockResponse]:
-        return self._expiring_products
+    def due_products(self) -&gt; List[CurrentStockResponse]:
+        return self._due_products
+
+    @property
+    def overdue_products(self) -&gt; List[CurrentStockResponse]:
+        return self._overdue_products
 
     @property
     def expired_products(self) -&gt; List[CurrentStockResponse]:
@@ -373,6 +383,15 @@ class CurrentVolatilStockResponse(object):
     @property
     def missing_products(self) -&gt; List[MissingProductResponse]:
         return self._missing_products
+
+
+class ProductBarcode(object):
+    def __init__(self, parsed_json):
+        self._barcode = parsed_json.get(&#34;barcode&#34;)
+
+    @property
+    def barcode(self) -&gt; str:
+        return self._barcode
 
 
 class ProductDetailsResponse(object):
@@ -388,13 +407,22 @@ class ProductDetailsResponse(object):
 
         self._product = ProductData(parsed_json.get(&#34;product&#34;))
 
-        self._quantity_unit_purchase = QuantityUnitData(
-            parsed_json.get(&#34;quantity_unit_purchase&#34;)
-        )
         self._quantity_unit_stock = QuantityUnitData(
             parsed_json.get(&#34;quantity_unit_stock&#34;)
         )
 
+        self._parse_location(parsed_json)
+
+        self._parse_barcodes(parsed_json)
+
+    def _parse_barcodes(self, parsed_json):
+        barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+
+    def _parse_location(self, parsed_json):
         raw_location = parsed_json.get(&#34;location&#34;)
         if raw_location is None:
             self._location = None
@@ -424,6 +452,10 @@ class ProductDetailsResponse(object):
     @property
     def last_price(self) -&gt; float:
         return self._last_price
+
+    @property
+    def barcodes(self) -&gt; List[ProductBarcode]:
+        return self._barcodes
 
     @property
     def product(self) -&gt; ProductData:
@@ -1052,22 +1084,41 @@ def product_id(self) -&gt; int:
 </summary>
 <pre><code class="python">class CurrentVolatilStockResponse(object):
     def __init__(self, parsed_json):
-        self._expiring_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get(&#34;expiring_products&#34;)
-        ]
-        self._expired_products = [
-            CurrentStockResponse(product)
-            for product in parsed_json.get(&#34;expired_products&#34;)
-        ]
-        self._missing_products = [
-            MissingProductResponse(product)
-            for product in parsed_json.get(&#34;missing_products&#34;)
-        ]
+        self._due_products = []
+        if &#34;due_products&#34; in parsed_json:
+            self._due_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;due_products&#34;)
+            ]
+
+        self._overdue_products = []
+        if &#34;overdue_products&#34; in parsed_json:
+            self._overdue_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;overdue_products&#34;)
+            ]
+
+        self._expired_products = []
+        if &#34;expired_products&#34; in parsed_json:
+            self._expired_products = [
+                CurrentStockResponse(product)
+                for product in parsed_json.get(&#34;expired_products&#34;)
+            ]
+
+        self._missing_products = []
+        if &#34;missing_products&#34; in parsed_json:
+            self._missing_products = [
+                MissingProductResponse(product)
+                for product in parsed_json.get(&#34;missing_products&#34;)
+            ]
 
     @property
-    def expiring_products(self) -&gt; List[CurrentStockResponse]:
-        return self._expiring_products
+    def due_products(self) -&gt; List[CurrentStockResponse]:
+        return self._due_products
+
+    @property
+    def overdue_products(self) -&gt; List[CurrentStockResponse]:
+        return self._overdue_products
 
     @property
     def expired_products(self) -&gt; List[CurrentStockResponse]:
@@ -1079,6 +1130,18 @@ def product_id(self) -&gt; int:
 </details>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.due_products"><code class="name">var <span class="ident">due_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def due_products(self) -&gt; List[CurrentStockResponse]:
+    return self._due_products</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expired_products"><code class="name">var <span class="ident">expired_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1091,18 +1154,6 @@ def expired_products(self) -&gt; List[CurrentStockResponse]:
     return self._expired_products</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expiring_products"><code class="name">var <span class="ident">expiring_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def expiring_products(self) -&gt; List[CurrentStockResponse]:
-    return self._expiring_products</code></pre>
-</details>
-</dd>
 <dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.missing_products"><code class="name">var <span class="ident">missing_products</span> : List[<a title="pygrocy.grocy_api_client.MissingProductResponse" href="#pygrocy.grocy_api_client.MissingProductResponse">MissingProductResponse</a>]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1113,6 +1164,18 @@ def expiring_products(self) -&gt; List[CurrentStockResponse]:
 <pre><code class="python">@property
 def missing_products(self) -&gt; List[MissingProductResponse]:
     return self._missing_products</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.overdue_products"><code class="name">var <span class="ident">overdue_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def overdue_products(self) -&gt; List[CurrentStockResponse]:
+    return self._overdue_products</code></pre>
 </details>
 </dd>
 </dl>
@@ -1429,7 +1492,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2020, 11, 16, 13, 4, 9, 636625))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 392551))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1472,7 +1535,7 @@ def missing_products(self) -&gt; List[MissingProductResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 11, 16, 13, 4, 9, 636562))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 392475))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2005,6 +2068,40 @@ def product_id(self) -&gt; int:
 </dd>
 </dl>
 </dd>
+<dt id="pygrocy.grocy_api_client.ProductBarcode"><code class="flex name class">
+<span>class <span class="ident">ProductBarcode</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProductBarcode(object):
+    def __init__(self, parsed_json):
+        self._barcode = parsed_json.get(&#34;barcode&#34;)
+
+    @property
+    def barcode(self) -&gt; str:
+        return self._barcode</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ProductBarcode.barcode"><code class="name">var <span class="ident">barcode</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def barcode(self) -&gt; str:
+    return self._barcode</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="pygrocy.grocy_api_client.ProductData"><code class="flex name class">
 <span>class <span class="ident">ProductData</span></span>
 <span>(</span><span>parsed_json)</span>
@@ -2039,12 +2136,6 @@ def product_id(self) -&gt; int:
             parsed_json.get(&#34;default_best_before_days&#34;, None)
         )
 
-        barcodes_raw = parsed_json.get(&#34;barcode&#34;, &#34;&#34;)
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
-            self._barcodes = barcodes_raw.split(&#34;,&#34;)
-
     @property
     def id(self) -&gt; int:
         return self._id
@@ -2055,26 +2146,10 @@ def product_id(self) -&gt; int:
 
     @property
     def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def barcodes(self) -&gt; List[str]:
-        return self._barcodes</code></pre>
+        return self._name</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.ProductData.barcodes"><code class="name">var <span class="ident">barcodes</span> : List[str]</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def barcodes(self) -&gt; List[str]:
-    return self._barcodes</code></pre>
-</details>
-</dd>
 <dt id="pygrocy.grocy_api_client.ProductData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
@@ -2136,13 +2211,22 @@ def product_group_id(self) -&gt; int:
 
         self._product = ProductData(parsed_json.get(&#34;product&#34;))
 
-        self._quantity_unit_purchase = QuantityUnitData(
-            parsed_json.get(&#34;quantity_unit_purchase&#34;)
-        )
         self._quantity_unit_stock = QuantityUnitData(
             parsed_json.get(&#34;quantity_unit_stock&#34;)
         )
 
+        self._parse_location(parsed_json)
+
+        self._parse_barcodes(parsed_json)
+
+    def _parse_barcodes(self, parsed_json):
+        barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
+        if barcodes_raw is None:
+            self._barcodes = None
+        else:
+            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+
+    def _parse_location(self, parsed_json):
         raw_location = parsed_json.get(&#34;location&#34;)
         if raw_location is None:
             self._location = None
@@ -2174,11 +2258,27 @@ def product_group_id(self) -&gt; int:
         return self._last_price
 
     @property
+    def barcodes(self) -&gt; List[ProductBarcode]:
+        return self._barcodes
+
+    @property
     def product(self) -&gt; ProductData:
         return self._product</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes"><code class="name">var <span class="ident">barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcode" href="#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def barcodes(self) -&gt; List[ProductBarcode]:
+    return self._barcodes</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_price"><code class="name">var <span class="ident">last_price</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
@@ -2716,9 +2816,10 @@ def username(self) -&gt; str:
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse">CurrentVolatilStockResponse</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse.due_products" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse.due_products">due_products</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expired_products" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse.expired_products">expired_products</a></code></li>
-<li><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expiring_products" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse.expiring_products">expiring_products</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse.missing_products" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse.missing_products">missing_products</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse.overdue_products" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse.overdue_products">overdue_products</a></code></li>
 </ul>
 </li>
 <li>
@@ -2778,9 +2879,14 @@ def username(self) -&gt; str:
 </ul>
 </li>
 <li>
+<h4><code><a title="pygrocy.grocy_api_client.ProductBarcode" href="#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ProductBarcode.barcode" href="#pygrocy.grocy_api_client.ProductBarcode.barcode">barcode</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></h4>
 <ul class="">
-<li><code><a title="pygrocy.grocy_api_client.ProductData.barcodes" href="#pygrocy.grocy_api_client.ProductData.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.id" href="#pygrocy.grocy_api_client.ProductData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.name" href="#pygrocy.grocy_api_client.ProductData.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id" href="#pygrocy.grocy_api_client.ProductData.product_group_id">product_group_id</a></code></li>
@@ -2789,6 +2895,7 @@ def username(self) -&gt; str:
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse" href="#pygrocy.grocy_api_client.ProductDetailsResponse">ProductDetailsResponse</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes" href="#pygrocy.grocy_api_client.ProductDetailsResponse.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_price" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_price">last_price</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased">last_purchased</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_used" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_used">last_used</a></code></li>
@@ -2849,7 +2956,7 @@ def username(self) -&gt; str:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>

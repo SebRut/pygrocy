@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>pygrocy.grocy API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -27,31 +27,28 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from datetime import datetime
-from enum import Enum
-from typing import List, Dict
+from typing import List
 
-from .base import DataModel
+import deprecation
+
+from .base import DataModel  # noqa: F401
 from .data_models.chore import Chore
-from .data_models.meal_items import RecipeItem, MealPlanItem
-from .data_models.product import Product, Group, ShoppingListProduct
+from .data_models.meal_items import MealPlanItem, RecipeItem
+from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
-from .data_models.user import User
-from .grocy_api_client import (
-    DEFAULT_PORT_NUMBER,
-    ChoreDetailsResponse,
-    CurrentChoreResponse,
-    CurrentStockResponse,
-    GrocyApiClient,
-    LocationData,
-    MissingProductResponse,
-    ProductDetailsResponse,
-    MealPlanResponse,
-    RecipeDetailsResponse,
-    ShoppingListItem,
-    TransactionType,
-    UserDto,
-    TaskResponse,
-)
+from .data_models.user import User  # noqa: F401
+from .grocy_api_client import ChoreDetailsResponse  # noqa: F401
+from .grocy_api_client import CurrentChoreResponse  # noqa: F401
+from .grocy_api_client import CurrentStockResponse  # noqa: F401
+from .grocy_api_client import LocationData  # noqa: F401
+from .grocy_api_client import MealPlanResponse  # noqa: F401
+from .grocy_api_client import MissingProductResponse  # noqa: F401
+from .grocy_api_client import ProductDetailsResponse  # noqa: F401
+from .grocy_api_client import RecipeDetailsResponse  # noqa: F401
+from .grocy_api_client import ShoppingListItem  # noqa: F401
+from .grocy_api_client import TaskResponse  # noqa: F401
+from .grocy_api_client import UserDto  # noqa: F401
+from .grocy_api_client import DEFAULT_PORT_NUMBER, GrocyApiClient, TransactionType
 
 
 class Grocy(object):
@@ -65,32 +62,45 @@ class Grocy(object):
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
+    @deprecation.deprecated(details=&#34;Use due_products instead&#34;)
     def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
-        expiring_product = [Product(resp) for resp in raw_expiring_product]
+        return self.due_products(get_details)
+
+    def due_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_due_prodcuts = self._api_client.get_volatile_stock().due_products
+        due_products = [Product(resp) for resp in raw_due_prodcuts]
 
         if get_details:
-            for item in expiring_product:
+            for item in due_products:
                 item.get_details(self._api_client)
-        return expiring_product
+        return due_products
+
+    def overdue_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_overdue_products = self._api_client.get_volatile_stock().overdue_products
+        overdue_products = [Product(resp) for resp in raw_overdue_products]
+
+        if get_details:
+            for item in overdue_products:
+                item.get_details(self._api_client)
+        return overdue_products
 
     def expired_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_expired_product = self._api_client.get_volatile_stock().expired_products
-        expired_product = [Product(resp) for resp in raw_expired_product]
+        raw_expired_products = self._api_client.get_volatile_stock().expired_products
+        expired_products = [Product(resp) for resp in raw_expired_products]
 
         if get_details:
-            for item in expired_product:
+            for item in expired_products:
                 item.get_details(self._api_client)
-        return expired_product
+        return expired_products
 
     def missing_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_missing_product = self._api_client.get_volatile_stock().missing_products
-        missing_product = [Product(resp) for resp in raw_missing_product]
+        raw_missing_products = self._api_client.get_volatile_stock().missing_products
+        missing_products = [Product(resp) for resp in raw_missing_products]
 
         if get_details:
-            for item in missing_product:
+            for item in missing_products:
                 item.get_details(self._api_client)
-        return missing_product
+        return missing_products
 
     def product(self, product_id: int) -&gt; Product:
         resp = self._api_client.get_product(product_id)
@@ -242,32 +252,45 @@ class Grocy(object):
         stock = [Product(resp) for resp in raw_stock]
         return stock
 
+    @deprecation.deprecated(details=&#34;Use due_products instead&#34;)
     def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
-        expiring_product = [Product(resp) for resp in raw_expiring_product]
+        return self.due_products(get_details)
+
+    def due_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_due_prodcuts = self._api_client.get_volatile_stock().due_products
+        due_products = [Product(resp) for resp in raw_due_prodcuts]
 
         if get_details:
-            for item in expiring_product:
+            for item in due_products:
                 item.get_details(self._api_client)
-        return expiring_product
+        return due_products
+
+    def overdue_products(self, get_details: bool = False) -&gt; List[Product]:
+        raw_overdue_products = self._api_client.get_volatile_stock().overdue_products
+        overdue_products = [Product(resp) for resp in raw_overdue_products]
+
+        if get_details:
+            for item in overdue_products:
+                item.get_details(self._api_client)
+        return overdue_products
 
     def expired_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_expired_product = self._api_client.get_volatile_stock().expired_products
-        expired_product = [Product(resp) for resp in raw_expired_product]
+        raw_expired_products = self._api_client.get_volatile_stock().expired_products
+        expired_products = [Product(resp) for resp in raw_expired_products]
 
         if get_details:
-            for item in expired_product:
+            for item in expired_products:
                 item.get_details(self._api_client)
-        return expired_product
+        return expired_products
 
     def missing_products(self, get_details: bool = False) -&gt; List[Product]:
-        raw_missing_product = self._api_client.get_volatile_stock().missing_products
-        missing_product = [Product(resp) for resp in raw_missing_product]
+        raw_missing_products = self._api_client.get_volatile_stock().missing_products
+        missing_products = [Product(resp) for resp in raw_missing_products]
 
         if get_details:
-            for item in missing_product:
+            for item in missing_products:
                 item.get_details(self._api_client)
-        return missing_product
+        return missing_products
 
     def product(self, product_id: int) -&gt; Product:
         resp = self._api_client.get_product(product_id)
@@ -549,8 +572,27 @@ class Grocy(object):
     )</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy.Grocy.due_products"><code class="name flex">
+<span>def <span class="ident">due_products</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def due_products(self, get_details: bool = False) -&gt; List[Product]:
+    raw_due_prodcuts = self._api_client.get_volatile_stock().due_products
+    due_products = [Product(resp) for resp in raw_due_prodcuts]
+
+    if get_details:
+        for item in due_products:
+            item.get_details(self._api_client)
+    return due_products</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2020, 11, 16, 13, 4, 9, 637637))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 394285))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -577,32 +619,29 @@ class Grocy(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def expired_products(self, get_details: bool = False) -&gt; List[Product]:
-    raw_expired_product = self._api_client.get_volatile_stock().expired_products
-    expired_product = [Product(resp) for resp in raw_expired_product]
+    raw_expired_products = self._api_client.get_volatile_stock().expired_products
+    expired_products = [Product(resp) for resp in raw_expired_products]
 
     if get_details:
-        for item in expired_product:
+        for item in expired_products:
             item.get_details(self._api_client)
-    return expired_product</code></pre>
+    return expired_products</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.expiring_products"><code class="name flex">
 <span>def <span class="ident">expiring_products</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a>]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><div class="admonition deprecated">
+<p class="admonition-title">Deprecated since version:&ensp;Use due_products instead</p>
+</div></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
-    raw_expiring_product = self._api_client.get_volatile_stock().expiring_products
-    expiring_product = [Product(resp) for resp in raw_expiring_product]
-
-    if get_details:
-        for item in expiring_product:
-            item.get_details(self._api_client)
-    return expiring_product</code></pre>
+<pre><code class="python">@deprecation.deprecated(details=&#34;Use due_products instead&#34;)
+def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
+    return self.due_products(get_details)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.get_last_db_changed"><code class="name flex">
@@ -660,13 +699,32 @@ class Grocy(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def missing_products(self, get_details: bool = False) -&gt; List[Product]:
-    raw_missing_product = self._api_client.get_volatile_stock().missing_products
-    missing_product = [Product(resp) for resp in raw_missing_product]
+    raw_missing_products = self._api_client.get_volatile_stock().missing_products
+    missing_products = [Product(resp) for resp in raw_missing_products]
 
     if get_details:
-        for item in missing_product:
+        for item in missing_products:
             item.get_details(self._api_client)
-    return missing_product</code></pre>
+    return missing_products</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.overdue_products"><code class="name flex">
+<span>def <span class="ident">overdue_products</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def overdue_products(self, get_details: bool = False) -&gt; List[Product]:
+    raw_overdue_products = self._api_client.get_volatile_stock().overdue_products
+    overdue_products = [Product(resp) for resp in raw_overdue_products]
+
+    if get_details:
+        for item in overdue_products:
+            item.get_details(self._api_client)
+    return overdue_products</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.product"><code class="name flex">
@@ -822,6 +880,7 @@ class Grocy(object):
 <li><code><a title="pygrocy.grocy.Grocy.clear_shopping_list" href="#pygrocy.grocy.Grocy.clear_shopping_list">clear_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.complete_task" href="#pygrocy.grocy.Grocy.complete_task">complete_task</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.consume_product" href="#pygrocy.grocy.Grocy.consume_product">consume_product</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.due_products" href="#pygrocy.grocy.Grocy.due_products">due_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.execute_chore" href="#pygrocy.grocy.Grocy.execute_chore">execute_chore</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expired_products" href="#pygrocy.grocy.Grocy.expired_products">expired_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.expiring_products" href="#pygrocy.grocy.Grocy.expiring_products">expiring_products</a></code></li>
@@ -829,6 +888,7 @@ class Grocy(object):
 <li><code><a title="pygrocy.grocy.Grocy.get_userfields" href="#pygrocy.grocy.Grocy.get_userfields">get_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan" href="#pygrocy.grocy.Grocy.meal_plan">meal_plan</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.missing_products" href="#pygrocy.grocy.Grocy.missing_products">missing_products</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.overdue_products" href="#pygrocy.grocy.Grocy.overdue_products">overdue_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product" href="#pygrocy.grocy.Grocy.product">product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product_groups" href="#pygrocy.grocy.Grocy.product_groups">product_groups</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.recipe" href="#pygrocy.grocy.Grocy.recipe">recipe</a></code></li>
@@ -845,7 +905,7 @@ class Grocy(object):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>

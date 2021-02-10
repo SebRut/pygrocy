@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>pygrocy.data_models.product API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -28,9 +28,17 @@
 </summary>
 <pre><code class="python">from datetime import datetime
 from typing import List
+
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import CurrentStockResponse, MissingProductResponse, ProductDetailsResponse, \
-    GrocyApiClient, LocationData, ShoppingListItem
+from pygrocy.grocy_api_client import (
+    CurrentStockResponse,
+    GrocyApiClient,
+    LocationData,
+    MissingProductResponse,
+    ProductBarcode,
+    ProductDetailsResponse,
+    ShoppingListItem,
+)
 
 
 class Product(DataModel):
@@ -61,7 +69,6 @@ class Product(DataModel):
         self._best_before_date = response.best_before_date
         if response.product:
             self._name = response.product.name
-            self._barcodes = response.product.barcodes
             self._product_group_id = response.product.product_group_id
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
@@ -75,13 +82,13 @@ class Product(DataModel):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._name = response.product.name
-        self._barcodes = response.product.barcodes
+        self._barcodes = response.barcodes
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.product.barcodes
+            self._barcodes = details.barcodes
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -106,6 +113,10 @@ class Product(DataModel):
 
     @property
     def barcodes(self) -&gt; List[str]:
+        return [barcode.barcode for barcode in self.product_barcodes]
+
+    @property
+    def product_barcodes(self) -&gt; List[ProductBarcode]:
         return self._barcodes
 
     @property
@@ -288,7 +299,6 @@ def name(self) -&gt; str:
         self._best_before_date = response.best_before_date
         if response.product:
             self._name = response.product.name
-            self._barcodes = response.product.barcodes
             self._product_group_id = response.product.product_group_id
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
@@ -302,13 +312,13 @@ def name(self) -&gt; str:
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._name = response.product.name
-        self._barcodes = response.product.barcodes
+        self._barcodes = response.barcodes
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.product.barcodes
+            self._barcodes = details.barcodes
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -333,6 +343,10 @@ def name(self) -&gt; str:
 
     @property
     def barcodes(self) -&gt; List[str]:
+        return [barcode.barcode for barcode in self.product_barcodes]
+
+    @property
+    def product_barcodes(self) -&gt; List[ProductBarcode]:
         return self._barcodes
 
     @property
@@ -382,7 +396,7 @@ def available_amount(self) -&gt; float:
 </summary>
 <pre><code class="python">@property
 def barcodes(self) -&gt; List[str]:
-    return self._barcodes</code></pre>
+    return [barcode.barcode for barcode in self.product_barcodes]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.product.Product.best_before_date"><code class="name">var <span class="ident">best_before_date</span> : datetime.datetime</code></dt>
@@ -433,6 +447,18 @@ def name(self) -&gt; str:
     return self._name</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.data_models.product.Product.product_barcodes"><code class="name">var <span class="ident">product_barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcode" href="../grocy_api_client.html#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def product_barcodes(self) -&gt; List[ProductBarcode]:
+    return self._barcodes</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.data_models.product.Product.product_group_id"><code class="name">var <span class="ident">product_group_id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
@@ -461,7 +487,7 @@ def product_group_id(self) -&gt; int:
     details = api_client.get_product(self.id)
     if details:
         self._name = details.product.name
-        self._barcodes = details.product.barcodes
+        self._barcodes = details.barcodes
         self._product_group_id = details.product.product_group_id</code></pre>
 </details>
 </dd>
@@ -629,6 +655,7 @@ def product_id(self) -&gt; int:
 <li><code><a title="pygrocy.data_models.product.Product.id" href="#pygrocy.data_models.product.Product.id">id</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.is_partly_in_stock" href="#pygrocy.data_models.product.Product.is_partly_in_stock">is_partly_in_stock</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.name" href="#pygrocy.data_models.product.Product.name">name</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.product_barcodes" href="#pygrocy.data_models.product.Product.product_barcodes">product_barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_group_id" href="#pygrocy.data_models.product.Product.product_group_id">product_group_id</a></code></li>
 </ul>
 </li>
@@ -649,7 +676,7 @@ def product_id(self) -&gt; int:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>
