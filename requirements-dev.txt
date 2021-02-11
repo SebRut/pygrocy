@@ -8,3 +8,5 @@ pre-commit
 isort
 pytest
 pytest-cov
+vcrpy
+pytest-recording

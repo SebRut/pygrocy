@@ -8,7 +8,6 @@ import responses
 from requests.exceptions import HTTPError
 
 from pygrocy import Grocy
-from pygrocy.data_models.chore import AssignmentType, Chore
 from pygrocy.data_models.product import Group, Product, ShoppingListProduct
 from pygrocy.grocy_api_client import GrocyApiClient
 
@@ -25,63 +24,6 @@ class TestGrocy(TestCase):
 
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
-
-    def test_get_tasks_valid(self):
-        tasks = self.grocy.tasks()
-
-        assert len(tasks) == 6
-        assert tasks[0].id == 1
-        assert tasks[0].name == "Repair the garage door"
-
-    def test_get_chores_valid(self):
-        chores = self.grocy.chores(get_details=True)
-
-        self.assertIsInstance(chores, list)
-        self.assertGreaterEqual(len(chores), 1)
-        for chore in chores:
-            self.assertIsInstance(chore, Chore)
-            self.assertIsInstance(chore.id, int)
-            self.assertIsInstance(chore.last_tracked_time, datetime)
-            self.assertIsInstance(chore.next_estimated_execution_time, datetime)
-            self.assertIsInstance(chore.name, str)
-            from pygrocy.data_models.user import User
-
-            self.assertIsInstance(chore.last_done_by, User)
-
-    @responses.activate
-    def test_get_chore_details_valid(self):
-        details_json = """{
-            "chore": {
-                "id": "1",
-                "name": "Changed towels in the bathroom",
-                "description": null,
-                "period_type": "manually",
-                "period_days": "5",
-                "row_created_timestamp": "2020-03-16 00:50:14",
-                "period_config": null,
-                "track_date_only": "0",
-                "rollover": "0",
-                "assignment_type": "who-least-did-first",
-                "assignment_config": null,
-                "next_execution_assigned_to_user_id": null,
-                "consume_product_on_execution": "0",
-                "product_id": null,
-                "product_amount": null,
-                "period_interval": "1"
-            },
-            "tracked_count": 3,
-            "next_estimated_execution_time": "2999-12-31 23:59:59",
-            "next_execution_assigned_user": null
-        }"""
-        details_json = json.loads(details_json)
-        responses.add(
-            responses.GET, f"{self.base_url}/chores/1", json=details_json, status=200
-        )
-        chore_details = self.grocy.chore(1)
-        self.assertIsInstance(chore_details, Chore)
-        self.assertEqual(
-            chore_details.assignment_type, AssignmentType.WHO_LEAST_DID_FIRST
-        )
 
     def test_product_get_details_valid(self):
         stock = self.grocy.stock()

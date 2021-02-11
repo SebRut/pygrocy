@@ -1,0 +1,140 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/tasks
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
+        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
+        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
+        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
+        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
+        avns/fXfwKYE3r4BnWLYgdoEAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:27:14 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/tasks
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
+        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
+        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
+        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
+        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
+        avns/fXfwKYE3r4BnWLYgdoEAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:30:13 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/tasks
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
+        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
+        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
+        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
+        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
+        avns/fXfwKYE3r4BnWLYgdoEAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:31:56 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1
