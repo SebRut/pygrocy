@@ -25,30 +25,6 @@ class TestGrocy(TestCase):
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
 
-    def test_product_get_details_valid(self):
-        stock = self.grocy.stock()
-
-        product = stock[0]
-
-        api_client = GrocyApiClient(
-            CONST_BASE_URL, "demo_mode", port=CONST_PORT, verify_ssl=CONST_SSL
-        )
-        product.get_details(api_client)
-
-        self.assertIsInstance(product.name, str)
-        self.assertIsInstance(product.id, int)
-        self.assertIsInstance(product.available_amount, float)
-        self.assertIsInstance(product.best_before_date, datetime)
-        if product.barcodes:
-            self.assertIsInstance(product.barcodes, (list, str))
-        self.assertIsInstance(product.product_group_id, int)
-
-    @responses.activate
-    def test_product_get_details_invalid_no_data(self):
-        responses.add(responses.GET, f"{self.base_url}/stock/products/0", status=200)
-        product = self.grocy.product(0)
-        self.assertIsNone(product)
-
     def test_get_stock_valid(self):
         stock = self.grocy.stock()
 
