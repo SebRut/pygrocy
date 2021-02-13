@@ -202,3 +202,6 @@ class Grocy(object):
         battery = self._api_client.get_battery(battery_id)
         if battery:
             return Battery(battery)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        return self._api_client.charge_battery(battery_id, tracked_time)

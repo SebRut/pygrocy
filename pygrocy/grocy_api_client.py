@@ -749,3 +749,9 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(f"batteries/{battery_id}")
         if parsed_json:
             return BatteryDetailsResponse(parsed_json)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        localized_tracked_time = localize_datetime(tracked_time)
+        data = {"tracked_time": localized_tracked_time.isoformat()}
+
+        return self._do_post_request(f"batteries/{battery_id}/charge", data)

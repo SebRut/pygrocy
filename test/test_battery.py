@@ -22,3 +22,7 @@ class TestBattery:
         assert battery.created_timestamp.day == 13
         assert battery.userfields is None
         assert battery.charge_cycles_count == 4
+
+    @pytest.mark.vcr
+    def test_charge_battery(self, grocy):
+        assert grocy.charge_battery(1)
