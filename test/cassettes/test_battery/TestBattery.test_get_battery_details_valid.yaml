@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA0WPzWoDIRDHX0XmnIVVk1I99hlKe5SpDq2wq0EnaZaQd8/YtBQ8iL//l1f4QGZq
+        G/gr5AQeNOyg4EpyfXmg8ZKox5aPnGsR8I6tYeFNUUldmdlYkZw6pZAHfn1TjdbKpGIt3OoiNH5h
+        +yThUnbGJSTcukhnQa1+h9gIWfycV+qM61GY5OppNpO2Sju/194+iRoj5/NYp+G2gwU7h0f2GC+W
+        edJmMoc/y/N/d9ziQj3EeioMfi/fpAsHqcvrT/fvxDFhRDnnRpTVylh/cHLgdgf3L2b9LwEAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 21:23:11 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -4,6 +4,7 @@ from typing import List
 import deprecation
 
 from .base import DataModel  # noqa: F401
+from .data_models.battery import Battery
 from .data_models.chore import Chore
 from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
@@ -192,3 +193,15 @@ class Grocy(object):
 
     def add_generic(self, entity_type, data):
         return self._api_client.add_generic(entity_type, data)
+
+    def batteries(self) -> List[Battery]:
+        raw_batteries = self._api_client.get_batteries()
+        return [Battery(bat) for bat in raw_batteries]
+
+    def battery(self, battery_id: int) -> Battery:
+        battery = self._api_client.get_battery(battery_id)
+        if battery:
+            return Battery(battery)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        return self._api_client.charge_battery(battery_id, tracked_time)
