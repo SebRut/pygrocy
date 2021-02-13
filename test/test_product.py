@@ -9,6 +9,7 @@ class TestProduct:
         assert product.name == "Cheese"
         assert product.available_amount == 5
         assert len(product.barcodes) == 0
+        assert product.product_group_id == 6
 
     @pytest.mark.vcr
     def test_product_get_details_non_existant(self, grocy):

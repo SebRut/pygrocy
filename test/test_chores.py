@@ -23,8 +23,7 @@ class TestChores:
 
         chore = next(chore for chore in chores if chore.id == 6)
         assert chore.name == "The thing which happens on Mondays and Wednesdays"
-        assert chore.period_type == PeriodType.WEEKLY
-        assert chore.last_done_by.id == 1
+        assert chore.period_config == "monday,wednesday"
 
     @pytest.mark.vcr
     def test_get_chore_details(self, grocy):
@@ -32,6 +31,14 @@ class TestChores:
         assert isinstance(chore_details, Chore)
 
         assert chore_details.name == "Lawn mowed in the garden"
-        assert chore_details.period_type == PeriodType.DYNAMIC_REGULAR
-        assert chore_details.last_done_by.id == 1
         assert chore_details.assignment_type == AssignmentType.RANDOM
+        assert chore_details.last_done_by.id == 1
+        assert chore_details.period_type == PeriodType.DYNAMIC_REGULAR
+        assert chore_details.period_days == 21
+        assert chore_details.period_config is None
+        assert chore_details.track_date_only is False
+        assert chore_details.rollover is False
+        assert chore_details.assignment_config == "1,2,3,4"
+        assert chore_details.next_execution_assigned_user.id == 2
+        assert chore_details.next_execution_assigned_to_user_id == 2
+        assert chore_details.userfields is None
