@@ -10,3 +10,4 @@ pytest
 pytest-cov
 vcrpy
 pytest-recording
+pytest-mock

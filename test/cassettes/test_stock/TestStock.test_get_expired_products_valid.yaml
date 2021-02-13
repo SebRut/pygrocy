@@ -1,0 +1,110 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/volatile
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA+1YTVPbMBD9K4zPkIkdCJArh5460+n01mE0iizHamxLyFLSlOG/d1eSYzsEJuUr
+        UHL0av30sfu0T3sbpZYTpWVqmamjyc/biJbSViaaRGfRcfggdDbTfEYNT9E+GMLIghaWw1d8OTgf
+        w/eU14ZMeSY1Jyl4wlAyTOKTYXISd5Ck4pVDQQw/FfG2/iRDN4moO1ayXhn+i+s2K+WWAJ9hC0Tg
+        CuOktUST26g1VrTEP75RpcWcIgyvmRbKCFlFk8oWRQs109IqD+g2wIxYNNMVklH8xw/jdHUulRLV
+        jPSGPOKNBT+irGY5rd3JwA/eWBvJ5nhW3pJRZqReuxIjSeMRuxMpReUtG6fBM2oLDEA3CiuIaHTu
+        drl9mNDMcO0CAJ7uWB8ACp6Z5vwP7HI3b5PTZeusBDMWsiMTBSchEMoHYvBLzWCZvKJTGDMUvJZc
+        zHJDclqlRYvRGcIluCOppCEs52weDiazBUxRlLwyBNKRaM6E4ngUuEEF4DDQzRcfJEYLqYXzi5MR
+        eDJb2gIymWyeOZEZqe20wWiQNzLyxgpYEpNVbUveRsuHMRcpJ5A+LrhELrheCL4MS9RySZjmSDdi
+        RAkhpaWCsTWfRkfx5eQ0nozG0d3d8b9T9mxw8e4oe4qx8fdQS1k0hkz5TlNR5/C9H8Yii/qMDZZP
+        xljPlQNR3V3ydKLidR+qX6+2Jr3aOh7EF+DYv9T3W1rdzbjJU2cMPP0qivnOLMVbCCrei9XVGG/4
+        Pk0b0yvwdId6idIm3Orpm1bWd8ZTCMsHKafXxxGW4+fK4iQeXKBqfIy7MWa/U9tBAodM6dk6AhiH
+        nyWLUdVscjdGY+DulYUgTbkGy36qbFDBIJYb1ftJdTELkTgI4zcWxmOkw7siLd4i90iLxkDaH7Kk
+        Rh4ou++nrHFxOBD26YSF0st/K6Hh2RsSfqMj1SmYPdXs39RNR+p0gE+zxzjcUd+v0Y9C+LCB0B9y
+        jYeNx22CxrVorhhPj0p48+9MZHwbv6R2xouvL52D5QMp5/hiB03edqVcoLZ0pZLh/0ZjL6PepiEF
+        NC5FXWMvtEdj34Vtk/5Kyjn229YiOPwFMhdfvdD7hV6dKVakaXk6eYz9LoeEW2p0ay6ZxFbdNqxR
+        I5nvo8XRGg1zPaB9sWW5OppyqreuDXm3dW0dtE7f6kqLWm0Fwhr+END13V80yNKkmhcAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:53 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/20
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81UwW7bMAz9lULntrDTrlv9AbsN2H0YCEambbWypMpSsq7ov4+07KQZgm677RLE
+        JPXEx/eoFxWib7NOqnlRplWN2lTqUjkcif9/MU5TezESJg62NOloQjLeqcZlay/Xw9BHnwPM52+5
+        EnUyOwGo+cN6jXKmpDccmQYfgnE9nKQK4lPmOgg56gEngbjhAyU4Ja8fj5GOb/HxUArJw1pRXwuJ
+        0bgSARx9dkxRSbilDrNNsKVJfjofCVp8nv6QBuwSRfCBmP27QEtlF4l+Mkuurj+9d/FSnwbcl3KZ
+        UTA6Ze6sM5ZgkWNTXT+EnpPkcMvhhFywJ9MPCQZ0rS3H5a43Kel2nofzCfRA+nGZSpcto9uRXAKe
+        AkTSJtA6h8DgnFjsMYtXFNJofTRzXb0RdXQes8VE8PvAwXcw5e2KsSK3mVt/DiKuMH3KhlvS3k15
+        pKNURcPBtATsnVlZ8DuKO0P7RYDo96Ajm5NaSGZkPXEMglpt6qtqc1XfXNT3zW3d3Nyp16NZtxi1
+        ZzOr5tt3tieyDVa/lQUopyvhNmfzRJwo7EsjB0OJwUtohzYLpdvrj4dYKZs9Iwiza94CAPZ9pF4I
+        cLYwPsmL25jcSVkRc3XxU0aXTHqG7MyRx2GbhcPinq/I23N2i/9+jrLcAgfB5oiWmxbUiaMlID4a
+        ebAyK574aXMzs/+ks6J6NLpIdnf/gTngrmevrjGR0Vv2iSzB2+B89vwbNht6leZ8SbGRox8JZBFa
+        Fp/HeLCsbMT6LB5mJcFFxc/RtD3x95nX+N90NBPMTxTF2ZksF/J6YU8wDWQ7sKZbH8Z7NnnwxkKU
+        NQ8UNT8NqqkuFYMczXlc3kq9/gJ//eiIWgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:53 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

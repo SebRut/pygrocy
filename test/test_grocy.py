@@ -8,7 +8,6 @@ import responses
 from requests.exceptions import HTTPError
 
 from pygrocy import Grocy
-from pygrocy.data_models.product import Group, Product
 from pygrocy.grocy_api_client import GrocyApiClient
 
 
@@ -68,18 +67,6 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(HTTPError, self.grocy.remove_product_in_shopping_list, 1)
 
-    def test_get_product_groups_valid(self):
-        product_groups_list = self.grocy.product_groups()
-
-        self.assertIsInstance(product_groups_list, list)
-        self.assertGreaterEqual(len(product_groups_list), 1)
-        for group in product_groups_list:
-            self.assertIsInstance(group, Group)
-            self.assertIsInstance(group.id, int)
-            self.assertIsInstance(group.name, str)
-            if group.description:
-                self.assertIsInstance(group.description, str)
-
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
         responses.add(
@@ -97,22 +84,6 @@ class TestGrocy(TestCase):
             status=200,
         )
         self.assertEqual(len(self.grocy.product_groups()), 0)
-
-    @responses.activate
-    def test_add_product_pic_valid(self):
-        with patch("os.path.exists") as m_exist:
-            with patch("builtins.open", mock_open()):
-                m_exist.return_value = True
-                responses.add(
-                    responses.PUT,
-                    f"{self.base_url}/files/productpictures/MS5qcGc=",
-                    status=204,
-                )
-                responses.add(
-                    responses.PUT, f"{self.base_url}/objects/products/1", status=204
-                )
-                resp = self.grocy.add_product_pic(1, "/somepath/pic.jpg")
-                self.assertIsNone(resp)
 
     @responses.activate
     def test_add_product_pic_invalid_missing_data(self):
@@ -147,14 +118,6 @@ class TestGrocy(TestCase):
         responses.add(responses.PUT, f"{self.base_url}/objects/products/1", status=400)
         self.assertRaises(HTTPError, api_client.update_product_pic, 1)
 
-    def test_get_due_products_valid(self):
-        due_products = self.grocy.due_products(True)
-
-        self.assertIsInstance(due_products, list)
-        self.assertGreaterEqual(len(due_products), 1)
-        for prod in due_products:
-            self.assertIsInstance(prod, Product)
-
     @responses.activate
     def test_get_due_invalid_no_data(self):
         resp = {"due_products": [], "expired_products": [], "missing_products": []}
@@ -163,14 +126,6 @@ class TestGrocy(TestCase):
         )
 
         self.grocy.due_products(True)
-
-    def test_get_expired_products_valid(self):
-        expired_product = self.grocy.expired_products(True)
-
-        self.assertIsInstance(expired_product, list)
-        self.assertGreaterEqual(len(expired_product), 0)
-        for prod in expired_product:
-            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_expired_invalid_no_data(self):
@@ -188,16 +143,6 @@ class TestGrocy(TestCase):
             responses.GET, f"{self.base_url}/stock/volatile", json=resp, status=200
         )
 
-    def test_get_missing_products_valid(self):
-        missing_product = self.grocy.missing_products(True)
-
-        self.assertIsInstance(missing_product, list)
-        self.assertGreaterEqual(len(missing_product), 1)
-        for prod in missing_product:
-            self.assertIsInstance(prod, Product)
-            self.assertIsInstance(prod.amount_missing, float)
-            self.assertIsInstance(prod.is_partly_in_stock, bool)
-
     @responses.activate
     def test_get_missing_invalid_no_data(self):
         resp = {"expiring_products": [], "expired_products": [], "missing_products": []}
@@ -213,14 +158,6 @@ class TestGrocy(TestCase):
         responses.add(
             responses.GET, f"{self.base_url}/stock/volatile", json=resp, status=200
         )
-
-    def test_get_overdue_products_valid(self):
-        overdue_products = self.grocy.overdue_products(True)
-
-        self.assertIsInstance(overdue_products, list)
-        self.assertGreaterEqual(len(overdue_products), 1)
-        for prod in overdue_products:
-            self.assertIsInstance(prod, Product)
 
     @responses.activate
     def test_get_userfields_valid(self):
