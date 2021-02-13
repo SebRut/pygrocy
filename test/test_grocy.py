@@ -21,9 +21,6 @@ class TestGrocy(TestCase):
         self.date_test = datetime.strptime("2019-05-04 11:31:04", "%Y-%m-%d %H:%M:%S")
         self.add_generic_data = {"name": "This is a task"}
 
-    def test_init(self):
-        self.assertIsInstance(self.grocy, Grocy)
-
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
         responses.add(
@@ -182,12 +179,6 @@ class TestGrocy(TestCase):
         self.assertRaises(
             HTTPError, self.grocy.set_userfields, "chores", 1, "auserfield", "value"
         )
-
-    def test_get_last_db_changed_valid(self):
-
-        timestamp = self.grocy.get_last_db_changed()
-
-        self.assertIsInstance(timestamp, datetime)
 
     @responses.activate
     def test_get_last_db_changed_invalid_no_data(self):
