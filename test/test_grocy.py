@@ -8,7 +8,7 @@ import responses
 from requests.exceptions import HTTPError
 
 from pygrocy import Grocy
-from pygrocy.data_models.product import Group, Product, ShoppingListProduct
+from pygrocy.data_models.product import Group, Product
 from pygrocy.grocy_api_client import GrocyApiClient
 
 
@@ -24,22 +24,6 @@ class TestGrocy(TestCase):
 
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
-
-    def test_get_shopping_list_valid(self):
-        shopping_list = self.grocy.shopping_list(True)
-
-        self.assertIsInstance(shopping_list, list)
-        self.assertGreaterEqual(len(shopping_list), 1)
-        for item in shopping_list:
-            self.assertIsInstance(item, ShoppingListProduct)
-            self.assertIsInstance(item.id, int)
-            if item.product_id:
-                self.assertIsInstance(item.product_id, int)
-                self.assertIsInstance(item.product, Product)
-                self.assertIsInstance(item.product.id, int)
-            self.assertIsInstance(item.amount, float)
-            if item.note:
-                self.assertIsInstance(item.note, str)
 
     @responses.activate
     def test_get_shopping_list_invalid_no_data(self):
@@ -59,9 +43,6 @@ class TestGrocy(TestCase):
         )
         self.assertEqual(len(self.grocy.shopping_list()), 0)
 
-    def test_add_missing_product_to_shopping_list_valid(self):
-        self.assertIsNone(self.grocy.add_missing_product_to_shopping_list())
-
     @responses.activate
     def test_add_missing_product_to_shopping_list_error(self):
         responses.add(
@@ -71,34 +52,12 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(HTTPError, self.grocy.add_missing_product_to_shopping_list)
 
-    def test_add_product_to_shopping_list_valid(self):
-        self.grocy.add_product_to_shopping_list(3)
-
-    def test_add_product_to_shopping_list_error(self):
-        self.assertRaises(HTTPError, self.grocy.add_product_to_shopping_list, 3000)
-
-    @responses.activate
-    def test_clear_shopping_list_valid(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/stock/shoppinglist/clear", status=204
-        )
-        self.grocy.clear_shopping_list()
-
     @responses.activate
     def test_clear_shopping_list_error(self):
         responses.add(
             responses.POST, f"{self.base_url}/stock/shoppinglist/clear", status=400
         )
         self.assertRaises(HTTPError, self.grocy.clear_shopping_list)
-
-    @responses.activate
-    def test_remove_product_in_shopping_list_valid(self):
-        responses.add(
-            responses.POST,
-            f"{self.base_url}/stock/shoppinglist/remove-product",
-            status=204,
-        )
-        self.grocy.remove_product_in_shopping_list(1)
 
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
