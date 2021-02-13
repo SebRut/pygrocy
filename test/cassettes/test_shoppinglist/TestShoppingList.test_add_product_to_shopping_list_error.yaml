@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: '{"product_id": 3000, "list_id": null, "product_amount": null}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '61'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/shoppinglist/add-product
+  response:
+    body:
+      string: '{"error_message":"Product does not exist or is inactive"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 19:37:31 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 400
+      message: Bad Request
+version: 1

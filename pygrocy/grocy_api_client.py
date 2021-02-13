@@ -7,7 +7,13 @@ from urllib.parse import urljoin
 
 import requests
 
-from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
+from pygrocy.utils import (
+    localize_datetime,
+    parse_bool_int,
+    parse_date,
+    parse_float,
+    parse_int,
+)
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -194,12 +200,12 @@ class ChoreData(object):
         self.period_type = parsed_json.get("period_type")
         self.period_config = parsed_json.get("period_config")
         self.period_days = parse_int(parsed_json.get("period_days"))
-        self.track_date_only = parsed_json.get("track_date_only")
-        self.rollover = parsed_json.get("rollover")
+        self.track_date_only = parse_bool_int(parsed_json.get("track_date_only"))
+        self.rollover = parse_bool_int(parsed_json.get("rollover"))
         self.assignment_type = parsed_json.get("assignment_type")
         self.assignment_config = parsed_json.get("assignment_config")
         self.next_execution_assigned_to_user_id = parse_int(
-            "next_execution_assigned_to_user_id"
+            parsed_json.get("next_execution_assigned_to_user_id")
         )
         self.userfields = parsed_json.get("userfields")
 
@@ -499,6 +505,36 @@ class TaskResponse(object):
         self.userfields = parsed_json.get("userfields")
 
 
+class CurrentBatteryResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get("battery_id"))
+        self.last_tracked_time = parse_date(parsed_json.get("last_tracked_time"))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get("'next_estimated_charge_time")
+        )
+
+
+class BatteryData(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get("id"))
+        self.name = parsed_json.get("name")
+        self.description = parsed_json.get("description")
+        self.used_in = parsed_json.get("used_in")
+        self.charge_interval_days = parse_int(parsed_json.get("charge_interval_days"))
+        self.created_timestamp = parse_date(parsed_json.get("row_created_timestamp"))
+        self.userfields = parsed_json.get("userfields")
+
+
+class BatteryDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self.battery = BatteryData(parsed_json.get("battery"))
+        self.charge_cycles_count = parse_int(parsed_json.get("charge_cycles_count"))
+        self.last_charged = parse_date(parsed_json.get("last_charged"))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get("'next_estimated_charge_time")
+        )
+
+
 class GrocyApiClient(object):
     def __init__(
         self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
@@ -703,3 +739,19 @@ class GrocyApiClient(object):
 
     def add_generic(self, entity_type: str, data: object):
         self._do_post_request(f"objects/{entity_type}", data)
+
+    def get_batteries(self) -> List[CurrentBatteryResponse]:
+        parsed_json = self._do_get_request(f"batteries")
+        if parsed_json:
+            return [CurrentBatteryResponse(data) for data in parsed_json]
+
+    def get_battery(self, battery_id: int) -> BatteryDetailsResponse:
+        parsed_json = self._do_get_request(f"batteries/{battery_id}")
+        if parsed_json:
+            return BatteryDetailsResponse(parsed_json)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        localized_tracked_time = localize_datetime(tracked_time)
+        data = {"tracked_time": localized_tracked_time.isoformat()}
+
+        return self._do_post_request(f"batteries/{battery_id}/charge", data)

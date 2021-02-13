@@ -1,0 +1,333 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA62UzW6DMBCEX8XiHCQDIQlce21vlXqoKuTiDbZC1hF2mkRV370bSvjpAVQayZcR
+        npU/z5jXT09LL/UCb+HlylSQ/ZIo9kDfH5TAAiRz5gSlZRqZU8DehVOVMXsyl8K6zFUi34HMnK5N
+        IQ+5zzd+EDC+SpdRGm9oJ8LZZWBpj3C0F86QH5022LqSJPGD0I8CFpIloUWuenQmyZIZLC90JN7O
+        aicIa3WB1wOY7GihqmHwWJZfi4YzJFOPs5M3zhIEDajpdtrlCpBtS2Mq8o0h8tWfEG8XE/Vd8xG9
+        yGsJoyFhJxvCR3FCtqcY5S3FQlQScBRw7Ue8f9TJDBvAcOD6B2DYAS6HgJ1sAJ+pmE5pLNhJ6Vwx
+        JQ4HQMvMT2djp5jZMviA6kL3gE6Nkm/8OdEmPo8Z52m9aP588kF74yF6JyfQpdD0ZMYbHMxr8Lpf
+        izthroaYnZzApISfDEpxsUygZC8gEexVTqDPSZj+anfqdp3w2zfFWA7QiQUAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA41Sy27CMBD8lchnIiWh0JJr+ws9W8ZeiFU/Ij+ACPHvXWOnSQ+VKvnifczs7Oyd
+        8ME6IP2dSEF60pINMUxjgLwPzJxBVMFeQflKmioMUB1ZGJy1GusEeO7kGKQ1pDdRqQ0ZwUkraJjG
+        hKCZiUypCWtLQrDJY2KHEWevlDtgAbBeavCB6RFzXdM1dfNWt/uq2fcv2373uvRza07yPLMFx/gX
+        FQhBrUGanjRPYKXsBVz5Mu/l2WgwoYyVJ12Ff4MauAUKN+AxCaO5Ls1oafTgaFpThsA+HzXQ0VkR
+        ecAZlr5CPqeWpjnCtI0mzFBlPdIEcBemsDsZwXiQl7TIljw2RDGPEpJkSE797Kmd9/SGLSVPeUbf
+        ljZhDdAjbmhlc1JTrP4AbatP/CPCSTrkyYms80m8Dvzfuj0CCulHxaYCSdZco+QhOqAnqWBFiWKz
+        Cx4P43kgix/pVJL6w+FQt129basOT+SAD6n+8i5Jzat+fAOYw2Oh8QIAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA71Sy27DIBD8FYuzI/mRppGv7S/0jCisE1QMFuA0VpR/766NHR8aqace2dnZ3Znh
+        xuTZeWDNjWnFGlaxnFnRYYG9GRAWVBbPkH3pKM9gs9Y457FFQZBe91E7yxo7GJOzHrx2isexJ7Ia
+        cYqWOw+nwQiiJFyJMSD+ihXvvrn0ICIgTXcQouh6uqGoil1x3JWHrDg0+7p5oe7El862+rQsjV7I
+        L65wBHfWjEgupsHGuAv49BQh6JPtwMblOi+sch12bqBlMCvzKq/zPaIWrpHDFeRAQvncTMc6PgTw
+        fHKsxkbkhqED3nunBhnxlgctHbFAxEmGpWbRucHGtTrbqG0EfxEG2SXdKaO+kK8lu+fMiIBSSDpM
+        mSW/itWvI1ISzuU8vUo05SzwT3QqBU7TSUwK/R06l33gG8ut9rhnBuaTp8Xbwt8jPOBApUNvxJhG
+        su2uXss4eOCtNrBZiWLnEAJ+kOmjPOKgL4OOrL+lXn4LqX8WHUldtVN0v2nPCPg39dO2Z/rvPzDl
+        y2GhAwAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA71Su27DMAz8FUOzDfiRJoHnjl07C6rEOEL1MPRIYgT591K2nKRAC3TqKB7vyOPp
+        SvjROiD9lUhBetKRkhimsUDe2NkU2p5BFNIU4QjFwJwAgx0CPHdyDNIa0puoVElGcNIKGqYxccWE
+        IpJXDoaomENKxgWbPOJtgyVnz5Q7YAGQJzX4wPSYwLqtq3pfNdui3vabrn/ZPQS4NQc5rFODY/yT
+        CpSg1qgJyfUsrJQ9gctP5r0cjAYT1vUcM8Jq7HyCVmHSlG3ZlRtEDVwChQvwmJzSpTkta2n04Oh8
+        sRYbkeujBjo6KyIPuMuDlpdYocTJF8vNTNtowr263FGaAO7EFLLTqRgP8pQO25BbSRTzaCVZh5TZ
+        cq9d1dXrvfZIyTjli3qTacIaoB94qRx4Uk9mcuivoG3xjm8sH6TDOQuwrDwPfi78PcItCgrpR8Wm
+        LEmeZ42Sh+iAHqSCp5FodgnB4weZP8ojjvRl7u73VfvN/W/RJat37ym6n7wXCfg39/O03/zfvgDM
+        fl2XoQMAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA41SQW7DIBD8CuKcSCSN09TnPqE9I4rXMSoGBDiJFeXvXQyO3UOlSr54dmdmZ5c7
+        lZ31QOs7VQ2t6YFuqBE9AvSjAxI7Zc7k2inZkU44ByYQaxAGUsWO2JbABfxIemtih9QGgvTKRWUN
+        rc2g9YY68Mo2PI4uiU6NesTWgjdiDIhXiHh75dKDiIDtqocQRe+wtmd7tmWn7e5I2LE+vNTV68KX
+        1rTqPJtFL+Q3b1CCW4M2NWWTsNYW5yy/IgR1Nj2YWKbKg67g36IGbpHDDeSQcvHcl2a0fAjgeVpc
+        lkBeGHrgzttmkBFnWHjFfC4tpBkRvR1MnKXKepSJ4C9CI3uHSYSM6pL2uKOPDdUiYIQUGdLt5j2x
+        555OSCl1LrP6rtAaa4B/4YbK4ZN6SlOO/w69JZ/4j3CrPPrkQs45Ga+B/5/uiIKNCk6LsUjStZdT
+        Mg4eeKs0rCwxbL5CwIcxPZDlHumpPNO/bVlFGKunD63+ul2Kmlf9+AFyYJEsAwMAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/5
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA41Sy27DIBD8FYtzItlp85DP/YT2jChs4lUxIB5JrCj/3iVgxVVVqUeWmdmdnb0x
+        OVgPrL8xVKxnW7ZiRoxUYO8DNHFAc2ouA8qhGYRzYEKjBOqJYAqC9OgiWsN6k7ReMQcereJxcllg
+        BtaqElOYgd5euPQgIhAaRwhRjI4om3bTrtvDuts17a5/fem3e+pUBaQ1RzzNEtEL+cUVSXBraKCe
+        tQT1Vmt7Bl+fIgQ8mRFMrEOVORfln6IGrpHDFWTKtnjB5RktTwE8zzsqEsQLaQTuvFVJRprhyavN
+        568naa6I0SYTZ6lqD00Efxaa2B05ETLiOa+xY/cV0yKQhWwZcky/93QgSv3nsqh3laasAf5JG6oZ
+        Z/Xspub8BqNtPuhN5SN66lM+is9H42Xh/9HtSFBhcFpMVZItezmUMXngR9SwaElmSwqBDuNxIM88
+        8qks3e/nK8nu/8ouWy2rvn8D344MJe4CAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/6
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA41SwW7DIAz9FcS5lZJu66qcd91t046IgdugEoOANK2q/vtMIWsuk3bEvGe/9+wr
+        V70LwLsrN5p3fMtXHOVABf7RA0u9wQObeqN61kvvASNzyN4danmJTKJmX6ARYn4SVUNUwfhkHPIO
+        R2tX3EMwTot08bnpBHC0F0LW8p1XkcFNQgWQCQhuBohJDp44m2bTrJvdut2yZts9P3Uvr48GyuHe
+        HAg13DWtplkOQVKQ6ig0NRQOaWrHG6oGZ607QahPGaM54ACYqsYie1GeR5QPhHMScAY1Zpei4LJi
+        J8YIQeQYC5J4cRxA+OD0qBJpePDq8PnrQZorcnAjprlVTctggnCSltgtOZEqmVNOteW3FbcykoVs
+        GfIm59Sa39R2cySkVpXubaVphyC+KaF6Brl7dlNP4Q0Gxz7pTeW9CTSnfBSf98HLwv8Xmc9Nm+it
+        vNSWfDnLG5XGAGJvLCxGktmyhUhncj+Xxz7y4Szct818M9n9X7vLVkvUtx8vzWmgEQMAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Feb 2021 05:34:46 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

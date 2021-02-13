@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: '{"product_id": 19, "list_id": null, "product_amount": null}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '59'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/shoppinglist/add-product
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 19:37:30 GMT
+      Server:
+      - nginx/1.18.0
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 204
+      message: No Content
+version: 1
