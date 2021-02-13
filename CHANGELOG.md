@@ -1,5 +1,22 @@
 # Changelog
 
+## [v0.26.0](https://github.com/SebRut/pygrocy/tree/v0.26.0) (2021-02-13)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.25.0...v0.26.0)
+
+**Implemented enhancements:**
+
+- add support for batteries [\#127](https://github.com/SebRut/pygrocy/issues/127)
+- Test data model changes [\#77](https://github.com/SebRut/pygrocy/issues/77)
+
+**Closed issues:**
+
+- make data used in docker grocy instance testing consistent [\#94](https://github.com/SebRut/pygrocy/issues/94)
+
+**Merged pull requests:**
+
+- add batteries support [\#148](https://github.com/SebRut/pygrocy/pull/148) ([SebRut](https://github.com/SebRut))
+
 ## [v0.25.0](https://github.com/SebRut/pygrocy/tree/v0.25.0) (2021-02-10)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.24.1...v0.25.0)
