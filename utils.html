@@ -26,14 +26,15 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import iso8601
+<pre><code class="python">from datetime import datetime
+
+import iso8601
 import pytz
 from tzlocal import get_localzone
-from datetime import datetime
 
 
 def parse_date(input_value):
-    if input_value is &#34;&#34; or input_value is None:
+    if input_value == &#34;&#34; or input_value is None:
         return None
     return iso8601.parse_date(input_value)
 
@@ -54,6 +55,16 @@ def parse_float(input_value, default_value=None):
         return float(input_value)
     except ValueError:
         return default_value
+
+
+def parse_bool_int(input_value):
+    if input_value is None:
+        return False
+    try:
+        num = int(input_value)
+        return bool(num)
+    except ValueError:
+        return False
 
 
 def localize_datetime(timestamp: datetime) -&gt; datetime:
@@ -88,6 +99,25 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
     return local_tz.localize(timestamp).astimezone(pytz.utc)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.utils.parse_bool_int"><code class="name flex">
+<span>def <span class="ident">parse_bool_int</span></span>(<span>input_value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_bool_int(input_value):
+    if input_value is None:
+        return False
+    try:
+        num = int(input_value)
+        return bool(num)
+    except ValueError:
+        return False</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.utils.parse_date"><code class="name flex">
 <span>def <span class="ident">parse_date</span></span>(<span>input_value)</span>
 </code></dt>
@@ -98,7 +128,7 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def parse_date(input_value):
-    if input_value is &#34;&#34; or input_value is None:
+    if input_value == &#34;&#34; or input_value is None:
         return None
     return iso8601.parse_date(input_value)</code></pre>
 </details>
@@ -158,6 +188,7 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="pygrocy.utils.localize_datetime" href="#pygrocy.utils.localize_datetime">localize_datetime</a></code></li>
+<li><code><a title="pygrocy.utils.parse_bool_int" href="#pygrocy.utils.parse_bool_int">parse_bool_int</a></code></li>
 <li><code><a title="pygrocy.utils.parse_date" href="#pygrocy.utils.parse_date">parse_date</a></code></li>
 <li><code><a title="pygrocy.utils.parse_float" href="#pygrocy.utils.parse_float">parse_float</a></code></li>
 <li><code><a title="pygrocy.utils.parse_int" href="#pygrocy.utils.parse_int">parse_int</a></code></li>

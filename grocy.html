@@ -32,6 +32,7 @@ from typing import List
 import deprecation
 
 from .base import DataModel  # noqa: F401
+from .data_models.battery import Battery
 from .data_models.chore import Chore
 from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
@@ -219,7 +220,19 @@ class Grocy(object):
             return RecipeItem(recipe)
 
     def add_generic(self, entity_type, data):
-        return self._api_client.add_generic(entity_type, data)</code></pre>
+        return self._api_client.add_generic(entity_type, data)
+
+    def batteries(self) -&gt; List[Battery]:
+        raw_batteries = self._api_client.get_batteries()
+        return [Battery(bat) for bat in raw_batteries]
+
+    def battery(self, battery_id: int) -&gt; Battery:
+        battery = self._api_client.get_battery(battery_id)
+        if battery:
+            return Battery(battery)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        return self._api_client.charge_battery(battery_id, tracked_time)</code></pre>
 </details>
 </section>
 <section>
@@ -409,7 +422,19 @@ class Grocy(object):
             return RecipeItem(recipe)
 
     def add_generic(self, entity_type, data):
-        return self._api_client.add_generic(entity_type, data)</code></pre>
+        return self._api_client.add_generic(entity_type, data)
+
+    def batteries(self) -&gt; List[Battery]:
+        raw_batteries = self._api_client.get_batteries()
+        return [Battery(bat) for bat in raw_batteries]
+
+    def battery(self, battery_id: int) -&gt; Battery:
+        battery = self._api_client.get_battery(battery_id)
+        if battery:
+            return Battery(battery)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        return self._api_client.charge_battery(battery_id, tracked_time)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -490,6 +515,48 @@ class Grocy(object):
     return self._api_client.add_product_to_shopping_list(
         product_id, shopping_list_id, amount
     )</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.batteries"><code class="name flex">
+<span>def <span class="ident">batteries</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.battery.Battery" href="data_models/battery.html#pygrocy.data_models.battery.Battery">Battery</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def batteries(self) -&gt; List[Battery]:
+    raw_batteries = self._api_client.get_batteries()
+    return [Battery(bat) for bat in raw_batteries]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.battery"><code class="name flex">
+<span>def <span class="ident">battery</span></span>(<span>self, battery_id: int) ‑> <a title="pygrocy.data_models.battery.Battery" href="data_models/battery.html#pygrocy.data_models.battery.Battery">Battery</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def battery(self, battery_id: int) -&gt; Battery:
+    battery = self._api_client.get_battery(battery_id)
+    if battery:
+        return Battery(battery)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 393799))</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    return self._api_client.charge_battery(battery_id, tracked_time)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.chore"><code class="name flex">
@@ -592,7 +659,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 394285))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 393735))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -875,6 +942,9 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.add_product" href="#pygrocy.grocy.Grocy.add_product">add_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_product_pic" href="#pygrocy.grocy.Grocy.add_product_pic">add_product_pic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_product_to_shopping_list" href="#pygrocy.grocy.Grocy.add_product_to_shopping_list">add_product_to_shopping_list</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.batteries" href="#pygrocy.grocy.Grocy.batteries">batteries</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.battery" href="#pygrocy.grocy.Grocy.battery">battery</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.charge_battery" href="#pygrocy.grocy.Grocy.charge_battery">charge_battery</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.chore" href="#pygrocy.grocy.Grocy.chore">chore</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.chores" href="#pygrocy.grocy.Grocy.chores">chores</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.clear_shopping_list" href="#pygrocy.grocy.Grocy.clear_shopping_list">clear_shopping_list</a></code></li>

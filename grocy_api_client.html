@@ -35,7 +35,13 @@ from urllib.parse import urljoin
 
 import requests
 
-from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
+from pygrocy.utils import (
+    localize_datetime,
+    parse_bool_int,
+    parse_date,
+    parse_float,
+    parse_int,
+)
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -222,12 +228,12 @@ class ChoreData(object):
         self.period_type = parsed_json.get(&#34;period_type&#34;)
         self.period_config = parsed_json.get(&#34;period_config&#34;)
         self.period_days = parse_int(parsed_json.get(&#34;period_days&#34;))
-        self.track_date_only = parsed_json.get(&#34;track_date_only&#34;)
-        self.rollover = parsed_json.get(&#34;rollover&#34;)
+        self.track_date_only = parse_bool_int(parsed_json.get(&#34;track_date_only&#34;))
+        self.rollover = parse_bool_int(parsed_json.get(&#34;rollover&#34;))
         self.assignment_type = parsed_json.get(&#34;assignment_type&#34;)
         self.assignment_config = parsed_json.get(&#34;assignment_config&#34;)
         self.next_execution_assigned_to_user_id = parse_int(
-            &#34;next_execution_assigned_to_user_id&#34;
+            parsed_json.get(&#34;next_execution_assigned_to_user_id&#34;)
         )
         self.userfields = parsed_json.get(&#34;userfields&#34;)
 
@@ -527,6 +533,36 @@ class TaskResponse(object):
         self.userfields = parsed_json.get(&#34;userfields&#34;)
 
 
+class CurrentBatteryResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get(&#34;battery_id&#34;))
+        self.last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
+        )
+
+
+class BatteryData(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get(&#34;id&#34;))
+        self.name = parsed_json.get(&#34;name&#34;)
+        self.description = parsed_json.get(&#34;description&#34;)
+        self.used_in = parsed_json.get(&#34;used_in&#34;)
+        self.charge_interval_days = parse_int(parsed_json.get(&#34;charge_interval_days&#34;))
+        self.created_timestamp = parse_date(parsed_json.get(&#34;row_created_timestamp&#34;))
+        self.userfields = parsed_json.get(&#34;userfields&#34;)
+
+
+class BatteryDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self.battery = BatteryData(parsed_json.get(&#34;battery&#34;))
+        self.charge_cycles_count = parse_int(parsed_json.get(&#34;charge_cycles_count&#34;))
+        self.last_charged = parse_date(parsed_json.get(&#34;last_charged&#34;))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
+        )
+
+
 class GrocyApiClient(object):
     def __init__(
         self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
@@ -730,7 +766,23 @@ class GrocyApiClient(object):
             return RecipeDetailsResponse(parsed_json)
 
     def add_generic(self, entity_type: str, data: object):
-        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)</code></pre>
+        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)
+
+    def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
+        parsed_json = self._do_get_request(f&#34;batteries&#34;)
+        if parsed_json:
+            return [CurrentBatteryResponse(data) for data in parsed_json]
+
+    def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
+        parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
+        if parsed_json:
+            return BatteryDetailsResponse(parsed_json)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        localized_tracked_time = localize_datetime(tracked_time)
+        data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+
+        return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)</code></pre>
 </details>
 </section>
 <section>
@@ -742,6 +794,47 @@ class GrocyApiClient(object):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="pygrocy.grocy_api_client.BatteryData"><code class="flex name class">
+<span>class <span class="ident">BatteryData</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BatteryData(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get(&#34;id&#34;))
+        self.name = parsed_json.get(&#34;name&#34;)
+        self.description = parsed_json.get(&#34;description&#34;)
+        self.used_in = parsed_json.get(&#34;used_in&#34;)
+        self.charge_interval_days = parse_int(parsed_json.get(&#34;charge_interval_days&#34;))
+        self.created_timestamp = parse_date(parsed_json.get(&#34;row_created_timestamp&#34;))
+        self.userfields = parsed_json.get(&#34;userfields&#34;)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse"><code class="flex name class">
+<span>class <span class="ident">BatteryDetailsResponse</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BatteryDetailsResponse(object):
+    def __init__(self, parsed_json):
+        self.battery = BatteryData(parsed_json.get(&#34;battery&#34;))
+        self.charge_cycles_count = parse_int(parsed_json.get(&#34;charge_cycles_count&#34;))
+        self.last_charged = parse_date(parsed_json.get(&#34;last_charged&#34;))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
+        )</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.ChoreData"><code class="flex name class">
 <span>class <span class="ident">ChoreData</span></span>
 <span>(</span><span>parsed_json)</span>
@@ -760,12 +853,12 @@ class GrocyApiClient(object):
         self.period_type = parsed_json.get(&#34;period_type&#34;)
         self.period_config = parsed_json.get(&#34;period_config&#34;)
         self.period_days = parse_int(parsed_json.get(&#34;period_days&#34;))
-        self.track_date_only = parsed_json.get(&#34;track_date_only&#34;)
-        self.rollover = parsed_json.get(&#34;rollover&#34;)
+        self.track_date_only = parse_bool_int(parsed_json.get(&#34;track_date_only&#34;))
+        self.rollover = parse_bool_int(parsed_json.get(&#34;rollover&#34;))
         self.assignment_type = parsed_json.get(&#34;assignment_type&#34;)
         self.assignment_config = parsed_json.get(&#34;assignment_config&#34;)
         self.next_execution_assigned_to_user_id = parse_int(
-            &#34;next_execution_assigned_to_user_id&#34;
+            parsed_json.get(&#34;next_execution_assigned_to_user_id&#34;)
         )
         self.userfields = parsed_json.get(&#34;userfields&#34;)</code></pre>
 </details>
@@ -899,6 +992,25 @@ def track_count(self) -&gt; int:
 </details>
 </dd>
 </dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse"><code class="flex name class">
+<span>class <span class="ident">CurrentBatteryResponse</span></span>
+<span>(</span><span>parsed_json)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CurrentBatteryResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get(&#34;battery_id&#34;))
+        self.last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
+        )</code></pre>
+</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentChoreResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentChoreResponse</span></span>
@@ -1393,7 +1505,23 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
             return RecipeDetailsResponse(parsed_json)
 
     def add_generic(self, entity_type: str, data: object):
-        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)</code></pre>
+        self._do_post_request(f&#34;objects/{entity_type}&#34;, data)
+
+    def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
+        parsed_json = self._do_get_request(f&#34;batteries&#34;)
+        if parsed_json:
+            return [CurrentBatteryResponse(data) for data in parsed_json]
+
+    def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
+        parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
+        if parsed_json:
+            return BatteryDetailsResponse(parsed_json)
+
+    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+        localized_tracked_time = localize_datetime(tracked_time)
+        data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+
+        return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1476,6 +1604,22 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     self._do_post_request(&#34;stock/shoppinglist/add-product&#34;, data)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391563))</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    localized_tracked_time = localize_datetime(tracked_time)
+    data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+
+    return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list"><code class="name flex">
 <span>def <span class="ident">clear_shopping_list</span></span>(<span>self, shopping_list_id: int = 1)</span>
 </code></dt>
@@ -1492,7 +1636,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 392551))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391535))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1535,7 +1679,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 10, 19, 38, 53, 392475))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391488))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1557,6 +1701,36 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         data[&#34;done_by&#34;] = done_by
 
     return self._do_post_request(f&#34;chores/{chore_id}/execute&#34;, data)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_batteries"><code class="name flex">
+<span>def <span class="ident">get_batteries</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.CurrentBatteryResponse" href="#pygrocy.grocy_api_client.CurrentBatteryResponse">CurrentBatteryResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
+    parsed_json = self._do_get_request(f&#34;batteries&#34;)
+    if parsed_json:
+        return [CurrentBatteryResponse(data) for data in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_battery"><code class="name flex">
+<span>def <span class="ident">get_battery</span></span>(<span>self, battery_id: int) ‑> <a title="pygrocy.grocy_api_client.BatteryDetailsResponse" href="#pygrocy.grocy_api_client.BatteryDetailsResponse">BatteryDetailsResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
+    parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
+    if parsed_json:
+        return BatteryDetailsResponse(parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
@@ -2782,6 +2956,12 @@ def username(self) -&gt; str:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="pygrocy.grocy_api_client.BatteryData" href="#pygrocy.grocy_api_client.BatteryData">BatteryData</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse" href="#pygrocy.grocy_api_client.BatteryDetailsResponse">BatteryDetailsResponse</a></code></h4>
+</li>
+<li>
 <h4><code><a title="pygrocy.grocy_api_client.ChoreData" href="#pygrocy.grocy_api_client.ChoreData">ChoreData</a></code></h4>
 </li>
 <li>
@@ -2794,6 +2974,9 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.next_execution_assigned_user" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.next_execution_assigned_user">next_execution_assigned_user</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse.track_count" href="#pygrocy.grocy_api_client.ChoreDetailsResponse.track_count">track_count</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.CurrentBatteryResponse" href="#pygrocy.grocy_api_client.CurrentBatteryResponse">CurrentBatteryResponse</a></code></h4>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse" href="#pygrocy.grocy_api_client.CurrentChoreResponse">CurrentChoreResponse</a></code></h4>
@@ -2829,10 +3012,13 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_missing_product_to_shopping_list">add_missing_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product">add_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list">add_product_to_shopping_list</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.charge_battery" href="#pygrocy.grocy_api_client.GrocyApiClient.charge_battery">charge_battery</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.clear_shopping_list">clear_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.complete_task" href="#pygrocy.grocy_api_client.GrocyApiClient.complete_task">complete_task</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.consume_product" href="#pygrocy.grocy_api_client.GrocyApiClient.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.execute_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.execute_chore">execute_chore</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_batteries" href="#pygrocy.grocy_api_client.GrocyApiClient.get_batteries">get_batteries</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_battery" href="#pygrocy.grocy_api_client.GrocyApiClient.get_battery">get_battery</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chore" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chore">get_chore</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_chores" href="#pygrocy.grocy_api_client.GrocyApiClient.get_chores">get_chores</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed" href="#pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed">get_last_db_changed</a></code></li>

@@ -1,4 +1,5 @@
 ./base.html
+./data_models/battery.html
 ./data_models/chore.html
 ./data_models/index.html
 ./data_models/meal_items.html
