@@ -17,17 +17,8 @@ addons:
       - python3-setuptools
       - python3-wheel
       - tox
-
-services:
-  - docker
-
+  
 before_install:
-  - git clone --branch v3.0.1-8 https://github.com/grocy/grocy-docker.git
-  - cd grocy-docker
-  - docker-compose pull
-  - docker-compose up -d
-  - curl http://localhost
-  - cd ..
   - pip3 install virtualenv==20.0.23 --force-reinstall
 
 install:
