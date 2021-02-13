@@ -197,3 +197,8 @@ class Grocy(object):
     def batteries(self) -> List[Battery]:
         raw_batteries = self._api_client.get_batteries()
         return [Battery(bat) for bat in raw_batteries]
+
+    def battery(self, battery_id: int) -> Battery:
+        battery = self._api_client.get_battery(battery_id)
+        if battery:
+            return Battery(battery)
