@@ -25,20 +25,6 @@ class TestGrocy(TestCase):
     def test_init(self):
         self.assertIsInstance(self.grocy, Grocy)
 
-    def test_get_stock_valid(self):
-        stock = self.grocy.stock()
-
-        self.assertIsInstance(stock, list)
-        self.assertGreaterEqual(len(stock), 10)
-        for prod in stock:
-            self.assertIsInstance(prod, Product)
-
-    @responses.activate
-    def test_get_stock_invalid_missing_data(self):
-        resp = []
-        responses.add(responses.GET, f"{self.base_url}/stock", json=resp, status=200)
-        self.assertEqual(len(self.grocy.stock()), 0)
-
     def test_get_shopping_list_valid(self):
         shopping_list = self.grocy.shopping_list(True)
 

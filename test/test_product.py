@@ -10,7 +10,7 @@ class TestProduct:
         assert product.available_amount == 5
         assert len(product.barcodes) == 0
 
-    @pytest.mark.vcri3s
+    @pytest.mark.vcr
     def test_product_get_details_non_existant(self, grocy):
         import requests
 
