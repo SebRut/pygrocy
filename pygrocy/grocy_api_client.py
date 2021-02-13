@@ -505,6 +505,15 @@ class TaskResponse(object):
         self.userfields = parsed_json.get("userfields")
 
 
+class CurrentBatteryResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get("battery_id"))
+        self.last_tracked_time = parse_date(parsed_json.get("last_tracked_time"))
+        self.next_estimated_charge_time = parse_date(
+            parsed_json.get("'next_estimated_charge_time")
+        )
+
+
 class GrocyApiClient(object):
     def __init__(
         self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
@@ -709,3 +718,8 @@ class GrocyApiClient(object):
 
     def add_generic(self, entity_type: str, data: object):
         self._do_post_request(f"objects/{entity_type}", data)
+
+    def get_batteries(self) -> List[CurrentBatteryResponse]:
+        parsed_json = self._do_get_request(f"batteries")
+        if parsed_json:
+            return [CurrentBatteryResponse(data) for data in parsed_json]
