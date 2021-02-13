@@ -2,9 +2,9 @@ from datetime import datetime
 from typing import List
 
 import deprecation
-from data_models.battery import Battery
 
 from .base import DataModel  # noqa: F401
+from .data_models.battery import Battery
 from .data_models.chore import Chore
 from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
