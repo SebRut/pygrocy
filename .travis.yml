@@ -17,7 +17,7 @@ addons:
       - python3-setuptools
       - python3-wheel
       - tox
-  
+
 before_install:
   - pip3 install virtualenv==20.0.23 --force-reinstall
 
