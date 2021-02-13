@@ -51,6 +51,7 @@ class Product(DataModel):
 
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._id = response.product.id
+        self._product_group_id = response.product.product_group_id
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._name = response.product.name

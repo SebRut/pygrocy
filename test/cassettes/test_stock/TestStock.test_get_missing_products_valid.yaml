@@ -1,0 +1,266 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/volatile
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA+1YTVPbMBD9K4zPkIkdCJArh5460+n01mE0iizHamxLyFLSlOG/d1eSYzsEJuUr
+        UHL0av30sfu0T3sbpZYTpWVqmamjyc/biJbSViaaRGfRcfggdDbTfEYNT9E+GMLIghaWw1d8OTgf
+        w/eU14ZMeSY1Jyl4wlAyTOKTYXISd5Ck4pVDQQw/FfG2/iRDN4moO1ayXhn+i+s2K+WWAJ9hC0Tg
+        CuOktUST26g1VrTEP75RpcWcIgyvmRbKCFlFk8oWRQs109IqD+g2wIxYNNMVklH8xw/jdHUulRLV
+        jPSGPOKNBT+irGY5rd3JwA/eWBvJ5nhW3pJRZqReuxIjSeMRuxMpReUtG6fBM2oLDEA3CiuIaHTu
+        drl9mNDMcO0CAJ7uWB8ACp6Z5vwP7HI3b5PTZeusBDMWsiMTBSchEMoHYvBLzWCZvKJTGDMUvJZc
+        zHJDclqlRYvRGcIluCOppCEs52weDiazBUxRlLwyBNKRaM6E4ngUuEEF4DDQzRcfJEYLqYXzi5MR
+        eDJb2gIymWyeOZEZqe20wWiQNzLyxgpYEpNVbUveRsuHMRcpJ5A+LrhELrheCL4MS9RySZjmSDdi
+        RAkhpaWCsTWfRkfx5eQ0nozG0d3d8b9T9mxw8e4oe4qx8fdQS1k0hkz5TlNR5/C9H8Yii/qMDZZP
+        xljPlQNR3V3ydKLidR+qX6+2Jr3aOh7EF+DYv9T3W1rdzbjJU2cMPP0qivnOLMVbCCrei9XVGG/4
+        Pk0b0yvwdId6idIm3Orpm1bWd8ZTCMsHKafXxxGW4+fK4iQeXKBqfIy7MWa/U9tBAodM6dk6AhiH
+        nyWLUdVscjdGY+DulYUgTbkGy36qbFDBIJYb1ftJdTELkTgI4zcWxmOkw7siLd4i90iLxkDaH7Kk
+        Rh4ou++nrHFxOBD26YSF0st/K6Hh2RsSfqMj1SmYPdXs39RNR+p0gE+zxzjcUd+v0Y9C+LCB0B9y
+        jYeNx22CxrVorhhPj0p48+9MZHwbv6R2xouvL52D5QMp5/hiB03edqVcoLZ0pZLh/0ZjL6PepiEF
+        NC5FXWMvtEdj34Vtk/5Kyjn229YiOPwFMhdfvdD7hV6dKVakaXk6eYz9LoeEW2p0ay6ZxFbdNqxR
+        I5nvo8XRGg1zPaB9sWW5OppyqreuDXm3dW0dtE7f6kqLWm0Fwhr+END13V80yNKkmhcAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:54 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA8VUy27bMBD8lUDnJLDstGh9zQ/0XhQLmlpJbCiSoUi7bpB/71AUpSRtAwM99GLI
+        sw/u7szuU+W8baIM1f6pUk21r+rqujJiYHzeW/ugeATQ8Ci9ckFZU+1N1Pq6xFHnbXS0hAoZ1DEF
+        pzzaSpFisvkOyNhb55Tp6JUpZ3yM8CMXvezFmFLsEJDBMVj5sCItXrF+caVgqXjUtxtEDcpkhMRg
+        o0F31SfADbci6kAHHtNPaz1TI84jzCnqb2YSbWBP1jG6v8Sz9cw/0eVl3qEXp9XZKRki6mqVZpqJ
+        kJmI2++uQ5lsxAG2IOB1YtX1gXphGr3meGFKJUwjMTaQ7Fk+zINpo8YTemATCIMgz1I5kJ0bdEgO
+        wyyOib9MkhTa+iQKMLxNBMk4RC0C09uZk21pjIeSo2RuIko/uyKRx6hQkrRmjAOvbGUae9UwQT4T
+        uWSP7I+KT3OJ3p5IesbTDQU1gFIxONi2m219s9ne1Lur+vP+rt7vPlbPq14PwksLPVf7r9+gUAEl
+        FMlB/rnJCY0jL0AuoGhpAx0nQdJR6IhGlv/ZYRJKin2Li67z3KWCf7clcaGRNy5FkY9RmKDCmaJR
+        a73LziYeZql8EViUPy7s5fNKi5rSkdPRC42ZpqzpDmQg6WXAANOwMNnXxc2LOF+T/1tZZtcrCZIy
+        s+LYQZAvAKuhhST0F9gU9t6lKrS852P4R6Ak9gaEl+fL1VuYK6PGjO+xw+crGd3BCt/8K4cfkECN
+        NF0i9tPKgCqBFRId09izbkmrtty/mxqadlZp8mmXHXuJ/Z9kiiyrKpcN3Tz/AhMmQKk7BgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:54 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81UTW/bMAz9K4PObRG77db62j+w+zAQjEzbQmVJlaVkWdH/PtKK42bIgBx3CZzH
+        D/GRj3xXIfo266Sad2Va1aha3SiHI/Hny+C1t5iIoZYmHU1IxjvVuGztzRIJffQ5wBxcsSfqZHYS
+        Ln+s1ygxxfzAyDT4EIzr4cxUMr5l9oOQox5wkhT3HFDAKXn9uiIdv+LjyRWSh8Wjuttw1GhcQQBH
+        nx3zU08Mt9Rhtgm2NMlP5yNBi4eJzRL1LzNglyiCD8Tsr/HsItFvZnmddxpwvzoHo1PmujpjCcoo
+        SnvI4ZahhGzck+mHBAO61q6hn0zy8twJ5xPogfTrsR9dtpzZjuQSMH+IpE2gpQOBk7PhqIp5bOVx
+        jdZHM/tVtcxF5zGLOODvVoPvYMrbJYdkFim0mUs/hEUZb9lwSdq7KY+0DqlMbzAtAatmnin4HcWd
+        of2xmdHvQUfip1tIZuRJ4hjYVm/q6nZT31b3X6rn5qFq7r+qj1WmW4zas4xV8+MnCxNZAIvSZt0f
+        ozfCbbbmidhQ2JdCTlISPgXaoc1Cqb57+nYCi98sF0kxC+ZzBsC+j9QLA7Y+zmM6s4vQmN2ZW5nm
+        otC3jC6ZdIDszErktMVC4rjF35EX5+ICX99IWVxJB8HmiJaLlqwTowUQIY3cWWkWt/y8uJnZf1JZ
+        GXs0eplZ/cgkcNezWleQIW9ZKrIHZ+gcfvmCFY0fz8tllyIlR78SyDK0clkX2T7dVnJ5l6N4atfS
+        eXZ84V0/fNE5bD3Glp0v3OTrRyq8zQTzoaLI6TeyLMirhj3BNJDtwJpuOY/V84YlH7yxEGXpA0XN
+        h0I1DHOaVamfVll9/AEgNG7kXwYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:54 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81UwW7bMAz9lcLnJoiTdmh93WHX3YeBYGTa1ipLqiwly4r9+0g5qpshA3LcJXDI
+        R4rke+Rb5YNrk4pV81bptmqqXXVfWRyJP7+kcTzd7QnDxMaWJhW0j9rZqrHJmPsSC31wyUMOrxmJ
+        KuqDJJA/ximUmNn9wJZpcN5r28OFa874mhgHPgU14CQppJzZOEWnXhZLx6+48A6F6KAg6vWGo0Zt
+        Zwvg6JLlDqsnNrfUYTIR9jTJT+cCQYunid0S9S83YBcpgPPE3d+C7ALRL+7yNnQc8LiAvVYxcV2d
+        NgRnMnohI3Ox/uF7rpQs7tkdkYFH0v0QYUDbmiXNB5dUkadiXQQ1kHo5z6ZLhl8xI9kIPAsIpLSn
+        Mg3Pydlx1kimcOZJoXFBZ1y9FY5UGpPBSPD32MF1MKV9yVEyt4lLP/miktekuSTl7JRGWgibmRx0
+        S8AKyvyCO1A4aDqeBxvcEVQgfrqFqEdmFUfPvu1mW68221W9u6ufm4e62X2qfi+S3WNQjiVdNd++
+        s0iRxVBUJ1tQojfSW/amidgxdz8X8i6rR8bMpgOalFuq188i/o/ArB3JkdfiwoN9H6iXFtj7mHm6
+        8IvquL0L2DyaItfXhDbqeIJk9dLJtaX+irxFV7f59knKFosswZsU0HDRklWOxGwQJY08WpkWz/yy
+        uNzZf1LZzHvQSkjbrh+FSTz0LNZi2snNcIaVImtwYc3B149Zprhwcx0yK8nSzwiyCy2zLzVk1T6t
+        6i0/W+7j+7DK3Bn4mVf9dKeS3zsMLYOvnOfbCZW+9QT5ZlHg9BvZFeRNw55gGsh0YHRXLuW23rC2
+        vdMGguy8p6D4TlQNmznNotNlkznhHxvN53VsBgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:54 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA8VVTW/bMAz9K4XPbWE76bb62j+w+zAQikzbQmVLlaVkWdH/PlKy4mQrivS0S5CQ
+        j0/8eGReC+tMG6QvmtdCtUVTbIvbYhIj0tcnp2Y70+8WZ+mU9cpMRTMFrW9zGPTOBAsxsiKkkF7t
+        OZZ/aCMFxyQ3E8+DsVZNPVy4EuNLIBzY4OQgZqbYUEAyzt7I59XS0SvGnaDgDWREdV9S1KimZAEx
+        mjBRcUXF9hY7EbSHHc780RmH0IrjTP6P3CA6jw6MRSr/GmTnEH9Tmdeh/SAOK9gq6QPl1SmNkAaR
+        +oOT2JHJC3IeUPWDh0FMrV5Dz1z8cmzFZDzIAeXz0pAuaGLWI04eqH5wKJXF3AFL5ORYNBHnlh6X
+        QhunIq6qeTAyjEELj/B3r8F0MIdd5sjMbaDUjzZL4yUoSkmaaQ4jnk0p5jyoFoFkE4cKZo9ur/Cw
+        NNOZA0iH9HQLXo00STFa8tVlXd2V9V21uakem23VbL4Ub6tOd8JJQzoumh+L0LmK80Kj8hcY8W3r
+        aluVj4+EiiLMws+KSn35SNBakMqsU5KKTujP5E5baPwS+faTlimyLdvBi5oLLrmQ6A0zkmNJjFdm
+        bewDYVI790IHnkJd3T/ElTwDRokzRxR5wqd6QfS9w567Tt6HOKYLPy8HTeQClhSYl+4liMkrf4Qw
+        KerLac/PxrHcne+Ctv3dq3N9A/MZA6uDE5qSZtaZaJOBxT+SGrhbJJPL5GJlp4vI/f1/mZ2rqNje
+        b+qvPEux77O02MjX1miS90lw2RrD31dpUVNUns77kKSlCX954AVuaf4snbhq3+4qJsiX/NSu3HkC
+        PtF9Ot7IYHdGuDa+9s8fyfUj5brVDPG4oiP6khdc0HkQPcI8oO5Aqy6f9LoqSfPWKA2OD5VFJ+m4
+        FQ2ZiWZV6rolRPgHgXRpxxEHAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 20:02:54 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

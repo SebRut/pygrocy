@@ -1,0 +1,82 @@
+interactions:
+- request:
+    body: "0\r\n\r\n"
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/octet-stream
+      Transfer-Encoding:
+      - chunked
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - '*/*'
+    method: PUT
+    uri: https://localhost/api/files/productpictures/MjAuanBn
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 19:57:44 GMT
+      Server:
+      - nginx/1.18.0
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 204
+      message: No Content
+- request:
+    body: '{"picture_file_name": "20.jpg"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - '*/*'
+    method: PUT
+    uri: https://localhost/api/objects/products/20
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 13 Feb 2021 19:57:45 GMT
+      Server:
+      - nginx/1.18.0
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 204
+      message: No Content
+version: 1

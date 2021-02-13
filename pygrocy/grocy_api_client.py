@@ -7,7 +7,13 @@ from urllib.parse import urljoin
 
 import requests
 
-from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
+from pygrocy.utils import (
+    localize_datetime,
+    parse_bool_int,
+    parse_date,
+    parse_float,
+    parse_int,
+)
 
 DEFAULT_PORT_NUMBER = 9192
 
@@ -194,12 +200,12 @@ class ChoreData(object):
         self.period_type = parsed_json.get("period_type")
         self.period_config = parsed_json.get("period_config")
         self.period_days = parse_int(parsed_json.get("period_days"))
-        self.track_date_only = parsed_json.get("track_date_only")
-        self.rollover = parsed_json.get("rollover")
+        self.track_date_only = parse_bool_int(parsed_json.get("track_date_only"))
+        self.rollover = parse_bool_int(parsed_json.get("rollover"))
         self.assignment_type = parsed_json.get("assignment_type")
         self.assignment_config = parsed_json.get("assignment_config")
         self.next_execution_assigned_to_user_id = parse_int(
-            "next_execution_assigned_to_user_id"
+            parsed_json.get("next_execution_assigned_to_user_id")
         )
         self.userfields = parsed_json.get("userfields")
 
