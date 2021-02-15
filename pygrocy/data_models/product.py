@@ -32,7 +32,7 @@ class Product(DataModel):
         self._available_amount = None
         self._best_before_date = None
 
-        self._barcodes = None
+        self._barcodes = []
         self._product_group_id = None
 
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):

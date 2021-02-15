@@ -1,0 +1,75 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock
+  response:
+    body:
+      string: !!binary |
+        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
+        WfqB/wfoqlH9538RD+fHsUsAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 14:14:24 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

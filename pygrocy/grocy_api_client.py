@@ -395,9 +395,7 @@ class ProductDetailsResponse(object):
 
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get("product_barcodes", "")
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
+        if barcodes_raw is not None:
             self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
