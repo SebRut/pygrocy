@@ -1,7 +1,12 @@
 import base64
 from datetime import datetime
+
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import RecipeDetailsResponse, MealPlanResponse, GrocyApiClient
+from pygrocy.grocy_api_client import (
+    GrocyApiClient,
+    MealPlanResponse,
+    RecipeDetailsResponse,
+)
 
 
 class RecipeItem(DataModel):
@@ -49,6 +54,7 @@ class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
         self._day = response.day
+        self._recipe = None
         self._recipe_id = response.recipe_id
         self._recipe_servings = response.recipe_servings
         self._note = response.note
@@ -78,6 +84,7 @@ class MealPlanItem(DataModel):
         return self._recipe
 
     def get_details(self, api_client: GrocyApiClient):
-        recipe = api_client.get_recipe(self.recipe_id)
-        if recipe:
-            self._recipe = RecipeItem(recipe)
+        if self.recipe_id:
+            recipe = api_client.get_recipe(self.recipe_id)
+            if recipe:
+                self._recipe = RecipeItem(recipe)

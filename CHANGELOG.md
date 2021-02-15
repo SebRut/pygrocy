@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.27.0](https://github.com/SebRut/pygrocy/tree/v0.27.0) (2021-02-15)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.26.0...v0.27.0)
+
+**Merged pull requests:**
+
+- add tests for meal plan && change MealItem to only fetch recipe when … [\#150](https://github.com/SebRut/pygrocy/pull/150) ([SebRut](https://github.com/SebRut))
+- fix error if product has no barcodes [\#149](https://github.com/SebRut/pygrocy/pull/149) ([SebRut](https://github.com/SebRut))
+
 ## [v0.26.0](https://github.com/SebRut/pygrocy/tree/v0.26.0) (2021-02-13)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.25.0...v0.26.0)
