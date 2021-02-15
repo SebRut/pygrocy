@@ -1,0 +1,397 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9WVyw6CMBBFf4V0DaYFn3yHO2NIQ6s24WVpNcb4784oKEjSpUkTFpNpb5kDd6a7
+        O1GCpISRkAh+gyimMYtoHNE1pMytkZDTMlcQhF2QfSTvhayV+qKqY9sdVNUGVJUtipA0uhY2Ny/J
+        OMPL2lYGJHRG4eh+49kO9ur6muVaciNFZlQpW8PLZlAkSwK2SecsTZZwhIU6DkoWAgrBdz3Cji6G
+        xR+6DaRcdCjxhC6Z0DH8oC46lHhCN5/SoVlddCjxhG4xpUPnueiQ3hM6bMpx3zF0novOo75bTenQ
+        eS46j5yJ43/87+hgZr5G/MeHeB+8h7vLmGR7Um0ADw86eT/zv/o+84fLYf8E8//2HPwGAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTY/TMBCG/8ooJ5DSbtNlkSghEncOSFwjRY49m3rrL+xxURfx3xmHarV0JZBK
+        OLRqZzzPTN9OXn+vtKp2VVPVlRMW+eNn/fgo+KvCJKMOpL3jaLtvuk8+ogUdUrZtf8OBNjyPQTt2
+        yhsfIWniA2MHTKQapHcJCSlzRiiul9pNgEZTrCGhAqWFBeddtidAHa1XQGgDk7Q7apUdQSYwYuQB
+        AAnmLghWTE6AMPprPjEAo+BmT7yjNzlQFmv4SHDE6AF9KtVCypzKeYKHnMiDyvwqg+OcRwERx2zX
+        8IWHBslzCjiIpGDKI8Ypoqt5Wu4kgMRBW8H5JJykzPWJ4JlOv7hFkFmL9R9yv+nUpiAcJDoZ/NBX
+        o5CHKfrs1EqWOXcQp/HV9u6uhvlt8/p9X3WX2vJfUCjdM03+m8bcK3RtNl1rdHet3gzh6kJYXvgz
+        u78pMy6zy33s3aXm12ldSEvtdGH9+14XykK7XVAvfGDR/Z5/8tNzf+2Oz3Mu4iWFtJSfFNZfPGV+
+        9tiwo/82yIiCUA2kLVcJG9i6t5tts9psV80tNO92b5rd7Vs+HTT7VcThXhscztYfivWvH8LE+VEk
+        HBLGI3t1Ot8QfCXoyPSLsPM0yD3Kw5D2PgQuMDoR12yYQ6dQbhXnoxWm9I1eZUlDuXZcNqauMuPu
+        NRrFbUrkx0+6jljZlAYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTYvbQAyG/4rwqQUnG2e7haauoffe9mow4xmtM5v56owmJZT+92qcZUlTaCF1
+        DzZmJD2SX8vS90qraldtq7pywiI/PgYx7ZFIw+iNnxwmZKPCJKMOpL1jn3bfdF98RAs6pGzb/o4P
+        2nB5Bu3YKQZESJrYYeyA+VSD9C4hIWW2CMXxUrsJ0GiKNSRUoLSw4LzL9gSoo/UKCG1gknZHrbIj
+        yARGjFwAIMGcBcGKyQkQRn/NJwZgFJzslXf0JgfKYg2fCY4YPaBPJVpImVPxJ3jOiTyozFcpHGc7
+        Cog4ZruGRy4aJNcp4CCSgimPGKeIruZqOZMAEgdtBduTcJIyxyeCC53O3CLIrMX6D7ZfdGpTEA4S
+        nQx+6qtRyMMUfXZqJUudO4jT+Gb78FDDfNu8/dhX3bW2/AkKpbvQ5L9pzLlC12bTtUZ3t+rNEI4u
+        hOWFf2H3d6XGZXq5j7271vw2rQtpqZ4urH/v60JZqLcL6rc5sGh/z6/8+t/f2uNznYvMkkJaap4U
+        1l9myvzv8cCO/tsgIwpCNZC2HCVsKJN+s21Wm+2quYfmw+5ds7t/z95B87yKODxpg8PLIuBxcV4E
+        6+cwsc8oEg4J45HndWJSc14LOnKGq2PnaZB7lIch7X0IHGB0Io7ZcAydQtkzzkcrTMkdvcqShrKI
+        XDamrjLjnjQaxWnKyY+fIr01HKYGAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTYvbMBCG/8rgUwtONk66haauoffe9howsjTraKOvSqMsofS/d+QNS5pCF1L3
+        kBBmNM+M34xf/ai0qrbVpqorJyzyzwfh1LOWe0wcU5hk1IG0d5xq9033zUe0oEPKtt3dcaANlzFo
+        h0554yMkTXxg6ICxVIP0LiEhZc4IxfVSuxHQaIo1JFSgtLDgvMv2BKij9QoIbWCSdketsiPIBEYM
+        PAAgwdQFwYrRCRBGf88nBmAU3OyVd/QmB8piCV8Jjhg9oE+lWkiZUzlP8JQTeVCZP2VwnPIoIOKQ
+        7RIeeGiQPKeAg0gKxjxgHCO6mqflTgJIHLQVnE/CScpcnwgudHrhFkEmLZZ/yf2mU5uCcJDoZPDL
+        rhqEPIzRZ6cWssy5hTgO79b39zVMX6v3n3dVd60t/wWF0l1o8t805l6ha7PpWqO7W/VmCFcXwvzC
+        n9m7uzLjPLu8izt3rfltWhfSXDtdWP++14Uy024X1B8+MOt+T4/8+t7fuuPTnLN4SSHN5SeF9Yan
+        TO8eG3b0z72MKAhVT9pylbCBrXu9WjeL1XrRbKD5tP3QbDcf+XTQ7FcR+0dtsD/7P5vY2f+XT2Hk
+        Q4NI2CeMRzbsxKjm5V7QkVtchZ2nnm8OeejT3ofABUYn4poV19AplPvF+WiFKc2jV1lSXy4gl42p
+        q8y4R41GcZsS+fkL8MDRbp4GAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTYvbMBCG/8rgUwtONs7uFpq6ht57KPRqMLI062ijr0qjlFD63zvyLkuawhZS
+        95AQZjTPjN+MX/2otKp21V1VV05Y5J9fhJPigIkjCpOMOpD2jhPtvuk++4gWdEjZtv0NB9pwHoN2
+        7JQ3PkLSxAfGDhhKNUjvEhJS5oxQXC+1mwCNplhDQgVKCwvOu2xPgDpar4DQBiZpd9QqO4JMYMTI
+        AwASzF0QrJicAGH0t3xiAEbBzV54R29yoCzW8IngiNED+lSqhZQ5lfMEjzmRB5X5UwbHOY8CIo7Z
+        ruErDw2S5xRwEEnBlEeMU0RX87TcSQCJg7aC84mFo8z1ieBMpyduEWTWYv1K7jed2hSEg0Qngx/7
+        ahTyMEWfnVrJMucO4jS+2d7f1zB/bd5+6KvuUlv+CwqlO9Pkv2nMvULXZtO1RnfX6s0Qri6E5YV/
+        Zvc3ZcZldrmPvbvU/DqtC2mpnS6sf9/rQllotwvqDx9YdL/nR35576/d8XnORbykkJbyk8L6i6fM
+        7x4bdvTfBxlREKqBtOUqYQNb93azbVab7aq5heb97q7Z3b7j00GzX0UcHrTB4dn92S1m918/homP
+        jCLhkDAe2a4Tg5qnW0FHbnARdp4GuUd5GNLeh8AFRifimg3X0CmUu8X5aIUpraNXWdJQLh+Xjamr
+        zLgHjUZxmxL5+QvlZUE5mgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTY/TMBCG/8ooJ5DSbtNlkSghEncOSFwjRY49m3rrL+xxURfx3xmHarV0JZBK
+        OLRqZzzPTN9OXn+vtKp2VVPVlRMW+eNn/fgo+KvCJKMOpL3jaLtvuk8+ogUdUrZtf8OBNjyPQTt2
+        yhsfIWniA2MHTKQapHcJCSlzRiiul9pNgEZTrCGhAqWFBeddtidAHa1XQGgDk7Q7apUdQSYwYuQB
+        AAnmLghWTE6AMPprPjEAo+BmT7yjNzlQFmv4SHDE6AF9KtVCypzKeYKHnMiDyvwqg+OcRwERx2zX
+        8IWHBslzCjiIpGDKI8Ypoqt5Wu4kgMRBW8H5JJykzPWJ4JlOv7hFkFmL9R9yv+nUpiAcJDoZ/NBX
+        o5CHKfrs1EqWOXcQp/HV9u6uhvlt8/p9X3WX2vJfUCjdM03+m8bcK3RtNl1rdHet3gzh6kJYXvgz
+        u78pMy6zy33s3aXm12ldSEvtdGH9+14XykK7XVAvfGDR/Z5/8tNzf+2Oz3Mu4iWFtJSfFNZfPGV+
+        9tiwo/82yIiCUA2kLVcJG9i6t5tts9psV80tNO92b5rd7Vs+HTT7VcThXhscztYfivWvH8LE+VEk
+        HBLGI3t1Ot8QfCXoyPSLsPM0yD3Kw5D2PgQuMDoR12yYQ6dQbhXnoxWm9I1eZUlDuXZcNqauMuPu
+        NRrFbUrkx0+6jljZlAYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:51 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTYvbQAyG/4rwqQUnG2e7haauoffe9mow4xmtM5v56owmJZT+92qcZUlTaCF1
+        DzZmJD2SX8vS90qraldtq7pywiI/PgYx7ZFIw+iNnxwmZKPCJKMOpL1jn3bfdF98RAs6pGzb/o4P
+        2nB5Bu3YKQZESJrYYeyA+VSD9C4hIWW2CMXxUrsJ0GiKNSRUoLSw4LzL9gSoo/UKCG1gknZHrbIj
+        yARGjFwAIMGcBcGKyQkQRn/NJwZgFJzslXf0JgfKYg2fCY4YPaBPJVpImVPxJ3jOiTyozFcpHGc7
+        Cog4ZruGRy4aJNcp4CCSgimPGKeIruZqOZMAEgdtBduTcJIyxyeCC53O3CLIrMX6D7ZfdGpTEA4S
+        nQx+6qtRyMMUfXZqJUudO4jT+Gb78FDDfNu8/dhX3bW2/AkKpbvQ5L9pzLlC12bTtUZ3t+rNEI4u
+        hOWFf2H3d6XGZXq5j7271vw2rQtpqZ4urH/v60JZqLcL6rc5sGh/z6/8+t/f2uNznYvMkkJaap4U
+        1l9myvzv8cCO/tsgIwpCNZC2HCVsKJN+s21Wm+2quYfmw+5ds7t/z95B87yKODxpg8PLIuBxcV4E
+        6+cwsc8oEg4J45HndWJSc14LOnKGq2PnaZB7lIch7X0IHGB0Io7ZcAydQtkzzkcrTMkdvcqShrKI
+        XDamrjLjnjQaxWnKyY+fIr01HKYGAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:52 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTYvbMBCG/8rgUwtONs7uFpq6ht57KPRqMLI062ijr0qjlFD63zvyLkuawhZS
+        95AQZjTPjN+MX/2otKp21V1VV05Y5J9fhJPigIkjCpOMOpD2jhPtvuk++4gWdEjZtv0NB9pwHoN2
+        7JQ3PkLSxAfGDhhKNUjvEhJS5oxQXC+1mwCNplhDQgVKCwvOu2xPgDpar4DQBiZpd9QqO4JMYMTI
+        AwASzF0QrJicAGH0t3xiAEbBzV54R29yoCzW8IngiNED+lSqhZQ5lfMEjzmRB5X5UwbHOY8CIo7Z
+        ruErDw2S5xRwEEnBlEeMU0RX87TcSQCJg7aC84mFo8z1ieBMpyduEWTWYv1K7jed2hSEg0Qngx/7
+        ahTyMEWfnVrJMucO4jS+2d7f1zB/bd5+6KvuUlv+CwqlO9Pkv2nMvULXZtO1RnfX6s0Qri6E5YV/
+        Zvc3ZcZldrmPvbvU/DqtC2mpnS6sf9/rQllotwvqDx9YdL/nR35576/d8XnORbykkJbyk8L6i6fM
+        7x4bdvTfBxlREKqBtOUqYQNb93azbVab7aq5heb97q7Z3b7j00GzX0UcHrTB4dn92S1m918/homP
+        jCLhkDAe2a4Tg5qnW0FHbnARdp4GuUd5GNLeh8AFRifimg3X0CmUu8X5aIUpraNXWdJQLh+Xjamr
+        zLgHjUZxmxL5+QvlZUE5mgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:43:52 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1
