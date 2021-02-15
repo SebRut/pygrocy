@@ -1,0 +1,47 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9WVyw6CMBBFf4V0DaYFn3yHO2NIQ6s24WVpNcb4784oKEjSpUkTFpNpb5kDd6a7
+        O1GCpISRkAh+gyimMYtoHNE1pMytkZDTMlcQhF2QfSTvhayV+qKqY9sdVNUGVJUtipA0uhY2Ny/J
+        OMPL2lYGJHRG4eh+49kO9ur6muVaciNFZlQpW8PLZlAkSwK2SecsTZZwhIU6DkoWAgrBdz3Cji6G
+        xR+6DaRcdCjxhC6Z0DH8oC46lHhCN5/SoVlddCjxhG4xpUPnueiQ3hM6bMpx3zF0novOo75bTenQ
+        eS46j5yJ43/87+hgZr5G/MeHeB+8h7vLmGR7Um0ADw86eT/zv/o+84fLYf8E8//2HPwGAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 Feb 2021 15:38:19 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1
