@@ -28,8 +28,13 @@
 </summary>
 <pre><code class="python">import base64
 from datetime import datetime
+
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import RecipeDetailsResponse, MealPlanResponse, GrocyApiClient
+from pygrocy.grocy_api_client import (
+    GrocyApiClient,
+    MealPlanResponse,
+    RecipeDetailsResponse,
+)
 
 
 class RecipeItem(DataModel):
@@ -77,6 +82,7 @@ class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
         self._day = response.day
+        self._recipe = None
         self._recipe_id = response.recipe_id
         self._recipe_servings = response.recipe_servings
         self._note = response.note
@@ -106,9 +112,10 @@ class MealPlanItem(DataModel):
         return self._recipe
 
     def get_details(self, api_client: GrocyApiClient):
-        recipe = api_client.get_recipe(self.recipe_id)
-        if recipe:
-            self._recipe = RecipeItem(recipe)</code></pre>
+        if self.recipe_id:
+            recipe = api_client.get_recipe(self.recipe_id)
+            if recipe:
+                self._recipe = RecipeItem(recipe)</code></pre>
 </details>
 </section>
 <section>
@@ -134,6 +141,7 @@ class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
         self._day = response.day
+        self._recipe = None
         self._recipe_id = response.recipe_id
         self._recipe_servings = response.recipe_servings
         self._note = response.note
@@ -163,9 +171,10 @@ class MealPlanItem(DataModel):
         return self._recipe
 
     def get_details(self, api_client: GrocyApiClient):
-        recipe = api_client.get_recipe(self.recipe_id)
-        if recipe:
-            self._recipe = RecipeItem(recipe)</code></pre>
+        if self.recipe_id:
+            recipe = api_client.get_recipe(self.recipe_id)
+            if recipe:
+                self._recipe = RecipeItem(recipe)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -258,9 +267,10 @@ def recipe_servings(self) -&gt; int:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_details(self, api_client: GrocyApiClient):
-    recipe = api_client.get_recipe(self.recipe_id)
-    if recipe:
-        self._recipe = RecipeItem(recipe)</code></pre>
+    if self.recipe_id:
+        recipe = api_client.get_recipe(self.recipe_id)
+        if recipe:
+            self._recipe = RecipeItem(recipe)</code></pre>
 </details>
 </dd>
 </dl>

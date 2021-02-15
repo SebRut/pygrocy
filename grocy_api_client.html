@@ -423,9 +423,7 @@ class ProductDetailsResponse(object):
 
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
+        if barcodes_raw is not None:
             self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
@@ -1605,7 +1603,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391563))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799593))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1636,7 +1634,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391535))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799568))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1679,7 +1677,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 13, 22, 8, 17, 391488))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799527))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2395,9 +2393,7 @@ def product_group_id(self) -&gt; int:
 
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
-        if barcodes_raw is None:
-            self._barcodes = None
-        else:
+        if barcodes_raw is not None:
             self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
