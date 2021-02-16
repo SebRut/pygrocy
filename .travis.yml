@@ -26,6 +26,9 @@ before_install:
   - pip3 install doctr~=1.8.0
   - pip3 install pdoc3~=0.9.2
 
+install:
+  - pip3 install -r requirements.txt
+
 script:
   - tox
   - set -e
