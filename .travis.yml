@@ -12,7 +12,7 @@ addons:
     packages:
       - python3.6
       - python3.8
-      - python3
+      - python3.9
       - python3-pip
       - python3-setuptools
       - python3-wheel
@@ -20,11 +20,9 @@ addons:
 
 before_install:
   - pip3 install virtualenv==20.0.23 --force-reinstall
-
-install:
-  - pip3 install -r requirements.txt
-  - pip3 install -r requirements-dev.txt
-  - pip3 install coveralls
+  - pip3 install coveralls~=3.0.0
+  - pip3 install doctr~=1.8.0
+  - pip3 install pdoc3~=0.9.2
 
 script:
   - tox
