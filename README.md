@@ -33,13 +33,4 @@ for entry in grocy.stock():
 ```
 
 ## Development testing
-You need a Grocy instance running in demo mode at localhost with https (docker or a php server)
-You can setup url, port and ssl in test/test_const.py
-
-```
-  curl -L https://github.com/grocy/grocy-docker/raw/master/Dockerfile-grocy > Dockerfile-grocy
-  docker-compose build grocy
-  docker pull grocy/grocy-docker:nginx
-  docker-compose up -d
-  curl -kX GET https://localhost
-```
+You need tox and Python 3.6/8/9 to run the tests. Navigate to the root dir of `pygrocy` and execute `tox` to run the tests.
