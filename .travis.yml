@@ -9,6 +9,8 @@ env:
 addons:
   apt:
     update: true
+    sources:
+      - deadsnakes
     packages:
       - python3.6
       - python3.8
