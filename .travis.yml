@@ -10,7 +10,7 @@ addons:
   apt:
     update: true
     sources:
-      - deadsnakes
+      - sourceline: 'ppa:deadsnakes/ppa'
     packages:
       - python3.6
       - python3.8
