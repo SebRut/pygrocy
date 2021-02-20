@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: '{"list_id": 3000}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '17'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/shoppinglist/add-missing-products
+  response:
+    body:
+      string: '{"error_message":"Shopping list does not exist"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 20 Feb 2021 16:56:56 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 400
+      message: Bad Request
+version: 1
