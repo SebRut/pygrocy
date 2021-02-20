@@ -1,6 +1,7 @@
 import pytest
 
 from pygrocy.data_models.product import Product, ShoppingListProduct
+from pygrocy.errors import GrocyError
 
 
 class TestShoppingList:
@@ -35,11 +36,22 @@ class TestShoppingList:
         grocy.add_product_to_shopping_list(19)
 
     @pytest.mark.vcr
-    def test_add_product_to_shopping_list_error(self, grocy):
-        import requests
-
-        with pytest.raises(requests.exceptions.HTTPError):
+    def test_add_nonexistant_product_to_shopping_list(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
             grocy.add_product_to_shopping_list(3000)
+
+        error = exc_info.value
+        assert error.status_code == 400
+        assert error.message == "Product does not exist or is inactive"
+
+    @pytest.mark.vcr
+    def test_add_missing_products_to_nonexistant_shopping_list(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.add_missing_product_to_shopping_list(3000)
+
+        error = exc_info.value
+        assert error.status_code == 400
+        assert error.message == "Shopping list does not exist"
 
     @pytest.mark.vcr
     def test_clear_shopping_list_valid(self, grocy):

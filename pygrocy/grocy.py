@@ -10,6 +10,7 @@ from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
+from .errors import GrocyError  # noqa: F401
 from .grocy_api_client import ChoreDetailsResponse  # noqa: F401
 from .grocy_api_client import CurrentChoreResponse  # noqa: F401
 from .grocy_api_client import CurrentStockResponse  # noqa: F401

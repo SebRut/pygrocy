@@ -15,6 +15,8 @@ from pygrocy.utils import (
     parse_int,
 )
 
+from .errors import GrocyError
+
 DEFAULT_PORT_NUMBER = 9192
 
 
@@ -548,7 +550,9 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) > 0:
             return resp.json()
 
@@ -557,7 +561,8 @@ class GrocyApiClient(object):
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise GrocyError(resp)
         if len(resp.content) > 0:
             return resp.json()
 
@@ -573,7 +578,9 @@ class GrocyApiClient(object):
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) > 0:
             return resp.json()
 
