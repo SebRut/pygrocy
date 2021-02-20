@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.28.0](https://github.com/SebRut/pygrocy/tree/v0.28.0) (2021-02-20)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.27.0...v0.28.0)
+
+**Implemented enhancements:**
+
+- Better error messages [\#133](https://github.com/SebRut/pygrocy/issues/133)
+
+**Closed issues:**
+
+- Support for Grocy 3.x api [\#145](https://github.com/SebRut/pygrocy/issues/145)
+
+**Merged pull requests:**
+
+- better error handling [\#153](https://github.com/SebRut/pygrocy/pull/153) ([SebRut](https://github.com/SebRut))
+- add python 3.6 to tox config [\#152](https://github.com/SebRut/pygrocy/pull/152) ([SebRut](https://github.com/SebRut))
+- add python 3.6 to tox config [\#151](https://github.com/SebRut/pygrocy/pull/151) ([SebRut](https://github.com/SebRut))
+
 ## [v0.27.0](https://github.com/SebRut/pygrocy/tree/v0.27.0) (2021-02-15)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.26.0...v0.27.0)
