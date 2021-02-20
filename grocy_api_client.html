@@ -43,6 +43,8 @@ from pygrocy.utils import (
     parse_int,
 )
 
+from .errors import GrocyError
+
 DEFAULT_PORT_NUMBER = 9192
 
 
@@ -576,7 +578,9 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -585,7 +589,8 @@ class GrocyApiClient(object):
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -601,7 +606,9 @@ class GrocyApiClient(object):
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -1315,7 +1322,9 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -1324,7 +1333,8 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -1340,7 +1350,9 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
-        resp.raise_for_status()
+        if resp.status_code &gt;= 400:
+            raise GrocyError(resp)
+
         if len(resp.content) &gt; 0:
             return resp.json()
 
@@ -1603,7 +1615,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799593))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 20, 17, 19, 28, 531317))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1634,7 +1646,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799568))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 2, 20, 17, 19, 28, 531295))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1677,7 +1689,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 799527))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 20, 17, 19, 28, 531187))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>

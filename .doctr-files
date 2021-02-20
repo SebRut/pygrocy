@@ -6,6 +6,8 @@
 ./data_models/product.html
 ./data_models/task.html
 ./data_models/user.html
+./errors/grocy_error.html
+./errors/index.html
 ./grocy.html
 ./grocy_api_client.html
 ./index.html

@@ -38,6 +38,7 @@ from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
+from .errors import GrocyError  # noqa: F401
 from .grocy_api_client import ChoreDetailsResponse  # noqa: F401
 from .grocy_api_client import CurrentChoreResponse  # noqa: F401
 from .grocy_api_client import CurrentStockResponse  # noqa: F401
@@ -547,7 +548,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 801448))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 20, 17, 19, 28, 532563))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -659,7 +660,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 15, 15, 56, 30, 801384))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 2, 20, 17, 19, 28, 532502))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
