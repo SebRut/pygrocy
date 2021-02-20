@@ -1,11 +1,15 @@
 import pytest
 
+from pygrocy.data_models.product import Product
+from pygrocy.errors.grocy_error import GrocyError
+
 
 class TestProduct:
     @pytest.mark.vcr
     def test_product_get_details_valid(self, grocy):
         product = grocy.product(10)
 
+        assert isinstance(product, Product)
         assert product.name == "Cheese"
         assert product.available_amount == 5
         assert len(product.barcodes) == 0
@@ -23,10 +27,12 @@ class TestProduct:
 
     @pytest.mark.vcr
     def test_product_get_details_non_existant(self, grocy):
-        import requests
-
-        with pytest.raises(requests.exceptions.HTTPError):
+        with pytest.raises(GrocyError) as exc_info:
             grocy.product(200)
+
+        error = exc_info.value
+        assert error.status_code == 400
+        assert error.message == "Product does not exist or is inactive"
 
     @pytest.mark.vcr
     def test_add_product_pic_valid(self, grocy, mocker):

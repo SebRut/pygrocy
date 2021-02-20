@@ -5,9 +5,9 @@ from unittest import TestCase
 from unittest.mock import mock_open, patch
 
 import responses
-from requests.exceptions import HTTPError
 
 from pygrocy import Grocy
+from pygrocy.errors import GrocyError
 from pygrocy.grocy_api_client import GrocyApiClient
 
 
@@ -26,7 +26,7 @@ class TestGrocy(TestCase):
         responses.add(
             responses.GET, f"{self.base_url}/objects/shopping_list", status=400
         )
-        self.assertRaises(HTTPError, self.grocy.shopping_list)
+        self.assertRaises(GrocyError, self.grocy.shopping_list)
 
     @responses.activate
     def test_get_shopping_list_invalid_missing_data(self):
@@ -40,20 +40,11 @@ class TestGrocy(TestCase):
         self.assertEqual(len(self.grocy.shopping_list()), 0)
 
     @responses.activate
-    def test_add_missing_product_to_shopping_list_error(self):
-        responses.add(
-            responses.POST,
-            f"{self.base_url}/stock/shoppinglist/add-missing-products",
-            status=400,
-        )
-        self.assertRaises(HTTPError, self.grocy.add_missing_product_to_shopping_list)
-
-    @responses.activate
     def test_clear_shopping_list_error(self):
         responses.add(
             responses.POST, f"{self.base_url}/stock/shoppinglist/clear", status=400
         )
-        self.assertRaises(HTTPError, self.grocy.clear_shopping_list)
+        self.assertRaises(GrocyError, self.grocy.clear_shopping_list)
 
     @responses.activate
     def test_remove_product_in_shopping_list_error(self):
@@ -62,14 +53,14 @@ class TestGrocy(TestCase):
             f"{self.base_url}/stock/shoppinglist/remove-product",
             status=400,
         )
-        self.assertRaises(HTTPError, self.grocy.remove_product_in_shopping_list, 1)
+        self.assertRaises(GrocyError, self.grocy.remove_product_in_shopping_list, 1)
 
     @responses.activate
     def test_get_product_groups_invalid_no_data(self):
         responses.add(
             responses.GET, f"{self.base_url}/objects/product_groups", status=400
         )
-        self.assertRaises(HTTPError, self.grocy.product_groups)
+        self.assertRaises(GrocyError, self.grocy.product_groups)
 
     @responses.activate
     def test_get_product_groups_invalid_missing_data(self):
@@ -104,7 +95,10 @@ class TestGrocy(TestCase):
                     status=400,
                 )
                 self.assertRaises(
-                    HTTPError, api_client.upload_product_picture, 1, "/somepath/pic.jpg"
+                    GrocyError,
+                    api_client.upload_product_picture,
+                    1,
+                    "/somepath/pic.jpg",
                 )
 
     @responses.activate
@@ -113,7 +107,7 @@ class TestGrocy(TestCase):
             CONST_BASE_URL, "demo_mode", port=CONST_PORT, verify_ssl=CONST_SSL
         )
         responses.add(responses.PUT, f"{self.base_url}/objects/products/1", status=400)
-        self.assertRaises(HTTPError, api_client.update_product_pic, 1)
+        self.assertRaises(GrocyError, api_client.update_product_pic, 1)
 
     @responses.activate
     def test_get_due_invalid_no_data(self):
@@ -177,7 +171,7 @@ class TestGrocy(TestCase):
     def test_set_userfields_error(self):
         responses.add(responses.PUT, f"{self.base_url}/userfields/chores/1", status=400)
         self.assertRaises(
-            HTTPError, self.grocy.set_userfields, "chores", 1, "auserfield", "value"
+            GrocyError, self.grocy.set_userfields, "chores", 1, "auserfield", "value"
         )
 
     @responses.activate
@@ -205,7 +199,7 @@ class TestGrocy(TestCase):
             responses.POST, f"{self.base_url}/stock/products/1/add", status=400
         )
         self.assertRaises(
-            HTTPError, self.grocy.add_product, 1, 1.3, 2.44, self.date_test
+            GrocyError, self.grocy.add_product, 1, 1.3, 2.44, self.date_test
         )
 
     @responses.activate
@@ -217,7 +211,7 @@ class TestGrocy(TestCase):
     def test_add_generic_error(self):
         responses.add(responses.POST, f"{self.base_url}/objects/tasks", status=400)
         self.assertRaises(
-            HTTPError, self.grocy.add_generic, "tasks", self.add_generic_data
+            GrocyError, self.grocy.add_generic, "tasks", self.add_generic_data
         )
 
     @responses.activate
@@ -232,7 +226,7 @@ class TestGrocy(TestCase):
         responses.add(
             responses.POST, f"{self.base_url}/stock/products/1/consume", status=400
         )
-        self.assertRaises(HTTPError, self.grocy.consume_product, 1, 1.3)
+        self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @responses.activate
     def test_execute_chore_valid(self):
@@ -242,7 +236,7 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_execute_chore_error(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
-        self.assertRaises(HTTPError, self.grocy.execute_chore, 1, 1, self.date_test)
+        self.assertRaises(GrocyError, self.grocy.execute_chore, 1, 1, self.date_test)
 
     @responses.activate
     def test_get_meal_plan(self):
