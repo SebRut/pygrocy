@@ -5,7 +5,7 @@ class GrocyError(Exception):
     def __init__(self, response: Response):
         self._status_code = response.status_code
 
-        if response.text and len(response.text):
+        if len(response.text) > 0:
             json = response.json()
             self._message = json["error_message"]
         else:
