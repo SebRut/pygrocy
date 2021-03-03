@@ -775,3 +775,6 @@ class GrocyApiClient(object):
 
     def delete_generic(self, entity_type: str, object_id: int):
         return self._do_delete_request(f"objects/{entity_type}/{object_id}")
+
+    def get_generic_objects_for_type(self, entity_type: str):
+        return self._do_get_request(f"objects/{entity_type}")
