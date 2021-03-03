@@ -1,6 +1,7 @@
 ./base.html
 ./data_models/battery.html
 ./data_models/chore.html
+./data_models/generic.html
 ./data_models/index.html
 ./data_models/meal_items.html
 ./data_models/product.html
