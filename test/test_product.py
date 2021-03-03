@@ -6,6 +6,16 @@ from pygrocy.errors.grocy_error import GrocyError
 
 class TestProduct:
     @pytest.mark.vcr
+    def test_get_all_products(self, grocy):
+        products = grocy.all_products()
+
+        assert len(products) == 26
+
+        product = products[0]
+        assert product.id == 1
+        assert product.name == "Cookies"
+
+    @pytest.mark.vcr
     def test_product_get_details_valid(self, grocy):
         product = grocy.product(10)
 

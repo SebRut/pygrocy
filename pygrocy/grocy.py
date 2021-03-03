@@ -82,6 +82,13 @@ class Grocy(object):
         if resp:
             return Product(resp)
 
+    def all_products(self) -> List[Product]:
+        raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
+        from pygrocy.grocy_api_client import ProductData
+
+        product_datas = [ProductData(product) for product in raw_products]
+        return [Product(product) for product in product_datas]
+
     def chores(self, get_details: bool = False) -> List[Chore]:
         raw_chores = self._api_client.get_chores()
         chores = [Chore(chore) for chore in raw_chores]
@@ -215,3 +222,6 @@ class Grocy(object):
 
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
+
+    def get_generic_objects_for_type(self, entity_type: EntityType):
+        return self._api_client.get_generic_objects_for_type(entity_type.value)

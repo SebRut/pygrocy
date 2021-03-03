@@ -8,20 +8,23 @@ from pygrocy.grocy_api_client import (
     LocationData,
     MissingProductResponse,
     ProductBarcode,
+    ProductData,
     ProductDetailsResponse,
     ShoppingListItem,
 )
 
 
 class Product(DataModel):
-    def __init__(self, response):
+    def __init__(self, data):
         self._init_empty()
-        if isinstance(response, CurrentStockResponse):
-            self._init_from_CurrentStockResponse(response)
-        elif isinstance(response, MissingProductResponse):
-            self._init_from_MissingProductResponse(response)
-        elif isinstance(response, ProductDetailsResponse):
-            self._init_from_ProductDetailsResponse(response)
+        if isinstance(data, CurrentStockResponse):
+            self._init_from_CurrentStockResponse(data)
+        elif isinstance(data, MissingProductResponse):
+            self._init_from_MissingProductResponse(data)
+        elif isinstance(data, ProductDetailsResponse):
+            self._init_from_ProductDetailsResponse(data)
+        elif isinstance(data, ProductData):
+            self._init_from_ProductData(data)
 
     def _init_empty(self):
         self._name = None
@@ -39,9 +42,9 @@ class Product(DataModel):
         self._id = response.product_id
         self._available_amount = response.amount
         self._best_before_date = response.best_before_date
+
         if response.product:
-            self._name = response.product.name
-            self._product_group_id = response.product.product_group_id
+            self._init_from_ProductData(response.product)
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
         self._id = response.product_id
@@ -50,12 +53,17 @@ class Product(DataModel):
         self._is_partly_in_stock = response.is_partly_in_stock
 
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
-        self._id = response.product.id
-        self._product_group_id = response.product.product_group_id
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
-        self._name = response.product.name
         self._barcodes = response.barcodes
+
+        if response.product:
+            self._init_from_ProductData(response.product)
+
+    def _init_from_ProductData(self, product: ProductData):
+        self._id = product.id
+        self._product_group_id = product.product_group_id
+        self._name = product.name
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
