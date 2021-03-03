@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 import deprecation
+from data_models.generic import EntityType
 
 from .base import DataModel  # noqa: F401
 from .data_models.battery import Battery
@@ -206,3 +207,8 @@ class Grocy(object):
 
     def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
         return self._api_client.charge_battery(battery_id, tracked_time)
+
+    def update_generic(self, entity_type: EntityType, object_id: int, updated_data):
+        return self._api_client.update_generic(
+            entity_type.value, object_id, updated_data
+        )

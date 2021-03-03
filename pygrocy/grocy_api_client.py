@@ -760,3 +760,6 @@ class GrocyApiClient(object):
         data = {"tracked_time": localized_tracked_time.isoformat()}
 
         return self._do_post_request(f"batteries/{battery_id}/charge", data)
+
+    def update_generic(self, entity, object_id, data):
+        return self._do_put_request(f"objects/{entity}/{object_id}", data)
