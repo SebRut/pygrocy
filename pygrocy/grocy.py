@@ -2,11 +2,11 @@ from datetime import datetime
 from typing import List
 
 import deprecation
-from data_models.generic import EntityType
 
 from .base import DataModel  # noqa: F401
 from .data_models.battery import Battery
 from .data_models.chore import Chore
+from .data_models.generic import EntityType
 from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
