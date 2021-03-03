@@ -212,3 +212,6 @@ class Grocy(object):
         return self._api_client.update_generic(
             entity_type.value, object_id, updated_data
         )
+
+    def delete_generic(self, entity_type: EntityType, object_id: int):
+        return self._api_client.delete_generic(entity_type, object_id)

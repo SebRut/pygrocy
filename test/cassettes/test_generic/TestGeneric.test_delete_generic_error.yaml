@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/tasks/30000
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA6tWSi0qyi+Kz00tLk5MT1WyUvJPykpNLlHIyy9RSMsvzUtRqgUAcMoJfiQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 03 Mar 2021 13:12:37 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 404
+      message: Not Found
+version: 1

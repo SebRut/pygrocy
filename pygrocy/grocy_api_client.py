@@ -584,6 +584,15 @@ class GrocyApiClient(object):
         if len(resp.content) > 0:
             return resp.json()
 
+    def _do_delete_request(self, end_url: str):
+        req_url = urljoin(self._base_url, end_url)
+        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        if resp.status_code >= 400:
+            raise GrocyError(resp)
+
+        if len(resp.content) > 0:
+            return resp.json()
+
     def get_stock(self) -> List[CurrentStockResponse]:
         parsed_json = self._do_get_request("stock")
         return [CurrentStockResponse(response) for response in parsed_json]
@@ -761,5 +770,8 @@ class GrocyApiClient(object):
     def add_generic(self, entity_type: str, data):
         return self._do_post_request(f"objects/{entity_type}", data)
 
-    def update_generic(self, entity, object_id, data):
-        return self._do_put_request(f"objects/{entity}/{object_id}", data)
+    def update_generic(self, entity_type: str, object_id: int, data):
+        return self._do_put_request(f"objects/{entity_type}/{object_id}", data)
+
+    def delete_generic(self, entity_type: str, object_id: int):
+        return self._do_delete_request(f"objects/{entity_type}/{object_id}")

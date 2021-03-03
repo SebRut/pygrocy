@@ -46,3 +46,15 @@ class TestGeneric:
         error = exc_info.value
         assert error.status_code == 400
         assert error.message[:7] == "Request"
+
+    @pytest.mark.vcr
+    def test_delete_generic_success(self, grocy):
+        grocy.delete_generic(EntityType.TASKS, 3)
+
+    @pytest.mark.vcr
+    def test_delete_generic_error(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.delete_generic(EntityType.TASKS, 30000)
+
+        error = exc_info.value
+        assert error.status_code == 404
