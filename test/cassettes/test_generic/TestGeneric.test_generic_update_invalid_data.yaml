@@ -1,0 +1,45 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/octet-stream
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - '*/*'
+    method: PUT
+    uri: https://localhost/api/objects/batteries/1
+  response:
+    body:
+      string: '{"error_message":"Request body could not be parsed (probably invalid
+        JSON format or missing\/wrong Content-Type header)"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 03 Mar 2021 11:40:26 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 400
+      message: Bad Request
+version: 1

@@ -6,6 +6,7 @@ import deprecation
 from .base import DataModel  # noqa: F401
 from .data_models.battery import Battery
 from .data_models.chore import Chore
+from .data_models.generic import EntityType
 from .data_models.meal_items import MealPlanItem, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
@@ -80,6 +81,13 @@ class Grocy(object):
         resp = self._api_client.get_product(product_id)
         if resp:
             return Product(resp)
+
+    def all_products(self) -> List[Product]:
+        raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
+        from pygrocy.grocy_api_client import ProductData
+
+        product_datas = [ProductData(product) for product in raw_products]
+        return [Product(product) for product in product_datas]
 
     def chores(self, get_details: bool = False) -> List[Chore]:
         raw_chores = self._api_client.get_chores()
@@ -192,9 +200,6 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def add_generic(self, entity_type, data):
-        return self._api_client.add_generic(entity_type, data)
-
     def batteries(self) -> List[Battery]:
         raw_batteries = self._api_client.get_batteries()
         return [Battery(bat) for bat in raw_batteries]
@@ -206,3 +211,17 @@ class Grocy(object):
 
     def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
         return self._api_client.charge_battery(battery_id, tracked_time)
+
+    def add_generic(self, entity_type: EntityType, data):
+        return self._api_client.add_generic(entity_type.value, data)
+
+    def update_generic(self, entity_type: EntityType, object_id: int, updated_data):
+        return self._api_client.update_generic(
+            entity_type.value, object_id, updated_data
+        )
+
+    def delete_generic(self, entity_type: EntityType, object_id: int):
+        return self._api_client.delete_generic(entity_type, object_id)
+
+    def get_generic_objects_for_type(self, entity_type: EntityType):
+        return self._api_client.get_generic_objects_for_type(entity_type.value)

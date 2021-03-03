@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.29.0](https://github.com/SebRut/pygrocy/tree/v0.29.0) (2021-03-03)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.28.0...v0.29.0)
+
+**Implemented enhancements:**
+
+- Missing generic put and get option [\#155](https://github.com/SebRut/pygrocy/issues/155)
+- add "get all products" method [\#97](https://github.com/SebRut/pygrocy/issues/97)
+
+**Closed issues:**
+
+- 404 errors and unresponsive sensors after configuring integration in HA [\#154](https://github.com/SebRut/pygrocy/issues/154)
+
+**Merged pull requests:**
+
+- add all\_products method [\#157](https://github.com/SebRut/pygrocy/pull/157) ([SebRut](https://github.com/SebRut))
+- add support for generic objcts [\#156](https://github.com/SebRut/pygrocy/pull/156) ([SebRut](https://github.com/SebRut))
+
 ## [v0.28.0](https://github.com/SebRut/pygrocy/tree/v0.28.0) (2021-02-20)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.27.0...v0.28.0)
@@ -196,6 +214,7 @@
 - Update coveralls requirement from ~=2.0.0 to ~=2.1.1 [\#104](https://github.com/SebRut/pygrocy/pull/104) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.1 to ~=0.8.3 [\#102](https://github.com/SebRut/pygrocy/pull/102) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update responses requirement from ~=0.10.14 to ~=0.10.15 [\#101](https://github.com/SebRut/pygrocy/pull/101) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
 
 ## [v0.15.0](https://github.com/SebRut/pygrocy/tree/v0.15.0) (2020-05-25)
 
@@ -219,7 +238,6 @@
 
 - upgrade used grocy version [\#100](https://github.com/SebRut/pygrocy/pull/100) ([SebRut](https://github.com/SebRut))
 - Feature/91 task api [\#99](https://github.com/SebRut/pygrocy/pull/99) ([SebRut](https://github.com/SebRut))
-- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
 - finish abstraction from api [\#96](https://github.com/SebRut/pygrocy/pull/96) ([SebRut](https://github.com/SebRut))
 - fix travis build [\#93](https://github.com/SebRut/pygrocy/pull/93) ([SebRut](https://github.com/SebRut))
 - Update responses requirement from ~=0.10.12 to ~=0.10.14 [\#89](https://github.com/SebRut/pygrocy/pull/89) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
