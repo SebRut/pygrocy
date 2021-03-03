@@ -1,0 +1,45 @@
+interactions:
+- request:
+    body: '{"eman": "Testbattery"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/objects/batteries
+  response:
+    body:
+      string: '{"error_message":"SQLSTATE[HY000]: General error: 1 table batteries
+        has no column named eman"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 03 Mar 2021 13:07:14 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 400
+      message: Bad Request
+version: 1

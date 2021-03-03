@@ -1,0 +1,65 @@
+interactions:
+- request:
+    body: '{"name": "Le new battery"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - '*/*'
+    method: PUT
+    uri: https://localhost/api/objects/batteries/1000
+  response:
+    body:
+      string: '{"error_message":"Call to a member function update() on null","error_details":{"stack_trace":"#0
+        \/var\/www\/vendor\/slim\/slim\/Slim\/Handlers\/Strategies\/RequestResponse.php(43):
+        Grocy\\Controllers\\GenericEntityApiController->EditObject()\n#1 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/Route.php(384):
+        Slim\\Handlers\\Strategies\\RequestResponse->__invoke()\n#2 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        Slim\\Routing\\Route->handle()\n#3 \/var\/www\/middleware\/JsonMiddleware.php(13):
+        Slim\\MiddlewareDispatcher->handle()\n#4 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(209):
+        Grocy\\Middleware\\JsonMiddleware->__invoke()\n#5 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        class@anonymous->handle()\n#6 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/Route.php(341):
+        Slim\\MiddlewareDispatcher->handle()\n#7 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/RouteRunner.php(84):
+        Slim\\Routing\\Route->run()\n#8 \/var\/www\/middleware\/AuthMiddleware.php(48):
+        Slim\\Routing\\RouteRunner->handle()\n#9 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(313):
+        Grocy\\Middleware\\AuthMiddleware->__invoke()\n#10 \/var\/www\/vendor\/slim\/slim\/Slim\/Middleware\/RoutingMiddleware.php(59):
+        class@anonymous->handle()\n#11 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(147):
+        Slim\\Middleware\\RoutingMiddleware->process()\n#12 \/var\/www\/vendor\/slim\/slim\/Slim\/Middleware\/ErrorMiddleware.php(107):
+        class@anonymous->handle()\n#13 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(147):
+        Slim\\Middleware\\ErrorMiddleware->process()\n#14 \/var\/www\/middleware\/CorsMiddleware.php(30):
+        class@anonymous->handle()\n#15 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(313):
+        Grocy\\Middleware\\CorsMiddleware->__invoke()\n#16 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        class@anonymous->handle()\n#17 \/var\/www\/vendor\/slim\/slim\/Slim\/App.php(215):
+        Slim\\MiddlewareDispatcher->handle()\n#18 \/var\/www\/vendor\/slim\/slim\/Slim\/App.php(199):
+        Slim\\App->handle()\n#19 \/var\/www\/app.php(94): Slim\\App->run()\n#20 \/var\/www\/public\/index.php(45):
+        require_once(''\/var\/www\/app.ph...'')\n#21 {main}","file":"\/var\/www\/controllers\/GenericEntityApiController.php","line":93}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 03 Mar 2021 11:35:43 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 500
+      message: Internal Server Error
+version: 1
