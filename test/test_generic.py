@@ -6,6 +6,22 @@ from pygrocy.errors.grocy_error import GrocyError
 
 class TestGeneric:
     @pytest.mark.vcr
+    def test_generic_add_valid(self, grocy):
+        data = {"name": "Testbattery"}
+
+        grocy.add_generic(EntityType.BATTERIES, data)
+
+    @pytest.mark.vcr
+    def test_generic_add_invalid(self, grocy):
+        data = {"eman": "Testbattery"}
+
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.add_generic(EntityType.BATTERIES, data)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_generic_update_valid(self, grocy):
         updated_data = {"name": "Le new battery"}
 

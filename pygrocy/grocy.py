@@ -193,9 +193,6 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def add_generic(self, entity_type, data):
-        return self._api_client.add_generic(entity_type, data)
-
     def batteries(self) -> List[Battery]:
         raw_batteries = self._api_client.get_batteries()
         return [Battery(bat) for bat in raw_batteries]
@@ -207,6 +204,9 @@ class Grocy(object):
 
     def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
         return self._api_client.charge_battery(battery_id, tracked_time)
+
+    def add_generic(self, entity_type: EntityType, data):
+        return self._api_client.add_generic(entity_type.value, data)
 
     def update_generic(self, entity_type: EntityType, object_id: int, updated_data):
         return self._api_client.update_generic(

@@ -742,9 +742,6 @@ class GrocyApiClient(object):
         if parsed_json:
             return RecipeDetailsResponse(parsed_json)
 
-    def add_generic(self, entity_type: str, data: object):
-        self._do_post_request(f"objects/{entity_type}", data)
-
     def get_batteries(self) -> List[CurrentBatteryResponse]:
         parsed_json = self._do_get_request(f"batteries")
         if parsed_json:
@@ -760,6 +757,9 @@ class GrocyApiClient(object):
         data = {"tracked_time": localized_tracked_time.isoformat()}
 
         return self._do_post_request(f"batteries/{battery_id}/charge", data)
+
+    def add_generic(self, entity_type: str, data):
+        return self._do_post_request(f"objects/{entity_type}", data)
 
     def update_generic(self, entity, object_id, data):
         return self._do_put_request(f"objects/{entity}/{object_id}", data)

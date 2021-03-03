@@ -203,18 +203,6 @@ class TestGrocy(TestCase):
         )
 
     @responses.activate
-    def test_add_generic_valid(self):
-        responses.add(responses.POST, f"{self.base_url}/objects/tasks", status=200)
-        self.assertIsNone(self.grocy.add_generic("tasks", self.add_generic_data))
-
-    @responses.activate
-    def test_add_generic_error(self):
-        responses.add(responses.POST, f"{self.base_url}/objects/tasks", status=400)
-        self.assertRaises(
-            GrocyError, self.grocy.add_generic, "tasks", self.add_generic_data
-        )
-
-    @responses.activate
     def test_consume_product_valid(self):
         responses.add(
             responses.POST, f"{self.base_url}/stock/products/1/consume", status=200
