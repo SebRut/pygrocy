@@ -365,7 +365,7 @@ class CurrentVolatilStockResponse(object):
         return self._missing_products
 
 
-class ProductBarcode(object):
+class ProductBarcodeData(object):
     def __init__(self, parsed_json):
         self._barcode = parsed_json.get("barcode")
 
@@ -398,7 +398,7 @@ class ProductDetailsResponse(object):
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get("product_barcodes", "")
         if barcodes_raw is not None:
-            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
         raw_location = parsed_json.get("location")
@@ -432,7 +432,7 @@ class ProductDetailsResponse(object):
         return self._last_price
 
     @property
-    def barcodes(self) -> List[ProductBarcode]:
+    def barcodes(self) -> List[ProductBarcodeData]:
         return self._barcodes
 
     @property
