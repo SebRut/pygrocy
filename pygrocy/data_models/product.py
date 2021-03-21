@@ -7,11 +7,20 @@ from pygrocy.grocy_api_client import (
     GrocyApiClient,
     LocationData,
     MissingProductResponse,
-    ProductBarcode,
+    ProductBarcodeData,
     ProductData,
     ProductDetailsResponse,
     ShoppingListItem,
 )
+
+
+class ProductBarcode(DataModel):
+    def __init__(self, data: ProductBarcodeData):
+        self._barcode = data.barcode
+
+    @property
+    def barcode(self) -> str:
+        return self._barcode
 
 
 class Product(DataModel):
@@ -55,7 +64,7 @@ class Product(DataModel):
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
-        self._barcodes = response.barcodes
+        self._barcodes = [ProductBarcode(data) for data in response.barcodes]
 
         if response.product:
             self._init_from_ProductData(response.product)
