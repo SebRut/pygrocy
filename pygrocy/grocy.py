@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import List
 
@@ -25,12 +26,23 @@ from .grocy_api_client import TaskResponse  # noqa: F401
 from .grocy_api_client import UserDto  # noqa: F401
 from .grocy_api_client import DEFAULT_PORT_NUMBER, GrocyApiClient, TransactionType
 
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.INFO)
+
 
 class Grocy(object):
     def __init__(
-        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+        self,
+        base_url,
+        api_key,
+        port: int = DEFAULT_PORT_NUMBER,
+        verify_ssl=True,
+        debug=False,
     ):
-        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl)
+        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl, debug)
+
+        if debug:
+            _LOGGER.setLevel(logging.DEBUG)
 
     def stock(self) -> List[Product]:
         raw_stock = self._api_client.get_stock()
@@ -42,8 +54,8 @@ class Grocy(object):
         return self.due_products(get_details)
 
     def due_products(self, get_details: bool = False) -> List[Product]:
-        raw_due_prodcuts = self._api_client.get_volatile_stock().due_products
-        due_products = [Product(resp) for resp in raw_due_prodcuts]
+        raw_due_products = self._api_client.get_volatile_stock().due_products
+        due_products = [Product(resp) for resp in raw_due_products]
 
         if get_details:
             for item in due_products:

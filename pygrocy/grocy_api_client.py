@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 from datetime import datetime
 from enum import Enum
 from typing import List
@@ -18,6 +19,9 @@ from pygrocy.utils import (
 from .errors import GrocyError
 
 DEFAULT_PORT_NUMBER = 9192
+
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.INFO)
 
 
 class ShoppingListItem(object):
@@ -535,11 +539,35 @@ class BatteryDetailsResponse(object):
         )
 
 
+def _enable_debug_mode():
+    _LOGGER.setLevel(logging.DEBUG)
+
+    # log http request related data
+    from http.client import HTTPConnection
+
+    HTTPConnection.debuglevel = 1
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
+
+
 class GrocyApiClient(object):
     def __init__(
-        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+        self,
+        base_url,
+        api_key,
+        port: int = DEFAULT_PORT_NUMBER,
+        verify_ssl=True,
+        debug=False,
     ):
+        if debug:
+            _enable_debug_mode()
+
         self._base_url = "{}:{}/api/".format(base_url, port)
+        _LOGGER.debug(f"generated base url: {self._base_url}")
+
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         if self._api_key == "demo_mode":
@@ -550,6 +578,9 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(f"response: {resp.content}")
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 
@@ -561,6 +592,9 @@ class GrocyApiClient(object):
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
+
+        _LOGGER.debug(f"response: {resp.content}")
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
         if len(resp.content) > 0:
@@ -578,6 +612,9 @@ class GrocyApiClient(object):
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
+
+        _LOGGER.debug(f"response: {resp.content}")
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 
@@ -587,6 +624,9 @@ class GrocyApiClient(object):
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(f"response: {resp.content}")
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 
