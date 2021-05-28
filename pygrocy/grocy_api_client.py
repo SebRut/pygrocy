@@ -570,9 +570,9 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
 
-        _LOGGER.debug(f"-->\tGET /{end_url}")
-        _LOGGER.debug(f"<--\t{resp.status_code} for /{end_url}")
-        _LOGGER.debug(f"\t\t{resp.content}")
+        _LOGGER.debug("-->\tGET /%s", end_url)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
 
         if resp.status_code >= 400:
             raise GrocyError(resp)
@@ -586,10 +586,10 @@ class GrocyApiClient(object):
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
 
-        _LOGGER.debug(f"-->\tPOST /{end_url}")
-        _LOGGER.debug(f"\t\t{data}")
-        _LOGGER.debug(f"<--\t{resp.status_code} for /{end_url}")
-        _LOGGER.debug(f"\t\t{resp.content}")
+        _LOGGER.debug("-->\tPOST /%s", end_url)
+        _LOGGER.debug("\t\t%s", data)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
 
         if resp.status_code >= 400:
             raise GrocyError(resp)
@@ -609,10 +609,10 @@ class GrocyApiClient(object):
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
 
-        _LOGGER.debug(f"-->\tPUT /{end_url}")
-        _LOGGER.debug(f"\t\t{data}")
-        _LOGGER.debug(f"<--\t{resp.status_code} for /{end_url}")
-        _LOGGER.debug(f"\t\t{resp.content}")
+        _LOGGER.debug("-->\tPUT /%s", end_url)
+        _LOGGER.debug("\t\t%s", data)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
 
         if resp.status_code >= 400:
             raise GrocyError(resp)
@@ -624,9 +624,9 @@ class GrocyApiClient(object):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
 
-        _LOGGER.debug(f"-->\tDELETE /{end_url}")
-        _LOGGER.debug(f"<--\t{resp.status_code} for /{end_url}")
-        _LOGGER.debug(f"\t\t{resp.content}")
+        _LOGGER.debug("-->\tDELETE /%s", end_url)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
 
         if resp.status_code >= 400:
             raise GrocyError(resp)
