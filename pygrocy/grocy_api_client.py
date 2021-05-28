@@ -818,3 +818,8 @@ class GrocyApiClient(object):
 
     def get_generic_objects_for_type(self, entity_type: str):
         return self._do_get_request(f"objects/{entity_type}")
+
+    def get_users(self):
+        parsed_json = self._do_get_request("users")
+        if parsed_json:
+            return [UserDto(user) for user in parsed_json]

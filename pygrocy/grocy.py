@@ -237,3 +237,7 @@ class Grocy(object):
 
     def get_generic_objects_for_type(self, entity_type: EntityType):
         return self._api_client.get_generic_objects_for_type(entity_type.value)
+
+    def users(self) -> List[User]:
+        user_dtos = self._api_client.get_users()
+        return [User(user) for user in user_dtos]
