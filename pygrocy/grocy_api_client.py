@@ -20,7 +20,6 @@ from .errors import GrocyError
 
 DEFAULT_PORT_NUMBER = 9192
 
-logging.basicConfig()
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.INFO)
 
