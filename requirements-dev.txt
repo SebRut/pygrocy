@@ -1,6 +1,6 @@
 responses~=0.13.3
 tzlocal~=2.1
-iso8601~=0.1.14
+iso8601~=0.1.16
 pre-commit
 isort
 pytest
