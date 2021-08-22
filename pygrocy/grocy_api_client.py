@@ -371,7 +371,7 @@ class CurrentVolatilStockResponse(object):
 
 class ProductBarcodeData(object):
     def __init__(self, parsed_json):
-        self._barcode = parsed_json.get("barcode")
+        self._barcode = str(parsed_json.get("barcode"))
 
     @property
     def barcode(self) -> str:

@@ -8,7 +8,7 @@ class TestBattery:
     def test_get_batteries_valid(self, grocy):
         batteries = grocy.batteries()
 
-        assert len(batteries) == 4
+        assert len(batteries) == 5
         assert isinstance(batteries[0].last_tracked_time, datetime)
 
     @pytest.mark.vcr
@@ -16,7 +16,7 @@ class TestBattery:
         battery = grocy.battery(1)
 
         assert battery.id == 1
-        assert battery.name == "Battery1"
+        assert battery.name == "Le new battery"
         assert battery.description == "Warranty ends 2023"
         assert battery.used_in == "TV remote control"
         assert battery.charge_interval_days == 0
@@ -24,7 +24,7 @@ class TestBattery:
         assert isinstance(battery.last_charged, datetime)
         assert battery.next_estimated_charge_time is None
         assert battery.userfields is None
-        assert battery.charge_cycles_count == 4
+        assert battery.charge_cycles_count == 6
 
     @pytest.mark.vcr
     def test_charge_battery(self, grocy):
