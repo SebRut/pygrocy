@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: '{"done_time": "2021-08-23T09:07:57.290165+00:00"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '49'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/tasks/3/complete
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 23 Aug 2021 09:07:58 GMT
+      Server:
+      - nginx/1.20.1
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 204
+      message: No Content
+version: 1
