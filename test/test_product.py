@@ -1,6 +1,6 @@
 import pytest
 
-from pygrocy.data_models.product import Product
+from pygrocy.data_models.product import Product, ProductBarcode
 from pygrocy.errors.grocy_error import GrocyError
 
 
@@ -22,8 +22,12 @@ class TestProduct:
         assert isinstance(product, Product)
         assert product.name == "Cheese"
         assert product.available_amount == 5
-        assert len(product.barcodes) == 0
         assert product.product_group_id == 6
+
+        assert len(product.product_barcodes) == 1
+        barcode = product.product_barcodes[0]
+        assert isinstance(barcode, ProductBarcode)
+        assert barcode.barcode == "12345"
 
     @pytest.mark.vcr
     def test_product_no_barcodes(self, grocy):

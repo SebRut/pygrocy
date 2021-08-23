@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 12 Feb 2021 05:49:49 GMT
+      - Sat, 21 Aug 2021 19:42:51 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 400
       message: Bad Request

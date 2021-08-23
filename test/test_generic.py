@@ -35,8 +35,8 @@ class TestGeneric:
             grocy.update_generic(EntityType.BATTERIES, 1000, updated_data)
 
         error = exc_info.value
-        assert error.status_code == 500
-        assert error.message[:7] == "Call to"
+        assert error.status_code == 400
+        assert error.message == "Object not found"
 
     @pytest.mark.vcr
     def test_generic_update_invalid_data(self, grocy):

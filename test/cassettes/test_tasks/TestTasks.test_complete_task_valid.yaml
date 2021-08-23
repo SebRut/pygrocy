@@ -1,20 +1,24 @@
 interactions:
 - request:
-    body: null
+    body: '{"done_time": "2021-08-23T09:06:38.501659+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
       Connection:
       - keep-alive
+      Content-Length:
+      - '49'
+      Content-Type:
+      - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
-    method: GET
-    uri: https://localhost/api/stock/products/-1
+    method: POST
+    uri: https://localhost/api/tasks/4/complete
   response:
     body:
-      string: '{"error_message":"Product does not exist or is inactive"}'
+      string: ''
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -27,14 +31,12 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 12 Feb 2021 05:48:23 GMT
+      - Mon, 23 Aug 2021 09:06:38 GMT
       Server:
-      - nginx/1.18.0
-      Transfer-Encoding:
-      - chunked
+      - nginx/1.20.1
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
-      code: 400
-      message: Bad Request
+      code: 204
+      message: No Content
 version: 1

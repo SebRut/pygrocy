@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -15,9 +15,9 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA0WNSwoCMRBEryJZO5CPCOYc7kNI2iGYz5DOICLe3W5HmV11Vb2ul0hRWGHEUVRf
-        gOTV413RGQFDT8tIrQpb15zJWsFFP7ilpVaT1JPSXG2VPfmTbqQCOHxZ/mAgaG796b5jjHjENFeI
-        bjS3IvQt4d3eHi50IILC/dG+aA7qYk/KmjO1mb0lyBG3rfcHvUz3sNEAAAA=
+        H4sIAAAAAAAEA0WN3QoCIRCFXyXm2gV/Isjn6F5Ep0XyZ3GUiOjd05bYu+HMd873huBBKwbZJgQN
+        N0sPAQw8kqtha6Fk0LnHOKKOxts2KcmlWLhchJxoySPj+2FaSEjNpu1fc6OylvoyUyQZWKKwZvSm
+        FdMJ6y8XDGp5Gldx0ON1jBwudRJXfRZaXYZ0Nu8Bo6fd8/kCH9CrIckAAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -32,13 +32,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 03 Mar 2021 13:12:37 GMT
+      - Sat, 21 Aug 2021 19:42:50 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK

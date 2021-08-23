@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -15,12 +15,14 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
-        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
-        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
-        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
-        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
-        avns/fXfwKYE3r4BnWLYgdoEAAA=
+        H4sIAAAAAAAEA+2WX2uDMBDAv0rIc4Wqbcd8HmWDPYyxPY0hQU+bVY0kcUWG332X+ZfqoI7uqX3T
+        S+4ud7/cXd6+KA+pZy9oxlKgHn2GnHFJ9A5IzCSLgYRCSLqgIahA8lxzkVEvK5IERQX4IdNGzVk6
+        trV0LOfGbBUZypb1h695CkqzNG/VAlSJhSz9xjNTiscZhL4WfqFAtnIpDn4gAXfjUm+k82W7xL71
+        VrbnbtDpsRXqdaEZo014d5AK8or/qBFxqbRfL9QBJexIcPoRViZurvKElY1JOvSV80AXEvyIJzBw
+        WS1om43BeZuz3gskglbHiT/9WBtaVYs6EU7HeCvknrAsJDzNpfhE0lIE5bSrEWPXstdm6wzG7pjO
+        ZTPGhDSMn6T4gECr6eT/iXNv/IWpvT1teYTVsWxnJla8UMdFd9lY+wp75NE5S3fV3ReD9IfTuClc
+        kfYD4Wzd+N+QrjukW46dmBElksIMVxIJSQ47pokWOHvxEzLyYKQxoAznshnIZA/lL01j6h6YATmn
+        Y9fj8Frd5plSP1vaKbrpuJlSdE/vrnMfRlcEw7eRyUb1/g1XhIa7rgoAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -35,105 +37,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 11 Feb 2021 05:27:14 GMT
+      - Sat, 21 Aug 2021 19:42:54 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      User-Agent:
-      - python-requests/2.25.1
-      accept:
-      - application/json
-    method: GET
-    uri: https://localhost/api/tasks
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
-        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
-        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
-        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
-        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
-        avns/fXfwKYE3r4BnWLYgdoEAAA=
-    headers:
-      Access-Control-Allow-Headers:
-      - '*'
-      Access-Control-Allow-Methods:
-      - GET, POST, PUT, DELETE, OPTIONS
-      Access-Control-Allow-Origin:
-      - '*'
-      Connection:
-      - keep-alive
-      Content-Encoding:
-      - gzip
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 11 Feb 2021 05:30:13 GMT
-      Server:
-      - nginx/1.18.0
-      Transfer-Encoding:
-      - chunked
-      X-Powered-By:
-      - PHP/7.4.14
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      User-Agent:
-      - python-requests/2.25.1
-      accept:
-      - application/json
-    method: GET
-    uri: https://localhost/api/tasks
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
-        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
-        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
-        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
-        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
-        avns/fXfwKYE3r4BnWLYgdoEAAA=
-    headers:
-      Access-Control-Allow-Headers:
-      - '*'
-      Access-Control-Allow-Methods:
-      - GET, POST, PUT, DELETE, OPTIONS
-      Access-Control-Allow-Origin:
-      - '*'
-      Connection:
-      - keep-alive
-      Content-Encoding:
-      - gzip
-      Content-Type:
-      - application/json
-      Date:
-      - Thu, 11 Feb 2021 05:31:56 GMT
-      Server:
-      - nginx/1.18.0
-      Transfer-Encoding:
-      - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK

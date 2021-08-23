@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -15,10 +15,10 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA72SwQrCMBBEf2XJucUmrYI9evADVLyoSGy2GmyTskkQEf/dFBV68iJ6WwZ2HzOz
-        mxvTipWMs4QZ2WIcMw7LC6J3UVLoKtKd19aw0oSmSRjZy74ilB7V3usWnZdtF9dEJniaiZTnwKdl
-        wct8HA8Eh1RrbJR77t+TF1AMgAJm8ox0hY6sCtX35Mkncj4g57DSxqCC2loV9a/8fqQWA2oBs+Cr
-        098c90W8yx3DGo/o5aFBtx3NKegfx92n8oZPYIE16SNS/z6/rXv3AAijqsnbAgAA
+        H4sIAAAAAAAEA7XRTQrCMBAF4KsMs67YpD9gll14ABU3KiUmYw22SUlTRMS7qwjmANUDzPt483Z3
+        NBoFS9DKjlBgymB9JQoDJqhpUN70wTiLwo5tm6B311p5koF0HUxHQ5Bd/zrjKWezlM9YBmwhciay
+        Ah/JJ5zHcA6VvJC/Qe+dHtV0pfwqWVQy2BhrScPJOT21RxTyKORQjUGd/9OkiE4BW2ooyGNLw36+
+        9KP55cvKCJWwopM3Dfn3tL+c5/AE0GdNo2MCAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -33,13 +33,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:47:51 GMT
+      - Sat, 21 Aug 2021 19:42:51 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK

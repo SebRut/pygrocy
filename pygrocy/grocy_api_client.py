@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 from datetime import datetime
 from enum import Enum
 from typing import List
@@ -18,6 +19,9 @@ from pygrocy.utils import (
 from .errors import GrocyError
 
 DEFAULT_PORT_NUMBER = 9192
+
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.INFO)
 
 
 class ShoppingListItem(object):
@@ -365,9 +369,9 @@ class CurrentVolatilStockResponse(object):
         return self._missing_products
 
 
-class ProductBarcode(object):
+class ProductBarcodeData(object):
     def __init__(self, parsed_json):
-        self._barcode = parsed_json.get("barcode")
+        self._barcode = str(parsed_json.get("barcode"))
 
     @property
     def barcode(self) -> str:
@@ -398,7 +402,7 @@ class ProductDetailsResponse(object):
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get("product_barcodes", "")
         if barcodes_raw is not None:
-            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
         raw_location = parsed_json.get("location")
@@ -432,7 +436,7 @@ class ProductDetailsResponse(object):
         return self._last_price
 
     @property
-    def barcodes(self) -> List[ProductBarcode]:
+    def barcodes(self) -> List[ProductBarcodeData]:
         return self._barcodes
 
     @property
@@ -535,11 +539,25 @@ class BatteryDetailsResponse(object):
         )
 
 
+def _enable_debug_mode():
+    _LOGGER.setLevel(logging.DEBUG)
+
+
 class GrocyApiClient(object):
     def __init__(
-        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+        self,
+        base_url,
+        api_key,
+        port: int = DEFAULT_PORT_NUMBER,
+        verify_ssl=True,
+        debug=False,
     ):
+        if debug:
+            _enable_debug_mode()
+
         self._base_url = "{}:{}/api/".format(base_url, port)
+        _LOGGER.debug(f"generated base url: {self._base_url}")
+
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         if self._api_key == "demo_mode":
@@ -550,6 +568,11 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug("-->\tGET /%s", end_url)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 
@@ -561,6 +584,12 @@ class GrocyApiClient(object):
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
+
+        _LOGGER.debug("-->\tPOST /%s", end_url)
+        _LOGGER.debug("\t\t%s", data)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
         if len(resp.content) > 0:
@@ -578,6 +607,12 @@ class GrocyApiClient(object):
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
+
+        _LOGGER.debug("-->\tPUT /%s", end_url)
+        _LOGGER.debug("\t\t%s", data)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 
@@ -587,6 +622,11 @@ class GrocyApiClient(object):
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug("-->\tDELETE /%s", end_url)
+        _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
+        _LOGGER.debug("\t\t%s", resp.content)
+
         if resp.status_code >= 400:
             raise GrocyError(resp)
 

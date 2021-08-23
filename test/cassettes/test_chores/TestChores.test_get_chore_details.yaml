@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -15,14 +15,14 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA71Su27DMAz8FUOzDfiRJoHnjl07C6rEOEL1MPRIYgT591K2nKRAC3TqKB7vyOPp
-        SvjROiD9lUhBetKRkhimsUDe2NkU2p5BFNIU4QjFwJwAgx0CPHdyDNIa0puoVElGcNIKGqYxccWE
-        IpJXDoaomENKxgWbPOJtgyVnz5Q7YAGQJzX4wPSYwLqtq3pfNdui3vabrn/ZPQS4NQc5rFODY/yT
-        CpSg1qgJyfUsrJQ9gctP5r0cjAYT1vUcM8Jq7HyCVmHSlG3ZlRtEDVwChQvwmJzSpTkta2n04Oh8
-        sRYbkeujBjo6KyIPuMuDlpdYocTJF8vNTNtowr263FGaAO7EFLLTqRgP8pQO25BbSRTzaCVZh5TZ
-        cq9d1dXrvfZIyTjli3qTacIaoB94qRx4Uk9mcuivoG3xjm8sH6TDOQuwrDwPfi78PcItCgrpR8Wm
-        LEmeZ42Sh+iAHqSCp5FodgnB4weZP8ojjvRl7u73VfvN/W/RJat37ym6n7wXCfg39/O03/zfvgDM
-        fl2XoQMAAA==
+        H4sIAAAAAAAEA61SuW7DMAz9FYOzAsROennu2LWzoEqMI1SHIclJjCD/XspH4gJN0aEjj/fI98gz
+        yL0PCPUZtIJ6w8AJSyG8iaMrrD+iKrQr0h6LRgSFDhgojDLoNmnvoHadMQxaDNornvo2Y1VPJFqu
+        AjadEYEgU12JPkJdlQyCP3IZUCQklLYYk7AtQat1Va7W1arcFOVLvS3rzeMNLr3b6WaemYKQn1wR
+        BffO9FCvM60x/oBhCESMunEWXZoXC8Ipb4lwUZpJoWQV27AtVR2eEscTyi5r5GNzXtTzLmLg2amK
+        ASFjZ5G3watOJtriBhoWmAu5f/JpahXWdy5ds6N72iUMB2GgJoOETPpAZpYXBkZEkpDlIjFNHpWr
+        6mn26JmWnupcjsxEMcCUd8g/yJ3xwJTOEqYjv6L1xTvFhN/pQFPGwrjsgF8m/n607KLSsTWinyhh
+        OavVMnUB+U4bXIwkqaP1kV5ieI3bEfKTXLXTf3zTfu9gWeqsnA72k/Ki+m/tD79oH6bdU3/5Ag6u
+        hmKNAwAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -37,13 +37,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 11 Feb 2021 05:45:41 GMT
+      - Sat, 21 Aug 2021 19:42:49 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK

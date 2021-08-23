@@ -1,26 +1,27 @@
 interactions:
 - request:
-    body: null
+    body: '{"tracked_time": "2020-12-01T15:00:00+00:00", "done_by": 1}'
     headers:
       Accept-Encoding:
       - gzip, deflate
       Connection:
       - keep-alive
+      Content-Length:
+      - '59'
+      Content-Type:
+      - application/json
       User-Agent:
       - python-requests/2.25.1
       accept:
       - application/json
-    method: GET
-    uri: https://localhost/api/tasks
+    method: POST
+    uri: https://localhost/api/chores/1/execute
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA9VUTWvDMAz9K8bnBvLRZmt+QGHXsdsYxsRaappYwXZWwth/n8SSht3SkctuQvKz
-        9Pz0/PoprZGVzOROOt0Bhc/Qa+tFPINotNcNCIPoqW4g1N720aKTlRvallIDKKMjw/I0T5P0MSlS
-        PoqOc3Ooou0gRN31M7AmUIN+VLfuOgTbODAqohoC+KXi8apqD4Sg4nLRrWNWirSs9kV1eJBfu4lQ
-        vhA6ob8I7YywXe/xg2h5rMeVhI5JdrifUEGQjQnxlZNCLzpcWLB1gvxlfn69jeff/56fO/yr+XkL
-        pvc/WVomLQK2A5tBvKMX17OOIiJ5hUJw4omzDVCOfMQGEhcYw3rSRz56l4t+HLmxauXCmreOl3Cd
-        avns/fXfwKYE3r4BnWLYgdoEAAA=
+        H4sIAAAAAAAEA3WNywrCMBBFf0XuOoU0QSzzM0NMBiy2iUwTRMR/lz5curtncc59Y0yg3hvEW1Hh
+        jQyqhniXxHWcBQRnXd/ZoXP+ZAdyns4XGKSSha8vbovoT9Ty5KgS6iEvNcyPv4WW1wbIGuxzOzyc
+        3Kbp8wVSZJlQoAAAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -35,13 +36,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 11 Feb 2021 05:24:36 GMT
+      - Mon, 23 Aug 2021 08:23:57 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK
