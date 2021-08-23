@@ -1,25 +1,24 @@
 interactions:
 - request:
-    body: null
+    body: '{"done_time": "2021-08-23T09:06:38.501659+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
       Connection:
       - keep-alive
       Content-Length:
-      - '0'
+      - '49'
       Content-Type:
-      - application/octet-stream
+      - application/json
       User-Agent:
       - python-requests/2.26.0
       accept:
-      - '*/*'
-    method: PUT
-    uri: https://localhost/api/objects/batteries/1
+      - application/json
+    method: POST
+    uri: https://localhost/api/tasks/4/complete
   response:
     body:
-      string: '{"error_message":"Request body could not be parsed (probably invalid
-        JSON format or missing\/wrong Content-Type header)"}'
+      string: ''
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -32,14 +31,12 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Mon, 23 Aug 2021 09:06:38 GMT
       Server:
       - nginx/1.20.1
-      Transfer-Encoding:
-      - chunked
       X-Powered-By:
       - PHP/8.0.9
     status:
-      code: 400
-      message: Bad Request
+      code: 204
+      message: No Content
 version: 1

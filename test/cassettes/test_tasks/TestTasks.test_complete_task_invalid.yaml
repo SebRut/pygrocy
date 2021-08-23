@@ -1,25 +1,24 @@
 interactions:
 - request:
-    body: null
+    body: '{"done_time": "2021-08-23T09:10:00.314599+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
       Connection:
       - keep-alive
       Content-Length:
-      - '0'
+      - '49'
       Content-Type:
-      - application/octet-stream
+      - application/json
       User-Agent:
       - python-requests/2.26.0
       accept:
-      - '*/*'
-    method: PUT
-    uri: https://localhost/api/objects/batteries/1
+      - application/json
+    method: POST
+    uri: https://localhost/api/tasks/1000/complete
   response:
     body:
-      string: '{"error_message":"Request body could not be parsed (probably invalid
-        JSON format or missing\/wrong Content-Type header)"}'
+      string: '{"error_message":"Task does not exist"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -32,7 +31,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Mon, 23 Aug 2021 09:10:01 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
