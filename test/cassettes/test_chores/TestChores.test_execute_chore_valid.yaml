@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: '{"tracked_time": "2021-08-23T08:17:14.341685+00:00"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '52'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/chores/1/execute
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA3WNywrCMBBFf0XuOoUkCpb5mSEmAxbbRKYJUsR/lz5curtncc59Y0gg5w3ivajw
+        RgZVQ3xI4jpMAoK33nW27/z5ZHtyV3IXGKSShW8Lt1n0J2p5cVQJ9ZDnGqbn30LLawNkDfa5HR5O
+        buP4+QLriBPloAAAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 23 Aug 2021 08:17:14 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+version: 1
