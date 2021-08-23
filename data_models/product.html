@@ -35,11 +35,20 @@ from pygrocy.grocy_api_client import (
     GrocyApiClient,
     LocationData,
     MissingProductResponse,
-    ProductBarcode,
+    ProductBarcodeData,
     ProductData,
     ProductDetailsResponse,
     ShoppingListItem,
 )
+
+
+class ProductBarcode(DataModel):
+    def __init__(self, data: ProductBarcodeData):
+        self._barcode = data.barcode
+
+    @property
+    def barcode(self) -&gt; str:
+        return self._barcode
 
 
 class Product(DataModel):
@@ -83,7 +92,7 @@ class Product(DataModel):
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
-        self._barcodes = response.barcodes
+        self._barcodes = [ProductBarcode(data) for data in response.barcodes]
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -321,7 +330,7 @@ def name(self) -&gt; str:
     def _init_from_ProductDetailsResponse(self, response: ProductDetailsResponse):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
-        self._barcodes = response.barcodes
+        self._barcodes = [ProductBarcode(data) for data in response.barcodes]
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -464,7 +473,7 @@ def name(self) -&gt; str:
     return self._name</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.data_models.product.Product.product_barcodes"><code class="name">var <span class="ident">product_barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcode" href="../grocy_api_client.html#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a>]</code></dt>
+<dt id="pygrocy.data_models.product.Product.product_barcodes"><code class="name">var <span class="ident">product_barcodes</span> : List[<a title="pygrocy.data_models.product.ProductBarcode" href="#pygrocy.data_models.product.ProductBarcode">ProductBarcode</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -506,6 +515,44 @@ def product_group_id(self) -&gt; int:
         self._name = details.product.name
         self._barcodes = details.barcodes
         self._product_group_id = details.product.product_group_id</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.product.ProductBarcode"><code class="flex name class">
+<span>class <span class="ident">ProductBarcode</span></span>
+<span>(</span><span>data: <a title="pygrocy.grocy_api_client.ProductBarcodeData" href="../grocy_api_client.html#pygrocy.grocy_api_client.ProductBarcodeData">ProductBarcodeData</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProductBarcode(DataModel):
+    def __init__(self, data: ProductBarcodeData):
+        self._barcode = data.barcode
+
+    @property
+    def barcode(self) -&gt; str:
+        return self._barcode</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygrocy.base.DataModel" href="../base.html#pygrocy.base.DataModel">DataModel</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.data_models.product.ProductBarcode.barcode"><code class="name">var <span class="ident">barcode</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def barcode(self) -&gt; str:
+    return self._barcode</code></pre>
 </details>
 </dd>
 </dl>
@@ -674,6 +721,12 @@ def product_id(self) -&gt; int:
 <li><code><a title="pygrocy.data_models.product.Product.name" href="#pygrocy.data_models.product.Product.name">name</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_barcodes" href="#pygrocy.data_models.product.Product.product_barcodes">product_barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_group_id" href="#pygrocy.data_models.product.Product.product_group_id">product_group_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.product.ProductBarcode" href="#pygrocy.data_models.product.ProductBarcode">ProductBarcode</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.product.ProductBarcode.barcode" href="#pygrocy.data_models.product.ProductBarcode.barcode">barcode</a></code></li>
 </ul>
 </li>
 <li>

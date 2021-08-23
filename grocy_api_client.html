@@ -28,6 +28,7 @@
 </summary>
 <pre><code class="python">import base64
 import json
+import logging
 from datetime import datetime
 from enum import Enum
 from typing import List
@@ -46,6 +47,9 @@ from pygrocy.utils import (
 from .errors import GrocyError
 
 DEFAULT_PORT_NUMBER = 9192
+
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.INFO)
 
 
 class ShoppingListItem(object):
@@ -393,9 +397,9 @@ class CurrentVolatilStockResponse(object):
         return self._missing_products
 
 
-class ProductBarcode(object):
+class ProductBarcodeData(object):
     def __init__(self, parsed_json):
-        self._barcode = parsed_json.get(&#34;barcode&#34;)
+        self._barcode = str(parsed_json.get(&#34;barcode&#34;))
 
     @property
     def barcode(self) -&gt; str:
@@ -426,7 +430,7 @@ class ProductDetailsResponse(object):
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
         if barcodes_raw is not None:
-            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
         raw_location = parsed_json.get(&#34;location&#34;)
@@ -460,7 +464,7 @@ class ProductDetailsResponse(object):
         return self._last_price
 
     @property
-    def barcodes(self) -&gt; List[ProductBarcode]:
+    def barcodes(self) -&gt; List[ProductBarcodeData]:
         return self._barcodes
 
     @property
@@ -563,11 +567,25 @@ class BatteryDetailsResponse(object):
         )
 
 
+def _enable_debug_mode():
+    _LOGGER.setLevel(logging.DEBUG)
+
+
 class GrocyApiClient(object):
     def __init__(
-        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+        self,
+        base_url,
+        api_key,
+        port: int = DEFAULT_PORT_NUMBER,
+        verify_ssl=True,
+        debug=False,
     ):
+        if debug:
+            _enable_debug_mode()
+
         self._base_url = &#34;{}:{}/api/&#34;.format(base_url, port)
+        _LOGGER.debug(f&#34;generated base url: {self._base_url}&#34;)
+
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         if self._api_key == &#34;demo_mode&#34;:
@@ -578,6 +596,11 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(&#34;--&gt;\tGET /%s&#34;, end_url)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -589,6 +612,12 @@ class GrocyApiClient(object):
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
+
+        _LOGGER.debug(&#34;--&gt;\tPOST /%s&#34;, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, data)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
         if len(resp.content) &gt; 0:
@@ -606,6 +635,12 @@ class GrocyApiClient(object):
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
+
+        _LOGGER.debug(&#34;--&gt;\tPUT /%s&#34;, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, data)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -615,6 +650,11 @@ class GrocyApiClient(object):
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(&#34;--&gt;\tDELETE /%s&#34;, end_url)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -1317,7 +1357,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient"><code class="flex name class">
 <span>class <span class="ident">GrocyApiClient</span></span>
-<span>(</span><span>base_url, api_key, port: int = 9192, verify_ssl=True)</span>
+<span>(</span><span>base_url, api_key, port: int = 9192, verify_ssl=True, debug=False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1327,9 +1367,19 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">class GrocyApiClient(object):
     def __init__(
-        self, base_url, api_key, port: int = DEFAULT_PORT_NUMBER, verify_ssl=True
+        self,
+        base_url,
+        api_key,
+        port: int = DEFAULT_PORT_NUMBER,
+        verify_ssl=True,
+        debug=False,
     ):
+        if debug:
+            _enable_debug_mode()
+
         self._base_url = &#34;{}:{}/api/&#34;.format(base_url, port)
+        _LOGGER.debug(f&#34;generated base url: {self._base_url}&#34;)
+
         self._api_key = api_key
         self._verify_ssl = verify_ssl
         if self._api_key == &#34;demo_mode&#34;:
@@ -1340,6 +1390,11 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     def _do_get_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(&#34;--&gt;\tGET /%s&#34;, end_url)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -1351,6 +1406,12 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         resp = requests.post(
             req_url, verify=self._verify_ssl, headers=self._headers, json=data
         )
+
+        _LOGGER.debug(&#34;--&gt;\tPOST /%s&#34;, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, data)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
         if len(resp.content) &gt; 0:
@@ -1368,6 +1429,12 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         resp = requests.put(
             req_url, verify=self._verify_ssl, headers=up_header, data=data
         )
+
+        _LOGGER.debug(&#34;--&gt;\tPUT /%s&#34;, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, data)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -1377,6 +1444,11 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+
+        _LOGGER.debug(&#34;--&gt;\tDELETE /%s&#34;, end_url)
+        _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
+        _LOGGER.debug(&#34;\t\t%s&#34;, resp.content)
+
         if resp.status_code &gt;= 400:
             raise GrocyError(resp)
 
@@ -1651,7 +1723,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 3, 3, 13, 55, 1, 329134))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707303))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1682,7 +1754,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 3, 3, 13, 55, 1, 329115))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707283))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1738,7 +1810,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 3, 3, 13, 55, 1, 329069))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707232))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2327,8 +2399,8 @@ def product_id(self) -&gt; int:
 </dd>
 </dl>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductBarcode"><code class="flex name class">
-<span>class <span class="ident">ProductBarcode</span></span>
+<dt id="pygrocy.grocy_api_client.ProductBarcodeData"><code class="flex name class">
+<span>class <span class="ident">ProductBarcodeData</span></span>
 <span>(</span><span>parsed_json)</span>
 </code></dt>
 <dd>
@@ -2337,9 +2409,9 @@ def product_id(self) -&gt; int:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ProductBarcode(object):
+<pre><code class="python">class ProductBarcodeData(object):
     def __init__(self, parsed_json):
-        self._barcode = parsed_json.get(&#34;barcode&#34;)
+        self._barcode = str(parsed_json.get(&#34;barcode&#34;))
 
     @property
     def barcode(self) -&gt; str:
@@ -2347,7 +2419,7 @@ def product_id(self) -&gt; int:
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.ProductBarcode.barcode"><code class="name">var <span class="ident">barcode</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductBarcodeData.barcode"><code class="name">var <span class="ident">barcode</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -2481,7 +2553,7 @@ def product_group_id(self) -&gt; int:
     def _parse_barcodes(self, parsed_json):
         barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
         if barcodes_raw is not None:
-            self._barcodes = [ProductBarcode(barcode) for barcode in barcodes_raw]
+            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
 
     def _parse_location(self, parsed_json):
         raw_location = parsed_json.get(&#34;location&#34;)
@@ -2515,7 +2587,7 @@ def product_group_id(self) -&gt; int:
         return self._last_price
 
     @property
-    def barcodes(self) -&gt; List[ProductBarcode]:
+    def barcodes(self) -&gt; List[ProductBarcodeData]:
         return self._barcodes
 
     @property
@@ -2524,7 +2596,7 @@ def product_group_id(self) -&gt; int:
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes"><code class="name">var <span class="ident">barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcode" href="#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes"><code class="name">var <span class="ident">barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcodeData" href="#pygrocy.grocy_api_client.ProductBarcodeData">ProductBarcodeData</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -2532,7 +2604,7 @@ def product_group_id(self) -&gt; int:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def barcodes(self) -&gt; List[ProductBarcode]:
+def barcodes(self) -&gt; List[ProductBarcodeData]:
     return self._barcodes</code></pre>
 </details>
 </dd>
@@ -3151,9 +3223,9 @@ def username(self) -&gt; str:
 </ul>
 </li>
 <li>
-<h4><code><a title="pygrocy.grocy_api_client.ProductBarcode" href="#pygrocy.grocy_api_client.ProductBarcode">ProductBarcode</a></code></h4>
+<h4><code><a title="pygrocy.grocy_api_client.ProductBarcodeData" href="#pygrocy.grocy_api_client.ProductBarcodeData">ProductBarcodeData</a></code></h4>
 <ul class="">
-<li><code><a title="pygrocy.grocy_api_client.ProductBarcode.barcode" href="#pygrocy.grocy_api_client.ProductBarcode.barcode">barcode</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductBarcodeData.barcode" href="#pygrocy.grocy_api_client.ProductBarcodeData.barcode">barcode</a></code></li>
 </ul>
 </li>
 <li>
