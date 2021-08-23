@@ -18,7 +18,7 @@ setuptools.setup(
         "requests",
         "iso8601~=0.1.16",
         "pytz~=2021.1",
-        "tzlocal~=2.1",
+        "tzlocal>=2.1,<3.0",
         "deprecation~=2.1.0",
     ],
     classifiers=[
