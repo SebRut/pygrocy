@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -30,13 +30,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 10 May 2021 07:21:59 GMT
+      - Sat, 21 Aug 2021 19:42:50 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 404
       message: Not Found

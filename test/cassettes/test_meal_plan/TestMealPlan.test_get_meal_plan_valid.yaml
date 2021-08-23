@@ -7,7 +7,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
       accept:
       - application/json
     method: GET
@@ -15,11 +15,11 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA9WVyw6CMBBFf4V0DaYFn3yHO2NIQ6s24WVpNcb4784oKEjSpUkTFpNpb5kDd6a7
-        O1GCpISRkAh+gyimMYtoHNE1pMytkZDTMlcQhF2QfSTvhayV+qKqY9sdVNUGVJUtipA0uhY2Ny/J
-        OMPL2lYGJHRG4eh+49kO9ur6muVaciNFZlQpW8PLZlAkSwK2SecsTZZwhIU6DkoWAgrBdz3Cji6G
-        xR+6DaRcdCjxhC6Z0DH8oC46lHhCN5/SoVlddCjxhG4xpUPnueiQ3hM6bMpx3zF0novOo75bTenQ
-        eS46j5yJ43/87+hgZr5G/MeHeB+8h7vLmGR7Um0ADw86eT/zv/o+84fLYf8E8//2HPwGAAA=
+        H4sIAAAAAAAEA83U3QqCMBQH8FeRcz1hm2a25+guQoaOGvjVnIVE795SKXO0yxh4MQ7nP/zB2Tnc
+        QRbACIKCD8CAYkpCTEOcAgI9tMLUlMilOaD5kM2BqZx1Ql1lferGS+pGm0TdlyWCVjVFn+ux/bvC
+        q6avNTD8abr0iz7V3LJcCa5FkWlZiU7zql38HIkCsmMxYVECDzQJqCXYuQUm4JcgWgsIdgtMwC9B
+        bAmIW2ACfgk2loC6Bebh+CVILEHkFnj3DraWIHYLvJuidC3Ai100rsj31Lx26bQcf48R7M+yC8zH
+        gzn8p9V6fALTAMx5HgYAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,13 +34,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 10 May 2021 07:21:59 GMT
+      - Sat, 21 Aug 2021 19:42:50 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.1
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.9
     status:
       code: 200
       message: OK
