@@ -1,5 +1,41 @@
 # Changelog
 
+## [v0.30.0](https://github.com/SebRut/pygrocy/tree/v0.30.0) (2021-08-23)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.29.0...v0.30.0)
+
+**Implemented enhancements:**
+
+- Done time should be optional, as it is for execute\_chore call [\#176](https://github.com/SebRut/pygrocy/issues/176)
+- Add debug mode [\#167](https://github.com/SebRut/pygrocy/issues/167)
+
+**Fixed bugs:**
+
+- Sending no time when tracking chore gives an error [\#175](https://github.com/SebRut/pygrocy/issues/175)
+- Lovelace not accessible [\#158](https://github.com/SebRut/pygrocy/issues/158)
+
+**Closed issues:**
+
+- grocy.update\_generic Entity\_type not callable [\#159](https://github.com/SebRut/pygrocy/issues/159)
+
+**Merged pull requests:**
+
+- make done\_time optional for complete\_task [\#181](https://github.com/SebRut/pygrocy/pull/181) ([SebRut](https://github.com/SebRut))
+- pin down tzlocal to \<3.0 [\#180](https://github.com/SebRut/pygrocy/pull/180) ([SebRut](https://github.com/SebRut))
+- add execute chore tests [\#179](https://github.com/SebRut/pygrocy/pull/179) ([SebRut](https://github.com/SebRut))
+- pin dependencies in setup.py [\#178](https://github.com/SebRut/pygrocy/pull/178) ([SebRut](https://github.com/SebRut))
+- update & fix tests for grocy 3.1.0 [\#177](https://github.com/SebRut/pygrocy/pull/177) ([SebRut](https://github.com/SebRut))
+- Update responses requirement from ~=0.13.3 to ~=0.13.4 [\#173](https://github.com/SebRut/pygrocy/pull/173) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update iso8601 requirement from ~=0.1.14 to ~=0.1.16 [\#171](https://github.com/SebRut/pygrocy/pull/171) ([dependabot[bot]](https://github.com/apps/dependabot))
+- switch from general requests logging to custom http logging events [\#169](https://github.com/SebRut/pygrocy/pull/169) ([SebRut](https://github.com/SebRut))
+- add basic request/response logging capability [\#168](https://github.com/SebRut/pygrocy/pull/168) ([SebRut](https://github.com/SebRut))
+- Upgrade to GitHub-native Dependabot [\#166](https://github.com/SebRut/pygrocy/pull/166) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update responses requirement from ~=0.13.2 to ~=0.13.3 [\#165](https://github.com/SebRut/pygrocy/pull/165) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update responses requirement from ~=0.13.1 to ~=0.13.2 [\#164](https://github.com/SebRut/pygrocy/pull/164) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- add tojson helper method [\#163](https://github.com/SebRut/pygrocy/pull/163) ([SebRut](https://github.com/SebRut))
+- Update responses requirement from ~=0.13.0 to ~=0.13.1 [\#162](https://github.com/SebRut/pygrocy/pull/162) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update responses requirement from ~=0.12.1 to ~=0.13.0 [\#161](https://github.com/SebRut/pygrocy/pull/161) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.29.0](https://github.com/SebRut/pygrocy/tree/v0.29.0) (2021-03-03)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.28.0...v0.29.0)
@@ -214,7 +250,6 @@
 - Update coveralls requirement from ~=2.0.0 to ~=2.1.1 [\#104](https://github.com/SebRut/pygrocy/pull/104) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update pdoc3 requirement from ~=0.8.1 to ~=0.8.3 [\#102](https://github.com/SebRut/pygrocy/pull/102) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Update responses requirement from ~=0.10.14 to ~=0.10.15 [\#101](https://github.com/SebRut/pygrocy/pull/101) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
 
 ## [v0.15.0](https://github.com/SebRut/pygrocy/tree/v0.15.0) (2020-05-25)
 
@@ -238,6 +273,7 @@
 
 - upgrade used grocy version [\#100](https://github.com/SebRut/pygrocy/pull/100) ([SebRut](https://github.com/SebRut))
 - Feature/91 task api [\#99](https://github.com/SebRut/pygrocy/pull/99) ([SebRut](https://github.com/SebRut))
+- add all fields from chore details api call [\#98](https://github.com/SebRut/pygrocy/pull/98) ([SebRut](https://github.com/SebRut))
 - finish abstraction from api [\#96](https://github.com/SebRut/pygrocy/pull/96) ([SebRut](https://github.com/SebRut))
 - fix travis build [\#93](https://github.com/SebRut/pygrocy/pull/93) ([SebRut](https://github.com/SebRut))
 - Update responses requirement from ~=0.10.12 to ~=0.10.14 [\#89](https://github.com/SebRut/pygrocy/pull/89) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
