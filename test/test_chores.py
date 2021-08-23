@@ -51,9 +51,7 @@ class TestChores:
 
     @pytest.mark.vcr
     def test_execute_chore_valid_with_data(self, grocy):
-        result = grocy.execute_chore(
-            1, done_by=1, tracked_time=datetime.fromisoformat("2020-12-01T16:00:00")
-        )
+        result = grocy.execute_chore(1, done_by=1, tracked_time=datetime.now())
         assert not isinstance(result, GrocyError)
 
     @pytest.mark.vcr
