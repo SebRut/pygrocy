@@ -4,6 +4,7 @@ import pytest
 
 from pygrocy.data_models.chore import AssignmentType, Chore, PeriodType
 from pygrocy.data_models.user import User
+from pygrocy.errors.grocy_error import GrocyError
 
 
 class TestChores:
@@ -42,3 +43,21 @@ class TestChores:
         assert chore_details.next_execution_assigned_user.id == 2
         assert chore_details.next_execution_assigned_to_user_id == 2
         assert chore_details.userfields is None
+
+    @pytest.mark.vcr
+    def test_execute_chore_valid(self, grocy):
+        result = grocy.execute_chore(1)
+        assert not isinstance(result, GrocyError)
+
+    @pytest.mark.vcr
+    def test_execute_chore_valid_with_data(self, grocy):
+        result = grocy.execute_chore(1, done_by=1, tracked_time=datetime.now())
+        assert not isinstance(result, GrocyError)
+
+    @pytest.mark.vcr
+    def test_execute_chore_invalid(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.execute_chore(1000)
+
+        error = exc_info.value
+        assert error.status_code == 400
