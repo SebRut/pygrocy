@@ -69,6 +69,7 @@ class MealPlanResponse(object):
             parsed_json.get("row_created_timestamp")
         )
         self._userfields = parsed_json.get("userfields")
+        self._section_id = parse_int(parsed_json.get("section_id"))
 
     @property
     def id(self) -> int:
@@ -89,6 +90,10 @@ class MealPlanResponse(object):
     @property
     def note(self) -> str:
         return self._note
+
+    @property
+    def section_id(self) -> int:
+        return self._section_id
 
 
 class RecipeDetailsResponse(object):
