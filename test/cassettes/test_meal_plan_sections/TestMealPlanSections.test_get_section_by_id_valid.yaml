@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAw3LwQpAQBAG4FfRf15lh8IcvYa0LUZJi3ZHDvLunL++/sE6g63B7oOA0UXx2+KT
+        wiAdUd1+hVEiuDSIx+2m31Vmp2uQpD6c/6GCbF40OVWZrblqmQjv8AEGfHFxWwAAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 24 Aug 2021 17:57:00 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+version: 1
