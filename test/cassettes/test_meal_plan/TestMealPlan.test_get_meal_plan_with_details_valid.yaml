@@ -15,11 +15,12 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA83U3QqCMBQH8FeRcz1hm2a25+guQoaOGvjVnIVE795SKXO0yxh4MQ7nP/zB2Tnc
-        QRbACIKCD8CAYkpCTEOcAgI9tMLUlMilOaD5kM2BqZx1Ql1lferGS+pGm0TdlyWCVjVFn+ux/bvC
-        q6avNTD8abr0iz7V3LJcCa5FkWlZiU7zql38HIkCsmMxYVECDzQJqCXYuQUm4JcgWgsIdgtMwC9B
-        bAmIW2ACfgk2loC6Bebh+CVILEHkFnj3DraWIHYLvJuidC3Ai100rsj31Lx26bQcf48R7M+yC8zH
-        gzn8p9V6fALTAMx5HgYAAA==
+        H4sIAAAAAAAEA9WVzWrDMAzHXyX47IDlpF3i59htlGBisxkaO3OclTL67lOTsKXN5h03gw9C6C/r
+        B/p4eidGEQGUKHkmgnDGIWc8ZxWhJJx7jT6vW4MGXYxmEczuZtD+zdjnYUpiXUCFHY9HSnrv1NiG
+        KfzWIzs32kAE+wp6HVdx3p2a1msZtGqC6fQQZNevioMig1qUIIo9VqWcxT8x16DbYJydEuVwoTMa
+        36DVcTQUJIJW3KMBi6OhIBG0coMGcTQUJIK226DxOBoOZyJo+w1aEUdLZ9YeNmhlHC2dhqzu0dhq
+        Q04b/bMBr6t/3uU/dyR5fDFDhk9mi/ifXIL6lrPK+S+D94fdicWVGVSCgdhdZ+jbIweXwweKUAJF
+        wAcAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,7 +35,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Tue, 24 Aug 2021 18:04:30 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -84,7 +85,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -134,7 +135,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -184,7 +185,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -234,7 +235,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -284,7 +285,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -334,7 +335,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
@@ -384,7 +385,57 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Tue, 24 Aug 2021 18:04:31 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZKuA+Z5BnbfrdcAhiyxjhp9TaIyBMP++yi3KNIOWIHO
+        OzgHiXzIvKZf/hRGi3bXCC8dilbcRjkdkMjAGGyYPGYUjdCYVTKRTPAc0x22/beQ0IGJubhuf8UH
+        Xbw8g27sNQMSZEMcMPbAfGpABZ+RkArfSM35yvgJ0BpKDWTUoI104IMv7gxokgsaCF1kkvEno4sn
+        KARWjtwAIMFcBcHJyUuQ1nwvZwZgklzsiXcKtkQqcg1fCU6YAmDINVsqVXKNJ7gvmQLowk9tHOd7
+        lJBwLG4Nt9w0KO5TwlFmDVMZMU0JfcPdciUJJI/GSb7P0isqnJ8JLnR64FZBZi3Wf7l7plOXo/SQ
+        6Wzxy16MUh2nFIrXK1X7bCFN47vdzU0D88/m/ee96F9qy6+gUvoLTf6bxlwr9l2xfWdN/1a9GcLZ
+        lbC88I/s/VXtcZlZ3qe9f6n527SupKVmurL+fa4rZaHZrqg/fGDR+Z7/8tN3/9YZn/tcxEsqaSk/
+        qaxXPGX+9tiwU/gxqISSUA9kHGdJF9m6d5vddrXZrbbXsP3Ufti21x85Ohr2q4TDnbE4PC4CtouH
+        RbC+jxPHjDLjkDGd2K+zaLfzUjCJ+c8OfaBBHVAdh3wIMXKwNZlEu2kEnWPdMD4kJ22tmoIuioa6
+        gHyxthGFUXcGreYC9eTXb5+DW9eeBgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 24 Aug 2021 18:04:31 GMT
       Server:
       - nginx/1.20.1
       Transfer-Encoding:
