@@ -5,6 +5,7 @@ from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
     GrocyApiClient,
     MealPlanResponse,
+    MealPlanSectionResponse,
     RecipeDetailsResponse,
 )
 
@@ -88,3 +89,27 @@ class MealPlanItem(DataModel):
             recipe = api_client.get_recipe(self.recipe_id)
             if recipe:
                 self._recipe = RecipeItem(recipe)
+
+
+class MealPlanSection(DataModel):
+    def __init__(self, response: MealPlanSectionResponse):
+        self._id = response.id
+        self._name = response.name
+        self._sort_number = response.sort_number
+        self._row_created_timestamp = response.row_created_timestamp
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def sort_number(self) -> int:
+        return self._sort_number
+
+    @property
+    def row_created_timestamp(self) -> datetime:
+        return self._row_created_timestamp
