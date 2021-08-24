@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 import requests
 
+from pygrocy import EntityType
 from pygrocy.utils import (
     localize_datetime,
     parse_bool_int,
@@ -68,6 +69,7 @@ class MealPlanResponse(object):
             parsed_json.get("row_created_timestamp")
         )
         self._userfields = parsed_json.get("userfields")
+        self._section_id = parse_int(parsed_json.get("section_id"))
 
     @property
     def id(self) -> int:
@@ -88,6 +90,10 @@ class MealPlanResponse(object):
     @property
     def note(self) -> str:
         return self._note
+
+    @property
+    def section_id(self) -> int:
+        return self._section_id
 
 
 class RecipeDetailsResponse(object):
@@ -539,6 +545,16 @@ class BatteryDetailsResponse(object):
         )
 
 
+class MealPlanSectionResponse(object):
+    def __init__(self, parsed_json):
+        self.id = parse_int(parsed_json.get("id"))
+        self.name = parsed_json.get("name")
+        self.sort_number = parse_int(parsed_json.get("sort_number"))
+        self.row_created_timestamp = parse_date(
+            parsed_json.get("row_created_timestamp")
+        )
+
+
 def _enable_debug_mode():
     _LOGGER.setLevel(logging.DEBUG)
 
@@ -818,3 +834,15 @@ class GrocyApiClient(object):
 
     def get_generic_objects_for_type(self, entity_type: str):
         return self._do_get_request(f"objects/{entity_type}")
+
+    def get_meal_plan_sections(self) -> List[MealPlanSectionResponse]:
+        parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
+        if parsed_json:
+            return [MealPlanSectionResponse(resp) for resp in parsed_json]
+
+    def get_meal_plan_section(self, meal_plan_section_id) -> MealPlanSectionResponse:
+        parsed_json = self._do_get_request(
+            f"objects/meal_plan_sections?query%5B%5D=id%3D{meal_plan_section_id}"
+        )
+        if parsed_json and len(parsed_json) == 1:
+            return MealPlanSectionResponse(parsed_json[0])
