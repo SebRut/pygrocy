@@ -1,5 +1,6 @@
 import base64
 from datetime import datetime
+from enum import Enum
 
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
@@ -75,6 +76,12 @@ class MealPlanSection(DataModel):
         return self._row_created_timestamp
 
 
+class MealPlanItemType(str, Enum):
+    NOTE = "note"
+    PRODUCT = "product"
+    RECIPE = "recipe"
+
+
 class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
@@ -84,6 +91,8 @@ class MealPlanItem(DataModel):
         self._recipe_servings = response.recipe_servings
         self._note = response.note
         self._section_id = response.section_id
+        self._type = MealPlanItemType(response.type)
+        self._product_id = response.product_id
 
     @property
     def id(self) -> int:
@@ -116,6 +125,14 @@ class MealPlanItem(DataModel):
     @property
     def section(self) -> MealPlanSection:
         return self._section
+
+    @property
+    def type(self) -> MealPlanItemType:
+        return self._type
+
+    @property
+    def product_id(self) -> int:
+        return self._product_id
 
     def get_details(self, api_client: GrocyApiClient):
         if self.recipe_id:

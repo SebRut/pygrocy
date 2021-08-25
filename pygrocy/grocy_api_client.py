@@ -95,6 +95,14 @@ class MealPlanResponse(object):
     def section_id(self) -> int:
         return self._section_id
 
+    @property
+    def type(self) -> str:
+        return self._type
+
+    @property
+    def product_id(self) -> int:
+        return self._product_id
+
 
 class RecipeDetailsResponse(object):
     def __init__(self, parsed_json):

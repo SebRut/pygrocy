@@ -1,0 +1,868 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA9WW22qEMBCGX0VyrZCJutU8R+9KEdG0DayJ1bjLUvruHQ9ss5ttCoXSBrwIw/yT
+        +cgcfHgjsiUcYtLWJ8IJowwSyhJakJiYUy/QNohG4iHeDtUmWM3VKIaDVM/jEkRpgwo17fcx6Qfd
+        To1Z3C8tdacnZQinn06vk+U36GPVDKI2oq2M7MRo6q63koM0gpJnwNMdZtVqhXdirFE0Rmq1BErg
+        PV7RmINW+tFQEAhaeo0G1I+GgkDQMgcN/GgoCAQtd9CYHw2bMxC0nYOW+tHC6bU7By3zo4VTkMU1
+        GrUm5DLRzwU4j/51ln9dkeT+RY4RfnW0if/JJigvOYuEfdN4f1idmFwWQcEp8HzuoZtL7rzjALef
+        vb9RbTXeD57Q6KcJb/2th8P88ghmNL78aNykwxX++AEo0x9inwgAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/TQBCG/8rIJ5CcNE4pEsZY4s4Biasla7w7dbbZL/YjKEX8d2ZNVbVFAimY
+        g3OY2Xlm8nr87vdKyapt6sqioaqtPqv7e6zqSlIUQfmknOVod2j6Ty6QAeVjNt1wxYHOP41BN/XS
+        aRcgqsQHph6YmGoQzkZKlDJnUHK9UHYG0iqFGiJJkAoNWGezOQOpYJyERMYzSdmTktkmyAk0TjwA
+        UIKlC4HB2SKgVl/zmQEUkJs98k5OZ58ybuFjghMFB+RiqUYhciznE9zlmBzIzE8ZnJY8IQSastnC
+        Fx4aBM+JcMQoYc4ThTmQrXla7oSQ8KgMcj6iFSlzfUzwRKdf3CLIosX2D7lnOnXRo4WYzpo+DNWE
+        4jgHl63ciDJnC2GeXu1vbmpYfnav3w9V/1JbfgWF0j/R5L9pzL1832Xdd1r1l+rNEK4uhPWFf2AP
+        V2XGdXZ5CIN9qfllWhfSWjtdWP++14Wy0m4X1G8+sOp+L3/58bu/dMeXOVfxkkJay08K6y+esnx7
+        bNjBfRtFIEwkx6QMV6HxbN373b7Z7Pab5hqad+2bpr1+y6e9Yr8KNN4qTeOD9fti/ds7P3N+wkhj
+        pHBir47L/cAXggrMfha0Lo3iQOI4xoPzng9rFVPV7uoqnX25T6wLBnXpGJzMIo3lurFZ67rKjLpV
+        pCU3KJEfPwFRig1KjAYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZKuA+Z5BnbfrdcAhiyxjhp9TaIyBMP++yi3KNIOWIHO
+        OzgHiXzIvKZf/hRGi3bXCC8dilbcRjkdkMjAGGyYPGYUjdCYVTKRTPAc0x22/beQ0IGJubhuf8UH
+        Xbw8g27sNQMSZEMcMPbAfGpABZ+RkArfSM35yvgJ0BpKDWTUoI104IMv7gxokgsaCF1kkvEno4sn
+        KARWjtwAIMFcBcHJyUuQ1nwvZwZgklzsiXcKtkQqcg1fCU6YAmDINVsqVXKNJ7gvmQLowk9tHOd7
+        lJBwLG4Nt9w0KO5TwlFmDVMZMU0JfcPdciUJJI/GSb7P0isqnJ8JLnR64FZBZi3Wf7l7plOXo/SQ
+        6Wzxy16MUh2nFIrXK1X7bCFN47vdzU0D88/m/ee96F9qy6+gUvoLTf6bxlwr9l2xfWdN/1a9GcLZ
+        lbC88I/s/VXtcZlZ3qe9f6n527SupKVmurL+fa4rZaHZrqg/fGDR+Z7/8tN3/9YZn/tcxEsqaSk/
+        qaxXPGX+9tiwU/gxqISSUA9kHGdJF9m6d5vddrXZrbbXsP3Ufti21x85Ohr2q4TDnbE4PC4CtouH
+        RbC+jxPHjDLjkDGd2K+zaLfzUjCJ+c8OfaBBHVAdh3wIMXKwNZlEu2kEnWPdMD4kJ22tmoIuioa6
+        gHyxthGFUXcGreYC9eTXb5+DW9eeBgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7VVTWvcQAz9K2JOLXg3+9EU6rqG3nvLdcHIM4p3svPV+diwlP73atwQkhQaSN2D
+        fRhJT8/PmqcfQivR7hvh0JJoxQ06da/lkZJohKIkow5Ze8eh7rjtv/lIFnRIxXaHKz7owtMz6MZe
+        eeMjJJ05YeyBYXMD0rtEmXLhCCqul9pNQEbn2EAiBUqjBeddsRcgHa1XkMkGRtLurFVxGUoGgyMT
+        AMowdyGwODkENPp7uTAAReRmj3hnb0rIBdfwNcOZogfyqVajlCXV/Ax3JWUPqvBTidMcJ4RIY7Fr
+        uGHSIJknwgmTgqmMFKdIrmG23Akh40lb5HhCJ3Ph+pThiU6/casgsxbrv8Se6dSlgA5Svhj6chAj
+        ytMUfXFqJSvPFuI0vttdXzcwvzbvPx9E/1Jb/gUVpX+iyX/TmHuFvium74zu36o3g3B1RVhe+Afs
+        w1XluMwsH+LBvdT8bVpXpKVmumL9+1xXlIVmu0L94QOLzvf8yY/3/q0zPvNcxEsq0lJ+UrFe8ZT5
+        7rFhR38/yEiYSQ1ZW65CG9i6d5vddrXZrbZ72H5qP2zb/UfODpr9KtJwqw0ND/7PJvbg/+u7MHHS
+        iImGRPHMhp1Eu523go7c4Nmh83ngrSFPQzr6EDjZ6JRFu2lEvoS6WZyPFk1tG70qMg918bhiTCMK
+        Q91qMoob1JOfvwBbCM5klgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:40 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZK2A+Z5BnbfYcCuAQxZYh01+ppEZQiG/fdRXlGkHdAB
+        nXdwDiL5kHlNv/ohjBbtTSO8dCha8UV6JY+YRSM0ZpVMJBM8B7rDtv8cEjowMRfX7a/4oIuXZ9CN
+        vQ42JMiGOGHsgaHUgAo+IyEVjkjN9cr4CdAaSg1k1KCNdOCDL+4MaJILGghdZJLxJ6OLJygEVo48
+        ACDB3AXByclLkNZ8K2cGYJLc7JF3CrZEKnINnwhOmAJgyLVaKlVyzSe4L5kC6MJPHRznOEpIOBa3
+        hq88NCieU8JRZg1TGTFNCX3D03InCSSPxkmOZxaOCtdnggudfnOrILMW6xdiT3TqcpQeMp0tftyL
+        UarjlELxeqXqnC2kaXyzu71tYP7ZvP2wF/1zbfkVVEp/ocl/05h7xb4rtu+s6V+rN0O4uhKWF/6B
+        vb+qMy6zy/u09881f53WlbTUTlfWv+91pSy02xX1hw8sut/zX3787l+74/Oci3hJJS3lJ5X1F0+Z
+        vz027BS+DyqhJNQDGcdV0kW27t1mt11tdqvtNWzftzfb9vodZ0fDfpVwuDMWhwf3Z7eY3X99HydO
+        GWXGIWM6sV1n0W7nO8Ekxj859IEGdUB1HPIhxMjJ1mQS7aYRdI71VvEhOWlr0xR0UTTUS8cXaxtR
+        GHVn0GpuUE9+/gJlZaYokgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/TQBCG/8rIJ5CcNE4pEsZY4s4Biasla7w7dbbZL/YjKEX8d2ZNVbVFAimY
+        g3OY2Xlm8nr87vdKyapt6sqioaqtPqv7e6zqSlIUQfmknOVod2j6Ty6QAeVjNt1wxYHOP41BN/XS
+        aRcgqsQHph6YmGoQzkZKlDJnUHK9UHYG0iqFGiJJkAoNWGezOQOpYJyERMYzSdmTktkmyAk0TjwA
+        UIKlC4HB2SKgVl/zmQEUkJs98k5OZ58ybuFjghMFB+RiqUYhciznE9zlmBzIzE8ZnJY8IQSastnC
+        Fx4aBM+JcMQoYc4ThTmQrXla7oSQ8KgMcj6iFSlzfUzwRKdf3CLIosX2D7lnOnXRo4WYzpo+DNWE
+        4jgHl63ciDJnC2GeXu1vbmpYfnav3w9V/1JbfgWF0j/R5L9pzL1832Xdd1r1l+rNEK4uhPWFf2AP
+        V2XGdXZ5CIN9qfllWhfSWjtdWP++14Wy0m4X1G8+sOp+L3/58bu/dMeXOVfxkkJay08K6y+esnx7
+        bNjBfRtFIEwkx6QMV6HxbN373b7Z7Pab5hqad+2bpr1+y6e9Yr8KNN4qTeOD9fti/ds7P3N+wkhj
+        pHBir47L/cAXggrMfha0Lo3iQOI4xoPzng9rFVPV7uoqnX25T6wLBnXpGJzMIo3lurFZ67rKjLpV
+        pCU3KJEfPwFRig1KjAYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZKuA+Z5BnbfrdcAhiyxjhp9TaIyBMP++yi3KNIOWIHO
+        OzgHiXzIvKZf/hRGi3bXCC8dilbcRjkdkMjAGGyYPGYUjdCYVTKRTPAc0x22/beQ0IGJubhuf8UH
+        Xbw8g27sNQMSZEMcMPbAfGpABZ+RkArfSM35yvgJ0BpKDWTUoI104IMv7gxokgsaCF1kkvEno4sn
+        KARWjtwAIMFcBcHJyUuQ1nwvZwZgklzsiXcKtkQqcg1fCU6YAmDINVsqVXKNJ7gvmQLowk9tHOd7
+        lJBwLG4Nt9w0KO5TwlFmDVMZMU0JfcPdciUJJI/GSb7P0isqnJ8JLnR64FZBZi3Wf7l7plOXo/SQ
+        6Wzxy16MUh2nFIrXK1X7bCFN47vdzU0D88/m/ee96F9qy6+gUvoLTf6bxlwr9l2xfWdN/1a9GcLZ
+        lbC88I/s/VXtcZlZ3qe9f6n527SupKVmurL+fa4rZaHZrqg/fGDR+Z7/8tN3/9YZn/tcxEsqaSk/
+        qaxXPGX+9tiwU/gxqISSUA9kHGdJF9m6d5vddrXZrbbXsP3Ufti21x85Ohr2q4TDnbE4PC4CtouH
+        RbC+jxPHjDLjkDGd2K+zaLfzUjCJ+c8OfaBBHVAdh3wIMXKwNZlEu2kEnWPdMD4kJ22tmoIuioa6
+        gHyxthGFUXcGreYC9eTXb5+DW9eeBgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZK2A+Z5BnbfYcCuAQxZYh01+ppEZQiG/fdRXlGkHdAB
+        nXdwDiL5kHlNv/ohjBbtTSO8dCha8UV6JY+YRSM0ZpVMJBM8B7rDtv8cEjowMRfX7a/4oIuXZ9CN
+        vQ42JMiGOGHsgaHUgAo+IyEVjkjN9cr4CdAaSg1k1KCNdOCDL+4MaJILGghdZJLxJ6OLJygEVo48
+        ACDB3AXByclLkNZ8K2cGYJLc7JF3CrZEKnINnwhOmAJgyLVaKlVyzSe4L5kC6MJPHRznOEpIOBa3
+        hq88NCieU8JRZg1TGTFNCX3D03InCSSPxkmOZxaOCtdnggudfnOrILMW6xdiT3TqcpQeMp0tftyL
+        UarjlELxeqXqnC2kaXyzu71tYP7ZvP2wF/1zbfkVVEp/ocl/05h7xb4rtu+s6V+rN0O4uhKWF/6B
+        vb+qMy6zy/u09881f53WlbTUTlfWv+91pSy02xX1hw8sut/zX3787l+74/Oci3hJJS3lJ5X1F0+Z
+        vz027BS+DyqhJNQDGcdV0kW27t1mt11tdqvtNWzftzfb9vodZ0fDfpVwuDMWhwf3Z7eY3X99HydO
+        GWXGIWM6sV1n0W7nO8Ekxj859IEGdUB1HPIhxMjJ1mQS7aYRdI71VvEhOWlr0xR0UTTUS8cXaxtR
+        GHVn0GpuUE9+/gJlZaYokgYAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/recipes/2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA7WVTW/bMAyG/wqh0wY4aZKuA+Z5BnbfrdcAhiyxjhp9TaIyBMP++yi3KNIOWIHO
+        OzgHiXzIvKZf/hRGi3bXCC8dilbcRjkdkMjAGGyYPGYUjdCYVTKRTPAc0x22/beQ0IGJubhuf8UH
+        Xbw8g27sNQMSZEMcMPbAfGpABZ+RkArfSM35yvgJ0BpKDWTUoI104IMv7gxokgsaCF1kkvEno4sn
+        KARWjtwAIMFcBcHJyUuQ1nwvZwZgklzsiXcKtkQqcg1fCU6YAmDINVsqVXKNJ7gvmQLowk9tHOd7
+        lJBwLG4Nt9w0KO5TwlFmDVMZMU0JfcPdciUJJI/GSb7P0isqnJ8JLnR64FZBZi3Wf7l7plOXo/SQ
+        6Wzxy16MUh2nFIrXK1X7bCFN47vdzU0D88/m/ee96F9qy6+gUvoLTf6bxlwr9l2xfWdN/1a9GcLZ
+        lbC88I/s/VXtcZlZ3qe9f6n527SupKVmurL+fa4rZaHZrqg/fGDR+Z7/8tN3/9YZn/tcxEsqaSk/
+        qaxXPGX+9tiwU/gxqISSUA9kHGdJF9m6d5vddrXZrbbXsP3Ufti21x85Ohr2q4TDnbE4PC4CtouH
+        RbC+jxPHjDLjkDGd2K+zaLfzUjCJ+c8OfaBBHVAdh3wIMXKwNZlEu2kEnWPdMD4kJ22tmoIuioa6
+        gHyxthGFUXcGreYC9eTXb5+DW9eeBgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:41 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAw3LwQpAQBAG4FfRf15lh8IcvYa0LUZJi3ZHDvLunL++/sE6g63B7oOA0UXx2+KT
+        wiAdUd1+hVEiuDSIx+2m31Vmp2uQpD6c/6GCbF40OVWZrblqmQjv8AEGfHFxWwAAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:42 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D-1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEAyXKwQqAIAwA0F+JnRWcXWS/EiGWO3hQYy46RP9e0Pm95YaSgSwaaKkyEICB0UVj
+        O+vG8pP0K+7CSTlHLZWHpnp81zuP1gXr58kFwpkwwLO+Gg7z9FQAAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 25 Aug 2021 11:55:42 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.9
+    status:
+      code: 200
+      message: OK
+version: 1
