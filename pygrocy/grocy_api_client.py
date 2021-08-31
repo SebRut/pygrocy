@@ -76,74 +76,35 @@ class RecipeDetailsResponse(BaseModel):
     userfields: Optional[Dict] = None
 
 
-class QuantityUnitData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._name = parsed_json.get("name")
-        self._name_plural = parsed_json.get("name_plural")
-        self._description = parsed_json.get("description")
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp")
-        )
+class QuantityUnitData(BaseModel):
+    id: int
+    name: str
+    name_plural: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
 
 
-class LocationData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._name = parsed_json.get("name")
-        self._description = parsed_json.get("description")
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp")
-        )
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def description(self) -> str:
-        return self._description
+class LocationData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
 
 
-class ProductData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._name = parsed_json.get("name")
-        self._description = parsed_json.get("description", None)
-        self._location_id = parse_int(parsed_json.get("location_id", None))
-        self._product_group_id = parse_int(parsed_json.get("product_group_id", None))
-        self._qu_id_stock = parse_int(parsed_json.get("qu_id_stock", None))
-        self._qu_id_purchase = parse_int(parsed_json.get("qu_id_purchsase", None))
-        self._qu_factor_purchase_to_stock = parse_float(
-            parsed_json.get("qu_factor_purchase_to_stock", None)
-        )
-        self._picture_file_name = parsed_json.get("picture_file_name", None)
-        self._allow_partial_units_in_stock = bool(
-            parsed_json.get("allow_partial_units_in_stock", None) == "true"
-        )
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp", None)
-        )
-        self._min_stock_amount = parse_int(parsed_json.get("min_stock_amount", None), 0)
-        self._default_best_before_days = parse_int(
-            parsed_json.get("default_best_before_days", None)
-        )
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def product_group_id(self) -> int:
-        return self._product_group_id
-
-    @property
-    def name(self) -> str:
-        return self._name
+class ProductData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    location_id: int
+    product_group_id: Optional[int] = None
+    qu_id_stock: int
+    qu_id_purchase: int
+    qu_factor_purchase_to_stock: float
+    picture_file_name: Optional[str] = None
+    allow_partial_units_in_stock: Optional[bool] = False
+    row_created_timestamp: datetime
+    min_stock_amount: Optional[int]
+    default_best_before_days: int
 
 
 class ChoreData(BaseModel):
@@ -175,33 +136,12 @@ class CurrentChoreResponse(BaseModel):
     next_estimated_execution_time: datetime
 
 
-class CurrentStockResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get("product_id"))
-        self._amount = parse_float(parsed_json.get("amount"))
-        self._best_before_date = parse_date(parsed_json.get("best_before_date"))
-        self._amount_opened = parse_float(parsed_json.get("amount_opened"))
-        self._product = ProductData(parsed_json.get("product"))
-
-    @property
-    def product_id(self) -> int:
-        return self._product_id
-
-    @property
-    def amount(self) -> float:
-        return self._amount
-
-    @property
-    def best_before_date(self) -> datetime:
-        return self._best_before_date
-
-    @property
-    def amount_opened(self) -> float:
-        return self._amount_opened
-
-    @property
-    def product(self) -> ProductData:
-        return self._product
+class CurrentStockResponse(BaseModel):
+    product_id: int
+    amount: float
+    best_before_date: date
+    amount_opened: float
+    product: ProductData
 
 
 class MissingProductResponse(object):
@@ -235,21 +175,21 @@ class CurrentVolatilStockResponse(object):
         self._due_products = []
         if "due_products" in parsed_json:
             self._due_products = [
-                CurrentStockResponse(product)
+                CurrentStockResponse(**product)
                 for product in parsed_json.get("due_products")
             ]
 
         self._overdue_products = []
         if "overdue_products" in parsed_json:
             self._overdue_products = [
-                CurrentStockResponse(product)
+                CurrentStockResponse(**product)
                 for product in parsed_json.get("overdue_products")
             ]
 
         self._expired_products = []
         if "expired_products" in parsed_json:
             self._expired_products = [
-                CurrentStockResponse(product)
+                CurrentStockResponse(**product)
                 for product in parsed_json.get("expired_products")
             ]
 
@@ -281,70 +221,17 @@ class ProductBarcodeData(BaseModel):
     barcode: str
 
 
-class ProductDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._last_purchased = parse_date(parsed_json.get("last_purchased"))
-        self._last_used = parse_date(parsed_json.get("last_used"))
-        self._stock_amount = parse_int(parsed_json.get("stock_amount"))
-        self._stock_amount_opened = parse_int(parsed_json.get("stock_amount_opened"))
-        self._next_best_before_date = parse_date(
-            parsed_json.get("next_best_before_date")
-        )
-        self._last_price = parse_float(parsed_json.get("last_price"))
-
-        self._product = ProductData(parsed_json.get("product"))
-
-        self._quantity_unit_stock = QuantityUnitData(
-            parsed_json.get("quantity_unit_stock")
-        )
-
-        self._parse_location(parsed_json)
-
-        self._parse_barcodes(parsed_json)
-
-    def _parse_barcodes(self, parsed_json):
-        barcodes_raw = parsed_json.get("product_barcodes", "")
-        if barcodes_raw is not None:
-            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
-
-    def _parse_location(self, parsed_json):
-        raw_location = parsed_json.get("location")
-        if raw_location is None:
-            self._location = None
-        else:
-            self._location = LocationData(raw_location)
-
-    @property
-    def last_purchased(self) -> datetime:
-        return self._last_purchased
-
-    @property
-    def last_used(self) -> datetime:
-        return self._last_used
-
-    @property
-    def stock_amount(self) -> int:
-        return self._stock_amount
-
-    @property
-    def stock_amount_opened(self) -> int:
-        return self._stock_amount_opened
-
-    @property
-    def next_best_before_date(self) -> datetime:
-        return self._next_best_before_date
-
-    @property
-    def last_price(self) -> float:
-        return self._last_price
-
-    @property
-    def barcodes(self) -> List[ProductBarcodeData]:
-        return self._barcodes
-
-    @property
-    def product(self) -> ProductData:
-        return self._product
+class ProductDetailsResponse(BaseModel):
+    last_purchased: Optional[date] = None
+    last_used: Optional[datetime] = None
+    stock_amount: int
+    stock_amount_opened: int
+    next_best_before_date: Optional[date] = None
+    last_price: Optional[float] = None
+    product: ProductData
+    quantity_unit_stock: QuantityUnitData
+    barcodes: Optional[List[ProductBarcodeData]] = Field(alias="product_barcodes")
+    location: Optional[LocationData] = None
 
 
 class ChoreDetailsResponse(BaseModel):
@@ -502,7 +389,7 @@ class GrocyApiClient(object):
 
     def get_stock(self) -> List[CurrentStockResponse]:
         parsed_json = self._do_get_request("stock")
-        return [CurrentStockResponse(response) for response in parsed_json]
+        return [CurrentStockResponse(**response) for response in parsed_json]
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         parsed_json = self._do_get_request("stock/volatile")
@@ -512,7 +399,7 @@ class GrocyApiClient(object):
         url = f"stock/products/{product_id}"
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ProductDetailsResponse(parsed_json)
+            return ProductDetailsResponse(**parsed_json)
 
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores")
@@ -611,7 +498,7 @@ class GrocyApiClient(object):
 
     def get_product_groups(self) -> List[LocationData]:
         parsed_json = self._do_get_request("objects/product_groups")
-        return [LocationData(response) for response in parsed_json]
+        return [LocationData(**response) for response in parsed_json]
 
     def upload_product_picture(self, product_id: int, pic_path: str):
         b64fn = base64.b64encode("{}.jpg".format(product_id).encode("ascii"))
