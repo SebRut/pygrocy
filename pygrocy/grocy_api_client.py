@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from pydantic.schema import date
 
 from pygrocy import EntityType
-from pygrocy.utils import localize_datetime, parse_date, parse_int
+from pygrocy.utils import localize_datetime, parse_date
 
 from .errors import GrocyError
 
@@ -172,17 +172,16 @@ class TransactionType(Enum):
     PRODUCT_OPENED = "product-opened"
 
 
-class TaskResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get("id"))
-        self.name = parsed_json.get("name")
-        self.description = parsed_json.get("description")
-        self.due_date = parse_date(parsed_json.get("due_date"))
-        self.done = parse_int(parsed_json.get("done"))
-        self.done_timestamp = parse_date(parsed_json.get("done_timestamp"))
-        self.category_id = parse_int(parsed_json.get("category_id"))
-        self.assigned_to_user_id = parse_int(parsed_json.get("assigned_to_user_id"))
-        self.userfields = parsed_json.get("userfields")
+class TaskResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    due_date: date
+    done: int
+    done_timestamp: Optional[datetime] = None
+    category_id: Optional[int] = None
+    assigned_to_user_id: int
+    userfields: Optional[Dict] = None
 
 
 class CurrentBatteryResponse(BaseModel):
@@ -448,7 +447,7 @@ class GrocyApiClient(object):
 
     def get_tasks(self) -> List[TaskResponse]:
         parsed_json = self._do_get_request("tasks")
-        return [TaskResponse(data) for data in parsed_json]
+        return [TaskResponse(**data) for data in parsed_json]
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
