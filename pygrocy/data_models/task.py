@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict
+
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import TaskResponse
 
@@ -18,7 +19,7 @@ class Task(DataModel):
         self._userfields = response.userfields
 
     @property
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     @property
@@ -30,7 +31,7 @@ class Task(DataModel):
         return self._description
 
     @property
-    def due_date(self) -> datetime:
+    def due_date(self) -> datetime.date:
         return self._due_date
 
     @property

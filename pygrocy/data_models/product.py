@@ -78,7 +78,7 @@ class Product(DataModel):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.barcodes
+            self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -98,7 +98,7 @@ class Product(DataModel):
         return self._available_amount
 
     @property
-    def best_before_date(self) -> datetime:
+    def best_before_date(self) -> datetime.date:
         return self._best_before_date
 
     @property
