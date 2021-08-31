@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 import requests
 from pydantic import BaseModel, Field
+from pydantic.schema import date
 
 from pygrocy import EntityType
 from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
@@ -49,92 +50,30 @@ class ShoppingListItem(object):
         return self._amount
 
 
-class MealPlanResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._day = parse_date(parsed_json.get("day"))
-        self._type = parsed_json.get("type")
-        self._recipe_id = parse_int(parsed_json.get("recipe_id"))
-        self._recipe_servings = parse_int(parsed_json.get("recipe_servings"))
-        self._note = parsed_json.get("note", None)
-        self._product_id = parsed_json.get("product_id")
-        self._product_amount = parse_float(parsed_json.get("product_amount"), 0)
-        self._product_qu_id = parsed_json.get("product_qu_id")
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp")
-        )
-        self._userfields = parsed_json.get("userfields")
-        self._section_id = parse_int(parsed_json.get("section_id"))
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def day(self) -> datetime:
-        return self._day
-
-    @property
-    def recipe_id(self) -> int:
-        return self._recipe_id
-
-    @property
-    def recipe_servings(self) -> int:
-        return self._recipe_servings
-
-    @property
-    def note(self) -> str:
-        return self._note
-
-    @property
-    def section_id(self) -> int:
-        return self._section_id
-
-    @property
-    def type(self) -> str:
-        return self._type
-
-    @property
-    def product_id(self) -> int:
-        return self._product_id
+class MealPlanResponse(BaseModel):
+    id: int
+    day: date
+    type: str
+    recipe_id: Optional[int] = None
+    recipe_servings: Optional[int] = None
+    note: Optional[str] = None
+    product_id: Optional[int] = None
+    product_amount: Optional[float] = None
+    product_qu_id: Optional[str] = None
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None
+    section_id: Optional[int] = None
 
 
-class RecipeDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._name = parsed_json.get("name")
-        self._description = parsed_json.get("description")
-        self._base_servings = parse_int(parsed_json.get("base_servings"))
-        self._desired_servings = parse_int(parsed_json.get("desired_servings"))
-        self._picture_file_name = parsed_json.get("picture_file_name")
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp")
-        )
-        self._userfields = parsed_json.get("userfields")
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def description(self) -> str:
-        return self._description
-
-    @property
-    def base_servings(self) -> int:
-        return self._base_servings
-
-    @property
-    def desired_servings(self) -> int:
-        return self._desired_servings
-
-    @property
-    def picture_file_name(self) -> str:
-        return self._picture_file_name
+class RecipeDetailsResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    description: Optional[str] = None
+    base_servings: int
+    desired_servings: int
+    picture_file_name: Optional[str]
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None
 
 
 class QuantityUnitData(object):
@@ -465,14 +404,11 @@ class BatteryDetailsResponse(BaseModel):
     next_estimated_charge_time: datetime
 
 
-class MealPlanSectionResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get("id"))
-        self.name = parsed_json.get("name")
-        self.sort_number = parse_int(parsed_json.get("sort_number"))
-        self.row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp")
-        )
+class MealPlanSectionResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    sort_number: Optional[int] = None
+    row_created_timestamp: datetime
 
 
 def _enable_debug_mode():
@@ -720,12 +656,12 @@ class GrocyApiClient(object):
 
     def get_meal_plan(self) -> List[MealPlanResponse]:
         parsed_json = self._do_get_request("objects/meal_plan")
-        return [MealPlanResponse(data) for data in parsed_json]
+        return [MealPlanResponse(**data) for data in parsed_json]
 
     def get_recipe(self, object_id: int) -> RecipeDetailsResponse:
         parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
         if parsed_json:
-            return RecipeDetailsResponse(parsed_json)
+            return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -> List[CurrentBatteryResponse]:
         parsed_json = self._do_get_request(f"batteries")
@@ -758,11 +694,11 @@ class GrocyApiClient(object):
     def get_meal_plan_sections(self) -> List[MealPlanSectionResponse]:
         parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
         if parsed_json:
-            return [MealPlanSectionResponse(resp) for resp in parsed_json]
+            return [MealPlanSectionResponse(**resp) for resp in parsed_json]
 
     def get_meal_plan_section(self, meal_plan_section_id) -> MealPlanSectionResponse:
         parsed_json = self._do_get_request(
             f"objects/meal_plan_sections?query%5B%5D=id%3D{meal_plan_section_id}"
         )
         if parsed_json and len(parsed_json) == 1:
-            return MealPlanSectionResponse(parsed_json[0])
+            return MealPlanSectionResponse(**parsed_json[0])
