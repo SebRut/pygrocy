@@ -21,33 +21,14 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.INFO)
 
 
-class ShoppingListItem(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-        self._product_id = parse_int(parsed_json.get("product_id", None))
-        self._note = parsed_json.get("note", None)
-        self._amount = parse_float(parsed_json.get("amount"), 0)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get("row_created_timestamp", None)
-        )
-        self._shopping_list_id = parse_int(parsed_json.get("shopping_list_id"))
-        self._done = parse_int(parsed_json.get("done"))
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def product_id(self) -> int:
-        return self._product_id
-
-    @property
-    def note(self) -> str:
-        return self._note
-
-    @property
-    def amount(self) -> float:
-        return self._amount
+class ShoppingListItem(BaseModel):
+    id: int
+    product_id: Optional[int] = None
+    note: Optional[str] = None
+    amount: float
+    row_created_timestamp: datetime
+    shopping_list_id: int
+    done: int
 
 
 class MealPlanResponse(BaseModel):
@@ -462,7 +443,7 @@ class GrocyApiClient(object):
 
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list")
-        return [ShoppingListItem(response) for response in parsed_json]
+        return [ShoppingListItem(**response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
         data = None
