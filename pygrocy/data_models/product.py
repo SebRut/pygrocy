@@ -56,7 +56,7 @@ class Product(DataModel):
             self._init_from_ProductData(response.product)
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
-        self._id = response.product_id
+        self._id = response.id
         self._name = response.name
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock

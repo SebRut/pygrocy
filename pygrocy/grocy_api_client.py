@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from pydantic.schema import date
 
 from pygrocy import EntityType
-from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
+from pygrocy.utils import localize_datetime, parse_date, parse_int
 
 from .errors import GrocyError
 
@@ -125,77 +125,18 @@ class CurrentStockResponse(BaseModel):
     product: ProductData
 
 
-class MissingProductResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get("id"))
-        self._name = parsed_json.get("name")
-        self._amount_missing = parse_float(parsed_json.get("amount_missing"))
-        self._is_partly_in_stock = bool(
-            parse_int(parsed_json.get("is_partly_in_stock"))
-        )
-
-    @property
-    def product_id(self) -> int:
-        return self._product_id
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def amount_missing(self) -> float:
-        return self._amount_missing
-
-    @property
-    def is_partly_in_stock(self) -> bool:
-        return self._is_partly_in_stock
+class MissingProductResponse(BaseModel):
+    id: int
+    name: str
+    amount_missing: float
+    is_partly_in_stock: bool
 
 
-class CurrentVolatilStockResponse(object):
-    def __init__(self, parsed_json):
-        self._due_products = []
-        if "due_products" in parsed_json:
-            self._due_products = [
-                CurrentStockResponse(**product)
-                for product in parsed_json.get("due_products")
-            ]
-
-        self._overdue_products = []
-        if "overdue_products" in parsed_json:
-            self._overdue_products = [
-                CurrentStockResponse(**product)
-                for product in parsed_json.get("overdue_products")
-            ]
-
-        self._expired_products = []
-        if "expired_products" in parsed_json:
-            self._expired_products = [
-                CurrentStockResponse(**product)
-                for product in parsed_json.get("expired_products")
-            ]
-
-        self._missing_products = []
-        if "missing_products" in parsed_json:
-            self._missing_products = [
-                MissingProductResponse(product)
-                for product in parsed_json.get("missing_products")
-            ]
-
-    @property
-    def due_products(self) -> List[CurrentStockResponse]:
-        return self._due_products
-
-    @property
-    def overdue_products(self) -> List[CurrentStockResponse]:
-        return self._overdue_products
-
-    @property
-    def expired_products(self) -> List[CurrentStockResponse]:
-        return self._expired_products
-
-    @property
-    def missing_products(self) -> List[MissingProductResponse]:
-        return self._missing_products
+class CurrentVolatilStockResponse(BaseModel):
+    due_products: Optional[List[CurrentStockResponse]] = None
+    overdue_products: Optional[List[CurrentStockResponse]] = None
+    expired_products: Optional[List[CurrentStockResponse]] = None
+    missing_products: Optional[List[MissingProductResponse]] = None
 
 
 class ProductBarcodeData(BaseModel):
@@ -374,7 +315,7 @@ class GrocyApiClient(object):
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         parsed_json = self._do_get_request("stock/volatile")
-        return CurrentVolatilStockResponse(parsed_json)
+        return CurrentVolatilStockResponse(**parsed_json)
 
     def get_product(self, product_id) -> ProductDetailsResponse:
         url = f"stock/products/{product_id}"
