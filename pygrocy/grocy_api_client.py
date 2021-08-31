@@ -277,13 +277,8 @@ class CurrentVolatilStockResponse(object):
         return self._missing_products
 
 
-class ProductBarcodeData(object):
-    def __init__(self, parsed_json):
-        self._barcode = str(parsed_json.get("barcode"))
-
-    @property
-    def barcode(self) -> str:
-        return self._barcode
+class ProductBarcodeData(BaseModel):
+    barcode: str
 
 
 class ProductDetailsResponse(object):
