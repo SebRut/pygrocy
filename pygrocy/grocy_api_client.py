@@ -10,13 +10,7 @@ import requests
 from pydantic import BaseModel, Field
 
 from pygrocy import EntityType
-from pygrocy.utils import (
-    localize_datetime,
-    parse_bool_int,
-    parse_date,
-    parse_float,
-    parse_int,
-)
+from pygrocy.utils import localize_datetime, parse_date, parse_float, parse_int
 
 from .errors import GrocyError
 
@@ -213,73 +207,33 @@ class ProductData(object):
         return self._name
 
 
-class ChoreData(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get("id"))
-        self.name = parsed_json.get("name")
-        self.description = parsed_json.get("description")
-        self.period_type = parsed_json.get("period_type")
-        self.period_config = parsed_json.get("period_config")
-        self.period_days = parse_int(parsed_json.get("period_days"))
-        self.track_date_only = parse_bool_int(parsed_json.get("track_date_only"))
-        self.rollover = parse_bool_int(parsed_json.get("rollover"))
-        self.assignment_type = parsed_json.get("assignment_type")
-        self.assignment_config = parsed_json.get("assignment_config")
-        self.next_execution_assigned_to_user_id = parse_int(
-            parsed_json.get("next_execution_assigned_to_user_id")
-        )
-        self.userfields = parsed_json.get("userfields")
+class ChoreData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    period_type: str
+    period_config: Optional[str] = None
+    period_days: Optional[int] = 0
+    track_date_only: bool
+    rollover: bool
+    assignment_type: Optional[str] = None
+    assignment_config: Optional[str] = None
+    next_execution_assigned_to_user_id: Optional[int] = None
+    userfields: Optional[Dict]
 
 
-class UserDto(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get("id"))
-
-        self._username = parsed_json.get("username")
-        self._first_name = parsed_json.get("first_name")
-        self._last_name = parsed_json.get("last_name")
-        self._display_name = parsed_json.get("display_name")
-
-    @property
-    def id(self) -> int:
-        return self._id
-
-    @property
-    def username(self) -> str:
-        return self._username
-
-    @property
-    def first_name(self) -> str:
-        return self._first_name
-
-    @property
-    def last_name(self) -> str:
-        return self._last_name
-
-    @property
-    def display_name(self) -> str:
-        return self._display_name
+class UserDto(BaseModel):
+    id: int
+    username: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    display_name: Optional[str] = None
 
 
-class CurrentChoreResponse(object):
-    def __init__(self, parsed_json):
-        self._chore_id = parse_int(parsed_json.get("chore_id"), None)
-        self._last_tracked_time = parse_date(parsed_json.get("last_tracked_time"))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get("next_estimated_execution_time")
-        )
-
-    @property
-    def chore_id(self) -> int:
-        return self._chore_id
-
-    @property
-    def last_tracked_time(self) -> datetime:
-        return self._last_tracked_time
-
-    @property
-    def next_estimated_execution_time(self) -> datetime:
-        return self._next_estimated_execution_time
+class CurrentChoreResponse(BaseModel):
+    chore_id: int
+    last_tracked_time: Optional[datetime]
+    next_estimated_execution_time: datetime
 
 
 class CurrentStockResponse(object):
@@ -459,49 +413,13 @@ class ProductDetailsResponse(object):
         return self._product
 
 
-class ChoreDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._chore = ChoreData(parsed_json.get("chore"))
-        self._last_tracked = parse_date(parsed_json.get("last_tracked"))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get("next_estimated_execution_time")
-        )
-        self._track_count = parse_int(parsed_json.get("track_count"))
-
-        next_user = parsed_json.get("next_execution_assigned_user")
-        if next_user is not None:
-            self._next_execution_assigned_user = UserDto(next_user)
-        else:
-            self._next_execution_assigned_user = None
-
-        if self._last_tracked is None:
-            self._last_done_by = None
-        else:
-            self._last_done_by = UserDto(parsed_json.get("last_done_by"))
-
-    @property
-    def chore(self) -> ChoreData:
-        return self._chore
-
-    @property
-    def last_done_by(self) -> UserDto:
-        return self._last_done_by
-
-    @property
-    def last_tracked(self) -> datetime:
-        return self._last_tracked
-
-    @property
-    def next_estimated_execution_time(self) -> datetime:
-        return self._next_estimated_execution_time
-
-    @property
-    def track_count(self) -> int:
-        return self._track_count
-
-    @property
-    def next_execution_assigned_user(self) -> UserDto:
-        return self._next_execution_assigned_user
+class ChoreDetailsResponse(BaseModel):
+    chore: ChoreData
+    last_tracked: Optional[datetime] = None
+    next_estimated_execution_time: datetime
+    track_count: int = 0
+    next_execution_assigned_user: Optional[UserDto] = None
+    last_done_by: Optional[UserDto] = None
 
 
 class TransactionType(Enum):
@@ -667,13 +585,13 @@ class GrocyApiClient(object):
 
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores")
-        return [CurrentChoreResponse(chore) for chore in parsed_json]
+        return [CurrentChoreResponse(**chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
         url = f"chores/{chore_id}"
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ChoreDetailsResponse(parsed_json)
+            return ChoreDetailsResponse(**parsed_json)
 
     def execute_chore(
         self,
