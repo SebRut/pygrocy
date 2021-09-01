@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict
+
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import TaskResponse
 

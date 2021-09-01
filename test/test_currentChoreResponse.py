@@ -11,4 +11,3 @@ class TestCurrentChoreResponse(TestCase):
         response = CurrentChoreResponse(json.loads(input_json))
 
         assert response.chore_id == 4
-    
