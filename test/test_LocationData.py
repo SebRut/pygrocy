@@ -18,4 +18,3 @@ class TestLocationData(TestCase):
         assert response.id == 1
         assert response.name == "string"
         assert response.description == "string"
-        

@@ -12,7 +12,7 @@ class TestCurrentStockResponse(TestCase):
         assert response.product_id == 0
         assert response.amount == 12.53
         assert response.amount_opened == 0
-        
+
         assert response.best_before_date.year == 2019
         assert response.best_before_date.month == 4
         assert response.best_before_date.day == 22
