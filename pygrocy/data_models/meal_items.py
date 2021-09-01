@@ -99,7 +99,7 @@ class MealPlanItem(DataModel):
         return self._id
 
     @property
-    def day(self) -> datetime:
+    def day(self) -> datetime.date:
         return self._day
 
     @property
