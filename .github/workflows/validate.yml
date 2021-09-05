@@ -19,6 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install --upgrade tox
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
       - name: Test with tox
         run: |
