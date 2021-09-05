@@ -25,7 +25,7 @@ jobs:
       - name: Test with tox
         run: |
           tox -e py
-      - name: Publish test results
-        env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
