@@ -31,18 +31,15 @@ import json
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import Dict, List, Optional
 from urllib.parse import urljoin
 
 import requests
+from pydantic import BaseModel, Field
+from pydantic.schema import date
 
-from pygrocy.utils import (
-    localize_datetime,
-    parse_bool_int,
-    parse_date,
-    parse_float,
-    parse_int,
-)
+from pygrocy import EntityType
+from pygrocy.utils import localize_datetime, parse_date
 
 from .errors import GrocyError
 
@@ -52,469 +49,148 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.INFO)
 
 
-class ShoppingListItem(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._product_id = parse_int(parsed_json.get(&#34;product_id&#34;, None))
-        self._note = parsed_json.get(&#34;note&#34;, None)
-        self._amount = parse_float(parsed_json.get(&#34;amount&#34;), 0)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;, None)
-        )
-        self._shopping_list_id = parse_int(parsed_json.get(&#34;shopping_list_id&#34;))
-        self._done = parse_int(parsed_json.get(&#34;done&#34;))
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def note(self) -&gt; str:
-        return self._note
-
-    @property
-    def amount(self) -&gt; float:
-        return self._amount
-
-
-class MealPlanResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._day = parse_date(parsed_json.get(&#34;day&#34;))
-        self._type = parsed_json.get(&#34;type&#34;)
-        self._recipe_id = parse_int(parsed_json.get(&#34;recipe_id&#34;))
-        self._recipe_servings = parse_int(parsed_json.get(&#34;recipe_servings&#34;))
-        self._note = parsed_json.get(&#34;note&#34;, None)
-        self._product_id = parsed_json.get(&#34;product_id&#34;)
-        self._product_amount = parse_float(parsed_json.get(&#34;product_amount&#34;), 0)
-        self._product_qu_id = parsed_json.get(&#34;product_qu_id&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-        self._userfields = parsed_json.get(&#34;userfields&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def day(self) -&gt; datetime:
-        return self._day
-
-    @property
-    def recipe_id(self) -&gt; int:
-        return self._recipe_id
-
-    @property
-    def recipe_servings(self) -&gt; int:
-        return self._recipe_servings
-
-    @property
-    def note(self) -&gt; str:
-        return self._note
-
-
-class RecipeDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._base_servings = parse_int(parsed_json.get(&#34;base_servings&#34;))
-        self._desired_servings = parse_int(parsed_json.get(&#34;desired_servings&#34;))
-        self._picture_file_name = parsed_json.get(&#34;picture_file_name&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-        self._userfields = parsed_json.get(&#34;userfields&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def description(self) -&gt; str:
-        return self._description
-
-    @property
-    def base_servings(self) -&gt; int:
-        return self._base_servings
-
-    @property
-    def desired_servings(self) -&gt; int:
-        return self._desired_servings
-
-    @property
-    def picture_file_name(self) -&gt; str:
-        return self._picture_file_name
-
-
-class QuantityUnitData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._name_plural = parsed_json.get(&#34;name_plural&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-
-
-class LocationData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def description(self) -&gt; str:
-        return self._description
-
-
-class ProductData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;, None)
-        self._location_id = parse_int(parsed_json.get(&#34;location_id&#34;, None))
-        self._product_group_id = parse_int(parsed_json.get(&#34;product_group_id&#34;, None))
-        self._qu_id_stock = parse_int(parsed_json.get(&#34;qu_id_stock&#34;, None))
-        self._qu_id_purchase = parse_int(parsed_json.get(&#34;qu_id_purchsase&#34;, None))
-        self._qu_factor_purchase_to_stock = parse_float(
-            parsed_json.get(&#34;qu_factor_purchase_to_stock&#34;, None)
-        )
-        self._picture_file_name = parsed_json.get(&#34;picture_file_name&#34;, None)
-        self._allow_partial_units_in_stock = bool(
-            parsed_json.get(&#34;allow_partial_units_in_stock&#34;, None) == &#34;true&#34;
-        )
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;, None)
-        )
-        self._min_stock_amount = parse_int(parsed_json.get(&#34;min_stock_amount&#34;, None), 0)
-        self._default_best_before_days = parse_int(
-            parsed_json.get(&#34;default_best_before_days&#34;, None)
-        )
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def product_group_id(self) -&gt; int:
-        return self._product_group_id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-
-class ChoreData(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.period_type = parsed_json.get(&#34;period_type&#34;)
-        self.period_config = parsed_json.get(&#34;period_config&#34;)
-        self.period_days = parse_int(parsed_json.get(&#34;period_days&#34;))
-        self.track_date_only = parse_bool_int(parsed_json.get(&#34;track_date_only&#34;))
-        self.rollover = parse_bool_int(parsed_json.get(&#34;rollover&#34;))
-        self.assignment_type = parsed_json.get(&#34;assignment_type&#34;)
-        self.assignment_config = parsed_json.get(&#34;assignment_config&#34;)
-        self.next_execution_assigned_to_user_id = parse_int(
-            parsed_json.get(&#34;next_execution_assigned_to_user_id&#34;)
-        )
-        self.userfields = parsed_json.get(&#34;userfields&#34;)
-
-
-class UserDto(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-
-        self._username = parsed_json.get(&#34;username&#34;)
-        self._first_name = parsed_json.get(&#34;first_name&#34;)
-        self._last_name = parsed_json.get(&#34;last_name&#34;)
-        self._display_name = parsed_json.get(&#34;display_name&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def username(self) -&gt; str:
-        return self._username
-
-    @property
-    def first_name(self) -&gt; str:
-        return self._first_name
-
-    @property
-    def last_name(self) -&gt; str:
-        return self._last_name
-
-    @property
-    def display_name(self) -&gt; str:
-        return self._display_name
-
-
-class CurrentChoreResponse(object):
-    def __init__(self, parsed_json):
-        self._chore_id = parse_int(parsed_json.get(&#34;chore_id&#34;), None)
-        self._last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get(&#34;next_estimated_execution_time&#34;)
-        )
-
-    @property
-    def chore_id(self) -&gt; int:
-        return self._chore_id
-
-    @property
-    def last_tracked_time(self) -&gt; datetime:
-        return self._last_tracked_time
-
-    @property
-    def next_estimated_execution_time(self) -&gt; datetime:
-        return self._next_estimated_execution_time
-
-
-class CurrentStockResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get(&#34;product_id&#34;))
-        self._amount = parse_float(parsed_json.get(&#34;amount&#34;))
-        self._best_before_date = parse_date(parsed_json.get(&#34;best_before_date&#34;))
-        self._amount_opened = parse_float(parsed_json.get(&#34;amount_opened&#34;))
-        self._product = ProductData(parsed_json.get(&#34;product&#34;))
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def amount(self) -&gt; float:
-        return self._amount
-
-    @property
-    def best_before_date(self) -&gt; datetime:
-        return self._best_before_date
-
-    @property
-    def amount_opened(self) -&gt; float:
-        return self._amount_opened
-
-    @property
-    def product(self) -&gt; ProductData:
-        return self._product
-
-
-class MissingProductResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._amount_missing = parse_float(parsed_json.get(&#34;amount_missing&#34;))
-        self._is_partly_in_stock = bool(
-            parse_int(parsed_json.get(&#34;is_partly_in_stock&#34;))
-        )
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def amount_missing(self) -&gt; float:
-        return self._amount_missing
-
-    @property
-    def is_partly_in_stock(self) -&gt; bool:
-        return self._is_partly_in_stock
-
-
-class CurrentVolatilStockResponse(object):
-    def __init__(self, parsed_json):
-        self._due_products = []
-        if &#34;due_products&#34; in parsed_json:
-            self._due_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;due_products&#34;)
-            ]
-
-        self._overdue_products = []
-        if &#34;overdue_products&#34; in parsed_json:
-            self._overdue_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;overdue_products&#34;)
-            ]
-
-        self._expired_products = []
-        if &#34;expired_products&#34; in parsed_json:
-            self._expired_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;expired_products&#34;)
-            ]
-
-        self._missing_products = []
-        if &#34;missing_products&#34; in parsed_json:
-            self._missing_products = [
-                MissingProductResponse(product)
-                for product in parsed_json.get(&#34;missing_products&#34;)
-            ]
-
-    @property
-    def due_products(self) -&gt; List[CurrentStockResponse]:
-        return self._due_products
-
-    @property
-    def overdue_products(self) -&gt; List[CurrentStockResponse]:
-        return self._overdue_products
-
-    @property
-    def expired_products(self) -&gt; List[CurrentStockResponse]:
-        return self._expired_products
-
-    @property
-    def missing_products(self) -&gt; List[MissingProductResponse]:
-        return self._missing_products
-
-
-class ProductBarcodeData(object):
-    def __init__(self, parsed_json):
-        self._barcode = str(parsed_json.get(&#34;barcode&#34;))
-
-    @property
-    def barcode(self) -&gt; str:
-        return self._barcode
-
-
-class ProductDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._last_purchased = parse_date(parsed_json.get(&#34;last_purchased&#34;))
-        self._last_used = parse_date(parsed_json.get(&#34;last_used&#34;))
-        self._stock_amount = parse_int(parsed_json.get(&#34;stock_amount&#34;))
-        self._stock_amount_opened = parse_int(parsed_json.get(&#34;stock_amount_opened&#34;))
-        self._next_best_before_date = parse_date(
-            parsed_json.get(&#34;next_best_before_date&#34;)
-        )
-        self._last_price = parse_float(parsed_json.get(&#34;last_price&#34;))
-
-        self._product = ProductData(parsed_json.get(&#34;product&#34;))
-
-        self._quantity_unit_stock = QuantityUnitData(
-            parsed_json.get(&#34;quantity_unit_stock&#34;)
-        )
-
-        self._parse_location(parsed_json)
-
-        self._parse_barcodes(parsed_json)
-
-    def _parse_barcodes(self, parsed_json):
-        barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
-        if barcodes_raw is not None:
-            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
-
-    def _parse_location(self, parsed_json):
-        raw_location = parsed_json.get(&#34;location&#34;)
-        if raw_location is None:
-            self._location = None
-        else:
-            self._location = LocationData(raw_location)
-
-    @property
-    def last_purchased(self) -&gt; datetime:
-        return self._last_purchased
-
-    @property
-    def last_used(self) -&gt; datetime:
-        return self._last_used
-
-    @property
-    def stock_amount(self) -&gt; int:
-        return self._stock_amount
-
-    @property
-    def stock_amount_opened(self) -&gt; int:
-        return self._stock_amount_opened
-
-    @property
-    def next_best_before_date(self) -&gt; datetime:
-        return self._next_best_before_date
-
-    @property
-    def last_price(self) -&gt; float:
-        return self._last_price
-
-    @property
-    def barcodes(self) -&gt; List[ProductBarcodeData]:
-        return self._barcodes
-
-    @property
-    def product(self) -&gt; ProductData:
-        return self._product
-
-
-class ChoreDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._chore = ChoreData(parsed_json.get(&#34;chore&#34;))
-        self._last_tracked = parse_date(parsed_json.get(&#34;last_tracked&#34;))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get(&#34;next_estimated_execution_time&#34;)
-        )
-        self._track_count = parse_int(parsed_json.get(&#34;track_count&#34;))
-
-        next_user = parsed_json.get(&#34;next_execution_assigned_user&#34;)
-        if next_user is not None:
-            self._next_execution_assigned_user = UserDto(next_user)
-        else:
-            self._next_execution_assigned_user = None
-
-        if self._last_tracked is None:
-            self._last_done_by = None
-        else:
-            self._last_done_by = UserDto(parsed_json.get(&#34;last_done_by&#34;))
-
-    @property
-    def chore(self) -&gt; ChoreData:
-        return self._chore
-
-    @property
-    def last_done_by(self) -&gt; UserDto:
-        return self._last_done_by
-
-    @property
-    def last_tracked(self) -&gt; datetime:
-        return self._last_tracked
-
-    @property
-    def next_estimated_execution_time(self) -&gt; datetime:
-        return self._next_estimated_execution_time
-
-    @property
-    def track_count(self) -&gt; int:
-        return self._track_count
-
-    @property
-    def next_execution_assigned_user(self) -&gt; UserDto:
-        return self._next_execution_assigned_user
+class ShoppingListItem(BaseModel):
+    id: int
+    product_id: Optional[int] = None
+    note: Optional[str] = None
+    amount: float
+    row_created_timestamp: datetime
+    shopping_list_id: int
+    done: int
+
+
+class MealPlanResponse(BaseModel):
+    id: int
+    day: date
+    type: str
+    recipe_id: Optional[int] = None
+    recipe_servings: Optional[int] = None
+    note: Optional[str] = None
+    product_id: Optional[int] = None
+    product_amount: Optional[float] = None
+    product_qu_id: Optional[str] = None
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None
+    section_id: Optional[int] = None
+
+
+class RecipeDetailsResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    description: Optional[str] = None
+    base_servings: int
+    desired_servings: int
+    picture_file_name: Optional[str]
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None
+
+
+class QuantityUnitData(BaseModel):
+    id: int
+    name: str
+    name_plural: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
+
+
+class LocationData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
+
+
+class ProductData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    location_id: int
+    product_group_id: Optional[int] = None
+    qu_id_stock: int
+    qu_id_purchase: int
+    qu_factor_purchase_to_stock: float
+    picture_file_name: Optional[str] = None
+    allow_partial_units_in_stock: Optional[bool] = False
+    row_created_timestamp: datetime
+    min_stock_amount: Optional[int]
+    default_best_before_days: int
+
+
+class ChoreData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    period_type: str
+    period_config: Optional[str] = None
+    period_days: Optional[int] = 0
+    track_date_only: bool
+    rollover: bool
+    assignment_type: Optional[str] = None
+    assignment_config: Optional[str] = None
+    next_execution_assigned_to_user_id: Optional[int] = None
+    userfields: Optional[Dict]
+
+
+class UserDto(BaseModel):
+    id: int
+    username: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    display_name: Optional[str] = None
+
+
+class CurrentChoreResponse(BaseModel):
+    chore_id: int
+    last_tracked_time: Optional[datetime]
+    next_estimated_execution_time: datetime
+
+
+class CurrentStockResponse(BaseModel):
+    product_id: int
+    amount: float
+    best_before_date: date
+    amount_opened: float
+    product: ProductData
+
+
+class MissingProductResponse(BaseModel):
+    id: int
+    name: str
+    amount_missing: float
+    is_partly_in_stock: bool
+
+
+class CurrentVolatilStockResponse(BaseModel):
+    due_products: Optional[List[CurrentStockResponse]] = None
+    overdue_products: Optional[List[CurrentStockResponse]] = None
+    expired_products: Optional[List[CurrentStockResponse]] = None
+    missing_products: Optional[List[MissingProductResponse]] = None
+
+
+class ProductBarcodeData(BaseModel):
+    barcode: str
+
+
+class ProductDetailsResponse(BaseModel):
+    last_purchased: Optional[date] = None
+    last_used: Optional[datetime] = None
+    stock_amount: int
+    stock_amount_opened: int
+    next_best_before_date: Optional[date] = None
+    last_price: Optional[float] = None
+    product: ProductData
+    quantity_unit_stock: QuantityUnitData
+    barcodes: Optional[List[ProductBarcodeData]] = Field(alias=&#34;product_barcodes&#34;)
+    location: Optional[LocationData] = None
+
+
+class ChoreDetailsResponse(BaseModel):
+    chore: ChoreData
+    last_tracked: Optional[datetime] = None
+    next_estimated_execution_time: datetime
+    track_count: int = 0
+    next_execution_assigned_user: Optional[UserDto] = None
+    last_done_by: Optional[UserDto] = None
 
 
 class TransactionType(Enum):
@@ -524,47 +200,55 @@ class TransactionType(Enum):
     PRODUCT_OPENED = &#34;product-opened&#34;
 
 
-class TaskResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.due_date = parse_date(parsed_json.get(&#34;due_date&#34;))
-        self.done = parse_int(parsed_json.get(&#34;done&#34;))
-        self.done_timestamp = parse_date(parsed_json.get(&#34;done_timestamp&#34;))
-        self.category_id = parse_int(parsed_json.get(&#34;category_id&#34;))
-        self.assigned_to_user_id = parse_int(parsed_json.get(&#34;assigned_to_user_id&#34;))
-        self.userfields = parsed_json.get(&#34;userfields&#34;)
+class TaskCategoryDto(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
 
 
-class CurrentBatteryResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;battery_id&#34;))
-        self.last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
-        self.next_estimated_charge_time = parse_date(
-            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
-        )
+class TaskResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    due_date: date
+    done: int
+    done_timestamp: Optional[datetime] = None
+    category_id: Optional[int] = None
+    category: Optional[TaskCategoryDto] = None
+    assigned_to_user_id: Optional[int] = None
+    assigned_to_user: Optional[UserDto] = None
+    userfields: Optional[Dict] = None
 
 
-class BatteryData(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.used_in = parsed_json.get(&#34;used_in&#34;)
-        self.charge_interval_days = parse_int(parsed_json.get(&#34;charge_interval_days&#34;))
-        self.created_timestamp = parse_date(parsed_json.get(&#34;row_created_timestamp&#34;))
-        self.userfields = parsed_json.get(&#34;userfields&#34;)
+class CurrentBatteryResponse(BaseModel):
+    id: int
+    last_tracked_time: Optional[datetime] = None
+    next_estimated_charge_time: datetime
 
 
-class BatteryDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self.battery = BatteryData(parsed_json.get(&#34;battery&#34;))
-        self.charge_cycles_count = parse_int(parsed_json.get(&#34;charge_cycles_count&#34;))
-        self.last_charged = parse_date(parsed_json.get(&#34;last_charged&#34;))
-        self.next_estimated_charge_time = parse_date(
-            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
-        )
+class BatteryData(BaseModel):
+    id: int
+    name: str
+    description: str
+    used_in: str
+    charge_interval_days: int
+    created_timestamp: datetime = Field(alias=&#34;row_created_timestamp&#34;)
+    userfields: Optional[Dict] = None
+
+
+class BatteryDetailsResponse(BaseModel):
+    battery: BatteryData
+    charge_cycles_count: int
+    last_charged: Optional[datetime] = None
+    next_estimated_charge_time: datetime
+
+
+class MealPlanSectionResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    sort_number: Optional[int] = None
+    row_created_timestamp: datetime
 
 
 def _enable_debug_mode():
@@ -663,27 +347,27 @@ class GrocyApiClient(object):
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         parsed_json = self._do_get_request(&#34;stock&#34;)
-        return [CurrentStockResponse(response) for response in parsed_json]
+        return [CurrentStockResponse(**response) for response in parsed_json]
 
     def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         parsed_json = self._do_get_request(&#34;stock/volatile&#34;)
-        return CurrentVolatilStockResponse(parsed_json)
+        return CurrentVolatilStockResponse(**parsed_json)
 
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         url = f&#34;stock/products/{product_id}&#34;
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ProductDetailsResponse(parsed_json)
+            return ProductDetailsResponse(**parsed_json)
 
     def get_chores(self) -&gt; List[CurrentChoreResponse]:
         parsed_json = self._do_get_request(&#34;chores&#34;)
-        return [CurrentChoreResponse(chore) for chore in parsed_json]
+        return [CurrentChoreResponse(**chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
         url = f&#34;chores/{chore_id}&#34;
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ChoreDetailsResponse(parsed_json)
+            return ChoreDetailsResponse(**parsed_json)
 
     def execute_chore(
         self,
@@ -736,7 +420,7 @@ class GrocyApiClient(object):
 
     def get_shopping_list(self) -&gt; List[ShoppingListItem]:
         parsed_json = self._do_get_request(&#34;objects/shopping_list&#34;)
-        return [ShoppingListItem(response) for response in parsed_json]
+        return [ShoppingListItem(**response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
         data = None
@@ -772,7 +456,7 @@ class GrocyApiClient(object):
 
     def get_product_groups(self) -&gt; List[LocationData]:
         parsed_json = self._do_get_request(&#34;objects/product_groups&#34;)
-        return [LocationData(response) for response in parsed_json]
+        return [LocationData(**response) for response in parsed_json]
 
     def upload_product_picture(self, product_id: int, pic_path: str):
         b64fn = base64.b64encode(&#34;{}.jpg&#34;.format(product_id).encode(&#34;ascii&#34;))
@@ -800,7 +484,7 @@ class GrocyApiClient(object):
 
     def get_tasks(self) -&gt; List[TaskResponse]:
         parsed_json = self._do_get_request(&#34;tasks&#34;)
-        return [TaskResponse(data) for data in parsed_json]
+        return [TaskResponse(**data) for data in parsed_json]
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
@@ -812,22 +496,22 @@ class GrocyApiClient(object):
 
     def get_meal_plan(self) -&gt; List[MealPlanResponse]:
         parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
-        return [MealPlanResponse(data) for data in parsed_json]
+        return [MealPlanResponse(**data) for data in parsed_json]
 
     def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
         parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
         if parsed_json:
-            return RecipeDetailsResponse(parsed_json)
+            return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
         parsed_json = self._do_get_request(f&#34;batteries&#34;)
         if parsed_json:
-            return [CurrentBatteryResponse(data) for data in parsed_json]
+            return [CurrentBatteryResponse(**data) for data in parsed_json]
 
     def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
         parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
         if parsed_json:
-            return BatteryDetailsResponse(parsed_json)
+            return BatteryDetailsResponse(**parsed_json)
 
     def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
         localized_tracked_time = localize_datetime(tracked_time)
@@ -845,7 +529,32 @@ class GrocyApiClient(object):
         return self._do_delete_request(f&#34;objects/{entity_type}/{object_id}&#34;)
 
     def get_generic_objects_for_type(self, entity_type: str):
-        return self._do_get_request(f&#34;objects/{entity_type}&#34;)</code></pre>
+        return self._do_get_request(f&#34;objects/{entity_type}&#34;)
+
+    def get_meal_plan_sections(self) -&gt; List[MealPlanSectionResponse]:
+        parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
+        if parsed_json:
+            return [MealPlanSectionResponse(**resp) for resp in parsed_json]
+
+    def get_meal_plan_section(self, meal_plan_section_id) -&gt; MealPlanSectionResponse:
+        parsed_json = self._do_get_request(
+            f&#34;objects/meal_plan_sections?query%5B%5D=id%3D{meal_plan_section_id}&#34;
+        )
+        if parsed_json and len(parsed_json) == 1:
+            return MealPlanSectionResponse(**parsed_json[0])
+
+    def get_users(self) -&gt; List[UserDto]:
+        parsed_json = self._do_get_request(&#34;users&#34;)
+        if parsed_json:
+            return [UserDto(**user) for user in parsed_json]
+
+    def get_user(self, user_id: int) -&gt; UserDto:
+        query_params = []
+        if user_id:
+            query_params.append(f&#34;id={user_id}&#34;)
+        parsed_json = self._do_get_request(&#34;users&#34;)
+        if parsed_json:
+            return UserDto(**parsed_json[0])</code></pre>
 </details>
 </section>
 <section>
@@ -859,499 +568,397 @@ class GrocyApiClient(object):
 <dl>
 <dt id="pygrocy.grocy_api_client.BatteryData"><code class="flex name class">
 <span>class <span class="ident">BatteryData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class BatteryData(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.used_in = parsed_json.get(&#34;used_in&#34;)
-        self.charge_interval_days = parse_int(parsed_json.get(&#34;charge_interval_days&#34;))
-        self.created_timestamp = parse_date(parsed_json.get(&#34;row_created_timestamp&#34;))
-        self.userfields = parsed_json.get(&#34;userfields&#34;)</code></pre>
+<pre><code class="python">class BatteryData(BaseModel):
+    id: int
+    name: str
+    description: str
+    used_in: str
+    charge_interval_days: int
+    created_timestamp: datetime = Field(alias=&#34;row_created_timestamp&#34;)
+    userfields: Optional[Dict] = None</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.BatteryData.charge_interval_days"><code class="name">var <span class="ident">charge_interval_days</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.created_timestamp"><code class="name">var <span class="ident">created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.used_in"><code class="name">var <span class="ident">used_in</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryData.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.BatteryDetailsResponse"><code class="flex name class">
 <span>class <span class="ident">BatteryDetailsResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class BatteryDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self.battery = BatteryData(parsed_json.get(&#34;battery&#34;))
-        self.charge_cycles_count = parse_int(parsed_json.get(&#34;charge_cycles_count&#34;))
-        self.last_charged = parse_date(parsed_json.get(&#34;last_charged&#34;))
-        self.next_estimated_charge_time = parse_date(
-            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
-        )</code></pre>
+<pre><code class="python">class BatteryDetailsResponse(BaseModel):
+    battery: BatteryData
+    charge_cycles_count: int
+    last_charged: Optional[datetime] = None
+    next_estimated_charge_time: datetime</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.battery"><code class="name">var <span class="ident">battery</span> : <a title="pygrocy.grocy_api_client.BatteryData" href="#pygrocy.grocy_api_client.BatteryData">BatteryData</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.charge_cycles_count"><code class="name">var <span class="ident">charge_cycles_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.last_charged"><code class="name">var <span class="ident">last_charged</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ChoreData"><code class="flex name class">
 <span>class <span class="ident">ChoreData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ChoreData(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.period_type = parsed_json.get(&#34;period_type&#34;)
-        self.period_config = parsed_json.get(&#34;period_config&#34;)
-        self.period_days = parse_int(parsed_json.get(&#34;period_days&#34;))
-        self.track_date_only = parse_bool_int(parsed_json.get(&#34;track_date_only&#34;))
-        self.rollover = parse_bool_int(parsed_json.get(&#34;rollover&#34;))
-        self.assignment_type = parsed_json.get(&#34;assignment_type&#34;)
-        self.assignment_config = parsed_json.get(&#34;assignment_config&#34;)
-        self.next_execution_assigned_to_user_id = parse_int(
-            parsed_json.get(&#34;next_execution_assigned_to_user_id&#34;)
-        )
-        self.userfields = parsed_json.get(&#34;userfields&#34;)</code></pre>
+<pre><code class="python">class ChoreData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    period_type: str
+    period_config: Optional[str] = None
+    period_days: Optional[int] = 0
+    track_date_only: bool
+    rollover: bool
+    assignment_type: Optional[str] = None
+    assignment_config: Optional[str] = None
+    next_execution_assigned_to_user_id: Optional[int] = None
+    userfields: Optional[Dict]</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreData.assignment_config"><code class="name">var <span class="ident">assignment_config</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.assignment_type"><code class="name">var <span class="ident">assignment_type</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id"><code class="name">var <span class="ident">next_execution_assigned_to_user_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.period_config"><code class="name">var <span class="ident">period_config</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.period_days"><code class="name">var <span class="ident">period_days</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.period_type"><code class="name">var <span class="ident">period_type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.rollover"><code class="name">var <span class="ident">rollover</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.track_date_only"><code class="name">var <span class="ident">track_date_only</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ChoreData.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ChoreDetailsResponse"><code class="flex name class">
 <span>class <span class="ident">ChoreDetailsResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ChoreDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._chore = ChoreData(parsed_json.get(&#34;chore&#34;))
-        self._last_tracked = parse_date(parsed_json.get(&#34;last_tracked&#34;))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get(&#34;next_estimated_execution_time&#34;)
-        )
-        self._track_count = parse_int(parsed_json.get(&#34;track_count&#34;))
-
-        next_user = parsed_json.get(&#34;next_execution_assigned_user&#34;)
-        if next_user is not None:
-            self._next_execution_assigned_user = UserDto(next_user)
-        else:
-            self._next_execution_assigned_user = None
-
-        if self._last_tracked is None:
-            self._last_done_by = None
-        else:
-            self._last_done_by = UserDto(parsed_json.get(&#34;last_done_by&#34;))
-
-    @property
-    def chore(self) -&gt; ChoreData:
-        return self._chore
-
-    @property
-    def last_done_by(self) -&gt; UserDto:
-        return self._last_done_by
-
-    @property
-    def last_tracked(self) -&gt; datetime:
-        return self._last_tracked
-
-    @property
-    def next_estimated_execution_time(self) -&gt; datetime:
-        return self._next_estimated_execution_time
-
-    @property
-    def track_count(self) -&gt; int:
-        return self._track_count
-
-    @property
-    def next_execution_assigned_user(self) -&gt; UserDto:
-        return self._next_execution_assigned_user</code></pre>
+<pre><code class="python">class ChoreDetailsResponse(BaseModel):
+    chore: ChoreData
+    last_tracked: Optional[datetime] = None
+    next_estimated_execution_time: datetime
+    track_count: int = 0
+    next_execution_assigned_user: Optional[UserDto] = None
+    last_done_by: Optional[UserDto] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.chore"><code class="name">var <span class="ident">chore</span> : <a title="pygrocy.grocy_api_client.ChoreData" href="#pygrocy.grocy_api_client.ChoreData">ChoreData</a></code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def chore(self) -&gt; ChoreData:
-    return self._chore</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by"><code class="name">var <span class="ident">last_done_by</span> : <a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a></code></dt>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_done_by"><code class="name">var <span class="ident">last_done_by</span> : Union[<a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a>, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_done_by(self) -&gt; UserDto:
-    return self._last_done_by</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_tracked"><code class="name">var <span class="ident">last_tracked</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.last_tracked"><code class="name">var <span class="ident">last_tracked</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_tracked(self) -&gt; datetime:
-    return self._last_tracked</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : datetime.datetime</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def next_estimated_execution_time(self) -&gt; datetime:
-    return self._next_estimated_execution_time</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.next_execution_assigned_user"><code class="name">var <span class="ident">next_execution_assigned_user</span> : <a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a></code></dt>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.next_execution_assigned_user"><code class="name">var <span class="ident">next_execution_assigned_user</span> : Union[<a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a>, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def next_execution_assigned_user(self) -&gt; UserDto:
-    return self._next_execution_assigned_user</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.track_count"><code class="name">var <span class="ident">track_count</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def track_count(self) -&gt; int:
-    return self._track_count</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentBatteryResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentBatteryResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CurrentBatteryResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;battery_id&#34;))
-        self.last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
-        self.next_estimated_charge_time = parse_date(
-            parsed_json.get(&#34;&#39;next_estimated_charge_time&#34;)
-        )</code></pre>
+<pre><code class="python">class CurrentBatteryResponse(BaseModel):
+    id: int
+    last_tracked_time: Optional[datetime] = None
+    next_estimated_charge_time: datetime</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse.last_tracked_time"><code class="name">var <span class="ident">last_tracked_time</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentChoreResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentChoreResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CurrentChoreResponse(object):
-    def __init__(self, parsed_json):
-        self._chore_id = parse_int(parsed_json.get(&#34;chore_id&#34;), None)
-        self._last_tracked_time = parse_date(parsed_json.get(&#34;last_tracked_time&#34;))
-        self._next_estimated_execution_time = parse_date(
-            parsed_json.get(&#34;next_estimated_execution_time&#34;)
-        )
-
-    @property
-    def chore_id(self) -&gt; int:
-        return self._chore_id
-
-    @property
-    def last_tracked_time(self) -&gt; datetime:
-        return self._last_tracked_time
-
-    @property
-    def next_estimated_execution_time(self) -&gt; datetime:
-        return self._next_estimated_execution_time</code></pre>
+<pre><code class="python">class CurrentChoreResponse(BaseModel):
+    chore_id: int
+    last_tracked_time: Optional[datetime]
+    next_estimated_execution_time: datetime</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.CurrentChoreResponse.chore_id"><code class="name">var <span class="ident">chore_id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def chore_id(self) -&gt; int:
-    return self._chore_id</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.last_tracked_time"><code class="name">var <span class="ident">last_tracked_time</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.last_tracked_time"><code class="name">var <span class="ident">last_tracked_time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_tracked_time(self) -&gt; datetime:
-    return self._last_tracked_time</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : datetime.datetime</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def next_estimated_execution_time(self) -&gt; datetime:
-    return self._next_estimated_execution_time</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentStockResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CurrentStockResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get(&#34;product_id&#34;))
-        self._amount = parse_float(parsed_json.get(&#34;amount&#34;))
-        self._best_before_date = parse_date(parsed_json.get(&#34;best_before_date&#34;))
-        self._amount_opened = parse_float(parsed_json.get(&#34;amount_opened&#34;))
-        self._product = ProductData(parsed_json.get(&#34;product&#34;))
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def amount(self) -&gt; float:
-        return self._amount
-
-    @property
-    def best_before_date(self) -&gt; datetime:
-        return self._best_before_date
-
-    @property
-    def amount_opened(self) -&gt; float:
-        return self._amount_opened
-
-    @property
-    def product(self) -&gt; ProductData:
-        return self._product</code></pre>
+<pre><code class="python">class CurrentStockResponse(BaseModel):
+    product_id: int
+    amount: float
+    best_before_date: date
+    amount_opened: float
+    product: ProductData</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse.amount"><code class="name">var <span class="ident">amount</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def amount(self) -&gt; float:
-    return self._amount</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse.amount_opened"><code class="name">var <span class="ident">amount_opened</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def amount_opened(self) -&gt; float:
-    return self._amount_opened</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentStockResponse.best_before_date"><code class="name">var <span class="ident">best_before_date</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentStockResponse.best_before_date"><code class="name">var <span class="ident">best_before_date</span> : datetime.date</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def best_before_date(self) -&gt; datetime:
-    return self._best_before_date</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse.product"><code class="name">var <span class="ident">product</span> : <a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def product(self) -&gt; ProductData:
-    return self._product</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentStockResponse.product_id"><code class="name">var <span class="ident">product_id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def product_id(self) -&gt; int:
-    return self._product_id</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse"><code class="flex name class">
 <span>class <span class="ident">CurrentVolatilStockResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CurrentVolatilStockResponse(object):
-    def __init__(self, parsed_json):
-        self._due_products = []
-        if &#34;due_products&#34; in parsed_json:
-            self._due_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;due_products&#34;)
-            ]
-
-        self._overdue_products = []
-        if &#34;overdue_products&#34; in parsed_json:
-            self._overdue_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;overdue_products&#34;)
-            ]
-
-        self._expired_products = []
-        if &#34;expired_products&#34; in parsed_json:
-            self._expired_products = [
-                CurrentStockResponse(product)
-                for product in parsed_json.get(&#34;expired_products&#34;)
-            ]
-
-        self._missing_products = []
-        if &#34;missing_products&#34; in parsed_json:
-            self._missing_products = [
-                MissingProductResponse(product)
-                for product in parsed_json.get(&#34;missing_products&#34;)
-            ]
-
-    @property
-    def due_products(self) -&gt; List[CurrentStockResponse]:
-        return self._due_products
-
-    @property
-    def overdue_products(self) -&gt; List[CurrentStockResponse]:
-        return self._overdue_products
-
-    @property
-    def expired_products(self) -&gt; List[CurrentStockResponse]:
-        return self._expired_products
-
-    @property
-    def missing_products(self) -&gt; List[MissingProductResponse]:
-        return self._missing_products</code></pre>
+<pre><code class="python">class CurrentVolatilStockResponse(BaseModel):
+    due_products: Optional[List[CurrentStockResponse]] = None
+    overdue_products: Optional[List[CurrentStockResponse]] = None
+    expired_products: Optional[List[CurrentStockResponse]] = None
+    missing_products: Optional[List[MissingProductResponse]] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.due_products"><code class="name">var <span class="ident">due_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.due_products"><code class="name">var <span class="ident">due_products</span> : Union[List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>], NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def due_products(self) -&gt; List[CurrentStockResponse]:
-    return self._due_products</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expired_products"><code class="name">var <span class="ident">expired_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.expired_products"><code class="name">var <span class="ident">expired_products</span> : Union[List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>], NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def expired_products(self) -&gt; List[CurrentStockResponse]:
-    return self._expired_products</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.missing_products"><code class="name">var <span class="ident">missing_products</span> : List[<a title="pygrocy.grocy_api_client.MissingProductResponse" href="#pygrocy.grocy_api_client.MissingProductResponse">MissingProductResponse</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.missing_products"><code class="name">var <span class="ident">missing_products</span> : Union[List[<a title="pygrocy.grocy_api_client.MissingProductResponse" href="#pygrocy.grocy_api_client.MissingProductResponse">MissingProductResponse</a>], NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def missing_products(self) -&gt; List[MissingProductResponse]:
-    return self._missing_products</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.overdue_products"><code class="name">var <span class="ident">overdue_products</span> : List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentVolatilStockResponse.overdue_products"><code class="name">var <span class="ident">overdue_products</span> : Union[List[<a title="pygrocy.grocy_api_client.CurrentStockResponse" href="#pygrocy.grocy_api_client.CurrentStockResponse">CurrentStockResponse</a>], NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def overdue_products(self) -&gt; List[CurrentStockResponse]:
-    return self._overdue_products</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
@@ -1457,27 +1064,27 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 
     def get_stock(self) -&gt; List[CurrentStockResponse]:
         parsed_json = self._do_get_request(&#34;stock&#34;)
-        return [CurrentStockResponse(response) for response in parsed_json]
+        return [CurrentStockResponse(**response) for response in parsed_json]
 
     def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
         parsed_json = self._do_get_request(&#34;stock/volatile&#34;)
-        return CurrentVolatilStockResponse(parsed_json)
+        return CurrentVolatilStockResponse(**parsed_json)
 
     def get_product(self, product_id) -&gt; ProductDetailsResponse:
         url = f&#34;stock/products/{product_id}&#34;
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ProductDetailsResponse(parsed_json)
+            return ProductDetailsResponse(**parsed_json)
 
     def get_chores(self) -&gt; List[CurrentChoreResponse]:
         parsed_json = self._do_get_request(&#34;chores&#34;)
-        return [CurrentChoreResponse(chore) for chore in parsed_json]
+        return [CurrentChoreResponse(**chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -&gt; ChoreDetailsResponse:
         url = f&#34;chores/{chore_id}&#34;
         parsed_json = self._do_get_request(url)
         if parsed_json:
-            return ChoreDetailsResponse(parsed_json)
+            return ChoreDetailsResponse(**parsed_json)
 
     def execute_chore(
         self,
@@ -1530,7 +1137,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 
     def get_shopping_list(self) -&gt; List[ShoppingListItem]:
         parsed_json = self._do_get_request(&#34;objects/shopping_list&#34;)
-        return [ShoppingListItem(response) for response in parsed_json]
+        return [ShoppingListItem(**response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
         data = None
@@ -1566,7 +1173,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 
     def get_product_groups(self) -&gt; List[LocationData]:
         parsed_json = self._do_get_request(&#34;objects/product_groups&#34;)
-        return [LocationData(response) for response in parsed_json]
+        return [LocationData(**response) for response in parsed_json]
 
     def upload_product_picture(self, product_id: int, pic_path: str):
         b64fn = base64.b64encode(&#34;{}.jpg&#34;.format(product_id).encode(&#34;ascii&#34;))
@@ -1594,7 +1201,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 
     def get_tasks(self) -&gt; List[TaskResponse]:
         parsed_json = self._do_get_request(&#34;tasks&#34;)
-        return [TaskResponse(data) for data in parsed_json]
+        return [TaskResponse(**data) for data in parsed_json]
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
@@ -1606,22 +1213,22 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 
     def get_meal_plan(self) -&gt; List[MealPlanResponse]:
         parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
-        return [MealPlanResponse(data) for data in parsed_json]
+        return [MealPlanResponse(**data) for data in parsed_json]
 
     def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
         parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
         if parsed_json:
-            return RecipeDetailsResponse(parsed_json)
+            return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
         parsed_json = self._do_get_request(f&#34;batteries&#34;)
         if parsed_json:
-            return [CurrentBatteryResponse(data) for data in parsed_json]
+            return [CurrentBatteryResponse(**data) for data in parsed_json]
 
     def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
         parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
         if parsed_json:
-            return BatteryDetailsResponse(parsed_json)
+            return BatteryDetailsResponse(**parsed_json)
 
     def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
         localized_tracked_time = localize_datetime(tracked_time)
@@ -1639,7 +1246,32 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
         return self._do_delete_request(f&#34;objects/{entity_type}/{object_id}&#34;)
 
     def get_generic_objects_for_type(self, entity_type: str):
-        return self._do_get_request(f&#34;objects/{entity_type}&#34;)</code></pre>
+        return self._do_get_request(f&#34;objects/{entity_type}&#34;)
+
+    def get_meal_plan_sections(self) -&gt; List[MealPlanSectionResponse]:
+        parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
+        if parsed_json:
+            return [MealPlanSectionResponse(**resp) for resp in parsed_json]
+
+    def get_meal_plan_section(self, meal_plan_section_id) -&gt; MealPlanSectionResponse:
+        parsed_json = self._do_get_request(
+            f&#34;objects/meal_plan_sections?query%5B%5D=id%3D{meal_plan_section_id}&#34;
+        )
+        if parsed_json and len(parsed_json) == 1:
+            return MealPlanSectionResponse(**parsed_json[0])
+
+    def get_users(self) -&gt; List[UserDto]:
+        parsed_json = self._do_get_request(&#34;users&#34;)
+        if parsed_json:
+            return [UserDto(**user) for user in parsed_json]
+
+    def get_user(self, user_id: int) -&gt; UserDto:
+        query_params = []
+        if user_id:
+            query_params.append(f&#34;id={user_id}&#34;)
+        parsed_json = self._do_get_request(&#34;users&#34;)
+        if parsed_json:
+            return UserDto(**parsed_json[0])</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1723,7 +1355,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707303))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 678965))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1754,7 +1386,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707283))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 678943))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1810,7 +1442,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 8, 23, 9, 21, 39, 707232))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 678894))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1846,7 +1478,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 <pre><code class="python">def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
     parsed_json = self._do_get_request(f&#34;batteries&#34;)
     if parsed_json:
-        return [CurrentBatteryResponse(data) for data in parsed_json]</code></pre>
+        return [CurrentBatteryResponse(**data) for data in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_battery"><code class="name flex">
@@ -1861,7 +1493,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 <pre><code class="python">def get_battery(self, battery_id: int) -&gt; BatteryDetailsResponse:
     parsed_json = self._do_get_request(f&#34;batteries/{battery_id}&#34;)
     if parsed_json:
-        return BatteryDetailsResponse(parsed_json)</code></pre>
+        return BatteryDetailsResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chore"><code class="name flex">
@@ -1877,7 +1509,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     url = f&#34;chores/{chore_id}&#34;
     parsed_json = self._do_get_request(url)
     if parsed_json:
-        return ChoreDetailsResponse(parsed_json)</code></pre>
+        return ChoreDetailsResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_chores"><code class="name flex">
@@ -1891,7 +1523,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_chores(self) -&gt; List[CurrentChoreResponse]:
     parsed_json = self._do_get_request(&#34;chores&#34;)
-    return [CurrentChoreResponse(chore) for chore in parsed_json]</code></pre>
+    return [CurrentChoreResponse(**chore) for chore in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_generic_objects_for_type"><code class="name flex">
@@ -1933,7 +1565,39 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_meal_plan(self) -&gt; List[MealPlanResponse]:
     parsed_json = self._do_get_request(&#34;objects/meal_plan&#34;)
-    return [MealPlanResponse(data) for data in parsed_json]</code></pre>
+    return [MealPlanResponse(**data) for data in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_section"><code class="name flex">
+<span>def <span class="ident">get_meal_plan_section</span></span>(<span>self, meal_plan_section_id) ‑> <a title="pygrocy.grocy_api_client.MealPlanSectionResponse" href="#pygrocy.grocy_api_client.MealPlanSectionResponse">MealPlanSectionResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_meal_plan_section(self, meal_plan_section_id) -&gt; MealPlanSectionResponse:
+    parsed_json = self._do_get_request(
+        f&#34;objects/meal_plan_sections?query%5B%5D=id%3D{meal_plan_section_id}&#34;
+    )
+    if parsed_json and len(parsed_json) == 1:
+        return MealPlanSectionResponse(**parsed_json[0])</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_sections"><code class="name flex">
+<span>def <span class="ident">get_meal_plan_sections</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.MealPlanSectionResponse" href="#pygrocy.grocy_api_client.MealPlanSectionResponse">MealPlanSectionResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_meal_plan_sections(self) -&gt; List[MealPlanSectionResponse]:
+    parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
+    if parsed_json:
+        return [MealPlanSectionResponse(**resp) for resp in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product"><code class="name flex">
@@ -1949,7 +1613,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     url = f&#34;stock/products/{product_id}&#34;
     parsed_json = self._do_get_request(url)
     if parsed_json:
-        return ProductDetailsResponse(parsed_json)</code></pre>
+        return ProductDetailsResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups"><code class="name flex">
@@ -1963,7 +1627,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_product_groups(self) -&gt; List[LocationData]:
     parsed_json = self._do_get_request(&#34;objects/product_groups&#34;)
-    return [LocationData(response) for response in parsed_json]</code></pre>
+    return [LocationData(**response) for response in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_recipe"><code class="name flex">
@@ -1978,7 +1642,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 <pre><code class="python">def get_recipe(self, object_id: int) -&gt; RecipeDetailsResponse:
     parsed_json = self._do_get_request(f&#34;objects/recipes/{object_id}&#34;)
     if parsed_json:
-        return RecipeDetailsResponse(parsed_json)</code></pre>
+        return RecipeDetailsResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list"><code class="name flex">
@@ -1992,7 +1656,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_shopping_list(self) -&gt; List[ShoppingListItem]:
     parsed_json = self._do_get_request(&#34;objects/shopping_list&#34;)
-    return [ShoppingListItem(response) for response in parsed_json]</code></pre>
+    return [ShoppingListItem(**response) for response in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_stock"><code class="name flex">
@@ -2006,7 +1670,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_stock(self) -&gt; List[CurrentStockResponse]:
     parsed_json = self._do_get_request(&#34;stock&#34;)
-    return [CurrentStockResponse(response) for response in parsed_json]</code></pre>
+    return [CurrentStockResponse(**response) for response in parsed_json]</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_tasks"><code class="name flex">
@@ -2020,7 +1684,25 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_tasks(self) -&gt; List[TaskResponse]:
     parsed_json = self._do_get_request(&#34;tasks&#34;)
-    return [TaskResponse(data) for data in parsed_json]</code></pre>
+    return [TaskResponse(**data) for data in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_user"><code class="name flex">
+<span>def <span class="ident">get_user</span></span>(<span>self, user_id: int) ‑> <a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_user(self, user_id: int) -&gt; UserDto:
+    query_params = []
+    if user_id:
+        query_params.append(f&#34;id={user_id}&#34;)
+    parsed_json = self._do_get_request(&#34;users&#34;)
+    if parsed_json:
+        return UserDto(**parsed_json[0])</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_userfields"><code class="name flex">
@@ -2037,6 +1719,21 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
     return self._do_get_request(url)</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_users"><code class="name flex">
+<span>def <span class="ident">get_users</span></span>(<span>self) ‑> List[<a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_users(self) -&gt; List[UserDto]:
+    parsed_json = self._do_get_request(&#34;users&#34;)
+    if parsed_json:
+        return [UserDto(**user) for user in parsed_json]</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock"><code class="name flex">
 <span>def <span class="ident">get_volatile_stock</span></span>(<span>self) ‑> <a title="pygrocy.grocy_api_client.CurrentVolatilStockResponse" href="#pygrocy.grocy_api_client.CurrentVolatilStockResponse">CurrentVolatilStockResponse</a></span>
 </code></dt>
@@ -2048,7 +1745,7 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </summary>
 <pre><code class="python">def get_volatile_stock(self) -&gt; CurrentVolatilStockResponse:
     parsed_json = self._do_get_request(&#34;stock/volatile&#34;)
-    return CurrentVolatilStockResponse(parsed_json)</code></pre>
+    return CurrentVolatilStockResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list"><code class="name flex">
@@ -2133,823 +1830,682 @@ def overdue_products(self) -&gt; List[CurrentStockResponse]:
 </dd>
 <dt id="pygrocy.grocy_api_client.LocationData"><code class="flex name class">
 <span>class <span class="ident">LocationData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class LocationData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def description(self) -&gt; str:
-        return self._description</code></pre>
+<pre><code class="python">class LocationData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.LocationData.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.LocationData.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def description(self) -&gt; str:
-    return self._description</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.LocationData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.LocationData.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def name(self) -&gt; str:
-    return self._name</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.LocationData.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.MealPlanResponse"><code class="flex name class">
 <span>class <span class="ident">MealPlanResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MealPlanResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._day = parse_date(parsed_json.get(&#34;day&#34;))
-        self._type = parsed_json.get(&#34;type&#34;)
-        self._recipe_id = parse_int(parsed_json.get(&#34;recipe_id&#34;))
-        self._recipe_servings = parse_int(parsed_json.get(&#34;recipe_servings&#34;))
-        self._note = parsed_json.get(&#34;note&#34;, None)
-        self._product_id = parsed_json.get(&#34;product_id&#34;)
-        self._product_amount = parse_float(parsed_json.get(&#34;product_amount&#34;), 0)
-        self._product_qu_id = parsed_json.get(&#34;product_qu_id&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-        self._userfields = parsed_json.get(&#34;userfields&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def day(self) -&gt; datetime:
-        return self._day
-
-    @property
-    def recipe_id(self) -&gt; int:
-        return self._recipe_id
-
-    @property
-    def recipe_servings(self) -&gt; int:
-        return self._recipe_servings
-
-    @property
-    def note(self) -&gt; str:
-        return self._note</code></pre>
+<pre><code class="python">class MealPlanResponse(BaseModel):
+    id: int
+    day: date
+    type: str
+    recipe_id: Optional[int] = None
+    recipe_servings: Optional[int] = None
+    note: Optional[str] = None
+    product_id: Optional[int] = None
+    product_amount: Optional[float] = None
+    product_qu_id: Optional[str] = None
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None
+    section_id: Optional[int] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.MealPlanResponse.day"><code class="name">var <span class="ident">day</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.day"><code class="name">var <span class="ident">day</span> : datetime.date</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def day(self) -&gt; datetime:
-    return self._day</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.MealPlanResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.MealPlanResponse.note"><code class="name">var <span class="ident">note</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.note"><code class="name">var <span class="ident">note</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def note(self) -&gt; str:
-    return self._note</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_id"><code class="name">var <span class="ident">recipe_id</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.product_amount"><code class="name">var <span class="ident">product_amount</span> : Union[float, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def recipe_id(self) -&gt; int:
-    return self._recipe_id</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_servings"><code class="name">var <span class="ident">recipe_servings</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.product_id"><code class="name">var <span class="ident">product_id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.product_qu_id"><code class="name">var <span class="ident">product_qu_id</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_id"><code class="name">var <span class="ident">recipe_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.recipe_servings"><code class="name">var <span class="ident">recipe_servings</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.section_id"><code class="name">var <span class="ident">section_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanResponse.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse"><code class="flex name class">
+<span>class <span class="ident">MealPlanSectionResponse</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@property
-def recipe_servings(self) -&gt; int:
-    return self._recipe_servings</code></pre>
+<pre><code class="python">class MealPlanSectionResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    sort_number: Optional[int] = None
+    row_created_timestamp: datetime</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number"><code class="name">var <span class="ident">sort_number</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.MissingProductResponse"><code class="flex name class">
 <span>class <span class="ident">MissingProductResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MissingProductResponse(object):
-    def __init__(self, parsed_json):
-        self._product_id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._amount_missing = parse_float(parsed_json.get(&#34;amount_missing&#34;))
-        self._is_partly_in_stock = bool(
-            parse_int(parsed_json.get(&#34;is_partly_in_stock&#34;))
-        )
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def amount_missing(self) -&gt; float:
-        return self._amount_missing
-
-    @property
-    def is_partly_in_stock(self) -&gt; bool:
-        return self._is_partly_in_stock</code></pre>
+<pre><code class="python">class MissingProductResponse(BaseModel):
+    id: int
+    name: str
+    amount_missing: float
+    is_partly_in_stock: bool</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.MissingProductResponse.amount_missing"><code class="name">var <span class="ident">amount_missing</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def amount_missing(self) -&gt; float:
-    return self._amount_missing</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.MissingProductResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock"><code class="name">var <span class="ident">is_partly_in_stock</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def is_partly_in_stock(self) -&gt; bool:
-    return self._is_partly_in_stock</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.MissingProductResponse.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def name(self) -&gt; str:
-    return self._name</code></pre>
-</details>
-</dd>
-<dt id="pygrocy.grocy_api_client.MissingProductResponse.product_id"><code class="name">var <span class="ident">product_id</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def product_id(self) -&gt; int:
-    return self._product_id</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductBarcodeData"><code class="flex name class">
 <span>class <span class="ident">ProductBarcodeData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ProductBarcodeData(object):
-    def __init__(self, parsed_json):
-        self._barcode = str(parsed_json.get(&#34;barcode&#34;))
-
-    @property
-    def barcode(self) -&gt; str:
-        return self._barcode</code></pre>
+<pre><code class="python">class ProductBarcodeData(BaseModel):
+    barcode: str</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.ProductBarcodeData.barcode"><code class="name">var <span class="ident">barcode</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def barcode(self) -&gt; str:
-    return self._barcode</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductData"><code class="flex name class">
 <span>class <span class="ident">ProductData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ProductData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;, None)
-        self._location_id = parse_int(parsed_json.get(&#34;location_id&#34;, None))
-        self._product_group_id = parse_int(parsed_json.get(&#34;product_group_id&#34;, None))
-        self._qu_id_stock = parse_int(parsed_json.get(&#34;qu_id_stock&#34;, None))
-        self._qu_id_purchase = parse_int(parsed_json.get(&#34;qu_id_purchsase&#34;, None))
-        self._qu_factor_purchase_to_stock = parse_float(
-            parsed_json.get(&#34;qu_factor_purchase_to_stock&#34;, None)
-        )
-        self._picture_file_name = parsed_json.get(&#34;picture_file_name&#34;, None)
-        self._allow_partial_units_in_stock = bool(
-            parsed_json.get(&#34;allow_partial_units_in_stock&#34;, None) == &#34;true&#34;
-        )
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;, None)
-        )
-        self._min_stock_amount = parse_int(parsed_json.get(&#34;min_stock_amount&#34;, None), 0)
-        self._default_best_before_days = parse_int(
-            parsed_json.get(&#34;default_best_before_days&#34;, None)
-        )
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def product_group_id(self) -&gt; int:
-        return self._product_group_id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name</code></pre>
+<pre><code class="python">class ProductData(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    location_id: int
+    product_group_id: Optional[int] = None
+    qu_id_stock: int
+    qu_id_purchase: int
+    qu_factor_purchase_to_stock: float
+    picture_file_name: Optional[str] = None
+    allow_partial_units_in_stock: Optional[bool] = False
+    row_created_timestamp: datetime
+    min_stock_amount: Optional[int]
+    default_best_before_days: int</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
+<dt id="pygrocy.grocy_api_client.ProductData.allow_partial_units_in_stock"><code class="name">var <span class="ident">allow_partial_units_in_stock</span> : Union[bool, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.default_best_before_days"><code class="name">var <span class="ident">default_best_before_days</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="pygrocy.grocy_api_client.ProductData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.location_id"><code class="name">var <span class="ident">location_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.min_stock_amount"><code class="name">var <span class="ident">min_stock_amount</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductData.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def name(self) -&gt; str:
-    return self._name</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductData.product_group_id"><code class="name">var <span class="ident">product_group_id</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductData.picture_file_name"><code class="name">var <span class="ident">picture_file_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def product_group_id(self) -&gt; int:
-    return self._product_group_id</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.product_group_id"><code class="name">var <span class="ident">product_group_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock"><code class="name">var <span class="ident">qu_factor_purchase_to_stock</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.qu_id_purchase"><code class="name">var <span class="ident">qu_id_purchase</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.qu_id_stock"><code class="name">var <span class="ident">qu_id_stock</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse"><code class="flex name class">
 <span>class <span class="ident">ProductDetailsResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ProductDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._last_purchased = parse_date(parsed_json.get(&#34;last_purchased&#34;))
-        self._last_used = parse_date(parsed_json.get(&#34;last_used&#34;))
-        self._stock_amount = parse_int(parsed_json.get(&#34;stock_amount&#34;))
-        self._stock_amount_opened = parse_int(parsed_json.get(&#34;stock_amount_opened&#34;))
-        self._next_best_before_date = parse_date(
-            parsed_json.get(&#34;next_best_before_date&#34;)
-        )
-        self._last_price = parse_float(parsed_json.get(&#34;last_price&#34;))
-
-        self._product = ProductData(parsed_json.get(&#34;product&#34;))
-
-        self._quantity_unit_stock = QuantityUnitData(
-            parsed_json.get(&#34;quantity_unit_stock&#34;)
-        )
-
-        self._parse_location(parsed_json)
-
-        self._parse_barcodes(parsed_json)
-
-    def _parse_barcodes(self, parsed_json):
-        barcodes_raw = parsed_json.get(&#34;product_barcodes&#34;, &#34;&#34;)
-        if barcodes_raw is not None:
-            self._barcodes = [ProductBarcodeData(barcode) for barcode in barcodes_raw]
-
-    def _parse_location(self, parsed_json):
-        raw_location = parsed_json.get(&#34;location&#34;)
-        if raw_location is None:
-            self._location = None
-        else:
-            self._location = LocationData(raw_location)
-
-    @property
-    def last_purchased(self) -&gt; datetime:
-        return self._last_purchased
-
-    @property
-    def last_used(self) -&gt; datetime:
-        return self._last_used
-
-    @property
-    def stock_amount(self) -&gt; int:
-        return self._stock_amount
-
-    @property
-    def stock_amount_opened(self) -&gt; int:
-        return self._stock_amount_opened
-
-    @property
-    def next_best_before_date(self) -&gt; datetime:
-        return self._next_best_before_date
-
-    @property
-    def last_price(self) -&gt; float:
-        return self._last_price
-
-    @property
-    def barcodes(self) -&gt; List[ProductBarcodeData]:
-        return self._barcodes
-
-    @property
-    def product(self) -&gt; ProductData:
-        return self._product</code></pre>
+<pre><code class="python">class ProductDetailsResponse(BaseModel):
+    last_purchased: Optional[date] = None
+    last_used: Optional[datetime] = None
+    stock_amount: int
+    stock_amount_opened: int
+    next_best_before_date: Optional[date] = None
+    last_price: Optional[float] = None
+    product: ProductData
+    quantity_unit_stock: QuantityUnitData
+    barcodes: Optional[List[ProductBarcodeData]] = Field(alias=&#34;product_barcodes&#34;)
+    location: Optional[LocationData] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes"><code class="name">var <span class="ident">barcodes</span> : List[<a title="pygrocy.grocy_api_client.ProductBarcodeData" href="#pygrocy.grocy_api_client.ProductBarcodeData">ProductBarcodeData</a>]</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.barcodes"><code class="name">var <span class="ident">barcodes</span> : Union[List[<a title="pygrocy.grocy_api_client.ProductBarcodeData" href="#pygrocy.grocy_api_client.ProductBarcodeData">ProductBarcodeData</a>], NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def barcodes(self) -&gt; List[ProductBarcodeData]:
-    return self._barcodes</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_price"><code class="name">var <span class="ident">last_price</span> : float</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_price"><code class="name">var <span class="ident">last_price</span> : Union[float, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_price(self) -&gt; float:
-    return self._last_price</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased"><code class="name">var <span class="ident">last_purchased</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased"><code class="name">var <span class="ident">last_purchased</span> : Union[datetime.date, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_purchased(self) -&gt; datetime:
-    return self._last_purchased</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_used"><code class="name">var <span class="ident">last_used</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.last_used"><code class="name">var <span class="ident">last_used</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_used(self) -&gt; datetime:
-    return self._last_used</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date"><code class="name">var <span class="ident">next_best_before_date</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.location"><code class="name">var <span class="ident">location</span> : Union[<a title="pygrocy.grocy_api_client.LocationData" href="#pygrocy.grocy_api_client.LocationData">LocationData</a>, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def next_best_before_date(self) -&gt; datetime:
-    return self._next_best_before_date</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date"><code class="name">var <span class="ident">next_best_before_date</span> : Union[datetime.date, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse.product"><code class="name">var <span class="ident">product</span> : <a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def product(self) -&gt; ProductData:
-    return self._product</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.quantity_unit_stock"><code class="name">var <span class="ident">quantity_unit_stock</span> : <a title="pygrocy.grocy_api_client.QuantityUnitData" href="#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a></code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount"><code class="name">var <span class="ident">stock_amount</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def stock_amount(self) -&gt; int:
-    return self._stock_amount</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened"><code class="name">var <span class="ident">stock_amount_opened</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def stock_amount_opened(self) -&gt; int:
-    return self._stock_amount_opened</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.QuantityUnitData"><code class="flex name class">
 <span>class <span class="ident">QuantityUnitData</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class QuantityUnitData(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._name_plural = parsed_json.get(&#34;name_plural&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )</code></pre>
+<pre><code class="python">class QuantityUnitData(BaseModel):
+    id: int
+    name: str
+    name_plural: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.QuantityUnitData.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.QuantityUnitData.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.QuantityUnitData.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.QuantityUnitData.name_plural"><code class="name">var <span class="ident">name_plural</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.QuantityUnitData.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.RecipeDetailsResponse"><code class="flex name class">
 <span>class <span class="ident">RecipeDetailsResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class RecipeDetailsResponse(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._name = parsed_json.get(&#34;name&#34;)
-        self._description = parsed_json.get(&#34;description&#34;)
-        self._base_servings = parse_int(parsed_json.get(&#34;base_servings&#34;))
-        self._desired_servings = parse_int(parsed_json.get(&#34;desired_servings&#34;))
-        self._picture_file_name = parsed_json.get(&#34;picture_file_name&#34;)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;)
-        )
-        self._userfields = parsed_json.get(&#34;userfields&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def name(self) -&gt; str:
-        return self._name
-
-    @property
-    def description(self) -&gt; str:
-        return self._description
-
-    @property
-    def base_servings(self) -&gt; int:
-        return self._base_servings
-
-    @property
-    def desired_servings(self) -&gt; int:
-        return self._desired_servings
-
-    @property
-    def picture_file_name(self) -&gt; str:
-        return self._picture_file_name</code></pre>
+<pre><code class="python">class RecipeDetailsResponse(BaseModel):
+    id: Optional[int] = None
+    name: str
+    description: Optional[str] = None
+    base_servings: int
+    desired_servings: int
+    picture_file_name: Optional[str]
+    row_created_timestamp: datetime
+    userfields: Optional[Dict] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings"><code class="name">var <span class="ident">base_servings</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def base_servings(self) -&gt; int:
-    return self._base_servings</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def description(self) -&gt; str:
-    return self._description</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings"><code class="name">var <span class="ident">desired_servings</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def desired_servings(self) -&gt; int:
-    return self._desired_servings</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.id"><code class="name">var <span class="ident">id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def name(self) -&gt; str:
-    return self._name</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name"><code class="name">var <span class="ident">picture_file_name</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name"><code class="name">var <span class="ident">picture_file_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def picture_file_name(self) -&gt; str:
-    return self._picture_file_name</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.RecipeDetailsResponse.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ShoppingListItem"><code class="flex name class">
 <span>class <span class="ident">ShoppingListItem</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ShoppingListItem(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-        self._product_id = parse_int(parsed_json.get(&#34;product_id&#34;, None))
-        self._note = parsed_json.get(&#34;note&#34;, None)
-        self._amount = parse_float(parsed_json.get(&#34;amount&#34;), 0)
-        self._row_created_timestamp = parse_date(
-            parsed_json.get(&#34;row_created_timestamp&#34;, None)
-        )
-        self._shopping_list_id = parse_int(parsed_json.get(&#34;shopping_list_id&#34;))
-        self._done = parse_int(parsed_json.get(&#34;done&#34;))
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def product_id(self) -&gt; int:
-        return self._product_id
-
-    @property
-    def note(self) -&gt; str:
-        return self._note
-
-    @property
-    def amount(self) -&gt; float:
-        return self._amount</code></pre>
+<pre><code class="python">class ShoppingListItem(BaseModel):
+    id: int
+    product_id: Optional[int] = None
+    note: Optional[str] = None
+    amount: float
+    row_created_timestamp: datetime
+    shopping_list_id: int
+    done: int</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
 <dt id="pygrocy.grocy_api_client.ShoppingListItem.amount"><code class="name">var <span class="ident">amount</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def amount(self) -&gt; float:
-    return self._amount</code></pre>
-</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.done"><code class="name">var <span class="ident">done</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.ShoppingListItem.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ShoppingListItem.note"><code class="name">var <span class="ident">note</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.note"><code class="name">var <span class="ident">note</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def note(self) -&gt; str:
-    return self._note</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.ShoppingListItem.product_id"><code class="name">var <span class="ident">product_id</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.product_id"><code class="name">var <span class="ident">product_id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.ShoppingListItem.shopping_list_id"><code class="name">var <span class="ident">shopping_list_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskCategoryDto"><code class="flex name class">
+<span>class <span class="ident">TaskCategoryDto</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@property
-def product_id(self) -&gt; int:
-    return self._product_id</code></pre>
+<pre><code class="python">class TaskCategoryDto(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.TaskCategoryDto.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskCategoryDto.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskCategoryDto.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskCategoryDto.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.TaskResponse"><code class="flex name class">
 <span>class <span class="ident">TaskResponse</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class TaskResponse(object):
-    def __init__(self, parsed_json):
-        self.id = parse_int(parsed_json.get(&#34;id&#34;))
-        self.name = parsed_json.get(&#34;name&#34;)
-        self.description = parsed_json.get(&#34;description&#34;)
-        self.due_date = parse_date(parsed_json.get(&#34;due_date&#34;))
-        self.done = parse_int(parsed_json.get(&#34;done&#34;))
-        self.done_timestamp = parse_date(parsed_json.get(&#34;done_timestamp&#34;))
-        self.category_id = parse_int(parsed_json.get(&#34;category_id&#34;))
-        self.assigned_to_user_id = parse_int(parsed_json.get(&#34;assigned_to_user_id&#34;))
-        self.userfields = parsed_json.get(&#34;userfields&#34;)</code></pre>
+<pre><code class="python">class TaskResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    due_date: date
+    done: int
+    done_timestamp: Optional[datetime] = None
+    category_id: Optional[int] = None
+    category: Optional[TaskCategoryDto] = None
+    assigned_to_user_id: Optional[int] = None
+    assigned_to_user: Optional[UserDto] = None
+    userfields: Optional[Dict] = None</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.TaskResponse.assigned_to_user"><code class="name">var <span class="ident">assigned_to_user</span> : Union[<a title="pygrocy.grocy_api_client.UserDto" href="#pygrocy.grocy_api_client.UserDto">UserDto</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id"><code class="name">var <span class="ident">assigned_to_user_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.category"><code class="name">var <span class="ident">category</span> : Union[<a title="pygrocy.grocy_api_client.TaskCategoryDto" href="#pygrocy.grocy_api_client.TaskCategoryDto">TaskCategoryDto</a>, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.category_id"><code class="name">var <span class="ident">category_id</span> : Union[int, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.description"><code class="name">var <span class="ident">description</span> : Union[str, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.done"><code class="name">var <span class="ident">done</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.done_timestamp"><code class="name">var <span class="ident">done_timestamp</span> : Union[datetime.datetime, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.due_date"><code class="name">var <span class="ident">due_date</span> : datetime.date</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.TransactionType"><code class="flex name class">
 <span>class <span class="ident">TransactionType</span></span>
@@ -2993,104 +2549,48 @@ def product_id(self) -&gt; int:
 </dd>
 <dt id="pygrocy.grocy_api_client.UserDto"><code class="flex name class">
 <span>class <span class="ident">UserDto</span></span>
-<span>(</span><span>parsed_json)</span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class UserDto(object):
-    def __init__(self, parsed_json):
-        self._id = parse_int(parsed_json.get(&#34;id&#34;))
-
-        self._username = parsed_json.get(&#34;username&#34;)
-        self._first_name = parsed_json.get(&#34;first_name&#34;)
-        self._last_name = parsed_json.get(&#34;last_name&#34;)
-        self._display_name = parsed_json.get(&#34;display_name&#34;)
-
-    @property
-    def id(self) -&gt; int:
-        return self._id
-
-    @property
-    def username(self) -&gt; str:
-        return self._username
-
-    @property
-    def first_name(self) -&gt; str:
-        return self._first_name
-
-    @property
-    def last_name(self) -&gt; str:
-        return self._last_name
-
-    @property
-    def display_name(self) -&gt; str:
-        return self._display_name</code></pre>
+<pre><code class="python">class UserDto(BaseModel):
+    id: int
+    username: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    display_name: Optional[str] = None</code></pre>
 </details>
-<h3>Instance variables</h3>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.UserDto.display_name"><code class="name">var <span class="ident">display_name</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.UserDto.display_name"><code class="name">var <span class="ident">display_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def display_name(self) -&gt; str:
-    return self._display_name</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.UserDto.first_name"><code class="name">var <span class="ident">first_name</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.UserDto.first_name"><code class="name">var <span class="ident">first_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def first_name(self) -&gt; str:
-    return self._first_name</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.UserDto.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self) -&gt; int:
-    return self._id</code></pre>
-</details>
 </dd>
-<dt id="pygrocy.grocy_api_client.UserDto.last_name"><code class="name">var <span class="ident">last_name</span> : str</code></dt>
+<dt id="pygrocy.grocy_api_client.UserDto.last_name"><code class="name">var <span class="ident">last_name</span> : Union[str, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def last_name(self) -&gt; str:
-    return self._last_name</code></pre>
-</details>
 </dd>
 <dt id="pygrocy.grocy_api_client.UserDto.username"><code class="name">var <span class="ident">username</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def username(self) -&gt; str:
-    return self._username</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
@@ -3112,12 +2612,41 @@ def username(self) -&gt; str:
 <ul>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.BatteryData" href="#pygrocy.grocy_api_client.BatteryData">BatteryData</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.charge_interval_days" href="#pygrocy.grocy_api_client.BatteryData.charge_interval_days">charge_interval_days</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.created_timestamp" href="#pygrocy.grocy_api_client.BatteryData.created_timestamp">created_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.description" href="#pygrocy.grocy_api_client.BatteryData.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.id" href="#pygrocy.grocy_api_client.BatteryData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.name" href="#pygrocy.grocy_api_client.BatteryData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.used_in" href="#pygrocy.grocy_api_client.BatteryData.used_in">used_in</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryData.userfields" href="#pygrocy.grocy_api_client.BatteryData.userfields">userfields</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse" href="#pygrocy.grocy_api_client.BatteryDetailsResponse">BatteryDetailsResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse.battery" href="#pygrocy.grocy_api_client.BatteryDetailsResponse.battery">battery</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse.charge_cycles_count" href="#pygrocy.grocy_api_client.BatteryDetailsResponse.charge_cycles_count">charge_cycles_count</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse.last_charged" href="#pygrocy.grocy_api_client.BatteryDetailsResponse.last_charged">last_charged</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.BatteryDetailsResponse.next_estimated_charge_time" href="#pygrocy.grocy_api_client.BatteryDetailsResponse.next_estimated_charge_time">next_estimated_charge_time</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ChoreData" href="#pygrocy.grocy_api_client.ChoreData">ChoreData</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.assignment_config" href="#pygrocy.grocy_api_client.ChoreData.assignment_config">assignment_config</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.assignment_type" href="#pygrocy.grocy_api_client.ChoreData.assignment_type">assignment_type</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.description" href="#pygrocy.grocy_api_client.ChoreData.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.id" href="#pygrocy.grocy_api_client.ChoreData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.name" href="#pygrocy.grocy_api_client.ChoreData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id" href="#pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id">next_execution_assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.period_config" href="#pygrocy.grocy_api_client.ChoreData.period_config">period_config</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.period_days" href="#pygrocy.grocy_api_client.ChoreData.period_days">period_days</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.period_type" href="#pygrocy.grocy_api_client.ChoreData.period_type">period_type</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.rollover" href="#pygrocy.grocy_api_client.ChoreData.rollover">rollover</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.track_date_only" href="#pygrocy.grocy_api_client.ChoreData.track_date_only">track_date_only</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.userfields" href="#pygrocy.grocy_api_client.ChoreData.userfields">userfields</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ChoreDetailsResponse" href="#pygrocy.grocy_api_client.ChoreDetailsResponse">ChoreDetailsResponse</a></code></h4>
@@ -3132,6 +2661,11 @@ def username(self) -&gt; str:
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.CurrentBatteryResponse" href="#pygrocy.grocy_api_client.CurrentBatteryResponse">CurrentBatteryResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.CurrentBatteryResponse.id" href="#pygrocy.grocy_api_client.CurrentBatteryResponse.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentBatteryResponse.last_tracked_time" href="#pygrocy.grocy_api_client.CurrentBatteryResponse.last_tracked_time">last_tracked_time</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.CurrentBatteryResponse.next_estimated_charge_time" href="#pygrocy.grocy_api_client.CurrentBatteryResponse.next_estimated_charge_time">next_estimated_charge_time</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.CurrentChoreResponse" href="#pygrocy.grocy_api_client.CurrentChoreResponse">CurrentChoreResponse</a></code></h4>
@@ -3180,13 +2714,17 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_generic_objects_for_type" href="#pygrocy.grocy_api_client.GrocyApiClient.get_generic_objects_for_type">get_generic_objects_for_type</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed" href="#pygrocy.grocy_api_client.GrocyApiClient.get_last_db_changed">get_last_db_changed</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan" href="#pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan">get_meal_plan</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_section" href="#pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_section">get_meal_plan_section</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_sections" href="#pygrocy.grocy_api_client.GrocyApiClient.get_meal_plan_sections">get_meal_plan_sections</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product">get_product</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_product_groups" href="#pygrocy.grocy_api_client.GrocyApiClient.get_product_groups">get_product_groups</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_recipe" href="#pygrocy.grocy_api_client.GrocyApiClient.get_recipe">get_recipe</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list">get_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_tasks" href="#pygrocy.grocy_api_client.GrocyApiClient.get_tasks">get_tasks</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_user" href="#pygrocy.grocy_api_client.GrocyApiClient.get_user">get_user</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.get_userfields">get_userfields</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_users" href="#pygrocy.grocy_api_client.GrocyApiClient.get_users">get_users</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_volatile_stock">get_volatile_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list">remove_product_in_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.set_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.set_userfields">set_userfields</a></code></li>
@@ -3201,6 +2739,7 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.LocationData.description" href="#pygrocy.grocy_api_client.LocationData.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.id" href="#pygrocy.grocy_api_client.LocationData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.LocationData.name" href="#pygrocy.grocy_api_client.LocationData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.LocationData.row_created_timestamp" href="#pygrocy.grocy_api_client.LocationData.row_created_timestamp">row_created_timestamp</a></code></li>
 </ul>
 </li>
 <li>
@@ -3209,17 +2748,33 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.day" href="#pygrocy.grocy_api_client.MealPlanResponse.day">day</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.id" href="#pygrocy.grocy_api_client.MealPlanResponse.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.note" href="#pygrocy.grocy_api_client.MealPlanResponse.note">note</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.product_amount" href="#pygrocy.grocy_api_client.MealPlanResponse.product_amount">product_amount</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.product_id" href="#pygrocy.grocy_api_client.MealPlanResponse.product_id">product_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.product_qu_id" href="#pygrocy.grocy_api_client.MealPlanResponse.product_qu_id">product_qu_id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.recipe_id" href="#pygrocy.grocy_api_client.MealPlanResponse.recipe_id">recipe_id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.recipe_servings" href="#pygrocy.grocy_api_client.MealPlanResponse.recipe_servings">recipe_servings</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.row_created_timestamp" href="#pygrocy.grocy_api_client.MealPlanResponse.row_created_timestamp">row_created_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.section_id" href="#pygrocy.grocy_api_client.MealPlanResponse.section_id">section_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.type" href="#pygrocy.grocy_api_client.MealPlanResponse.type">type</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanResponse.userfields" href="#pygrocy.grocy_api_client.MealPlanResponse.userfields">userfields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse" href="#pygrocy.grocy_api_client.MealPlanSectionResponse">MealPlanSectionResponse</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.id" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.name" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.row_created_timestamp" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.row_created_timestamp">row_created_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number">sort_number</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.MissingProductResponse" href="#pygrocy.grocy_api_client.MissingProductResponse">MissingProductResponse</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.amount_missing" href="#pygrocy.grocy_api_client.MissingProductResponse.amount_missing">amount_missing</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.id" href="#pygrocy.grocy_api_client.MissingProductResponse.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock" href="#pygrocy.grocy_api_client.MissingProductResponse.is_partly_in_stock">is_partly_in_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.name" href="#pygrocy.grocy_api_client.MissingProductResponse.name">name</a></code></li>
-<li><code><a title="pygrocy.grocy_api_client.MissingProductResponse.product_id" href="#pygrocy.grocy_api_client.MissingProductResponse.product_id">product_id</a></code></li>
 </ul>
 </li>
 <li>
@@ -3231,9 +2786,19 @@ def username(self) -&gt; str:
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ProductData" href="#pygrocy.grocy_api_client.ProductData">ProductData</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.grocy_api_client.ProductData.allow_partial_units_in_stock" href="#pygrocy.grocy_api_client.ProductData.allow_partial_units_in_stock">allow_partial_units_in_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.default_best_before_days" href="#pygrocy.grocy_api_client.ProductData.default_best_before_days">default_best_before_days</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.description" href="#pygrocy.grocy_api_client.ProductData.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.id" href="#pygrocy.grocy_api_client.ProductData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.location_id" href="#pygrocy.grocy_api_client.ProductData.location_id">location_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.min_stock_amount" href="#pygrocy.grocy_api_client.ProductData.min_stock_amount">min_stock_amount</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.name" href="#pygrocy.grocy_api_client.ProductData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.picture_file_name" href="#pygrocy.grocy_api_client.ProductData.picture_file_name">picture_file_name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id" href="#pygrocy.grocy_api_client.ProductData.product_group_id">product_group_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock" href="#pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock">qu_factor_purchase_to_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_purchase" href="#pygrocy.grocy_api_client.ProductData.qu_id_purchase">qu_id_purchase</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_stock" href="#pygrocy.grocy_api_client.ProductData.qu_id_stock">qu_id_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.row_created_timestamp" href="#pygrocy.grocy_api_client.ProductData.row_created_timestamp">row_created_timestamp</a></code></li>
 </ul>
 </li>
 <li>
@@ -3243,37 +2808,73 @@ def username(self) -&gt; str:
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_price" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_price">last_price</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_purchased">last_purchased</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.last_used" href="#pygrocy.grocy_api_client.ProductDetailsResponse.last_used">last_used</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.location" href="#pygrocy.grocy_api_client.ProductDetailsResponse.location">location</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date" href="#pygrocy.grocy_api_client.ProductDetailsResponse.next_best_before_date">next_best_before_date</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.product" href="#pygrocy.grocy_api_client.ProductDetailsResponse.product">product</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.quantity_unit_stock" href="#pygrocy.grocy_api_client.ProductDetailsResponse.quantity_unit_stock">quantity_unit_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount" href="#pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount">stock_amount</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened" href="#pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened">stock_amount_opened</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.QuantityUnitData" href="#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.description" href="#pygrocy.grocy_api_client.QuantityUnitData.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.id" href="#pygrocy.grocy_api_client.QuantityUnitData.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.name" href="#pygrocy.grocy_api_client.QuantityUnitData.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.name_plural" href="#pygrocy.grocy_api_client.QuantityUnitData.name_plural">name_plural</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.QuantityUnitData.row_created_timestamp" href="#pygrocy.grocy_api_client.QuantityUnitData.row_created_timestamp">row_created_timestamp</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse" href="#pygrocy.grocy_api_client.RecipeDetailsResponse">RecipeDetailsResponse</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.base_servings">base_servings</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.description" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.desired_servings">desired_servings</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.id" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.name" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.picture_file_name">picture_file_name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.row_created_timestamp" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.row_created_timestamp">row_created_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.RecipeDetailsResponse.userfields" href="#pygrocy.grocy_api_client.RecipeDetailsResponse.userfields">userfields</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.ShoppingListItem" href="#pygrocy.grocy_api_client.ShoppingListItem">ShoppingListItem</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.amount" href="#pygrocy.grocy_api_client.ShoppingListItem.amount">amount</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.done" href="#pygrocy.grocy_api_client.ShoppingListItem.done">done</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.id" href="#pygrocy.grocy_api_client.ShoppingListItem.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.note" href="#pygrocy.grocy_api_client.ShoppingListItem.note">note</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.product_id" href="#pygrocy.grocy_api_client.ShoppingListItem.product_id">product_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.row_created_timestamp" href="#pygrocy.grocy_api_client.ShoppingListItem.row_created_timestamp">row_created_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ShoppingListItem.shopping_list_id" href="#pygrocy.grocy_api_client.ShoppingListItem.shopping_list_id">shopping_list_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.grocy_api_client.TaskCategoryDto" href="#pygrocy.grocy_api_client.TaskCategoryDto">TaskCategoryDto</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.grocy_api_client.TaskCategoryDto.description" href="#pygrocy.grocy_api_client.TaskCategoryDto.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskCategoryDto.id" href="#pygrocy.grocy_api_client.TaskCategoryDto.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskCategoryDto.name" href="#pygrocy.grocy_api_client.TaskCategoryDto.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskCategoryDto.row_created_timestamp" href="#pygrocy.grocy_api_client.TaskCategoryDto.row_created_timestamp">row_created_timestamp</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.TaskResponse" href="#pygrocy.grocy_api_client.TaskResponse">TaskResponse</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.assigned_to_user" href="#pygrocy.grocy_api_client.TaskResponse.assigned_to_user">assigned_to_user</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id" href="#pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id">assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.category" href="#pygrocy.grocy_api_client.TaskResponse.category">category</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.category_id" href="#pygrocy.grocy_api_client.TaskResponse.category_id">category_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.description" href="#pygrocy.grocy_api_client.TaskResponse.description">description</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.done" href="#pygrocy.grocy_api_client.TaskResponse.done">done</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.done_timestamp" href="#pygrocy.grocy_api_client.TaskResponse.done_timestamp">done_timestamp</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.due_date" href="#pygrocy.grocy_api_client.TaskResponse.due_date">due_date</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.id" href="#pygrocy.grocy_api_client.TaskResponse.id">id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.name" href="#pygrocy.grocy_api_client.TaskResponse.name">name</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.userfields" href="#pygrocy.grocy_api_client.TaskResponse.userfields">userfields</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.TransactionType" href="#pygrocy.grocy_api_client.TransactionType">TransactionType</a></code></h4>

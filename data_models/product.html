@@ -84,7 +84,7 @@ class Product(DataModel):
             self._init_from_ProductData(response.product)
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
-        self._id = response.product_id
+        self._id = response.id
         self._name = response.name
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock
@@ -106,7 +106,7 @@ class Product(DataModel):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.barcodes
+            self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -126,7 +126,7 @@ class Product(DataModel):
         return self._available_amount
 
     @property
-    def best_before_date(self) -&gt; datetime:
+    def best_before_date(self) -&gt; datetime.date:
         return self._best_before_date
 
     @property
@@ -322,7 +322,7 @@ def name(self) -&gt; str:
             self._init_from_ProductData(response.product)
 
     def _init_from_MissingProductResponse(self, response: MissingProductResponse):
-        self._id = response.product_id
+        self._id = response.id
         self._name = response.name
         self._amount_missing = response.amount_missing
         self._is_partly_in_stock = response.is_partly_in_stock
@@ -344,7 +344,7 @@ def name(self) -&gt; str:
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
-            self._barcodes = details.barcodes
+            self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
 
     @property
@@ -364,7 +364,7 @@ def name(self) -&gt; str:
         return self._available_amount
 
     @property
-    def best_before_date(self) -&gt; datetime:
+    def best_before_date(self) -&gt; datetime.date:
         return self._best_before_date
 
     @property
@@ -425,7 +425,7 @@ def barcodes(self) -&gt; List[str]:
     return [barcode.barcode for barcode in self.product_barcodes]</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.data_models.product.Product.best_before_date"><code class="name">var <span class="ident">best_before_date</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.data_models.product.Product.best_before_date"><code class="name">var <span class="ident">best_before_date</span> : <method 'date' of 'datetime.datetime' objects></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -433,7 +433,7 @@ def barcodes(self) -&gt; List[str]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def best_before_date(self) -&gt; datetime:
+def best_before_date(self) -&gt; datetime.date:
     return self._best_before_date</code></pre>
 </details>
 </dd>
@@ -513,7 +513,7 @@ def product_group_id(self) -&gt; int:
     details = api_client.get_product(self.id)
     if details:
         self._name = details.product.name
-        self._barcodes = details.barcodes
+        self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
         self._product_group_id = details.product.product_group_id</code></pre>
 </details>
 </dd>

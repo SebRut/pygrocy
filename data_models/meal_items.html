@@ -28,11 +28,13 @@
 </summary>
 <pre><code class="python">import base64
 from datetime import datetime
+from enum import Enum
 
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
     GrocyApiClient,
     MealPlanResponse,
+    MealPlanSectionResponse,
     RecipeDetailsResponse,
 )
 
@@ -78,6 +80,36 @@ class RecipeItem(DataModel):
             return f&#34;{path}?force_serve_as=picture&amp;best_fit_width={width}&#34;
 
 
+class MealPlanSection(DataModel):
+    def __init__(self, response: MealPlanSectionResponse):
+        self._id = response.id
+        self._name = response.name
+        self._sort_number = response.sort_number
+        self._row_created_timestamp = response.row_created_timestamp
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def sort_number(self) -&gt; int:
+        return self._sort_number
+
+    @property
+    def row_created_timestamp(self) -&gt; datetime:
+        return self._row_created_timestamp
+
+
+class MealPlanItemType(str, Enum):
+    NOTE = &#34;note&#34;
+    PRODUCT = &#34;product&#34;
+    RECIPE = &#34;recipe&#34;
+
+
 class MealPlanItem(DataModel):
     def __init__(self, response: MealPlanResponse):
         self._id = response.id
@@ -86,13 +118,16 @@ class MealPlanItem(DataModel):
         self._recipe_id = response.recipe_id
         self._recipe_servings = response.recipe_servings
         self._note = response.note
+        self._section_id = response.section_id
+        self._type = MealPlanItemType(response.type)
+        self._product_id = response.product_id
 
     @property
     def id(self) -&gt; int:
         return self._id
 
     @property
-    def day(self) -&gt; datetime:
+    def day(self) -&gt; datetime.date:
         return self._day
 
     @property
@@ -111,11 +146,31 @@ class MealPlanItem(DataModel):
     def recipe(self) -&gt; RecipeItem:
         return self._recipe
 
+    @property
+    def section_id(self) -&gt; int:
+        return self._section_id
+
+    @property
+    def section(self) -&gt; MealPlanSection:
+        return self._section
+
+    @property
+    def type(self) -&gt; MealPlanItemType:
+        return self._type
+
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
     def get_details(self, api_client: GrocyApiClient):
         if self.recipe_id:
             recipe = api_client.get_recipe(self.recipe_id)
             if recipe:
-                self._recipe = RecipeItem(recipe)</code></pre>
+                self._recipe = RecipeItem(recipe)
+        if self.section_id:
+            section = api_client.get_meal_plan_section(self.section_id)
+            if section:
+                self._section = MealPlanSection(section)</code></pre>
 </details>
 </section>
 <section>
@@ -145,13 +200,16 @@ class MealPlanItem(DataModel):
         self._recipe_id = response.recipe_id
         self._recipe_servings = response.recipe_servings
         self._note = response.note
+        self._section_id = response.section_id
+        self._type = MealPlanItemType(response.type)
+        self._product_id = response.product_id
 
     @property
     def id(self) -&gt; int:
         return self._id
 
     @property
-    def day(self) -&gt; datetime:
+    def day(self) -&gt; datetime.date:
         return self._day
 
     @property
@@ -170,11 +228,31 @@ class MealPlanItem(DataModel):
     def recipe(self) -&gt; RecipeItem:
         return self._recipe
 
+    @property
+    def section_id(self) -&gt; int:
+        return self._section_id
+
+    @property
+    def section(self) -&gt; MealPlanSection:
+        return self._section
+
+    @property
+    def type(self) -&gt; MealPlanItemType:
+        return self._type
+
+    @property
+    def product_id(self) -&gt; int:
+        return self._product_id
+
     def get_details(self, api_client: GrocyApiClient):
         if self.recipe_id:
             recipe = api_client.get_recipe(self.recipe_id)
             if recipe:
-                self._recipe = RecipeItem(recipe)</code></pre>
+                self._recipe = RecipeItem(recipe)
+        if self.section_id:
+            section = api_client.get_meal_plan_section(self.section_id)
+            if section:
+                self._section = MealPlanSection(section)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -182,7 +260,7 @@ class MealPlanItem(DataModel):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pygrocy.data_models.meal_items.MealPlanItem.day"><code class="name">var <span class="ident">day</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.data_models.meal_items.MealPlanItem.day"><code class="name">var <span class="ident">day</span> : <method 'date' of 'datetime.datetime' objects></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -190,7 +268,7 @@ class MealPlanItem(DataModel):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def day(self) -&gt; datetime:
+def day(self) -&gt; datetime.date:
     return self._day</code></pre>
 </details>
 </dd>
@@ -216,6 +294,18 @@ def id(self) -&gt; int:
 <pre><code class="python">@property
 def note(self) -&gt; str:
     return self._note</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItem.product_id"><code class="name">var <span class="ident">product_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def product_id(self) -&gt; int:
+    return self._product_id</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.meal_items.MealPlanItem.recipe"><code class="name">var <span class="ident">recipe</span> : <a title="pygrocy.data_models.meal_items.RecipeItem" href="#pygrocy.data_models.meal_items.RecipeItem">RecipeItem</a></code></dt>
@@ -254,6 +344,42 @@ def recipe_servings(self) -&gt; int:
     return self._recipe_servings</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItem.section"><code class="name">var <span class="ident">section</span> : <a title="pygrocy.data_models.meal_items.MealPlanSection" href="#pygrocy.data_models.meal_items.MealPlanSection">MealPlanSection</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def section(self) -&gt; MealPlanSection:
+    return self._section</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItem.section_id"><code class="name">var <span class="ident">section_id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def section_id(self) -&gt; int:
+    return self._section_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItem.type"><code class="name">var <span class="ident">type</span> : <a title="pygrocy.data_models.meal_items.MealPlanItemType" href="#pygrocy.data_models.meal_items.MealPlanItemType">MealPlanItemType</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def type(self) -&gt; MealPlanItemType:
+    return self._type</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
@@ -270,7 +396,136 @@ def recipe_servings(self) -&gt; int:
     if self.recipe_id:
         recipe = api_client.get_recipe(self.recipe_id)
         if recipe:
-            self._recipe = RecipeItem(recipe)</code></pre>
+            self._recipe = RecipeItem(recipe)
+    if self.section_id:
+        section = api_client.get_meal_plan_section(self.section_id)
+        if section:
+            self._section = MealPlanSection(section)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItemType"><code class="flex name class">
+<span>class <span class="ident">MealPlanItemType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MealPlanItemType(str, Enum):
+    NOTE = &#34;note&#34;
+    PRODUCT = &#34;product&#34;
+    RECIPE = &#34;recipe&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.str</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygrocy.data_models.meal_items.MealPlanItemType.NOTE"><code class="name">var <span class="ident">NOTE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItemType.PRODUCT"><code class="name">var <span class="ident">PRODUCT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanItemType.RECIPE"><code class="name">var <span class="ident">RECIPE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanSection"><code class="flex name class">
+<span>class <span class="ident">MealPlanSection</span></span>
+<span>(</span><span>response: <a title="pygrocy.grocy_api_client.MealPlanSectionResponse" href="../grocy_api_client.html#pygrocy.grocy_api_client.MealPlanSectionResponse">MealPlanSectionResponse</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MealPlanSection(DataModel):
+    def __init__(self, response: MealPlanSectionResponse):
+        self._id = response.id
+        self._name = response.name
+        self._sort_number = response.sort_number
+        self._row_created_timestamp = response.row_created_timestamp
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def sort_number(self) -&gt; int:
+        return self._sort_number
+
+    @property
+    def row_created_timestamp(self) -&gt; datetime:
+        return self._row_created_timestamp</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygrocy.base.DataModel" href="../base.html#pygrocy.base.DataModel">DataModel</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.data_models.meal_items.MealPlanSection.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanSection.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanSection.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def row_created_timestamp(self) -&gt; datetime:
+    return self._row_created_timestamp</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.meal_items.MealPlanSection.sort_number"><code class="name">var <span class="ident">sort_number</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def sort_number(self) -&gt; int:
+    return self._sort_number</code></pre>
 </details>
 </dd>
 </dl>
@@ -448,9 +703,30 @@ def picture_file_name(self) -&gt; str:
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.get_details" href="#pygrocy.data_models.meal_items.MealPlanItem.get_details">get_details</a></code></li>
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.id" href="#pygrocy.data_models.meal_items.MealPlanItem.id">id</a></code></li>
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.note" href="#pygrocy.data_models.meal_items.MealPlanItem.note">note</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.product_id" href="#pygrocy.data_models.meal_items.MealPlanItem.product_id">product_id</a></code></li>
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.recipe" href="#pygrocy.data_models.meal_items.MealPlanItem.recipe">recipe</a></code></li>
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.recipe_id" href="#pygrocy.data_models.meal_items.MealPlanItem.recipe_id">recipe_id</a></code></li>
 <li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.recipe_servings" href="#pygrocy.data_models.meal_items.MealPlanItem.recipe_servings">recipe_servings</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.section" href="#pygrocy.data_models.meal_items.MealPlanItem.section">section</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.section_id" href="#pygrocy.data_models.meal_items.MealPlanItem.section_id">section_id</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItem.type" href="#pygrocy.data_models.meal_items.MealPlanItem.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.meal_items.MealPlanItemType" href="#pygrocy.data_models.meal_items.MealPlanItemType">MealPlanItemType</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItemType.NOTE" href="#pygrocy.data_models.meal_items.MealPlanItemType.NOTE">NOTE</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItemType.PRODUCT" href="#pygrocy.data_models.meal_items.MealPlanItemType.PRODUCT">PRODUCT</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanItemType.RECIPE" href="#pygrocy.data_models.meal_items.MealPlanItemType.RECIPE">RECIPE</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.meal_items.MealPlanSection" href="#pygrocy.data_models.meal_items.MealPlanSection">MealPlanSection</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanSection.id" href="#pygrocy.data_models.meal_items.MealPlanSection.id">id</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanSection.name" href="#pygrocy.data_models.meal_items.MealPlanSection.name">name</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanSection.row_created_timestamp" href="#pygrocy.data_models.meal_items.MealPlanSection.row_created_timestamp">row_created_timestamp</a></code></li>
+<li><code><a title="pygrocy.data_models.meal_items.MealPlanSection.sort_number" href="#pygrocy.data_models.meal_items.MealPlanSection.sort_number">sort_number</a></code></li>
 </ul>
 </li>
 <li>

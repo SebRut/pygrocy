@@ -28,8 +28,34 @@
 </summary>
 <pre><code class="python">from datetime import datetime
 from typing import Dict
+
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import TaskResponse
+from pygrocy.data_models.user import User
+from pygrocy.grocy_api_client import TaskCategoryDto, TaskResponse
+
+
+class TaskCategory(DataModel):
+    def __init__(self, data: TaskCategoryDto):
+        self._id = data.id
+        self._name = data.name
+        self._description = data.description
+        self._row_created_timestamp = data.row_created_timestamp
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def row_created_timestamp(self) -&gt; datetime:
+        return self._row_created_timestamp
 
 
 class Task(DataModel):
@@ -42,11 +68,15 @@ class Task(DataModel):
         self._done = response.done
         self._done_timestamp = response.done_timestamp
         self._category_id = response.category_id
+        if response.category:
+            self._category = TaskCategory(response.category)
         self._assigned_to_user_id = response.assigned_to_user_id
+        if response.assigned_to_user:
+            self._assigned_to_user = User(response.assigned_to_user)
         self._userfields = response.userfields
 
     @property
-    def id(self) -&gt; str:
+    def id(self) -&gt; int:
         return self._id
 
     @property
@@ -58,7 +88,7 @@ class Task(DataModel):
         return self._description
 
     @property
-    def due_date(self) -&gt; datetime:
+    def due_date(self) -&gt; datetime.date:
         return self._due_date
 
     @property
@@ -74,8 +104,16 @@ class Task(DataModel):
         return self._category_id
 
     @property
+    def category(self) -&gt; TaskCategory:
+        return self._category
+
+    @property
     def assigned_to_user_id(self) -&gt; int:
         return self._assigned_to_user_id
+
+    @property
+    def assigned_to_user(self) -&gt; User:
+        return self._assigned_to_user
 
     @property
     def userfields(self) -&gt; Dict[str, str]:
@@ -111,11 +149,15 @@ class Task(DataModel):
         self._done = response.done
         self._done_timestamp = response.done_timestamp
         self._category_id = response.category_id
+        if response.category:
+            self._category = TaskCategory(response.category)
         self._assigned_to_user_id = response.assigned_to_user_id
+        if response.assigned_to_user:
+            self._assigned_to_user = User(response.assigned_to_user)
         self._userfields = response.userfields
 
     @property
-    def id(self) -&gt; str:
+    def id(self) -&gt; int:
         return self._id
 
     @property
@@ -127,7 +169,7 @@ class Task(DataModel):
         return self._description
 
     @property
-    def due_date(self) -&gt; datetime:
+    def due_date(self) -&gt; datetime.date:
         return self._due_date
 
     @property
@@ -143,8 +185,16 @@ class Task(DataModel):
         return self._category_id
 
     @property
+    def category(self) -&gt; TaskCategory:
+        return self._category
+
+    @property
     def assigned_to_user_id(self) -&gt; int:
         return self._assigned_to_user_id
+
+    @property
+    def assigned_to_user(self) -&gt; User:
+        return self._assigned_to_user
 
     @property
     def userfields(self) -&gt; Dict[str, str]:
@@ -156,6 +206,18 @@ class Task(DataModel):
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.data_models.task.Task.assigned_to_user"><code class="name">var <span class="ident">assigned_to_user</span> : <a title="pygrocy.data_models.user.User" href="user.html#pygrocy.data_models.user.User">User</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def assigned_to_user(self) -&gt; User:
+    return self._assigned_to_user</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.data_models.task.Task.assigned_to_user_id"><code class="name">var <span class="ident">assigned_to_user_id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
@@ -166,6 +228,18 @@ class Task(DataModel):
 <pre><code class="python">@property
 def assigned_to_user_id(self) -&gt; int:
     return self._assigned_to_user_id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.task.Task.category"><code class="name">var <span class="ident">category</span> : <a title="pygrocy.data_models.task.TaskCategory" href="#pygrocy.data_models.task.TaskCategory">TaskCategory</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def category(self) -&gt; TaskCategory:
+    return self._category</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.task.Task.category_id"><code class="name">var <span class="ident">category_id</span> : int</code></dt>
@@ -216,7 +290,7 @@ def done_timestamp(self) -&gt; datetime:
     return self._done_timestamp</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.data_models.task.Task.due_date"><code class="name">var <span class="ident">due_date</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.data_models.task.Task.due_date"><code class="name">var <span class="ident">due_date</span> : <method 'date' of 'datetime.datetime' objects></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -224,11 +298,11 @@ def done_timestamp(self) -&gt; datetime:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def due_date(self) -&gt; datetime:
+def due_date(self) -&gt; datetime.date:
     return self._due_date</code></pre>
 </details>
 </dd>
-<dt id="pygrocy.data_models.task.Task.id"><code class="name">var <span class="ident">id</span> : str</code></dt>
+<dt id="pygrocy.data_models.task.Task.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -236,7 +310,7 @@ def due_date(self) -&gt; datetime:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def id(self) -&gt; str:
+def id(self) -&gt; int:
     return self._id</code></pre>
 </details>
 </dd>
@@ -266,6 +340,95 @@ def userfields(self) -&gt; Dict[str, str]:
 </dd>
 </dl>
 </dd>
+<dt id="pygrocy.data_models.task.TaskCategory"><code class="flex name class">
+<span>class <span class="ident">TaskCategory</span></span>
+<span>(</span><span>data: <a title="pygrocy.grocy_api_client.TaskCategoryDto" href="../grocy_api_client.html#pygrocy.grocy_api_client.TaskCategoryDto">TaskCategoryDto</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TaskCategory(DataModel):
+    def __init__(self, data: TaskCategoryDto):
+        self._id = data.id
+        self._name = data.name
+        self._description = data.description
+        self._row_created_timestamp = data.row_created_timestamp
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
+
+    @property
+    def row_created_timestamp(self) -&gt; datetime:
+        return self._row_created_timestamp</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygrocy.base.DataModel" href="../base.html#pygrocy.base.DataModel">DataModel</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.data_models.task.TaskCategory.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.task.TaskCategory.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.task.TaskCategory.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.task.TaskCategory.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def row_created_timestamp(self) -&gt; datetime:
+    return self._row_created_timestamp</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -285,7 +448,9 @@ def userfields(self) -&gt; Dict[str, str]:
 <li>
 <h4><code><a title="pygrocy.data_models.task.Task" href="#pygrocy.data_models.task.Task">Task</a></code></h4>
 <ul class="two-column">
+<li><code><a title="pygrocy.data_models.task.Task.assigned_to_user" href="#pygrocy.data_models.task.Task.assigned_to_user">assigned_to_user</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.assigned_to_user_id" href="#pygrocy.data_models.task.Task.assigned_to_user_id">assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.data_models.task.Task.category" href="#pygrocy.data_models.task.Task.category">category</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.category_id" href="#pygrocy.data_models.task.Task.category_id">category_id</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.description" href="#pygrocy.data_models.task.Task.description">description</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.done" href="#pygrocy.data_models.task.Task.done">done</a></code></li>
@@ -294,6 +459,15 @@ def userfields(self) -&gt; Dict[str, str]:
 <li><code><a title="pygrocy.data_models.task.Task.id" href="#pygrocy.data_models.task.Task.id">id</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.name" href="#pygrocy.data_models.task.Task.name">name</a></code></li>
 <li><code><a title="pygrocy.data_models.task.Task.userfields" href="#pygrocy.data_models.task.Task.userfields">userfields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.task.TaskCategory" href="#pygrocy.data_models.task.TaskCategory">TaskCategory</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.task.TaskCategory.description" href="#pygrocy.data_models.task.TaskCategory.description">description</a></code></li>
+<li><code><a title="pygrocy.data_models.task.TaskCategory.id" href="#pygrocy.data_models.task.TaskCategory.id">id</a></code></li>
+<li><code><a title="pygrocy.data_models.task.TaskCategory.name" href="#pygrocy.data_models.task.TaskCategory.name">name</a></code></li>
+<li><code><a title="pygrocy.data_models.task.TaskCategory.row_created_timestamp" href="#pygrocy.data_models.task.TaskCategory.row_created_timestamp">row_created_timestamp</a></code></li>
 </ul>
 </li>
 </ul>
