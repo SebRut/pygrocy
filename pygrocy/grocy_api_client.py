@@ -509,7 +509,7 @@ class GrocyApiClient(object):
     def get_users(self) -> List[UserDto]:
         parsed_json = self._do_get_request("users")
         if parsed_json:
-            return [UserDto(user) for user in parsed_json]
+            return [UserDto(**user) for user in parsed_json]
 
     def get_user(self, id: int) -> UserDto:
         query_params = []
@@ -517,4 +517,4 @@ class GrocyApiClient(object):
             query_params.append(f"id={id}")
         parsed_json = self._do_get_request("users")
         if parsed_json:
-            return UserDto(parsed_json[0])
+            return UserDto(**parsed_json[0])
