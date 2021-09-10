@@ -1,9 +1,14 @@
 from datetime import datetime
 from enum import Enum
-from typing import List, Dict
+from typing import Dict
+
 from pygrocy.base import DataModel
 from pygrocy.data_models.user import User
-from pygrocy.grocy_api_client import CurrentChoreResponse, ChoreDetailsResponse, GrocyApiClient
+from pygrocy.grocy_api_client import (
+    ChoreDetailsResponse,
+    CurrentChoreResponse,
+    GrocyApiClient,
+)
 
 
 class PeriodType(str, Enum):

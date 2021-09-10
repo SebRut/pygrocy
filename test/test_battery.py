@@ -22,7 +22,7 @@ class TestBattery:
         assert battery.charge_interval_days == 0
         assert isinstance(battery.created_timestamp, datetime)
         assert isinstance(battery.last_charged, datetime)
-        assert battery.next_estimated_charge_time is None
+        assert isinstance(battery.next_estimated_charge_time, datetime)
         assert battery.userfields is None
         assert battery.charge_cycles_count == 6
 
