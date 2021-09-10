@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/users
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA72RywrCMBBFfyVknUKT1oVd+wuuREJopzCQtCEPioj/bqJdqFi7kS7nXrjnwJyu
+        FDvaUE4ZjR7coAyk8wBmJMd0p7hH54N8FkPUmlGtPgI3TrJ1oAJ0MqABH5SxaUaUghelKHhF+L6p
+        eVPVabBDb7W6zJNvLIttiA5kjxpekDc2a4oFTZKLv4rufog+aGuq1ZJqLrZTzbQ11fyUb88nudhO
+        NdOWVM932fjmdqkCAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 28 Jul 2021 13:11:50 GMT
+      Server:
+      - nginx/1.18.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/7.4.14
+    status:
+      code: 200
+      message: OK
+version: 1

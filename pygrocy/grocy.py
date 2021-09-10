@@ -8,7 +8,7 @@ from .base import DataModel  # noqa: F401
 from .data_models.battery import Battery
 from .data_models.chore import Chore
 from .data_models.generic import EntityType
-from .data_models.meal_items import MealPlanItem, RecipeItem
+from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
@@ -98,7 +98,7 @@ class Grocy(object):
         raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
         from pygrocy.grocy_api_client import ProductData
 
-        product_datas = [ProductData(product) for product in raw_products]
+        product_datas = [ProductData(**product) for product in raw_products]
         return [Product(product) for product in product_datas]
 
     def chores(self, get_details: bool = False) -> List[Chore]:
@@ -237,3 +237,22 @@ class Grocy(object):
 
     def get_generic_objects_for_type(self, entity_type: EntityType):
         return self._api_client.get_generic_objects_for_type(entity_type.value)
+
+    def meal_plan_sections(self) -> List[MealPlanSection]:
+        raw_sections = self._api_client.get_meal_plan_sections()
+        return [MealPlanSection(section) for section in raw_sections]
+
+    def meal_plan_section(self, meal_plan_section_id: int) -> MealPlanSection:
+        section = self._api_client.get_meal_plan_section(meal_plan_section_id)
+
+        if section:
+            return MealPlanSection(section)
+
+    def users(self) -> List[User]:
+        user_dtos = self._api_client.get_users()
+        return [User(user) for user in user_dtos]
+
+    def user(self, user_id: int = None) -> User:
+        user = self._api_client.get_user(user_id=user_id)
+        if user:
+            return User(user)

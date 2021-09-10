@@ -23,3 +23,4 @@ class EntityType(str, Enum):
     USER_ENTITIES = "userentities"
     USER_OBJECTS = "userobjects"
     MEAL_PLAN = "meal_plan"
+    MEAL_PLAN_SECTIONS = "meal_plan_sections"
