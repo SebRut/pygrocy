@@ -511,10 +511,10 @@ class GrocyApiClient(object):
         if parsed_json:
             return [UserDto(**user) for user in parsed_json]
 
-    def get_user(self, id: int) -> UserDto:
+    def get_user(self, user_id: int) -> UserDto:
         query_params = []
-        if id:
-            query_params.append(f"id={id}")
+        if user_id:
+            query_params.append(f"id={user_id}")
         parsed_json = self._do_get_request("users")
         if parsed_json:
             return UserDto(**parsed_json[0])

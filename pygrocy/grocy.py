@@ -252,7 +252,7 @@ class Grocy(object):
         user_dtos = self._api_client.get_users()
         return [User(user) for user in user_dtos]
 
-    def user(self, id: int = None) -> User:
-        user = self._api_client.get_user(id=id)
+    def user(self, user_id: int = None) -> User:
+        user = self._api_client.get_user(user_id=user_id)
         if user:
             return User(user)
