@@ -1,5 +1,28 @@
 # Changelog
 
+## [v1.0.0](https://github.com/SebRut/pygrocy/tree/v1.0.0) (2021-09-10)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.30.0...v1.0.0)
+
+**Implemented enhancements:**
+
+- Add assigned\_to\_user to task [\#188](https://github.com/SebRut/pygrocy/issues/188)
+- Add support for meal plan sections in grocy v3.1.0 [\#172](https://github.com/SebRut/pygrocy/issues/172)
+
+**Closed issues:**
+
+- add category field to task [\#189](https://github.com/SebRut/pygrocy/issues/189)
+- support consuming decimal amounts [\#187](https://github.com/SebRut/pygrocy/issues/187)
+
+**Merged pull requests:**
+
+- add assigned\_to\_user field to Task [\#190](https://github.com/SebRut/pygrocy/pull/190) ([SebRut](https://github.com/SebRut))
+- apply black to everything [\#185](https://github.com/SebRut/pygrocy/pull/185) ([SebRut](https://github.com/SebRut))
+- migrate to pydantic [\#184](https://github.com/SebRut/pygrocy/pull/184) ([SebRut](https://github.com/SebRut))
+- add basic support for product and note type [\#183](https://github.com/SebRut/pygrocy/pull/183) ([SebRut](https://github.com/SebRut))
+- add meal plan section support [\#182](https://github.com/SebRut/pygrocy/pull/182) ([SebRut](https://github.com/SebRut))
+- add users getter [\#170](https://github.com/SebRut/pygrocy/pull/170) ([SebRut](https://github.com/SebRut))
+
 ## [v0.30.0](https://github.com/SebRut/pygrocy/tree/v0.30.0) (2021-08-23)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.29.0...v0.30.0)
