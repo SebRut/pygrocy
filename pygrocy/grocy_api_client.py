@@ -505,3 +505,16 @@ class GrocyApiClient(object):
         )
         if parsed_json and len(parsed_json) == 1:
             return MealPlanSectionResponse(**parsed_json[0])
+
+    def get_users(self) -> List[UserDto]:
+        parsed_json = self._do_get_request("users")
+        if parsed_json:
+            return [UserDto(**user) for user in parsed_json]
+
+    def get_user(self, user_id: int) -> UserDto:
+        query_params = []
+        if user_id:
+            query_params.append(f"id={user_id}")
+        parsed_json = self._do_get_request("users")
+        if parsed_json:
+            return UserDto(**parsed_json[0])
