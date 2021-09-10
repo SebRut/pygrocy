@@ -2,6 +2,7 @@ from datetime import datetime
 
 import pytest
 
+from pygrocy.data_models.task import TaskCategory
 from pygrocy.data_models.user import User
 from pygrocy.errors import GrocyError
 
@@ -16,6 +17,9 @@ class TestTasks:
         assert task.id == 1
         assert task.name == "Repair the garage door"
         assert isinstance(task.assigned_to_user, User)
+        assert isinstance(task.category, TaskCategory)
+        assert task.category.id == 1
+        assert task.category.name == "Home"
 
     @pytest.mark.vcr
     def test_complete_task_valid_with_defaults(self, grocy):

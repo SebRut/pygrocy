@@ -172,6 +172,13 @@ class TransactionType(Enum):
     PRODUCT_OPENED = "product-opened"
 
 
+class TaskCategoryDto(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    row_created_timestamp: datetime
+
+
 class TaskResponse(BaseModel):
     id: int
     name: str
@@ -180,6 +187,7 @@ class TaskResponse(BaseModel):
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
+    category: Optional[TaskCategoryDto] = None
     assigned_to_user_id: Optional[int] = None
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
