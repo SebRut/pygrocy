@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Dict
 
 from pygrocy.base import DataModel
+from pygrocy.data_models.user import User
 from pygrocy.grocy_api_client import TaskResponse
 
 
@@ -16,6 +17,7 @@ class Task(DataModel):
         self._done_timestamp = response.done_timestamp
         self._category_id = response.category_id
         self._assigned_to_user_id = response.assigned_to_user_id
+        self._assigned_to_user = User(response.assigned_to_user)
         self._userfields = response.userfields
 
     @property
@@ -49,6 +51,10 @@ class Task(DataModel):
     @property
     def assigned_to_user_id(self) -> int:
         return self._assigned_to_user_id
+
+    @property
+    def assigned_to_user(self) -> User:
+        return self._assigned_to_user
 
     @property
     def userfields(self) -> Dict[str, str]:

@@ -181,6 +181,7 @@ class TaskResponse(BaseModel):
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
     assigned_to_user_id: int
+    assigned_to_user: UserDto
     userfields: Optional[Dict] = None
 
 
