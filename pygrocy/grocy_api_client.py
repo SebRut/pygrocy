@@ -145,7 +145,7 @@ class ProductBarcodeData(BaseModel):
 
 class ProductDetailsResponse(BaseModel):
     last_purchased: Optional[date] = None
-    last_used: Optional[datetime] = None
+    last_used: Optional[date] = None
     stock_amount: int
     stock_amount_opened: int
     next_best_before_date: Optional[date] = None
