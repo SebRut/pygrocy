@@ -233,13 +233,17 @@ class GrocyApiClient(object):
         base_url,
         api_key,
         port: int = DEFAULT_PORT_NUMBER,
+        path: str = None,
         verify_ssl=True,
         debug=False,
     ):
         if debug:
             _enable_debug_mode()
 
-        self._base_url = "{}:{}/api/".format(base_url, port)
+        if path:
+            self._base_url = "{}:{}/{}/api/".format(base_url, port, path)
+        else:
+            self._base_url = "{}:{}/api/".format(base_url, port)
         _LOGGER.debug(f"generated base url: {self._base_url}")
 
         self._api_key = api_key

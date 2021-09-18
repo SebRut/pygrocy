@@ -36,10 +36,13 @@ class Grocy(object):
         base_url,
         api_key,
         port: int = DEFAULT_PORT_NUMBER,
+        path: str = None,
         verify_ssl=True,
         debug=False,
     ):
-        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl, debug)
+        self._api_client = GrocyApiClient(
+            base_url, api_key, port, path, verify_ssl, debug
+        )
 
         if debug:
             _LOGGER.setLevel(logging.DEBUG)
