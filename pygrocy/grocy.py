@@ -229,12 +229,20 @@ class Grocy(object):
 
     def add_generic(self, entity_type: EntityType, data):
         return self._api_client.add_generic(entity_type.value, data)
+    
+    def add_stock(self, entity_type: EntityType, object_id: int, data):
+        return self._api_client.add_stock(entity_type.value, object_id, data)
 
     def update_generic(self, entity_type: EntityType, object_id: int, updated_data):
         return self._api_client.update_generic(
             entity_type.value, object_id, updated_data
         )
-
+    
+    def update_generic_userfields(self, entity_type: EntityType, object_id: int, updated_data):
+        return self._api_client.update_generic_userfields(
+            entity_type.value, object_id, updated_data
+        )
+    
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
 
