@@ -76,8 +76,8 @@ class ProductData(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    location_id: int
-    product_group_id: Optional[int] = None
+    location_id: str # changed from int to str
+    product_group_id: Optional[str] = None # changed from int to str
     qu_id_stock: int
     qu_id_purchase: int
     qu_factor_purchase_to_stock: float
