@@ -497,9 +497,15 @@ class GrocyApiClient(object):
 
     def add_generic(self, entity_type: str, data):
         return self._do_post_request(f"objects/{entity_type}", data)
-
+    
+     def add_stock(self, entity_type: str, object_id: int, data):
+        return self._do_post_request(f"stock/{entity_type}/{object_id}/add", data)
+    
     def update_generic(self, entity_type: str, object_id: int, data):
         return self._do_put_request(f"objects/{entity_type}/{object_id}", data)
+     
+    def update_generic_userfields(self, entity_type: str, object_id: int, data):
+        return self._do_put_request(f"userfields/{entity_type}/{object_id}", data)
 
     def delete_generic(self, entity_type: str, object_id: int):
         return self._do_delete_request(f"objects/{entity_type}/{object_id}")
