@@ -97,6 +97,11 @@ class Grocy(object):
         if resp:
             return Product(resp)
 
+    def product_by_barcode(self, barcode: str) -> Product:
+        resp = self._api_client.get_product_by_barcode(barcode)
+        if resp:
+            return Product(resp)
+
     def all_products(self) -> List[Product]:
         raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
         from pygrocy.grocy_api_client import ProductData
@@ -146,6 +151,29 @@ class Grocy(object):
     ):
         return self._api_client.consume_product(
             product_id, amount, spoiled, transaction_type
+        )
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        transaction_type: TransactionType = TransactionType.PURCHASE,
+    ):
+        return self._api_client.add_product_by_barcode(
+            barcode, amount, price, best_before_date, transaction_type
+        )
+
+    def consume_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float = 1,
+        spoiled: bool = False,
+        transaction_type: TransactionType = TransactionType.CONSUME,
+    ):
+        return self._api_client.consume_product_by_barcode(
+            barcode, amount, spoiled, transaction_type
         )
 
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:

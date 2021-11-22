@@ -217,6 +217,36 @@ class TestGrocy(TestCase):
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @responses.activate
+    def test_add_product_by_barcode_valid(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/by-barcode/42141099/add", status=200
+        )
+        self.assertIsNone(self.grocy.add_product_by_barcode("42141099", 1, 2.44, self.date_test))
+
+    @responses.activate
+    def test_add_product_by_barcode_error(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/by-barcode/555/add", status=400
+        )
+        self.assertRaises(
+            GrocyError, self.grocy.add_product_by_barcode, 555, 1.3, 2.44, self.date_test
+        )
+
+    @responses.activate
+    def test_consume_product_by_barcode_valid(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/by-barcode/42141099/consume", status=200
+        )
+        self.assertIsNone(self.grocy.consume_product_by_barcode("42141099", 1.3))
+
+    @responses.activate
+    def test_consume_product_error(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/by-barcode/555/consume", status=400
+        )
+        self.assertRaises(GrocyError, self.grocy.consume_product_by_barcode, "555", 1.3)
+
+    @responses.activate
     def test_execute_chore_valid(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=200)
         self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test))

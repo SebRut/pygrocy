@@ -335,6 +335,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return ProductDetailsResponse(**parsed_json)
 
+    def get_product_by_barcode(self, barcode) -> ProductDetailsResponse:
+        url = f"stock/products/by-barcode/{barcode}"
+        parsed_json = self._do_get_request(url)
+        if parsed_json:
+            return ProductDetailsResponse(**parsed_json)
+
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores")
         return [CurrentChoreResponse(**chore) for chore in parsed_json]
@@ -393,6 +399,40 @@ class GrocyApiClient(object):
         }
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        transaction_type: TransactionType = TransactionType.PURCHASE,
+    ):
+        data = {
+            "amount": amount,
+            "transaction_type": transaction_type.value,
+            "price": price,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = best_before_date.strftime("%Y-%m-%d")
+
+        return self._do_post_request(f"stock/products/by-barcode/{barcode}/add", data)
+
+    def consume_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float = 1,
+        spoiled: bool = False,
+        transaction_type: TransactionType = TransactionType.CONSUME,
+    ):
+        data = {
+            "amount": amount,
+            "spoiled": spoiled,
+            "transaction_type": transaction_type.value,
+        }
+
+        self._do_post_request(f"stock/products/by-barcode/{barcode}/consume", data)
 
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list")
