@@ -219,6 +219,28 @@ class TestGrocy(TestCase):
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @pytest.mark.vcr
+    def test_inventory_product_valid(self):
+        currentInv = int(self.grocy.product(4).available_amount)
+        newAmount = currentInv + 10
+
+        product = self.grocy.inventory_product(
+            4, newAmount, self.date_test, 1, 1, 150, True
+        )
+
+        assert product.id == 4
+        assert product.name == "Crisps"
+        assert product.available_amount == newAmount
+
+    @pytest.mark.vcr
+    def test_inventory_product_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            currentInv = int(self.grocy.product(4).available_amount)
+            self.grocy.inventory_product(4, currentInv, self.date_test, 1, 1, 150, True)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_add_product_by_barcode_valid(self):
         product = self.grocy.add_product_by_barcode(
             "42141099", 1, 5, self.date_test, True
@@ -248,6 +270,28 @@ class TestGrocy(TestCase):
     def test_consume_product_by_barcode_error(self):
         with pytest.raises(GrocyError) as exc_info:
             self.grocy.consume_product_by_barcode("555", 1, False, True)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
+    def test_inventory_product_by_barcode_valid(self):
+        currentInv = int(self.grocy.product_by_barcode("42141099").available_amount)
+        newAmount = currentInv + 10
+
+        product = self.grocy.inventory_product_by_barcode(
+            "42141099", newAmount, self.date_test, 1, 150, True
+        )
+
+        assert product.id == 4
+        assert product.name == "Crisps"
+        assert product.available_amount == newAmount
+
+    @pytest.mark.vcr
+    def test_inventory_product_by_barcode_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            currentInv = int(self.grocy.product_by_barcode("42141099").available_amount)
+            self.grocy.inventory_product(4, currentInv, self.date_test, 1, 150, True)
 
         error = exc_info.value
         assert error.status_code == 400
