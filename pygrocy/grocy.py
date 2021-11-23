@@ -158,22 +158,20 @@ class Grocy(object):
         barcode: str,
         amount: float,
         price: float,
-        best_before_date: datetime = None,
-        transaction_type: TransactionType = TransactionType.PURCHASE,
+        best_before_date: datetime = None
     ):
         return self._api_client.add_product_by_barcode(
-            barcode, amount, price, best_before_date, transaction_type
+            barcode, amount, price, best_before_date
         )
 
     def consume_product_by_barcode(
         self,
         barcode: str,
         amount: float = 1,
-        spoiled: bool = False,
-        transaction_type: TransactionType = TransactionType.CONSUME,
+        spoiled: bool = False
     ):
         return self._api_client.consume_product_by_barcode(
-            barcode, amount, spoiled, transaction_type
+            barcode, amount, spoiled
         )
 
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:

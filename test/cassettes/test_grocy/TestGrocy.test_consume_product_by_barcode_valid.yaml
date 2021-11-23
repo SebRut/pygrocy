@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: '{"amount": 1, "spoiled": 5, "transaction_type": "consume"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/products/by-barcode/42141099/consume
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA3VQ22rEIBD9leLzBjS7zTb5lVLEjLNdaeLIqJRS+u/VCGkK7Ztzzozn8vwpnBWT
+        GJ/ESQQmmyHpDbkUwKyUfSp0p8o0Y0x6xhsxamsSFryXveqU6vpzPc8MdxPR/snm/4gYyC1YTVSR
+        mAjemoNBjTBLHNAgDIVKbHw0kBx5nT5C1QfyMa9YxdlBRR7LO3tLvg5yH3Rya7Fv1iAmn5flJCig
+        3602iOldA2OJZo/7h5QPcpwuapLVzkJgNi97XYzgAm7m24dAzLj8bDX0mGO73YJezz1cLdzKz62D
+        6qbS7SjeKQTnX/Uv2caVarlVpsTXyzd/apPx0wEAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 09:41:06 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+version: 1

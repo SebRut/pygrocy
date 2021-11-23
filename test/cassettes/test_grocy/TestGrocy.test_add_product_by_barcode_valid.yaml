@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: '{"amount": 1, "transaction_type": "purchase", "price": 5}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '57'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/products/by-barcode/42141099/add
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA21Q22rDMAz9leHnFmK3S0l+ZRTjyNpqlljGF8YY+/fJNmsz2Jt1jqVzefkSzopZ
+        TBdxECGSLZB1Q84MmI2Kz0xLHhZMWS/4ShG1NRkZVoOSRymP6lS3S4SbSWj/ZcuD8GVdDyIFcitW
+        7YGXUyZ478KjnGAZcESDMDKVo/HJQHbkdf4MVfdXqqpGBxV65nfxlnwd6sU+6Ow29m22IOauSwH9
+        3WOHIn1oiMiZ7P7/Lt7TMM1nOQ/Vz0pgmpl7TRHBBWzu+0GgGHF9/OroPkjbbUkvJ2UUToov9xKq
+        m0r3pXSjEJx/039kO8edxt6ZFN/XH8JrT/jLAQAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 09:41:06 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+version: 1

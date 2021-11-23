@@ -1,5 +1,8 @@
 import json
 from datetime import datetime
+
+import pytest
+
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 from unittest import TestCase
 from unittest.mock import mock_open, patch
@@ -8,7 +11,7 @@ import responses
 
 from pygrocy import Grocy
 from pygrocy.errors import GrocyError
-from pygrocy.grocy_api_client import GrocyApiClient
+from pygrocy.grocy_api_client import GrocyApiClient, StockLogResponse, TransactionType
 
 
 class TestGrocy(TestCase):
@@ -216,35 +219,42 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
-    @responses.activate
+    @pytest.mark.vcr
     def test_add_product_by_barcode_valid(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/stock/products/by-barcode/42141099/add", status=200
-        )
-        self.assertIsNone(self.grocy.add_product_by_barcode("42141099", 1, 2.44, self.date_test))
+        stockLog = self.grocy.add_product_by_barcode("42141099", 1, 5)
 
-    @responses.activate
+        print(stockLog)
+
+        assert isinstance(stockLog, StockLogResponse)
+        assert stockLog.product_id == 4
+        assert stockLog.transaction_type == TransactionType.PURCHASE
+
+
+    @pytest.mark.vcr
     def test_add_product_by_barcode_error(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/stock/products/by-barcode/555/add", status=400
-        )
-        self.assertRaises(
-            GrocyError, self.grocy.add_product_by_barcode, 555, 1.3, 2.44, self.date_test
-        )
+        with pytest.raises(GrocyError) as exc_info:
+            self.grocy.add_product_by_barcode("555", 1, 5)
 
-    @responses.activate
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_consume_product_by_barcode_valid(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/stock/products/by-barcode/42141099/consume", status=200
-        )
-        self.assertIsNone(self.grocy.consume_product_by_barcode("42141099", 1.3))
+        stockLog = self.grocy.consume_product_by_barcode("42141099", 1, 5)
 
-    @responses.activate
+        print(stockLog)
+
+        assert isinstance(stockLog, StockLogResponse)
+        assert stockLog.product_id == 4
+        assert stockLog.transaction_type == TransactionType.CONSUME
+
+    @pytest.mark.vcr
     def test_consume_product_error(self):
-        responses.add(
-            responses.POST, f"{self.base_url}/stock/products/by-barcode/555/consume", status=400
-        )
-        self.assertRaises(GrocyError, self.grocy.consume_product_by_barcode, "555", 1.3)
+        with pytest.raises(GrocyError) as exc_info:
+            self.grocy.consume_product_by_barcode("555", 1, 5)
+
+        error = exc_info.value
+        assert error.status_code == 400
 
     @responses.activate
     def test_execute_chore_valid(self):
