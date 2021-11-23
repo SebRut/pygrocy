@@ -418,7 +418,7 @@ class GrocyApiClient(object):
         barcode: str,
         amount: float,
         price: float,
-        best_before_date: datetime = None
+        best_before_date: datetime = None,
     ) -> StockLogResponse:
         data = {
             "amount": amount,
@@ -429,17 +429,16 @@ class GrocyApiClient(object):
         if best_before_date is not None:
             data["best_before_date"] = best_before_date.strftime("%Y-%m-%d")
 
-        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/add", data)
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/add", data
+        )
 
         if parsed_json:
             stockLog = [StockLogResponse(**response) for response in parsed_json]
             return stockLog[0]
 
     def consume_product_by_barcode(
-        self,
-        barcode: str,
-        amount: float = 1,
-        spoiled: bool = False
+        self, barcode: str, amount: float = 1, spoiled: bool = False
     ):
         data = {
             "amount": amount,
@@ -447,7 +446,9 @@ class GrocyApiClient(object):
             "transaction_type": TransactionType.CONSUME.value,
         }
 
-        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/consume", data)
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/consume", data
+        )
 
         if parsed_json:
             stockLog = [StockLogResponse(**response) for response in parsed_json]

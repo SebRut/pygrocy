@@ -161,9 +161,11 @@ class Grocy(object):
         best_before_date: datetime = None,
         get_details: bool = True,
     ) -> Product:
-        product = Product(self._api_client.add_product_by_barcode(
-            barcode, amount, price, best_before_date
-        ))
+        product = Product(
+            self._api_client.add_product_by_barcode(
+                barcode, amount, price, best_before_date
+            )
+        )
 
         if get_details:
             product.get_details(self._api_client)
@@ -176,9 +178,9 @@ class Grocy(object):
         spoiled: bool = False,
         get_details: bool = True,
     ) -> Product:
-        product = Product(self._api_client.consume_product_by_barcode(
-            barcode, amount, spoiled
-        ))
+        product = Product(
+            self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+        )
 
         if get_details:
             product.get_details(self._api_client)
