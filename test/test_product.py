@@ -79,4 +79,3 @@ class TestProduct:
         error = exc_info.value
         assert error.status_code == 400
         assert error.message == "No product with barcode 200 found"
-
