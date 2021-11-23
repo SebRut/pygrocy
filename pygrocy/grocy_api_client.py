@@ -405,17 +405,16 @@ class GrocyApiClient(object):
         barcode: str,
         amount: float,
         price: float,
-        best_before_date: datetime = None,
-        transaction_type: TransactionType = TransactionType.PURCHASE,
+        best_before_date: datetime = None
     ):
         data = {
             "amount": amount,
-            "transaction_type": transaction_type.value,
+            "transaction_type": TransactionType.PURCHASE.value,
             "price": price,
         }
 
         if best_before_date is not None:
-            data["best_before_date"] = best_before_date.strftime("%Y-%m-%d")
+            data["best_before_date"] = parse_date(best_before_date)
 
         return self._do_post_request(f"stock/products/by-barcode/{barcode}/add", data)
 
@@ -423,13 +422,12 @@ class GrocyApiClient(object):
         self,
         barcode: str,
         amount: float = 1,
-        spoiled: bool = False,
-        transaction_type: TransactionType = TransactionType.CONSUME,
+        spoiled: bool = False
     ):
         data = {
             "amount": amount,
             "spoiled": spoiled,
-            "transaction_type": transaction_type.value,
+            "transaction_type": TransactionType.CONSUME.value,
         }
 
         self._do_post_request(f"stock/products/by-barcode/{barcode}/consume", data)
