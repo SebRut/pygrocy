@@ -56,3 +56,26 @@ class TestProduct:
         mocker.patch("builtins.open", mocker.mock_open())
 
         assert grocy.add_product_pic(20, "/somepath/pic.jpg") is None
+
+    @pytest.mark.vcr
+    def test_get_product_by_barcode(self, grocy):
+        product = grocy.product_by_barcode("42141099")
+
+        assert isinstance(product, Product)
+        assert product.name == "Crisps"
+        assert product.available_amount == 5
+        assert product.product_group_id == 1
+
+        assert len(product.product_barcodes) == 1
+        barcode = product.product_barcodes[0]
+        assert isinstance(barcode, ProductBarcode)
+        assert barcode.barcode == "42141099"
+
+    @pytest.mark.vcr
+    def test_product_by_barcode_get_details_non_existant(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.product_by_barcode(200)
+
+        error = exc_info.value
+        assert error.status_code == 400
+        assert error.message == "No product with barcode 200 found"

@@ -1,0 +1,55 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/by-barcode/42141099
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81Vy27bMBD8lUDnOLDkGEV87Q/0XhQLmqIkIpRIU6RdJ8i/d5aUbKUwAvfWi2Ht
+        i9yZ2eV74bytowzF7r3QdbErnovHYhC9wt/vXo9uxHetRum1C9oOxW6IxjzOadR6Gx2lzBKRQgZ9
+        5Fz+MFYKzsluLjx21jk9tPTJlSseIuLIRS87MXKJDRKycQxWvl4tDU6x/hJKwdIcUT6tkdXrIVtI
+        9DYOaK4o2V6rRkQTaK9G/mmsV1SL8wj/V24STVCerFNo/57Ixiv1hjbviw6dOF2DnZYh4l6NNooy
+        ERkfNYg9TEHAeVK67QJ1YqjNNXXh4pMTFIMNJDslXydAmmhQ2fRqCIT+ySupnZoRcCgOx6SJxFs+
+        XApjvU5xZcXEyNhHI4Kiv7Em29AY93ONuXIdcfWzm6VxiBpXknYYY68WLKU7d7pWBNkkUskelT9q
+        dZrA9PZE0iscXVPQPZgUvYOvWlflqixXVfVQbnbVeldVC8ad1+grFzRir8xUTRiDeslCDhzHQbNa
+        WA3QajQ1MYB70OHt20T/x1X9e+GlxXQUu5/T+DA2S/jSPE1hKPxclc/l+uUFUUna8zjNOs1ofzUm
+        RkC7aEcCyhz9b4ignynz4xdGNFWbZo7Hf4axZPSSN44KjuliPIhXurYMUzIdhYmJ229PW87M1txV
+        GhyukWFdlCDRtl61zCW820T+jczPYVnX8ygfohiCDufE3GUlXLYZ0zFtsx8CO+TmLrsbwJJ543Lk
+        TPSCRcRVR1izgUeqhxoYLcjk8+VSZ//JzZYqKjZP1YapFMd2VhZsbLEG4r7IbTKm3NsSLZYzdzsk
+        C2lQvwPxTqhBfpZdtVpvV9Xy3bhgtXyTsPLODzK6vRW+xhVvvE1385lO0yOGG/ta+aRQ0CawcUSr
+        aOyUacjoZn4lqnINaTurDXnefdgYEvuy2MGMMlc1X0eENwneM+xgbWoooxFmVB9/AA9z8G53BwAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 22 Nov 2021 13:29:27 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+version: 1
