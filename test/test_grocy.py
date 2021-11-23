@@ -1,16 +1,18 @@
 import json
 from datetime import datetime
+
+import pytest
+
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
-import pytest
 import responses
 
 from pygrocy import Grocy
-from pygrocy.data_models.product import Product
 from pygrocy.errors import GrocyError
 from pygrocy.grocy_api_client import GrocyApiClient
+from pygrocy.data_models.product import Product
 
 
 class TestGrocy(TestCase):
@@ -245,7 +247,7 @@ class TestGrocy(TestCase):
         assert product.name == "Crisps"
 
     @pytest.mark.vcr
-    def test_consume_product_by_barcode_error(self):
+    def test_consume_product_error(self):
         with pytest.raises(GrocyError) as exc_info:
             self.grocy.consume_product_by_barcode("555", 1, False, True)
 

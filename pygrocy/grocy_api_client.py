@@ -542,7 +542,7 @@ class GrocyApiClient(object):
             return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -> List[CurrentBatteryResponse]:
-        parsed_json = self._do_get_request("batteries")
+        parsed_json = self._do_get_request(f"batteries")
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
 
