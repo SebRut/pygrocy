@@ -427,7 +427,7 @@ class GrocyApiClient(object):
         }
 
         if best_before_date is not None:
-            data["best_before_date"] = best_before_date.strftime("%Y-%m-%d")
+            data["best_before_date"] = localize_datetime(best_before_date).strftime("%Y-%m-%d")
 
         parsed_json = self._do_post_request(
             f"stock/products/by-barcode/{barcode}/add", data
