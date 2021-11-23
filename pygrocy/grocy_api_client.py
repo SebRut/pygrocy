@@ -427,12 +427,13 @@ class GrocyApiClient(object):
         }
 
         if best_before_date is not None:
-            data["best_before_date"] = parse_date(best_before_date)
+            data["best_before_date"] = best_before_date.strftime("%Y-%m-%d")
 
-        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/add", data)[0]
+        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/add", data)
 
         if parsed_json:
-            return StockLogResponse(**parsed_json)
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
 
     def consume_product_by_barcode(
             self,
@@ -446,10 +447,11 @@ class GrocyApiClient(object):
             "transaction_type": TransactionType.CONSUME.value,
         }
 
-        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/consume", data)[0]
+        parsed_json = self._do_post_request(f"stock/products/by-barcode/{barcode}/consume", data)
 
         if parsed_json:
-            return StockLogResponse(**parsed_json)
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
 
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list")

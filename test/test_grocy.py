@@ -11,7 +11,8 @@ import responses
 
 from pygrocy import Grocy
 from pygrocy.errors import GrocyError
-from pygrocy.grocy_api_client import GrocyApiClient, StockLogResponse, TransactionType
+from pygrocy.grocy_api_client import GrocyApiClient
+from pygrocy.data_models.product import Product
 
 
 class TestGrocy(TestCase):
@@ -221,37 +222,33 @@ class TestGrocy(TestCase):
 
     @pytest.mark.vcr
     def test_add_product_by_barcode_valid(self):
-        stockLog = self.grocy.add_product_by_barcode("42141099", 1, 5)
+        product = self.grocy.add_product_by_barcode("42141099", 1, 5, self.date_test, True)
+        print(product.id)
 
-        print(stockLog)
-
-        assert isinstance(stockLog, StockLogResponse)
-        assert stockLog.product_id == 4
-        assert stockLog.transaction_type == TransactionType.PURCHASE
-
+        assert isinstance(product, Product)
+        assert product.id == 4
+        assert product.name == "Crisps"
 
     @pytest.mark.vcr
     def test_add_product_by_barcode_error(self):
         with pytest.raises(GrocyError) as exc_info:
-            self.grocy.add_product_by_barcode("555", 1, 5)
+            self.grocy.add_product_by_barcode("555", 1, 5, self.date_test, True)
 
         error = exc_info.value
         assert error.status_code == 400
 
     @pytest.mark.vcr
     def test_consume_product_by_barcode_valid(self):
-        stockLog = self.grocy.consume_product_by_barcode("42141099", 1, 5)
+        product = self.grocy.consume_product_by_barcode("42141099", 1, False, True)
 
-        print(stockLog)
-
-        assert isinstance(stockLog, StockLogResponse)
-        assert stockLog.product_id == 4
-        assert stockLog.transaction_type == TransactionType.CONSUME
+        assert isinstance(product, Product)
+        assert product.id == 4
+        assert product.name == "Crisps"
 
     @pytest.mark.vcr
     def test_consume_product_error(self):
         with pytest.raises(GrocyError) as exc_info:
-            self.grocy.consume_product_by_barcode("555", 1, 5)
+            self.grocy.consume_product_by_barcode("555", 1, False, True)
 
         error = exc_info.value
         assert error.status_code == 400
