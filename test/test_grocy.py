@@ -223,7 +223,6 @@ class TestGrocy(TestCase):
     @pytest.mark.vcr
     def test_add_product_by_barcode_valid(self):
         product = self.grocy.add_product_by_barcode("42141099", 1, 5, self.date_test, True)
-        print(product.id)
 
         assert isinstance(product, Product)
         assert product.id == 4
