@@ -220,22 +220,24 @@ class TestGrocy(TestCase):
 
     @pytest.mark.vcr
     def test_inventory_product_valid(self):
-        currentInv = int(self.grocy.product(4).available_amount)
-        newAmount = currentInv + 10
+        current_inventory = int(self.grocy.product(4).available_amount)
+        new_amount = current_inventory + 10
 
         product = self.grocy.inventory_product(
-            4, newAmount, self.date_test, 1, 1, 150, True
+            4, new_amount, self.date_test, 1, 1, 150, True
         )
 
         assert product.id == 4
         assert product.name == "Crisps"
-        assert product.available_amount == newAmount
+        assert product.available_amount == new_amount
 
     @pytest.mark.vcr
     def test_inventory_product_error(self):
         with pytest.raises(GrocyError) as exc_info:
-            currentInv = int(self.grocy.product(4).available_amount)
-            self.grocy.inventory_product(4, currentInv, self.date_test, 1, 1, 150, True)
+            current_inventory = int(self.grocy.product(4).available_amount)
+            self.grocy.inventory_product(
+                4, current_inventory, self.date_test, 1, 1, 150, True
+            )
 
         error = exc_info.value
         assert error.status_code == 400
