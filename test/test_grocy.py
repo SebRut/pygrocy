@@ -1,18 +1,16 @@
 import json
 from datetime import datetime
-
-import pytest
-
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
+import pytest
 import responses
 
 from pygrocy import Grocy
+from pygrocy.data_models.product import Product
 from pygrocy.errors import GrocyError
 from pygrocy.grocy_api_client import GrocyApiClient
-from pygrocy.data_models.product import Product
 
 
 class TestGrocy(TestCase):
@@ -221,6 +219,30 @@ class TestGrocy(TestCase):
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @pytest.mark.vcr
+    def test_inventory_product_valid(self):
+        current_inventory = int(self.grocy.product(4).available_amount)
+        new_amount = current_inventory + 10
+
+        product = self.grocy.inventory_product(
+            4, new_amount, self.date_test, 1, 1, 150, True
+        )
+
+        assert product.id == 4
+        assert product.name == "Crisps"
+        assert product.available_amount == new_amount
+
+    @pytest.mark.vcr
+    def test_inventory_product_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            current_inventory = int(self.grocy.product(4).available_amount)
+            self.grocy.inventory_product(
+                4, current_inventory, self.date_test, 1, 1, 150, True
+            )
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_add_product_by_barcode_valid(self):
         product = self.grocy.add_product_by_barcode(
             "42141099", 1, 5, self.date_test, True
@@ -247,9 +269,31 @@ class TestGrocy(TestCase):
         assert product.name == "Crisps"
 
     @pytest.mark.vcr
-    def test_consume_product_error(self):
+    def test_consume_product_by_barcode_error(self):
         with pytest.raises(GrocyError) as exc_info:
             self.grocy.consume_product_by_barcode("555", 1, False, True)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
+    def test_inventory_product_by_barcode_valid(self):
+        currentInv = int(self.grocy.product_by_barcode("42141099").available_amount)
+        newAmount = currentInv + 10
+
+        product = self.grocy.inventory_product_by_barcode(
+            "42141099", newAmount, self.date_test, 1, 150, True
+        )
+
+        assert product.id == 4
+        assert product.name == "Crisps"
+        assert product.available_amount == newAmount
+
+    @pytest.mark.vcr
+    def test_inventory_product_by_barcode_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            currentInv = int(self.grocy.product_by_barcode("42141099").available_amount)
+            self.grocy.inventory_product(4, currentInv, self.date_test, 1, 150, True)
 
         error = exc_info.value
         assert error.status_code == 400

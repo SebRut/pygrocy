@@ -153,6 +153,31 @@ class Grocy(object):
             product_id, amount, spoiled, transaction_type
         )
 
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: int,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.inventory_product(
+                product_id,
+                new_amount,
+                best_before_date,
+                shopping_location_id,
+                location_id,
+                price,
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
     def add_product_by_barcode(
         self,
         barcode: str,
@@ -180,6 +205,25 @@ class Grocy(object):
     ) -> Product:
         product = Product(
             self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: int,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.inventory_product_by_barcode(
+                barcode, new_amount, best_before_date, location_id, price
+            )
         )
 
         if get_details:

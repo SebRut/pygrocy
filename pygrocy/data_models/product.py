@@ -86,6 +86,7 @@ class Product(DataModel):
             self._name = details.product.name
             self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
+            self._available_amount = details.stock_amount
 
     @property
     def name(self) -> str:

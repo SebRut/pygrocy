@@ -1,0 +1,99 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/by-barcode/42141099
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81Vy27bMBD8lYDnOLBku0187Q/0XhQLmlpJRCiR4cOuE+Tfu0tKttMagXvrxbD2
+        Re7M7PJNOG+bpKLYvgndiK1Yi3sxygHp7zevgwv03WBQXruo7Si2YzLmfk6DztvkIGdWFClV1HvO
+        5Q9jleSc4ubCobfO6bGDD65S8SVRHLjkVS8Dl1hRQjGGaNXz2dLSKdafQiFamCOqhyVlDXosFpCD
+        TSM1Jyq2N9jKZCLsMPBPaz1CI4+B/J+5QbYRPViH1P4tka1HfKU2b4uOvTycg51WMdG9Wm0QChEF
+        HxzljkxRkvOAuusj9HJszDn1wsUnZyhGG0H1qJ4nQNpkqLIZcIxA/YNHpR3OCDgqTo5JE5m3criS
+        xnqd46qaiVFpSEZGhD+xBttCSLu5xly5SXT1o5ul8ZI0XUnZMaQBL1jKd+51g0CyyaSC3aPfazxM
+        YHp7AOWRjm4g6oGYlIMjX72sq0VVLer6rlpt6+W2ri8Yd15TX6WgkTs0UzVpDNXLFnDEcRo1q4XV
+        QFpNpgEGcEd0ePs60f9+Vv9OemVpOsT2xzQ+jM0lfHmepjAqvK6rdbV8eqKoLO15nGadFrQ/GxMj
+        SbvUjiIoS/S/IUL9TJnvP2lEc7Vp5nj8TzByI9mbAv7lKEDOlxbrDePFQwp7aRKTvHl8LAK8DM0j
+        lKtlgHNCKQKy6zx2zCqjtMk6uJL6Ma6cME/1S5Jj1PGYSTxth9Ni44amxfZd0jq5utZuxrJiCrkc
+        OJO8ZD1x1UDWYuDpGkgYzBEp5uPlcmf/yc0uBSWqDTMj990sMVGtCsrWkM5PyjuZc/Z1veY3YCbn
+        ekgR8Ii/IvCCaIj/rMHqabHcLJb8ZMwvxQmtyweK9t/xTiW3s9I3FHzlobqZ0ZqfLB1o0ml5o6d7
+        LAURJ2n9yA4h9GhaMLqdn4xN9eWRVO+sNuB5E9L+ULQ9xXb19WGTS51FfV5xjC89cLSUtWlIH600
+        Ad9/A5ls1FuIBwAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 14:53:58 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"new_amount": 45, "best_before_date": "2019-05-04", "shopping_location_id":
+      1, "location_id": 150, "price": true}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '114'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/products/4/inventory
+  response:
+    body:
+      string: '{"error_message":"The new amount cannot equal the current stock amount"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 14:53:58 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 400
+      message: Bad Request
+version: 1
