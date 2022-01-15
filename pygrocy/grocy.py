@@ -243,10 +243,10 @@ class Grocy(object):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = None, amount: int = None
+        self, product_id: int, shopping_list_id: int = None, amount: int = None, quantity_unit_id: int = None
     ):
         return self._api_client.add_product_to_shopping_list(
-            product_id, shopping_list_id, amount
+            product_id, shopping_list_id, amount, quantity_unit_id
         )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):

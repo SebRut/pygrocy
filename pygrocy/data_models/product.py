@@ -10,6 +10,7 @@ from pygrocy.grocy_api_client import (
     ProductBarcodeData,
     ProductData,
     ProductDetailsResponse,
+    QuantityUnitData,
     ShoppingListItem,
     StockLogResponse,
 )
@@ -23,6 +24,28 @@ class ProductBarcode(DataModel):
     def barcode(self) -> str:
         return self._barcode
 
+class QuantityUnit(DataModel):
+    def __init__(self, data: QuantityUnitData):
+        self._id = data.id
+        self._name = data.name
+        self._name_plural = data.name_plural
+        self._description = data.description
+
+    @property
+    def id(self) -> int:
+        return self._id
+    
+    @property
+    def name(self) -> str:
+        return self._name
+    
+    @property
+    def name_plural(self) -> str:
+        return self._name_plural
+
+    @property
+    def description(self) -> str:
+        return self._description
 
 class Product(DataModel):
     def __init__(self, data):
@@ -47,6 +70,9 @@ class Product(DataModel):
         self._available_amount = None
         self._best_before_date = None
 
+        self._default_quantity_unit_purchase = None
+        self._qu_factor_purchase_to_stock = None
+
         self._barcodes = []
         self._product_group_id = None
 
@@ -68,6 +94,7 @@ class Product(DataModel):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._barcodes = [ProductBarcode(data) for data in response.barcodes]
+        self._default_quantity_unit_purchase = QuantityUnit(response.default_quantity_unit_purchase)
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -76,6 +103,7 @@ class Product(DataModel):
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
+        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
 
     def _init_from_StockLogResponse(self, response: StockLogResponse):
         self._id = response.product_id
@@ -123,6 +151,14 @@ class Product(DataModel):
     @property
     def is_partly_in_stock(self) -> int:
         return self._is_partly_in_stock
+    
+    @property
+    def default_quantity_unit_purchase(self) -> QuantityUnit:
+        return self._default_quantity_unit_purchase
+
+    @property
+    def qu_factor_purchase_to_stock(self) -> float:
+        return self._qu_factor_purchase_to_stock
 
 
 class Group(DataModel):
