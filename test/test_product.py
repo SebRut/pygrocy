@@ -23,6 +23,11 @@ class TestProduct:
         assert product.name == "Cheese"
         assert product.available_amount == 5
         assert product.product_group_id == 6
+        assert product.qu_factor_purchase_to_stock == 1.0
+        assert product.default_quantity_unit_purchase.id == 3
+        assert product.default_quantity_unit_purchase.name == "Pack"
+        assert product.default_quantity_unit_purchase.description == None
+        assert product.default_quantity_unit_purchase.name_plural == "Packs"
 
         assert len(product.product_barcodes) == 1
         barcode = product.product_barcodes[0]
