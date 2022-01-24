@@ -534,7 +534,11 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/add-missing-products", data)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1, quantity_unit_id: int = None
+        self,
+        product_id: int,
+        shopping_list_id: int = 1,
+        amount: int = 1,
+        quantity_unit_id: int = None,
     ):
         data = {
             "product_id": product_id,

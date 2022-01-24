@@ -24,6 +24,7 @@ class ProductBarcode(DataModel):
     def barcode(self) -> str:
         return self._barcode
 
+
 class QuantityUnit(DataModel):
     def __init__(self, data: QuantityUnitData):
         self._id = data.id
@@ -34,11 +35,11 @@ class QuantityUnit(DataModel):
     @property
     def id(self) -> int:
         return self._id
-    
+
     @property
     def name(self) -> str:
         return self._name
-    
+
     @property
     def name_plural(self) -> str:
         return self._name_plural
@@ -46,6 +47,7 @@ class QuantityUnit(DataModel):
     @property
     def description(self) -> str:
         return self._description
+
 
 class Product(DataModel):
     def __init__(self, data):
@@ -94,7 +96,9 @@ class Product(DataModel):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._barcodes = [ProductBarcode(data) for data in response.barcodes]
-        self._default_quantity_unit_purchase = QuantityUnit(response.default_quantity_unit_purchase)
+        self._default_quantity_unit_purchase = QuantityUnit(
+            response.default_quantity_unit_purchase
+        )
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -151,7 +155,7 @@ class Product(DataModel):
     @property
     def is_partly_in_stock(self) -> int:
         return self._is_partly_in_stock
-    
+
     @property
     def default_quantity_unit_purchase(self) -> QuantityUnit:
         return self._default_quantity_unit_purchase
