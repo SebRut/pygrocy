@@ -223,6 +223,19 @@ class MealPlanSectionResponse(BaseModel):
     row_created_timestamp: datetime
 
 
+class StockLogResponse(BaseModel):
+    id: int
+    product_id: int
+    amount: int
+    best_before_date: date
+    purchased_date: date
+    used_date: Optional[date] = None
+    spoiled: bool = False
+    stock_id: str
+    transaction_id: str
+    transaction_type: TransactionType
+
+
 def _enable_debug_mode():
     _LOGGER.setLevel(logging.DEBUG)
 
@@ -335,6 +348,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return ProductDetailsResponse(**parsed_json)
 
+    def get_product_by_barcode(self, barcode) -> ProductDetailsResponse:
+        url = f"stock/products/by-barcode/{barcode}"
+        parsed_json = self._do_get_request(url)
+        if parsed_json:
+            return ProductDetailsResponse(**parsed_json)
+
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores")
         return [CurrentChoreResponse(**chore) for chore in parsed_json]
@@ -393,6 +412,114 @@ class GrocyApiClient(object):
         }
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
+
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: float,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+    ):
+        data = {
+            "new_amount": new_amount,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+        if shopping_location_id is not None:
+            data["shopping_location_id"] = shopping_location_id
+
+        if location_id is not None:
+            data["location_id"] = location_id
+
+        if price is not None:
+            data["price"] = price
+
+        parsed_json = self._do_post_request(
+            f"stock/products/{product_id}/inventory", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+    ) -> StockLogResponse:
+        data = {
+            "amount": amount,
+            "transaction_type": TransactionType.PURCHASE.value,
+            "price": price,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/add", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def consume_product_by_barcode(
+        self, barcode: str, amount: float = 1, spoiled: bool = False
+    ):
+        data = {
+            "amount": amount,
+            "spoiled": spoiled,
+            "transaction_type": TransactionType.CONSUME.value,
+        }
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/consume", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: float,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+    ):
+        data = {
+            "new_amount": new_amount,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+
+        if location_id is not None:
+            data["location_id"] = location_id
+
+        if price is not None:
+            data["price"] = price
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/inventory", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
 
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list")

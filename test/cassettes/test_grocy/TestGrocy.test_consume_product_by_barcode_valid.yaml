@@ -1,0 +1,105 @@
+interactions:
+- request:
+    body: '{"amount": 1, "spoiled": false, "transaction_type": "consume"}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/products/by-barcode/42141099/consume
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA3VQy07EMAz8FZTzFtWhLLS/glCUJl42oo2jPIQQ4t9xErG7HDh6xh7PzMuXcFYs
+        AiYpDiJEssVk1aCJAb1T8Zn5AXhaMWW14okiKqszMi5HmIcRBpjreYnmrBPaKyuZgkE+MFv+I1Ig
+        t2F1MfJaymTeu4MjzMYeR1gnsNVejtonbbIjr/JnqP8N+VR2rM+jMxWB+7l6Kd6Sr3PV7IPKbucE
+        eg9i8WXbDoIC+ovbDkX6UCYip7O3+xz0N8odyEXKBZ5ZeCOjm51LYxGNC9j8d0FDMeJ23erobZR2
+        27Kak36cYH5i5V5DdVPpfpTOFILzb+rP285xu7G3BuL79QeC7pDY1wEAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 12:22:18 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/4
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAEA81V227bMAz9lULPTRG7ydbkdT+w92EgFJm2hcqWqkuytOi/j5StJN2KIHvbS9Hw
+        ZvKcQ+pNOG+bpKLYvgndiK1YiXsxygHp329eBxfod4NBee2itqPYjsmY+5IGnbfJQc6sKFKqqPec
+        yz+MVZJzJjcXDr11To8dfHBNFV8SxYFLXvUycIlHSpiMIVr1fLa09BXrT6EQLZSI6mFJWYMeJwvI
+        waaRhhMV2xtsZTIRdhj4T2s9QiOPgfzX3CDbiB6sQxr/lsjWI77SmLdFx14ezsFOq5ior1YbhImI
+        CR8c5Y5MUZLzgLrrI/RybMw59cLFX85QjDaC6lE9z4C0yVBlM+AYgeYHj0o7LAg4Kk6OWROZt+nj
+        ShrrdY6raiZGpSEZGRH+xBpsCyHtSo1SuUnU+tEVabwkTS0pO4Y04AVLuedeNwgkm0wq2D36vcbD
+        DKa3B1Ae6dMNRD0Qk3Jw5KuXdbWoqkVd31WP23q5resLxp3XNNdU0MgdmrmaNIbqZQs44jiNmtXC
+        aiCtJtMAA7gjOrx9nel/P6t/J72ytB1i+2NeH8bmEr68T3MYFV7V1apabjYUlaVd1qnodEL72poY
+        SdqlcRRBOUX/GyI0z5z5/pNWNFebd47X/wQjD5K9KeBfjgnI0rRYPzFevKSwlyYxyfXXzcOaj8Bl
+        aF6hXC0DnBOmIiC7zmPHrFLy+inr4JPUj3GTxMtWvyQ5Rh2PmcTTdTgdNh5oPmzfJZ2TT8/azVhW
+        TCGXA2eSl6wnrhrIOhl4uwYSBnNEivnYXJ7sP+nsUlBiTf3LfVcEJlYPT7xG1pDIT7Ir1px5TauF
+        mWsxI/6KwNehIfKzAKvNYkmrzACXZ+IE1eXrRMfveKeS21npGwr+5JW6mc6apaoDrTldbvTUx1IQ
+        a5Juj+wQQo+mBaPb8l4sHmuStrPagOcrSLdD0eUU2y/LXOcs5/NxY83T00bnWJuGlNFKE/D9N9N4
+        xRmCBwAA
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Nov 2021 12:22:18 GMT
+      Server:
+      - nginx/1.20.1
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.11
+    status:
+      code: 200
+      message: OK
+version: 1

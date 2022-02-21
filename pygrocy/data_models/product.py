@@ -11,6 +11,7 @@ from pygrocy.grocy_api_client import (
     ProductData,
     ProductDetailsResponse,
     ShoppingListItem,
+    StockLogResponse,
 )
 
 
@@ -34,6 +35,8 @@ class Product(DataModel):
             self._init_from_ProductDetailsResponse(data)
         elif isinstance(data, ProductData):
             self._init_from_ProductData(data)
+        elif isinstance(data, StockLogResponse):
+            self._init_from_StockLogResponse(data)
 
     def _init_empty(self):
         self._name = None
@@ -74,12 +77,16 @@ class Product(DataModel):
         self._product_group_id = product.product_group_id
         self._name = product.name
 
+    def _init_from_StockLogResponse(self, response: StockLogResponse):
+        self._id = response.product_id
+
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
         if details:
             self._name = details.product.name
             self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
+            self._available_amount = details.stock_amount
 
     @property
     def name(self) -> str:
