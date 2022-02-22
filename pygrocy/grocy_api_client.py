@@ -84,7 +84,7 @@ class ProductData(BaseModel):
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
-    min_stock_amount: Optional[int]
+    min_stock_amount: Optional[float]
     default_best_before_days: int
 
 
