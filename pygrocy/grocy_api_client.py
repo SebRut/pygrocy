@@ -152,6 +152,7 @@ class ProductDetailsResponse(BaseModel):
     last_price: Optional[float] = None
     product: ProductData
     quantity_unit_stock: QuantityUnitData
+    default_quantity_unit_purchase: QuantityUnitData
     barcodes: Optional[List[ProductBarcodeData]] = Field(alias="product_barcodes")
     location: Optional[LocationData] = None
 
@@ -533,13 +534,20 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/add-missing-products", data)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self,
+        product_id: int,
+        shopping_list_id: int = 1,
+        amount: int = 1,
+        quantity_unit_id: int = None,
     ):
         data = {
             "product_id": product_id,
             "list_id": shopping_list_id,
             "product_amount": amount,
         }
+        if quantity_unit_id:
+            data["qu_id"] = quantity_unit_id
+        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
