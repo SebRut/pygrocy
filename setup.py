@@ -18,9 +18,9 @@ setuptools.setup(
         "requests",
         "iso8601~=0.1.16",
         "pytz~=2021.1",
-        "tzlocal>=2.1,<3.0",
+        "tzlocal>=2.1,<5.0",
         "deprecation~=2.1.0",
-        "pydantic~=1.8.2",
+        "pydantic>=1.8.2,<1.10.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
