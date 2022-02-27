@@ -411,7 +411,7 @@ class GrocyApiClient(object):
             "amount": amount,
             "spoiled": spoiled,
             "transaction_type": transaction_type.value,
-            "allow_subproduct_substitution": allow_subproduct_substitution
+            "allow_subproduct_substitution": allow_subproduct_substitution,
         }
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
