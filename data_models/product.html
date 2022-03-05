@@ -38,7 +38,9 @@ from pygrocy.grocy_api_client import (
     ProductBarcodeData,
     ProductData,
     ProductDetailsResponse,
+    QuantityUnitData,
     ShoppingListItem,
+    StockLogResponse,
 )
 
 
@@ -49,6 +51,30 @@ class ProductBarcode(DataModel):
     @property
     def barcode(self) -&gt; str:
         return self._barcode
+
+
+class QuantityUnit(DataModel):
+    def __init__(self, data: QuantityUnitData):
+        self._id = data.id
+        self._name = data.name
+        self._name_plural = data.name_plural
+        self._description = data.description
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def name_plural(self) -&gt; str:
+        return self._name_plural
+
+    @property
+    def description(self) -&gt; str:
+        return self._description
 
 
 class Product(DataModel):
@@ -62,6 +88,8 @@ class Product(DataModel):
             self._init_from_ProductDetailsResponse(data)
         elif isinstance(data, ProductData):
             self._init_from_ProductData(data)
+        elif isinstance(data, StockLogResponse):
+            self._init_from_StockLogResponse(data)
 
     def _init_empty(self):
         self._name = None
@@ -71,6 +99,9 @@ class Product(DataModel):
 
         self._available_amount = None
         self._best_before_date = None
+
+        self._default_quantity_unit_purchase = None
+        self._qu_factor_purchase_to_stock = None
 
         self._barcodes = []
         self._product_group_id = None
@@ -93,6 +124,9 @@ class Product(DataModel):
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._barcodes = [ProductBarcode(data) for data in response.barcodes]
+        self._default_quantity_unit_purchase = QuantityUnit(
+            response.default_quantity_unit_purchase
+        )
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -101,6 +135,10 @@ class Product(DataModel):
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
+        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
+
+    def _init_from_StockLogResponse(self, response: StockLogResponse):
+        self._id = response.product_id
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
@@ -108,6 +146,7 @@ class Product(DataModel):
             self._name = details.product.name
             self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
+            self._available_amount = details.stock_amount
 
     @property
     def name(self) -&gt; str:
@@ -144,6 +183,14 @@ class Product(DataModel):
     @property
     def is_partly_in_stock(self) -&gt; int:
         return self._is_partly_in_stock
+
+    @property
+    def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
+        return self._default_quantity_unit_purchase
+
+    @property
+    def qu_factor_purchase_to_stock(self) -&gt; float:
+        return self._qu_factor_purchase_to_stock
 
 
 class Group(DataModel):
@@ -300,6 +347,8 @@ def name(self) -&gt; str:
             self._init_from_ProductDetailsResponse(data)
         elif isinstance(data, ProductData):
             self._init_from_ProductData(data)
+        elif isinstance(data, StockLogResponse):
+            self._init_from_StockLogResponse(data)
 
     def _init_empty(self):
         self._name = None
@@ -309,6 +358,9 @@ def name(self) -&gt; str:
 
         self._available_amount = None
         self._best_before_date = None
+
+        self._default_quantity_unit_purchase = None
+        self._qu_factor_purchase_to_stock = None
 
         self._barcodes = []
         self._product_group_id = None
@@ -331,6 +383,9 @@ def name(self) -&gt; str:
         self._available_amount = response.stock_amount
         self._best_before_date = response.next_best_before_date
         self._barcodes = [ProductBarcode(data) for data in response.barcodes]
+        self._default_quantity_unit_purchase = QuantityUnit(
+            response.default_quantity_unit_purchase
+        )
 
         if response.product:
             self._init_from_ProductData(response.product)
@@ -339,6 +394,10 @@ def name(self) -&gt; str:
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
+        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
+
+    def _init_from_StockLogResponse(self, response: StockLogResponse):
+        self._id = response.product_id
 
     def get_details(self, api_client: GrocyApiClient):
         details = api_client.get_product(self.id)
@@ -346,6 +405,7 @@ def name(self) -&gt; str:
             self._name = details.product.name
             self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
             self._product_group_id = details.product.product_group_id
+            self._available_amount = details.stock_amount
 
     @property
     def name(self) -&gt; str:
@@ -381,7 +441,15 @@ def name(self) -&gt; str:
 
     @property
     def is_partly_in_stock(self) -&gt; int:
-        return self._is_partly_in_stock</code></pre>
+        return self._is_partly_in_stock
+
+    @property
+    def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
+        return self._default_quantity_unit_purchase
+
+    @property
+    def qu_factor_purchase_to_stock(self) -&gt; float:
+        return self._qu_factor_purchase_to_stock</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -435,6 +503,18 @@ def barcodes(self) -&gt; List[str]:
 <pre><code class="python">@property
 def best_before_date(self) -&gt; datetime.date:
     return self._best_before_date</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.Product.default_quantity_unit_purchase"><code class="name">var <span class="ident">default_quantity_unit_purchase</span> : <a title="pygrocy.data_models.product.QuantityUnit" href="#pygrocy.data_models.product.QuantityUnit">QuantityUnit</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
+    return self._default_quantity_unit_purchase</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.product.Product.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
@@ -497,6 +577,18 @@ def product_group_id(self) -&gt; int:
     return self._product_group_id</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.data_models.product.Product.qu_factor_purchase_to_stock"><code class="name">var <span class="ident">qu_factor_purchase_to_stock</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def qu_factor_purchase_to_stock(self) -&gt; float:
+    return self._qu_factor_purchase_to_stock</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
@@ -514,7 +606,8 @@ def product_group_id(self) -&gt; int:
     if details:
         self._name = details.product.name
         self._barcodes = [ProductBarcode(barcode) for barcode in details.barcodes]
-        self._product_group_id = details.product.product_group_id</code></pre>
+        self._product_group_id = details.product.product_group_id
+        self._available_amount = details.stock_amount</code></pre>
 </details>
 </dd>
 </dl>
@@ -553,6 +646,95 @@ def product_group_id(self) -&gt; int:
 <pre><code class="python">@property
 def barcode(self) -&gt; str:
     return self._barcode</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygrocy.data_models.product.QuantityUnit"><code class="flex name class">
+<span>class <span class="ident">QuantityUnit</span></span>
+<span>(</span><span>data: <a title="pygrocy.grocy_api_client.QuantityUnitData" href="../grocy_api_client.html#pygrocy.grocy_api_client.QuantityUnitData">QuantityUnitData</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class QuantityUnit(DataModel):
+    def __init__(self, data: QuantityUnitData):
+        self._id = data.id
+        self._name = data.name
+        self._name_plural = data.name_plural
+        self._description = data.description
+
+    @property
+    def id(self) -&gt; int:
+        return self._id
+
+    @property
+    def name(self) -&gt; str:
+        return self._name
+
+    @property
+    def name_plural(self) -&gt; str:
+        return self._name_plural
+
+    @property
+    def description(self) -&gt; str:
+        return self._description</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygrocy.base.DataModel" href="../base.html#pygrocy.base.DataModel">DataModel</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pygrocy.data_models.product.QuantityUnit.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self) -&gt; str:
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.QuantityUnit.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def id(self) -&gt; int:
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.QuantityUnit.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name(self) -&gt; str:
+    return self._name</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.QuantityUnit.name_plural"><code class="name">var <span class="ident">name_plural</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def name_plural(self) -&gt; str:
+    return self._name_plural</code></pre>
 </details>
 </dd>
 </dl>
@@ -710,23 +892,34 @@ def product_id(self) -&gt; int:
 </li>
 <li>
 <h4><code><a title="pygrocy.data_models.product.Product" href="#pygrocy.data_models.product.Product">Product</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pygrocy.data_models.product.Product.amount_missing" href="#pygrocy.data_models.product.Product.amount_missing">amount_missing</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.available_amount" href="#pygrocy.data_models.product.Product.available_amount">available_amount</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.barcodes" href="#pygrocy.data_models.product.Product.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.best_before_date" href="#pygrocy.data_models.product.Product.best_before_date">best_before_date</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.default_quantity_unit_purchase" href="#pygrocy.data_models.product.Product.default_quantity_unit_purchase">default_quantity_unit_purchase</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.get_details" href="#pygrocy.data_models.product.Product.get_details">get_details</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.id" href="#pygrocy.data_models.product.Product.id">id</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.is_partly_in_stock" href="#pygrocy.data_models.product.Product.is_partly_in_stock">is_partly_in_stock</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.name" href="#pygrocy.data_models.product.Product.name">name</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_barcodes" href="#pygrocy.data_models.product.Product.product_barcodes">product_barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_group_id" href="#pygrocy.data_models.product.Product.product_group_id">product_group_id</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.qu_factor_purchase_to_stock" href="#pygrocy.data_models.product.Product.qu_factor_purchase_to_stock">qu_factor_purchase_to_stock</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pygrocy.data_models.product.ProductBarcode" href="#pygrocy.data_models.product.ProductBarcode">ProductBarcode</a></code></h4>
 <ul class="">
 <li><code><a title="pygrocy.data_models.product.ProductBarcode.barcode" href="#pygrocy.data_models.product.ProductBarcode.barcode">barcode</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygrocy.data_models.product.QuantityUnit" href="#pygrocy.data_models.product.QuantityUnit">QuantityUnit</a></code></h4>
+<ul class="">
+<li><code><a title="pygrocy.data_models.product.QuantityUnit.description" href="#pygrocy.data_models.product.QuantityUnit.description">description</a></code></li>
+<li><code><a title="pygrocy.data_models.product.QuantityUnit.id" href="#pygrocy.data_models.product.QuantityUnit.id">id</a></code></li>
+<li><code><a title="pygrocy.data_models.product.QuantityUnit.name" href="#pygrocy.data_models.product.QuantityUnit.name">name</a></code></li>
+<li><code><a title="pygrocy.data_models.product.QuantityUnit.name_plural" href="#pygrocy.data_models.product.QuantityUnit.name_plural">name_plural</a></code></li>
 </ul>
 </li>
 <li>

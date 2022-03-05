@@ -64,10 +64,13 @@ class Grocy(object):
         base_url,
         api_key,
         port: int = DEFAULT_PORT_NUMBER,
+        path: str = None,
         verify_ssl=True,
         debug=False,
     ):
-        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl, debug)
+        self._api_client = GrocyApiClient(
+            base_url, api_key, port, path, verify_ssl, debug
+        )
 
         if debug:
             _LOGGER.setLevel(logging.DEBUG)
@@ -122,6 +125,11 @@ class Grocy(object):
         if resp:
             return Product(resp)
 
+    def product_by_barcode(self, barcode: str) -&gt; Product:
+        resp = self._api_client.get_product_by_barcode(barcode)
+        if resp:
+            return Product(resp)
+
     def all_products(self) -&gt; List[Product]:
         raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
         from pygrocy.grocy_api_client import ProductData
@@ -173,6 +181,83 @@ class Grocy(object):
             product_id, amount, spoiled, transaction_type
         )
 
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: int,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.inventory_product(
+                product_id,
+                new_amount,
+                best_before_date,
+                shopping_location_id,
+                location_id,
+                price,
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.add_product_by_barcode(
+                barcode, amount, price, best_before_date
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def consume_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float = 1,
+        spoiled: bool = False,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: int,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.inventory_product_by_barcode(
+                barcode, new_amount, best_before_date, location_id, price
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
@@ -186,10 +271,14 @@ class Grocy(object):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = None, amount: int = None
+        self,
+        product_id: int,
+        shopping_list_id: int = None,
+        amount: int = None,
+        quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
-            product_id, shopping_list_id, amount
+            product_id, shopping_list_id, amount, quantity_unit_id
         )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -297,7 +386,7 @@ class Grocy(object):
 <dl>
 <dt id="pygrocy.grocy.Grocy"><code class="flex name class">
 <span>class <span class="ident">Grocy</span></span>
-<span>(</span><span>base_url, api_key, port: int = 9192, verify_ssl=True, debug=False)</span>
+<span>(</span><span>base_url, api_key, port: int = 9192, path: str = None, verify_ssl=True, debug=False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -311,10 +400,13 @@ class Grocy(object):
         base_url,
         api_key,
         port: int = DEFAULT_PORT_NUMBER,
+        path: str = None,
         verify_ssl=True,
         debug=False,
     ):
-        self._api_client = GrocyApiClient(base_url, api_key, port, verify_ssl, debug)
+        self._api_client = GrocyApiClient(
+            base_url, api_key, port, path, verify_ssl, debug
+        )
 
         if debug:
             _LOGGER.setLevel(logging.DEBUG)
@@ -369,6 +461,11 @@ class Grocy(object):
         if resp:
             return Product(resp)
 
+    def product_by_barcode(self, barcode: str) -&gt; Product:
+        resp = self._api_client.get_product_by_barcode(barcode)
+        if resp:
+            return Product(resp)
+
     def all_products(self) -&gt; List[Product]:
         raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
         from pygrocy.grocy_api_client import ProductData
@@ -420,6 +517,83 @@ class Grocy(object):
             product_id, amount, spoiled, transaction_type
         )
 
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: int,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.inventory_product(
+                product_id,
+                new_amount,
+                best_before_date,
+                shopping_location_id,
+                location_id,
+                price,
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.add_product_by_barcode(
+                barcode, amount, price, best_before_date
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def consume_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float = 1,
+        spoiled: bool = False,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: int,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -&gt; Product:
+        product = Product(
+            self._api_client.inventory_product_by_barcode(
+                barcode, new_amount, best_before_date, location_id, price
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
     def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
@@ -433,10 +607,14 @@ class Grocy(object):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = None, amount: int = None
+        self,
+        product_id: int,
+        shopping_list_id: int = None,
+        amount: int = None,
+        quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
-            product_id, shopping_list_id, amount
+            product_id, shopping_list_id, amount, quantity_unit_id
         )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -582,6 +760,34 @@ class Grocy(object):
     )</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy.Grocy.add_product_by_barcode"><code class="name flex">
+<span>def <span class="ident">add_product_by_barcode</span></span>(<span>self, barcode: str, amount: float, price: float, best_before_date: datetime.datetime = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_product_by_barcode(
+    self,
+    barcode: str,
+    amount: float,
+    price: float,
+    best_before_date: datetime = None,
+    get_details: bool = True,
+) -&gt; Product:
+    product = Product(
+        self._api_client.add_product_by_barcode(
+            barcode, amount, price, best_before_date
+        )
+    )
+
+    if get_details:
+        product.get_details(self._api_client)
+    return product</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Grocy.add_product_pic"><code class="name flex">
 <span>def <span class="ident">add_product_pic</span></span>(<span>self, product_id: int, pic_path: str)</span>
 </code></dt>
@@ -597,7 +803,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.add_product_to_shopping_list"><code class="name flex">
-<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = None, amount: int = None)</span>
+<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = None, amount: int = None, quantity_unit_id: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -606,10 +812,14 @@ class Grocy(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_product_to_shopping_list(
-    self, product_id: int, shopping_list_id: int = None, amount: int = None
+    self,
+    product_id: int,
+    shopping_list_id: int = None,
+    amount: int = None,
+    quantity_unit_id: int = None,
 ):
     return self._api_client.add_product_to_shopping_list(
-        product_id, shopping_list_id, amount
+        product_id, shopping_list_id, amount, quantity_unit_id
     )</code></pre>
 </details>
 </dd>
@@ -660,7 +870,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 680657))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930147))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -719,7 +929,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 680636))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930128))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -750,6 +960,31 @@ class Grocy(object):
     return self._api_client.consume_product(
         product_id, amount, spoiled, transaction_type
     )</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.consume_product_by_barcode"><code class="name flex">
+<span>def <span class="ident">consume_product_by_barcode</span></span>(<span>self, barcode: str, amount: float = 1, spoiled: bool = False, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def consume_product_by_barcode(
+    self,
+    barcode: str,
+    amount: float = 1,
+    spoiled: bool = False,
+    get_details: bool = True,
+) -&gt; Product:
+    product = Product(
+        self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+    )
+
+    if get_details:
+        product.get_details(self._api_client)
+    return product</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.delete_generic"><code class="name flex">
@@ -785,7 +1020,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2021, 9, 10, 17, 15, 19, 680597))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930078))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -874,6 +1109,70 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </summary>
 <pre><code class="python">def get_userfields(self, entity: str, object_id: int):
     return self._api_client.get_userfields(entity, object_id)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.inventory_product"><code class="name flex">
+<span>def <span class="ident">inventory_product</span></span>(<span>self, product_id: int, new_amount: int, best_before_date: datetime.datetime = None, shopping_location_id: int = None, location_id: int = None, price: int = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inventory_product(
+    self,
+    product_id: int,
+    new_amount: int,
+    best_before_date: datetime = None,
+    shopping_location_id: int = None,
+    location_id: int = None,
+    price: int = None,
+    get_details: bool = True,
+) -&gt; Product:
+    product = Product(
+        self._api_client.inventory_product(
+            product_id,
+            new_amount,
+            best_before_date,
+            shopping_location_id,
+            location_id,
+            price,
+        )
+    )
+
+    if get_details:
+        product.get_details(self._api_client)
+    return product</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.inventory_product_by_barcode"><code class="name flex">
+<span>def <span class="ident">inventory_product_by_barcode</span></span>(<span>self, barcode: str, new_amount: int, best_before_date: datetime.datetime = None, location_id: int = None, price: int = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inventory_product_by_barcode(
+    self,
+    barcode: str,
+    new_amount: int,
+    best_before_date: datetime = None,
+    location_id: int = None,
+    price: int = None,
+    get_details: bool = True,
+) -&gt; Product:
+    product = Product(
+        self._api_client.inventory_product_by_barcode(
+            barcode, new_amount, best_before_date, location_id, price
+        )
+    )
+
+    if get_details:
+        product.get_details(self._api_client)
+    return product</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.meal_plan"><code class="name flex">
@@ -974,6 +1273,21 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </summary>
 <pre><code class="python">def product(self, product_id: int) -&gt; Product:
     resp = self._api_client.get_product(product_id)
+    if resp:
+        return Product(resp)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.product_by_barcode"><code class="name flex">
+<span>def <span class="ident">product_by_barcode</span></span>(<span>self, barcode: str) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def product_by_barcode(self, barcode: str) -&gt; Product:
+    resp = self._api_client.get_product_by_barcode(barcode)
     if resp:
         return Product(resp)</code></pre>
 </details>
@@ -1153,6 +1467,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.add_generic" href="#pygrocy.grocy.Grocy.add_generic">add_generic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_missing_product_to_shopping_list" href="#pygrocy.grocy.Grocy.add_missing_product_to_shopping_list">add_missing_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_product" href="#pygrocy.grocy.Grocy.add_product">add_product</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.add_product_by_barcode" href="#pygrocy.grocy.Grocy.add_product_by_barcode">add_product_by_barcode</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_product_pic" href="#pygrocy.grocy.Grocy.add_product_pic">add_product_pic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.add_product_to_shopping_list" href="#pygrocy.grocy.Grocy.add_product_to_shopping_list">add_product_to_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.all_products" href="#pygrocy.grocy.Grocy.all_products">all_products</a></code></li>
@@ -1164,6 +1479,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.clear_shopping_list" href="#pygrocy.grocy.Grocy.clear_shopping_list">clear_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.complete_task" href="#pygrocy.grocy.Grocy.complete_task">complete_task</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.consume_product" href="#pygrocy.grocy.Grocy.consume_product">consume_product</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.consume_product_by_barcode" href="#pygrocy.grocy.Grocy.consume_product_by_barcode">consume_product_by_barcode</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.delete_generic" href="#pygrocy.grocy.Grocy.delete_generic">delete_generic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.due_products" href="#pygrocy.grocy.Grocy.due_products">due_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.execute_chore" href="#pygrocy.grocy.Grocy.execute_chore">execute_chore</a></code></li>
@@ -1172,12 +1488,15 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.get_generic_objects_for_type" href="#pygrocy.grocy.Grocy.get_generic_objects_for_type">get_generic_objects_for_type</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.get_last_db_changed" href="#pygrocy.grocy.Grocy.get_last_db_changed">get_last_db_changed</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.get_userfields" href="#pygrocy.grocy.Grocy.get_userfields">get_userfields</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.inventory_product" href="#pygrocy.grocy.Grocy.inventory_product">inventory_product</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.inventory_product_by_barcode" href="#pygrocy.grocy.Grocy.inventory_product_by_barcode">inventory_product_by_barcode</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan" href="#pygrocy.grocy.Grocy.meal_plan">meal_plan</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan_section" href="#pygrocy.grocy.Grocy.meal_plan_section">meal_plan_section</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan_sections" href="#pygrocy.grocy.Grocy.meal_plan_sections">meal_plan_sections</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.missing_products" href="#pygrocy.grocy.Grocy.missing_products">missing_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.overdue_products" href="#pygrocy.grocy.Grocy.overdue_products">overdue_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product" href="#pygrocy.grocy.Grocy.product">product</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.product_by_barcode" href="#pygrocy.grocy.Grocy.product_by_barcode">product_by_barcode</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product_groups" href="#pygrocy.grocy.Grocy.product_groups">product_groups</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.recipe" href="#pygrocy.grocy.Grocy.recipe">recipe</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.remove_product_in_shopping_list" href="#pygrocy.grocy.Grocy.remove_product_in_shopping_list">remove_product_in_shopping_list</a></code></li>
