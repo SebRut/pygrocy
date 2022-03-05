@@ -1,5 +1,39 @@
 # Changelog
 
+## [v1.1.0](https://github.com/SebRut/pygrocy/tree/v1.1.0) (2022-03-05)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.0.0...v1.1.0)
+
+**Implemented enhancements:**
+
+- Feature: Edit Stock [\#201](https://github.com/SebRut/pygrocy/issues/201)
+- Add path in request when creating base url [\#121](https://github.com/SebRut/pygrocy/issues/121)
+- Get product by Barcode [\#85](https://github.com/SebRut/pygrocy/issues/85)
+
+**Fixed bugs:**
+
+- min\_stock\_amount should be float, not int [\#217](https://github.com/SebRut/pygrocy/issues/217)
+
+**Closed issues:**
+
+- execute\_chore is formatting time in UTC time. grocy server ignores the timezone, so it shifts the date of chore execution [\#222](https://github.com/SebRut/pygrocy/issues/222)
+- Update Product Userfields [\#196](https://github.com/SebRut/pygrocy/issues/196)
+
+**Merged pull requests:**
+
+- update python [\#219](https://github.com/SebRut/pygrocy/pull/219) ([SebRut](https://github.com/SebRut))
+- Optional float [\#218](https://github.com/SebRut/pygrocy/pull/218) ([harshi1122](https://github.com/harshi1122))
+- Update responses requirement from ~=0.14.0 to ~=0.18.0 [\#216](https://github.com/SebRut/pygrocy/pull/216) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Added support for product quantities [\#214](https://github.com/SebRut/pygrocy/pull/214) ([andreheuer](https://github.com/andreheuer))
+- Update pydantic requirement from ~=1.8.2 to \>=1.8.2,\<1.10.0 [\#212](https://github.com/SebRut/pygrocy/pull/212) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Feature/edit stock [\#209](https://github.com/SebRut/pygrocy/pull/209) ([georgegebbett](https://github.com/georgegebbett))
+- Product by barcode [\#208](https://github.com/SebRut/pygrocy/pull/208) ([georgegebbett](https://github.com/georgegebbett))
+- Update iso8601 requirement from ~=0.1.16 to \>=0.1.16,\<1.1.0 [\#202](https://github.com/SebRut/pygrocy/pull/202) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update tzlocal requirement from \<3.0,\>=2.1 to \>=2.1,\<5.0 [\#198](https://github.com/SebRut/pygrocy/pull/198) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ProductDetailsResponse last\_used Type Date instead of Datetime [\#194](https://github.com/SebRut/pygrocy/pull/194) ([sebiecker](https://github.com/sebiecker))
+- support path for url [\#193](https://github.com/SebRut/pygrocy/pull/193) ([SebRut](https://github.com/SebRut))
+- Update responses requirement from ~=0.13.4 to ~=0.14.0 [\#191](https://github.com/SebRut/pygrocy/pull/191) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.0.0](https://github.com/SebRut/pygrocy/tree/v1.0.0) (2021-09-10)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.30.0...v1.0.0)
@@ -7,7 +41,15 @@
 **Implemented enhancements:**
 
 - Add assigned\_to\_user to task [\#188](https://github.com/SebRut/pygrocy/issues/188)
+- Done time should be optional, as it is for execute\_chore call [\#176](https://github.com/SebRut/pygrocy/issues/176)
 - Add support for meal plan sections in grocy v3.1.0 [\#172](https://github.com/SebRut/pygrocy/issues/172)
+- Add debug mode [\#167](https://github.com/SebRut/pygrocy/issues/167)
+- Missing generic put and get option [\#155](https://github.com/SebRut/pygrocy/issues/155)
+- add "get all products" method [\#97](https://github.com/SebRut/pygrocy/issues/97)
+
+**Fixed bugs:**
+
+- Sending no time when tracking chore gives an error [\#175](https://github.com/SebRut/pygrocy/issues/175)
 
 **Closed issues:**
 
@@ -27,14 +69,8 @@
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.29.0...v0.30.0)
 
-**Implemented enhancements:**
-
-- Done time should be optional, as it is for execute\_chore call [\#176](https://github.com/SebRut/pygrocy/issues/176)
-- Add debug mode [\#167](https://github.com/SebRut/pygrocy/issues/167)
-
 **Fixed bugs:**
 
-- Sending no time when tracking chore gives an error [\#175](https://github.com/SebRut/pygrocy/issues/175)
 - Lovelace not accessible [\#158](https://github.com/SebRut/pygrocy/issues/158)
 
 **Closed issues:**
@@ -62,11 +98,6 @@
 ## [v0.29.0](https://github.com/SebRut/pygrocy/tree/v0.29.0) (2021-03-03)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v0.28.0...v0.29.0)
-
-**Implemented enhancements:**
-
-- Missing generic put and get option [\#155](https://github.com/SebRut/pygrocy/issues/155)
-- add "get all products" method [\#97](https://github.com/SebRut/pygrocy/issues/97)
 
 **Closed issues:**
 
