@@ -148,9 +148,10 @@ class Grocy(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         return self._api_client.consume_product(
-            product_id, amount, spoiled, transaction_type
+            product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
 
     def inventory_product(
