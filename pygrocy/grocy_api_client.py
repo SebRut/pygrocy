@@ -84,7 +84,7 @@ class ProductData(BaseModel):
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
-    min_stock_amount: Optional[int]
+    min_stock_amount: Optional[float]
     default_best_before_days: int
 
 
@@ -152,6 +152,7 @@ class ProductDetailsResponse(BaseModel):
     last_price: Optional[float] = None
     product: ProductData
     quantity_unit_stock: QuantityUnitData
+    default_quantity_unit_purchase: QuantityUnitData
     barcodes: Optional[List[ProductBarcodeData]] = Field(alias="product_barcodes")
     location: Optional[LocationData] = None
 
@@ -221,6 +222,19 @@ class MealPlanSectionResponse(BaseModel):
     name: str
     sort_number: Optional[int] = None
     row_created_timestamp: datetime
+
+
+class StockLogResponse(BaseModel):
+    id: int
+    product_id: int
+    amount: int
+    best_before_date: date
+    purchased_date: date
+    used_date: Optional[date] = None
+    spoiled: bool = False
+    stock_id: str
+    transaction_id: str
+    transaction_type: TransactionType
 
 
 def _enable_debug_mode():
@@ -335,6 +349,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return ProductDetailsResponse(**parsed_json)
 
+    def get_product_by_barcode(self, barcode) -> ProductDetailsResponse:
+        url = f"stock/products/by-barcode/{barcode}"
+        parsed_json = self._do_get_request(url)
+        if parsed_json:
+            return ProductDetailsResponse(**parsed_json)
+
     def get_chores(self) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores")
         return [CurrentChoreResponse(**chore) for chore in parsed_json]
@@ -385,14 +405,124 @@ class GrocyApiClient(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         data = {
             "amount": amount,
             "spoiled": spoiled,
             "transaction_type": transaction_type.value,
+            "allow_subproduct_substitution": allow_subproduct_substitution,
         }
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
+
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: float,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+    ):
+        data = {
+            "new_amount": new_amount,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+        if shopping_location_id is not None:
+            data["shopping_location_id"] = shopping_location_id
+
+        if location_id is not None:
+            data["location_id"] = location_id
+
+        if price is not None:
+            data["price"] = price
+
+        parsed_json = self._do_post_request(
+            f"stock/products/{product_id}/inventory", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+    ) -> StockLogResponse:
+        data = {
+            "amount": amount,
+            "transaction_type": TransactionType.PURCHASE.value,
+            "price": price,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/add", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def consume_product_by_barcode(
+        self, barcode: str, amount: float = 1, spoiled: bool = False
+    ):
+        data = {
+            "amount": amount,
+            "spoiled": spoiled,
+            "transaction_type": TransactionType.CONSUME.value,
+        }
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/consume", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: float,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+    ):
+        data = {
+            "new_amount": new_amount,
+        }
+
+        if best_before_date is not None:
+            data["best_before_date"] = localize_datetime(best_before_date).strftime(
+                "%Y-%m-%d"
+            )
+
+        if location_id is not None:
+            data["location_id"] = location_id
+
+        if price is not None:
+            data["price"] = price
+
+        parsed_json = self._do_post_request(
+            f"stock/products/by-barcode/{barcode}/inventory", data
+        )
+
+        if parsed_json:
+            stockLog = [StockLogResponse(**response) for response in parsed_json]
+            return stockLog[0]
 
     def get_shopping_list(self) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list")
@@ -406,13 +536,20 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/add-missing-products", data)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self,
+        product_id: int,
+        shopping_list_id: int = 1,
+        amount: int = 1,
+        quantity_unit_id: int = None,
     ):
         data = {
             "product_id": product_id,
             "list_id": shopping_list_id,
             "product_amount": amount,
         }
+        if quantity_unit_id:
+            data["qu_id"] = quantity_unit_id
+        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):

@@ -97,6 +97,11 @@ class Grocy(object):
         if resp:
             return Product(resp)
 
+    def product_by_barcode(self, barcode: str) -> Product:
+        resp = self._api_client.get_product_by_barcode(barcode)
+        if resp:
+            return Product(resp)
+
     def all_products(self) -> List[Product]:
         raw_products = self.get_generic_objects_for_type(EntityType.PRODUCTS)
         from pygrocy.grocy_api_client import ProductData
@@ -143,10 +148,88 @@ class Grocy(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         return self._api_client.consume_product(
-            product_id, amount, spoiled, transaction_type
+            product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
+
+    def inventory_product(
+        self,
+        product_id: int,
+        new_amount: int,
+        best_before_date: datetime = None,
+        shopping_location_id: int = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.inventory_product(
+                product_id,
+                new_amount,
+                best_before_date,
+                shopping_location_id,
+                location_id,
+                price,
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def add_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float,
+        price: float,
+        best_before_date: datetime = None,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.add_product_by_barcode(
+                barcode, amount, price, best_before_date
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def consume_product_by_barcode(
+        self,
+        barcode: str,
+        amount: float = 1,
+        spoiled: bool = False,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.consume_product_by_barcode(barcode, amount, spoiled)
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
+
+    def inventory_product_by_barcode(
+        self,
+        barcode: str,
+        new_amount: int,
+        best_before_date: datetime = None,
+        location_id: int = None,
+        price: int = None,
+        get_details: bool = True,
+    ) -> Product:
+        product = Product(
+            self._api_client.inventory_product_by_barcode(
+                barcode, new_amount, best_before_date, location_id, price
+            )
+        )
+
+        if get_details:
+            product.get_details(self._api_client)
+        return product
 
     def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
         raw_shoppinglist = self._api_client.get_shopping_list()
@@ -161,10 +244,14 @@ class Grocy(object):
         return self._api_client.add_missing_product_to_shopping_list(shopping_list_id)
 
     def add_product_to_shopping_list(
-        self, product_id: int, shopping_list_id: int = None, amount: int = None
+        self,
+        product_id: int,
+        shopping_list_id: int = None,
+        amount: int = None,
+        quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
-            product_id, shopping_list_id, amount
+            product_id, shopping_list_id, amount, quantity_unit_id
         )
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
