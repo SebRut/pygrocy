@@ -323,7 +323,7 @@ class GrocyApiClient(object):
 
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
 
         _LOGGER.debug("-->\tDELETE /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
@@ -549,7 +549,6 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data["qu_id"] = quantity_unit_id
-        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -596,8 +595,13 @@ class GrocyApiClient(object):
         return last_change_timestamp
 
     def get_tasks(self) -> List[TaskResponse]:
-        parsed_json = self._do_get_request("tasks")
-        return [TaskResponse(**data) for data in parsed_json]
+        parsed_json = self._do_get_request("objects/tasks", params={'query[]': 'done=0'})
+        return [TaskResponse(data) for data in parsed_json]
+
+    def get_task(self,  task_id: int) -> TaskResponse:
+        url = f"objects/tasks/{task_id}"
+        parsed_json = self._do_get_request(url)
+        return TaskResponse(parsed_json)
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
