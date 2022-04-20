@@ -7,19 +7,20 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/meal_plan
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA83U3QqCMBQH8FeRcz1hm2a25+guQoaOGvjVnIVE795SKXO0yxh4MQ7nP/zB2Tnc
-        QRbACIKCD8CAYkpCTEOcAgI9tMLUlMilOaD5kM2BqZx1Ql1lferGS+pGm0TdlyWCVjVFn+ux/bvC
-        q6avNTD8abr0iz7V3LJcCa5FkWlZiU7zql38HIkCsmMxYVECDzQJqCXYuQUm4JcgWgsIdgtMwC9B
-        bAmIW2ACfgk2loC6Bebh+CVILEHkFnj3DraWIHYLvJuidC3Ai100rsj31Lx26bQcf48R7M+yC8zH
-        gzn8p9V6fALTAMx5HgYAAA==
+        H4sIAAAAAAAAA93WX2vDIBAA8K8SfE5HNH+65mtsb2UEidLJGk2j6Shj333GyWK5bmFjpU0hD5cj
+        F+6Herh+Q4KhEmEUI0YPNiIJIYskW+AhZQ4tt7mO18IGsQ+qrxL/rnm3F3KjfVYqY6tkv93GqO0U
+        62vjSo4ztFG9NLYkuUvQmN71wbedeq3qjlPDWWVEw7WhTRs2WUQElxiXJB8ASg7dDn/TvDZCyc9O
+        CXqPvZNAJ5lwkjk6U+hMJ5zpbJzp6MygM5twZrNx4tGZQ2d+i/u2gM5iwjnLObSEzuXN7NvAeQ+d
+        wbx1jR8pfRs/MNHjs9CRfWjky6+BHBzVFSQnI9n38Fs1XFw3rwEUnxsazF7H+v7S8H/S1UWkwZLi
+        E9ej9BxS19BlqSduSMEE/tOJfVANjzZKsUhLWr/oKzmzdis/fQCIBsetAAsAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,13 +35,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Sat, 16 Apr 2022 19:12:44 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

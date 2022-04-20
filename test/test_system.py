@@ -9,6 +9,6 @@ class TestSystem:
         timestamp = grocy.get_last_db_changed()
 
         assert isinstance(timestamp, datetime)
-        assert timestamp.year == 2021
-        assert timestamp.month == 2
-        assert timestamp.day == 13
+        assert timestamp.year == 2022
+        assert timestamp.month == 4
+        assert timestamp.day == 16

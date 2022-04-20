@@ -7,15 +7,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/tasks/30000
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/tasks/30000
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA6tWSi0qyi+Kz00tLk5MT1WyUvJPykpNLlHIyy9RSMsvzUtRqgUAcMoJfiQAAAA=
+        H4sIAAAAAAAAA6tWSi0qyi+Kz00tLk5MT1WyUvJPykpNLlHIyy9RSMsvzUtRqgUAcMoJfiQAAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -30,13 +30,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Sat, 16 Apr 2022 19:12:41 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 404
       message: Not Found

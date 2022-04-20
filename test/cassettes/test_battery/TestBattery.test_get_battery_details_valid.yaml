@@ -7,19 +7,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/batteries/1
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/batteries/1
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA0WPQWrDMBBFryJmbYEl1QnSGbos7VJM5aEV2FKQJklNyN07blMKs3v89//c4B2Z
-        qW0QbpBnCGaAgitBgGdSha7qjw8wU08tnzjXIvgNW8PCm6Iyd2VH62CAc6c55h2/vKpGa2VSqRZu
-        dRGaPrF9kHApvOASZ9w6hHGAVq8xNUKWNOeVOuN6EolYjR6tNk4ZH55McAfRYOJ8kYXmPsCCneOv
-        V8Y/ApM2oxqPwZowHf9705YW6jHVc2EIB3mUvjhKWV5/mh/z9gG7ynuvjdXOKOvC5OXg/g0id9sR
-        LwEAAA==
+        H4sIAAAAAAAAA12P0WoDIRBFf0XmOQurSUrqY7+htI8y1aEVVg3jJM0S8u+ZzbYUCj6I53rPzBU+
+        UIR4Bn+FnMCDhQ1ULKTXlxUtL4l65HyU3KqCd2TGKrOhmrpxo9tq5NQphbzg1zfDVJqQia0Kt0lp
+        /EL+JOXaeMYpJJz7YjuMCrl9h8iEog2SC3XBclSqzW4Yd4N9Ms56a73baxqj5DM9Rr1tYMIuYW1P
+        6xc72HGwB+O2fv+s588e5zhRD7GdqoDf6aJ0kaC6XB7un9gywj/7b9XtDvlzPLgxAQAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,13 +33,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:48 GMT
+      - Sat, 16 Apr 2022 19:12:38 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

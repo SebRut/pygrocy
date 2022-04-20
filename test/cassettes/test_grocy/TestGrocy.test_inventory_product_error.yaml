@@ -7,28 +7,27 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/4
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/4
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA81Vy27bMBD8lYLnODBlq0l07Q/0XhQLmqIkIpTI8GHXCfLv3SUl22mNwL31Ylj7
-        IndmdvnGnLdtkpE1b0y3rGFbdscmMSr8+83r4AJ+typIr13UdmLNlIy5W9Kg9zY5yJkcI4WMek+5
-        9GGsFJRT3FQ4DNY5PfXwwVUqviSMA5e8HESgEhtMKMYQrXw+Wzo8xfpTKEQLSwS/X2PWqKdiATHa
-        NGFzjJO9VZ1IJsJOBfrprFfQimNA/2duEF1UHqxT2P4tkZ1X6hXbvC06DuJwDnZaxoT36rRRUIgo
-        +KhJ7NAUBToPSvdDhEFMrTmnXrjo5AzFZCPIQcnnGZAuGaxsRjVFwP7BK6mdWhBwWBwdsyYyb+Vw
-        KYz1OsfxioiRaUxGRAV/Yg22g5B2S42lcpvw6ke3SOMlabyStFNIo7pgKd950K0ClE0mFexe+b1W
-        hxlMbw8gvcKjW4h6RCbF6NBXrSu+4nxVVV/4pqnWTVVdMO68xr5KQSN2yszVhDFYL1vAIcdp0qQW
-        UgNqNZkWCMAd0uHt60z/+1n9O+GlxelgzY95fAibS/jyPM1hWHhb8S1fPz1hVJb2Mk6LTgvan42J
-        EahdbEcilCX63xDBfubM9584ornaPHM0/icYqZHsTUH95ShALpdmdU140ZDCXphEJD9sHosAL0Pz
-        COVqGeCcUIqA6HuvemIVk+s66+BK6se4csIy1S9JTFHHYybxtB1Oi40amhfbd4Hr5OpauxlLThRS
-        OXAmeUF6oqoBrcVA0zWiMIgjVMzHy+XO/pObXQqK8ZqYEft+kRjjm20mwxrU+Ul5J3POvq7X/AYs
-        5FwPKQKe1K8ItCBa5D9rkD+t1vVqTU/G8lKc0Lp8oHD/Hb/I5HZW+BaDrzxUNzNa0ZOlA046Lm/l
-        8R5rhsQJXD+iVxAGZTowuluejJp/fUTVO6sNeNqEuD8kbk/WbB7u61zqLOrziiN88YHDpaxNi/ro
-        hAnq/TcsMeFEiAcAAA==
+        H4sIAAAAAAAAA81VTW/bMAz9K4XPS2B5yYbmuj+w+zAQikzbwmRJ1UeytMh/H2VbtpsWQYdddgki
+        8pEW3yOpl8I6U0cRisNLIeviUOyKT4XmPdLfb0566+lcoxdO2iCNLg46KvUph0HrTLQwRDJCchHk
+        CaeDMoKnGJgT+85YK3ULr1xjxqdIB7DRiY77lOJzkY0+GPFrsTT0FeNmKAQzI9i2JEwv9WgB3puo
+        Q3KUQx0NjyrAEX36aYxDqPnFk/+eG3gT0IGxqD+GbBziM5X5MXTo+HkBWylCJEAjFcIoxMgPan4k
+        U+DkPKNsuwAd17VaQleuZBmo0CaA6JCoGAlpoqLMqkcdgC4CDoW0mBmwlIEcWdxFHMGVcXLAsSrJ
+        IGIfFQ8It1yDacDHY84xcxvp6hebW+MpSooQRvvY40ql4c6drBFMTmtO6E4Szzdkjk7Fj6hy4nLs
+        sKhqSGUfiURnnmfRnDmDcEiXriHInsTgvSVfVVbVptxt2JeHih0YO1T7RGZCDpoTnHswcSwtN9rA
+        LZiznk3r2+XK3vT5dRmdI3fC1InTH9PsJWLX3A8zM8HSqWI7Vj4+5rmYIjJ7o1L3Rkxxn8SVYm6q
+        v+OEWJ0irz9ztmkI61dBxeSN7zhuB3M/205cxaFB9uzrlt1AJymyzGsPb1uHbaphCN6+AWQV17hx
+        PLJeT5HrIMMFopZhtYRWwkxL8Tsnsd9diR/nsprSgVXRcTVlTZt2NKTJ7P3cMK8vN7Xbf3GzdUMR
+        84lRfmoXS8m2LPWwUTW+QYropm2ztg4p7zXxvADuYDT+DpBWTs1Tx1Kh7HFT7qnWYnmW3n3yaKNe
+        HkS0R8Nd/a9spsTSj88BuqF1r4khdLxFKgBVA0o2+RHa7KhvrZEKXNqsFp3ANCPlkGXp3mV4hm1J
+        y0l0UtWUoeHK4/UPL3Yxp9UHAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -43,18 +42,28 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:59 GMT
+      - Sat, 16 Apr 2022 19:12:43 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.11
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
 - request:
-    body: '{"new_amount": 55, "best_before_date": "2019-05-04", "shopping_location_id":
+    body: '{"new_amount": 15, "best_before_date": "2019-05-04", "shopping_location_id":
       1, "location_id": 1, "price": 150}'
     headers:
       Accept-Encoding:
@@ -66,11 +75,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/stock/products/4/inventory
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/4/inventory
   response:
     body:
       string: '{"error_message":"The new amount cannot equal the current stock amount"}'
@@ -86,13 +95,21 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:59 GMT
+      - Sat, 16 Apr 2022 19:12:43 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.11
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 400
       message: Bad Request

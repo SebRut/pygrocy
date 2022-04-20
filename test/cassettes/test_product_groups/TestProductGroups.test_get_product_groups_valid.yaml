@@ -7,18 +7,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/product_groups
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/product_groups
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA7XRTQrCMBAF4KsMs67YpD9gll14ABU3KiUmYw22SUlTRMS7qwjmANUDzPt483Z3
-        NBoFS9DKjlBgymB9JQoDJqhpUN70wTiLwo5tm6B311p5koF0HUxHQ5Bd/zrjKWezlM9YBmwhciay
-        Ah/JJ5zHcA6VvJC/Qe+dHtV0pfwqWVQy2BhrScPJOT21RxTyKORQjUGd/9OkiE4BW2ooyGNLw36+
-        9KP55cvKCJWwopM3Dfn3tL+c5/AE0GdNo2MCAAA=
+        H4sIAAAAAAAAA7XPQQrCMBAF0KsMWbfYpGkXWXbhAVTcqJSYTDXYJiVNKCLe3QoucoC6Gz7Mf/zT
+        ixhNBKEkI1YOuJwFhf2MGKYl0jgpb8ZgnCXCxr7PiHdzqzzKgLoNZsApyGFc3ljBWF7wnNbAqKBU
+        ME7e2a+eJfUMGvlA/4TROx3Vqk6ZOCUcjLWooXNOr2jwxODQxKDuf1pTJVIFR7xhkNcep/Nm66NZ
+        laoTqoYddt7c0H871hx2+QBcUaUibwIAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -33,13 +33,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Sat, 16 Apr 2022 19:12:54 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

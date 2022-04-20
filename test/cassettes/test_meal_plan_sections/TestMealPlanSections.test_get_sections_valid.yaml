@@ -7,17 +7,17 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/meal_plan_sections
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA4uuVspMUbLSNdRRykvMTVWyUlLSUSrOLyqJzyvNTUotgkgV5ZfHJxelJpakpsSX
-        ZOamFpck5hYA1RoZGBnqGljoGhkrGFhYGRpbGVoo1epAjESY6ATUmZ2WWFyCbrSxjhJBk00UDM2t
-        TCytjIyUamMBqqo+Xq4AAAA=
+        H4sIAAAAAAAAA63NzQrCMBAE4FeRnBtINuohR/HoG4iE2KYYbDaSHzyI7+4KSsWCIHobmGG+7YX5
+        jmnGJWsY2uAoU8oxFYM17F16limeTZucLa4zxQeXiw0nKkEAcDHncjkDqaXUoGh9XxiPfWQa6zBc
+        m4fzwqzo7NjbXCaeFF95iw8ejN6mYnuYWPA/S43W2iPS/Tumfsd2NzvB726yAQAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -32,13 +32,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 24 Aug 2021 17:49:32 GMT
+      - Sat, 16 Apr 2022 19:12:53 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

@@ -11,11 +11,11 @@ interactions:
       Transfer-Encoding:
       - chunked
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - '*/*'
     method: PUT
-    uri: https://localhost/api/files/productpictures/MjAuanBn
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/files/productpictures/MjAuanBn
   response:
     body:
       string: ''
@@ -31,11 +31,19 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Sat, 16 Apr 2022 19:12:54 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
-      X-Powered-By:
-      - PHP/8.0.9
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 204
       message: No Content
@@ -51,11 +59,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - '*/*'
     method: PUT
-    uri: https://localhost/api/objects/products/20
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/products/20
   response:
     body:
       string: ''
@@ -71,11 +79,19 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Sat, 16 Apr 2022 19:12:54 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
-      X-Powered-By:
-      - PHP/8.0.9
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 204
       message: No Content

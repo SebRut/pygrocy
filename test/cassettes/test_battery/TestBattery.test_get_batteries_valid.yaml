@@ -7,18 +7,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/batteries
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/batteries
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA6XRUQuCMBAH8K8i9+xgd3Pp9lUixtJRkvWgC4rou7dKk4FpEOzlD3f3427rG9QV
-        aExha7137dX0sbGdN7615cFVxtdHBxqIEzIuGfKE55pQyxxSOLmLN64LNdaH2nJv2537tCilGBIT
-        mJDQUoUH9/SNUoyG+AXlzwkkE1Q6Qy2Kf1ARoyHOoWHTn9HXcYjxYmwZNs1iNMRZVI0Tls7bo5iP
-        LQO6itEQJ9DTuWmWjKkv3DwAZYKjyzkCAAA=
+        H4sIAAAAAAAAA5XPTQrCMBAF4KuUrDuQmaRichWRENugxZ9FOouK9O5moW0JShRmNbyXb7J7iL4T
+        VqCoxcEzh3h38+LiB3YcfXsOneP+GtKeJCGgBNxWpGxj0qTkLYzswpAynlO2Pfl4DKsKgdSAm6Uy
+        1S+Ycpi+w+kVAmoqQotolSzCxhhAAoUfYJXDqgCj/B1+/xiXygzrHNYl2PwN0+rWaf8EfZLuzuUB
+        AAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -33,13 +33,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:48 GMT
+      - Sat, 16 Apr 2022 19:12:38 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

@@ -9,7 +9,7 @@ class TestStock:
         stock = grocy.stock()
 
         assert isinstance(stock, list)
-        assert len(stock) == 19
+        assert len(stock) == 20
         for prod in stock:
             assert isinstance(prod, Product)
 
@@ -36,7 +36,7 @@ class TestStock:
         missing_products = grocy.missing_products(True)
 
         assert isinstance(missing_products, list)
-        assert len(missing_products) == 4
+        assert len(missing_products) == 3
         for prod in missing_products:
             assert isinstance(prod, Product)
             assert isinstance(prod.amount_missing, float)
@@ -51,6 +51,6 @@ class TestStock:
         overdue_products = grocy.overdue_products(True)
 
         assert isinstance(overdue_products, list)
-        assert len(overdue_products) == 2
+        assert len(overdue_products) == 4
         for prod in overdue_products:
             assert isinstance(prod, Product)

@@ -11,11 +11,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/stock/shoppinglist/remove-product
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/shoppinglist/remove-product
   response:
     body:
       string: ''
@@ -31,11 +31,19 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 10 May 2021 07:22:02 GMT
+      - Sat, 16 Apr 2022 19:12:56 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
-      X-Powered-By:
-      - PHP/7.4.14
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 204
       message: No Content

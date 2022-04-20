@@ -7,16 +7,17 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D1
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEAw3LwQpAQBAG4FfRf15lh8IcvYa0LUZJi3ZHDvLunL++/sE6g63B7oOA0UXx2+KT
-        wiAdUd1+hVEiuDSIx+2m31Vmp2uQpD6c/6GCbF40OVWZrblqmQjv8AEGfHFxWwAAAA==
+        H4sIAAAAAAAAAxXKQQqEMAyF4asMWY/QBHXRpdcQKR2NULSttJFZiHc37h7/+8YLwgIWEL6QfGSd
+        Q2G/rb6KppqLuHTGH5cXGU0l/92sRHhxEiJX8fHQkwxRY9oG+w+hRbTUqX6FC2nNYNO57/f0AOGX
+        FkZxAAAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -31,13 +32,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 24 Aug 2021 17:57:00 GMT
+      - Sat, 16 Apr 2022 19:12:53 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

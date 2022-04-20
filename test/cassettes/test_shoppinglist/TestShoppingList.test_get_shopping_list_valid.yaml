@@ -7,19 +7,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/objects/shopping_list
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/shopping_list
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA8XSwQ6CMAwG4FchO0MyEJHwGh6NIYRNXIR1si0ejO9uKx4U0XiC69qmX/5ud2VK
-        sILFLGSmB+FrV9KD9m0bMg1OYnELnQwaABFYXdUni71VB16752APl7LuZeWkKJ3qpHVVZ7CW8IRH
-        PI/iLOBZka6K9QZH7RGMUbopW2WHZY/tAjTt4thx9i8Gb2V/ULIVdlDdwic5GZFxHb4M5IE/B5Kt
-        cOlXIxVfY2UxJTC7cf3LmH4YvxFzLPx/a+r++9a/YyT/W4x0+8kUKfBFiNmYSJJJYkKBL2Kkv/cW
-        I0kmjRT4rMT9HaDSU5OJBAAA
+        H4sIAAAAAAAAA8XRSwqDMBAA0KvIrBVM/BWv0WUpIibYUM1Yk9BF6d0bq7VFceGiugvzfUxODxAM
+        UiDgQtMiM4XOuoA0VeWCRM1t8og1d0pE5iiZF1dla/MajdRDY4v3rGh5rjnLtKi50nnd2Bz1KfX8
+        0COxQ0lKSEojW60u2DRCllklVL/sPYSh7Hb59nkzo+HpDkA6Adrh8AH22C1IEMAoCqYikuwhir6i
+        cCZaAh1WgZJVoJ8TRbNPWwIF24DiKSjYGZRMQeESKPov6PwC93MSEQoEAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,13 +33,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:51 GMT
+      - Sat, 16 Apr 2022 19:12:54 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -52,25 +61,26 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/20
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/20
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA8VUwW7bMAz9lcLnZrDTLij8AbsN2H0YCEaibaGypMhSsqzov4+yLCfthgwDBuwS
-        xI8URb73qJfKeSujCFX7UilZtdW2ru4rgyPx/8/KCJJ3I2FgUNIkvHJBWVO1Jmp9Xw5D7210MJ9/
-        5EwUQR1TgYY/tBWYzuTwlpFpsM4p08ObUK54iJwHLnox4JRKPPCBDE7BiucL0vEt1q+pECyUjOZD
-        GmJUJiOAo42GR6wSLKnDqAPsaUo/nfUEEs/TH8KAXSAP1hFPf7PQktl5oh88JWc3T7cuXvLDgKec
-        njhySoTInXVKE2Q5MkFkcM9QQA6eSPVDgAGN1PlouucqlDqduTA2gBhIPC+MdFFzZT2SCcAMgCeh
-        HBUOHBfnwGKNWbh8uUBtvZrzmm1SRsQxagwE78kG28EU96VGqSwjt352xRuHqLglYc0UR7rIlPUb
-        lCRg38yqgj2SPyo6LeR7ewLh2ZgkIaiRtcTRcWxbb+tN/bRpdnf1rn18aD/uqteLUffohWUjV+3X
-        b2xNZAsUr7H585AzGidagdxAMVHNBk5OhCPqyIOs3zlhdkg6+x7HvvfUp4Z/jSVX8SDvUopTDxFN
-        UOEM0ahLv+vGJh2Whf2CvCG/3dS/4SuXA6ejR82cpqoTl81A8svIBCaymNm3zS0buLwl/7ezrK5X
-        gkXKyuKxZ0NeAVazF5LRr7D52K0nqshyK8fQ9wDJ7JIFL9eX525VLi36otwnr2RP/0I7NcH89JCf
-        V4UlQl4d7AmmgXQHWnXlwds07GVnlQafdtiRF7z3sz25ysWN62bWrz8Bq9G8rjEGAAA=
+        H4sIAAAAAAAAA81Vy27cMAz8lcDnJLDdJG33A3or0HtREFyJtpXKkiJLu02C/Hspy6/dBG0OPfSy
+        WJMjmpwZ0c+F81ZGEYrdc6FksSvqsrgsDPbE/78qI0he9ISBg5IG4ZULyppiZ6LWl/NhaL2NDsbz
+        N4xEEdQhFaj4QVuB6UxO1xwZOuucMi2cpHLFh8gP4KIXHQ6pxIdiDg7Bip9rpOG3WL9AIdgFUV2n
+        IXplcgSwt9HwiEU5jtFg1AH2NKSfxnoCiY/DX9KATSAP1pF5H7LxRE88Zern0zvwocNjhieOnBIh
+        MqBRmmCSoy6v713LSTK453BABhxJtV2ADo3U+Xh61yaVIiMfxgYQHTEfmZUmaq6uezIBuBnwJJSj
+        mQfHFTgxK7wqJFBbr0ZcVSctROyjxkBwTjjYBoa4n2ssDEdu/dHRNOlDVHxCWDPEnlapsoadkgR2
+        LmsP5A+KjmcC5KTGPem5cJltFrWENPaeifT2aZHO2yMIz7YmCUH1LAj2bmS4rq/Km6vq7qKudlW1
+        q28TmQk5Ks9wHMDGPNrstpFbsEezhLbdzZO9MvvLen/26IWVidPvP/jGIBtk9rXctFXeFVM2joks
+        yJnHUzs5dEAdExm31x9vi1PcNM3M1DaDbeupTdQsKrxx8hSWDTZP/BDRBBUeIRoVNnd52jDJM5Oj
+        vyHT9eZmeb9C9VQOnI4e9VR1SBYeA8nb/bBQftrcJNh/0VmW3Sux0QwP7XnIakmvgSL66b6ehMea
+        b+/b8fItV+gPK9nQrwDp0kqeeTvo+IIJv34/Vg6/eCVb+hcsqiGvU/KjY18SMeSxJW6cdANaNfMS
+        /8x2dVZp8GklOfKC0rUoxyKraU+/CexPXo1KSy7QoB7o5TdfrVhqGQcAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -85,13 +95,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:51 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -103,25 +123,26 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/17
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/17
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA8VU227bMAz9lcDP7eCkazf4N7a3YSAYibaFyqIqS8m6ov8+yrLjNMW6FRiwlyDm
-        5YjkOeRT5QPrpGLVPFVGV021/VRdVQ4Hkv9fDB1IbyIPGJlGcWgaVTA+GnZV45K1VwsAdIGThwnj
-        RiJRRXPIIFv5sKww5xT3rVjGnr03roMXroL4kCQOfAqqxzFD5IRiHCOr+9XSyiscTqEQGZaI7Yda
-        sgbjigVw4OSkzSqbNbWYbIQ9jfmn5UCg8XH8gxuwjRSAPUn3bwLNkW0g+ild/l107PG4BnujYpK6
-        WmMJCiFlPORwL6aI4jyS6foIPTpt19QzV355moTjCKondT/Po01WkO1ALoL0D4GU8cJx6csLuDhm
-        cUy0lccVWg5mitvuMs8qDcliJLgcNXALY9ovGAuyTlL6o1+U8ZCMlKTYjWmglaTCXm80gahm4hT4
-        QOFg6DiXGPgIKpA8rSGaQZjEwYtvV+/q6/rz9fZuU981H2+a27vqeZXpHoNikXHVfPsuwkQRwKI0
-        kX9pcrKmkU6GUsAioVrkm3UIB7RJGjl9l4BJHzn30o5dF6jLBb/2ZU1JIxchi04fErpo4iMkZ9Z6
-        Tzub92Ne2a/GTfp+tabvGVdBA29TQCsjFdC8/OU7q2WQ8eVRyVxfljZv33xL/mddhdlglBBUWMVD
-        J2I8M7AVHWSRn9mmtLeO00LJWzGOfkTIQtdC9vL8cuh+w5qwv2mZ9UYlv2cM+l/QaEaYThCFaWmE
-        LpQlwo5g7Mm2YE27HL7rrajas7EQ8jZ7CkouwCRUQVl1edrR+vkXHdLVeT0GAAA=
+        H4sIAAAAAAAAA81UTW/bMAz9K4HP7RBn7Qbkb2y3YSBkibaFyaIqS8naov99lGXZTrpuPeywSxCR
+        j8/k48dz5TypKEN1fK60qo5V/bm6qawYkP9/0XhCtQs0iEA4skPhKL12QZOtjjYac1MIoPMUHUwc
+        HxkpZNCnRFLzw5AUKSa779ky9uScth1cuDLjQ+QHuOhlL0acA7JxDCR/rJaWv0J+gUKgBVF/2DNm
+        0DZbQAwULZdZ7acyWhFNgAbH9NOSR1DicfyLG0Qb0AM5tO9Dth7xiat8Hzr04ryCnZYhMqDVBiE3
+        JMuDVjRsCoKdZ9RdH6AXVpk1dONKlkkJSwFkj6xE1qONhpnNgDYAJwIepXZYFHDMwI7S27U3Uhjy
+        esLVh9RnGYdoREC4lhqohTE2hWPRNnLqj65MxkPUHCHJjnHAtUm5e71WCFRo6YT+pPF8JWZ2GtGg
+        KcT7PGDRKEhlNyyip6elaZ7OID1y0gqCHrgZYnDsO+wPh9v93W39aXeoj3V9PKQxCwk59ZzhYgSK
+        ubQyZ5O2QGe7mLbZlcpejfnLujmN8JJU0vTbd94VwcNRJnrRfbLGjeFyqvfFcBIm4uZdejGl/9ou
+        us5jl5R4K+YaUgp7iMIGHR4hWh02yzqfkfv1inzV9veX4/19uJvZwJnohcmk6R7ldxrgYVx0vUxt
+        7sp/kFfurNdyWWVx6i4NZBReg2T08zJujBPXn47osh5/wFj8GSAtpOJaF+YZ94ZkPBK7lkjtZHQN
+        Ca/+hYZ6zKcS/bQ+L0kZ9KJDTh9NC0a35UDf1jymjrQBn66OQy9x3gBmWYd1uxo8mXz7tFEc3woz
+        4ssvNPkEsvgGAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -136,13 +157,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:51 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -154,25 +185,26 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/1
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/1
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA8VU227bMAz9lcLPTeGkXVDkdT+w92EgGJm2tciSokuyrOi/j7IsO+22ogUG7CVw
-        Di8ieQ75VFlnmihCtXuqZFPtqnV1W2kciD8/G3OQ5BloyAsnbZBGVzsdlbotcdA5Ey3MoSiCPKXg
-        lEcZgSkmmx8Y8b2xVuoOXphyxmNkP7DRiR59SnHPARn0wYjDgrT8inGzKwQDxWN9V3PUIHVGAAcT
-        NXdXPTLcUItRBdiTTz+tcQQNXjybU9TfzIBtIAfGEnf/Hs/WEf3kLt/nHXo8L85WihC5rlYqgokI
-        kYm4+247LpM07tkWkL3OJLs+QI+6UUuOK1MqYRyJNgFET+IwDaaNip9QA+kAPAhwJKRlsnODlpOz
-        YRLHyF8mSaAyLomCGd4kgkQcosJA8HrmYFrwcV9ylMxN5NIvtkjkGCWXJIz2caCFrUxjLxsCls9I
-        LpgTuZOk81SiM2cQjvjpBoIcmFIcLNs29aZe1Y+r9fam3u4e7nefttXzotc9OmFYz9Xu6zdWKLIS
-        iuRY/rnJEY2eZiAXULRUs46TIOGEKnIj8//sMAolxb7Gsescdang321JXNzIK5eiyGNEHWS4QNRy
-        qXfe2cTDJJUvyIvyx4X9yLxyOrAqOlQ805Q13YEMJL0MPMA0LJ7sy+KmRZyuyf+tLLPrpGCSMrN4
-        6liQV4BRrIUk9CtsDHvrUhVa3vLR9CNAEnvDhJfny9WbmUs3sVxb3uHLjYh2b9A1/4JD6WG8ROTG
-        lWGqkFcIOwLfk2pBybbcv9WaNW2NVODSLltygvd/lClnWVQ5b2j9/AvbKfKtOwYAAA==
+        H4sIAAAAAAAAA81UTW/bMAz9K4XPbRG7xTDk2j+w+zAQtETbWmVJlaVkadH/Psq2bCfdggK77BLE
+        j48U+fjxVjhvZRSh2L8VShb7oixuC4M98d8na58VDQxIGoRXLihrir2JWt9mP2i9jQ4WVxRBHWj+
+        0FZg8pnMj4wMnXVOmRbOTFPEl8gf4KIXHQ4pxEORwSFY8bwiDb9i/UKFYBdGeb9jTq/MhAD2Nhqu
+        rvg6ltFg1AFqGtJPYz2BxNPA5t0VM2ATyIN1ZD7HbDzRK1f5OXbo8LiSnRIhMqFRmmBuhJgacf/T
+        tcwggzXbAjLrSKrtAnRopF5jbEwJGSUxNoDoiCWZhGmi5id0TyYAZwSehHKUpXAcgQ25yWuTBGrr
+        1cgrq9QOEfuoMRBcag62gSHWOcYicuTUTy6PyEtU7CGsGWJPa7emNnZKEtgc1h7IHxQdL1SdjBpr
+        0jnwbpq0qCWksmtW09vXpXveHkF44qQlBNVzV7B3bKt2VXW3e7wrv9xU5b4s91Ua2ZCYY/OZjgPY
+        OJWWB27UFuzRLNA2u1zZh3l/X1eoRi+sTJp+/8FLgzwlebQX3Uc0boDz8d5l4IA60uY792JM/yOO
+        beupTUr8zeeSkgt7iWiCCieIRoXN1s5n5GE9I9+QVfnjDfl8I6o5HDgdPeo5ajpNE5BGuB8WZc+T
+        m/vyX2Q2ddcrQfkpPLTngNWSLkki+nkhN+AY69pFXVbkCsfQrwBpKSUXu0SeeYtoj6toT3xrTjci
+        utqil/8qXwqshulikh+X5z1pQh5b4sRJN6BVk+/0XclD6qzS4NPNceQFzfPPUdZR3S4GzyVfPqUl
+        +zeoB3r/DR6YD/L2BgAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -187,13 +219,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:51 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -205,26 +247,26 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/2
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/2
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA81UTW/bMAz9K4XOTWGnadD6uj+w+zAQikzbQmVJkaVkWdH/PlKK42TogA7YYZfA
-        efwQyffIN+GDa5OKonkTuhWNWIt7YeWI9PllcMoZGZGgFicVtI/aWdHYZMz9HAl9cMlDDq7JU6qo
-        DxzOf4xTkmOKeUPINDjvte3hxlQy7hP5gU9BDXLiFI8UUMApOvW6IB294sLFFaKD2aN+qChq1LYg
-        IEeXLPUnnglusZPJRNjhxD+dCwitPE1k5qg/mUF2EQM4j9T9Zzy7gPiTuvycdxzkcXH2WsVEdXXa
-        IBQqynjQyh1BUZLxiLofIgzStmYJvTLxy3kS1kVQA6rX8zy6ZCizGdFGoP4hoNIe5wl4Sk6Gsyoy
-        beVxJY0LOvvVa+ZFpTGxOOD3UYPrYEq7OQdnZim0iUo/+VkZ+6SpJOXslEZcSCrsDbpFINVkTsEd
-        MBw0Hs/DDO4IKiA93ULUIzEpR0+2dbWuVtXzqt7eVdtm89g8bcX7ItOdDMqRjEXz7TsJU5IAZqVl
-        3Z+jqy3Vmq1pQjKU7kshFylxPwU6SJO4pc3D5uUCFr8sF06RBXOdAWTfB+y5A7I+ZZpu7Cw06u7G
-        rbA5K3SfpI06niBZvTRy2WIm6LzFXyUtzocL/DeDLOnAmxSkoaI560RpC8BCGmmyPCwa+W1xubP/
-        pLJCe9DqijN56EmrN5AzJBTeghs0B398v/LZnLn52KUIyeKPCLwKLd/VLNp6Va1XNd/d+SRehsUH
-        cz7GtOmnO5X8zsnQ/gtC9QT5TGHIEiXeJC2a7BGmAU0HRnfzcaxfKhK8d9pA4JX3GBSdCdEQTGkW
-        nV4tsnj/BbazoZJdBgAA
+        H4sIAAAAAAAAA81VwW7bMAz9lcLntbDTtNty7Q/sPgwELdG2MFlSZSlZWvTfR1lWnLRFUWCXXYKE
+        fGLJ9x7Z58p5K6MI1e65UrLaVZvqS2VwJP76MFhhNQbikKRJeOWCsqbamaj1l/ISem+jg/lxw0gU
+        Qe1p+aGtwPQmp7ccmQbrnDI9XKRyxcfIP8BFLwacUonbqgSnYMXvNdLxX7H+BIVgT4jmpmbMqEyO
+        AI42Gp6v+jaP0WHUAVqa0kdnPYHE48Tp+oM0YBfIg3VkPofsPNETT/k5dBjwsIKdEiEyoFOaIEuR
+        6SGDLYcCcvJAqh8CDGikXp+epVJkZsLYAGIgZiLz0UXNlfVIJgA3Ap6EclQYcFyBE0XbVRuB2no1
+        45pNUkHEMSZzwGuqwXYwxbbUmBYryMitH11xxmNU/EJYM8WRVpGyeoOSBLaUtXvye0WHV2TmpMaW
+        dClcZ4NFLSGN3TKJ3j6dRPP2AMITNy0hqJHFwNElz9ebzXW9vW7urzbNrml2m+TUkJCz5gzHCWzM
+        oxWfzdyCPZhT6Ly7Mtkbm7+sm9OiF1YmTn/+4l1BNkdxtDxrq76vlmycE1mQV+5O7eTQHnVMZNzd
+        fN1Wl7hlmsLUeQb73lOfqJmfvskXHs5h2WBl4seIJqhwhGhUONvi5bDcroflBzJd796UzytU7hQ4
+        HT3qpeqULDwHkrfH6UT5ZXOLYP9FZ1l2r8Si2e0dI3Hfn8eSjlZLegcpol829jI+l33/2OZ1LFv0
+        wT029CdA2luZ/gksszb1dZMYK/gTjduVxgc+S8crEV1r0ct/JTQVVlO+qeRn874kishjTzwA6Q60
+        6solb77X7F1nlQaf7pMjLyjtSD2XWR18uTxsVr6TSksuEXykl79O13TLHAcAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -239,13 +281,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:52 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -257,26 +309,27 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/3
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/3
   response:
     body:
       string: !!binary |
-        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
+        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
+        u2zlKwcAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -291,13 +344,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:52 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
@@ -309,26 +372,27 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/4
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/4
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA81U227bMAz9lcLPS2C7bdD5dT+w92EgFJm2hcqSqkuyrNi/j5TiONmKoX3bSxAf
-        kke8HPK1ct72Scaqe61UX3XVQ/WpMmJG+vvFq+ACffcYpFcuKmuqziStPy1hMHqbHOTIhjyFjOrA
-        sfyhrRQcU8xMHCbrnDIj3JgK40siP3DJy0kEpringAKGaOXzigz0ivUXV4gWFo9mW1PUrExBQMw2
-        GSquahjvcRBJR9hj4J/BeoRenALZ/2UGMUT0YB1S+e/xHDziTyrzfd5xEsfV2SkZE+U1KI1QBlH6
-        g0bsCYqCjEdU4xRhEqbXa+iViV/OrTA2gpxQPp8bMiRNzHpGE4HqB49SOVw64IicDGdN5LmVx6XQ
-        1qvs17Q8GJnmpEVE+LPXYAcIab9wLMx9otRPbpHGS1KUkrQmpBmvppRznlSPQLLJQwV7QH9QeDw3
-        09sjSI/0dA9RzTRJMTuytXVbb+qnTbO7q3fdw333uKt+rTrdCy8t6bjqvn0nZQoSwCI1Vv0SXe+o
-        tmxNAclQqi+JXLT0SD4FOgiduKTHZvv0+YIWx6wX5siKuaYAMY4eRy6BY3PNN3ZWGpV341bGuSj4
-        JQkTVTxBMmqt5LLEPKHzEn8VtDpvrvBHOlnowOnkhaakmZUvQwFYSTO1lrtFPb9NLlf2n2RW5u6V
-        5KG124ZvkjiMJNYCNfX2/okwq0kqvAe3cA5/+4ZVbW5yuS9vuxQtGfwRgbehp/lzFnXbbOp20zDB
-        chYv7bq+xrTspzuZ3N4K3+fX/rrKHxupCpAvFXrKo+ZtEbRrYkQIE+oBtBqW+9g2NWneWaXB89Y7
-        9JIuRdURTDSrUtddJsLfVk+mbV4GAAA=
+        H4sIAAAAAAAAA81VTW/bMAz9K4PPTWB7abfmuj+w+zAQikzbwmRJ1UeytMh/HyVbtpsGRYdddilq
+        8ulFfI+kXgpjdRO4L/YvhWiKfbEr7grFBqR/v1nhjKPvBh23wnihVbFXQcq7fAw6q4OBdLIiJONe
+        HHH6kJqzeAZmYtdrY4Tq4FVqZHwK9AEmWN4zFyk+FznovOa/lkhLv6LtDAWvZ0S1LQkzCDVGgA06
+        KB8TZaqjZUF6OKCLf1ptERp2dpR/Lw2s9WhBG1QfQ7YW8ZnK/Bja9+y0gI3gPhCgFRJhNGLUBxU7
+        UMgzSp5QdL2HnqlGLkdXqRhJUijtgfdIUoyCtEESsxxQeaCLgEUuDGYFDDFQIpu7mMOZ1FYkXFVH
+        G3gYgmQe4Vpr0C24cMgcs7aBrn42uTWegqATXCsXBly5lO7ciwZBZ1p9RHsUeLoSc0xKdkCZicux
+        w4JsIJZ9IBGtfp5Ns/oE3CJdugEvBjKDDYZydVnXm3K3qR4+1dW+qvb1fRQzIpPnBGcOdBhLy42W
+        tAV9UnNofbtc2Zs+vyyjc2CW6yZq+mOavSjsWvs0MxMsftXVriofH/NcTCeyeqNT742YZC6aK/jc
+        VH+nCak6nbz8zGzTEDavDhVTNtxIXA1mIh5jRyZDGvyy+rKtrqCTFdnmdYZ1ncUu1pD4tm8A2cU1
+        bhyP7NdTYMoLf4aghF8toZUx01L8zsjsmyvx41rWEx0YGSyTE2vctGMgTubg5oZ5fbmp3f6Lm60b
+        qqjuo6Ls2C2Rutw+fKWglg2+QfJgp22zjibK202chm6e/3f6XOFvD3HjNCw2LNVZPW7Keyq1WF6l
+        my8eLdTzJx7MQTPb/KuYkVi48TVAmzr3EgVCyzqkAlC2IEWb36DNjtrWaCHBxsVq0HKMI1ImlqV5
+        l9lJy5J2E++FbIihZdLh5Q+3/B1l1AcAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -343,13 +407,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 19:27:52 GMT
+      - Sat, 16 Apr 2022 19:12:55 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

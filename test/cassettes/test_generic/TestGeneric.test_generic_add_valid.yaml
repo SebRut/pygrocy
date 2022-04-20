@@ -11,15 +11,15 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/objects/batteries
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/batteries
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA6tWSi5KTSxJTYnPT8pKTS6Jz0xRslIyU6oFAAJYmJYZAAAA
+        H4sIAAAAAAAAA6tWSi5KTSxJTYnPT8pKTS6Jz0xRslIyVaoFAFvm3pQZAAAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -34,13 +34,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 10 May 2021 12:18:47 GMT
+      - Sat, 16 Apr 2022 19:12:41 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

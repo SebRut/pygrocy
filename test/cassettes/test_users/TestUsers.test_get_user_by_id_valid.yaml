@@ -7,18 +7,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/users
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/users
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA72RywrCMBBFfyVknUKT1oVd+wuuREJopzCQtCEPioj/bqJdqFi7kS7nXrjnwJyu
-        FDvaUE4ZjR7coAyk8wBmJMd0p7hH54N8FkPUmlGtPgI3TrJ1oAJ0MqABH5SxaUaUghelKHhF+L6p
-        eVPVabBDb7W6zJNvLIttiA5kjxpekDc2a4oFTZKLv4rufog+aGuq1ZJqLrZTzbQ11fyUb88nudhO
-        NdOWVM932fjmdqkCAAA=
+        H4sIAAAAAAAAA73OQQrCMBAF0KuUrFtoJsFF1l7BlUgIzRQGkrYkKUXEuxvUhYipLqTL+QP/v+OF
+        kWWKcVazOWIYjMd87tGP1SHfOe4pxKQfj2F2rmbOvAVhXHQX0CS0OpHHmIyfcg20AE0rG76rgCvO
+        FUAutBQnZ876w9ZEXZoD6p4cvixc6ycTCswK/g2VK9D72jeqKFHFplTxA1WWqHJTqlyhnm7wQJRd
+        qQIAAA==
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -33,13 +33,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 28 Jul 2021 13:11:50 GMT
+      - Sat, 16 Apr 2022 19:12:59 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.18.0
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/7.4.14
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

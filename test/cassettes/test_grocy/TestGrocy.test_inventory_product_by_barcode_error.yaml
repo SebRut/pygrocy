@@ -7,28 +7,27 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/stock/products/by-barcode/42141099
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/by-barcode/42141099
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA81Vy27bMBD8lYDnOLBku0187Q/0XhQLmlpJRCiR4cOuE+Tfu0tKttMagXvrxbD2
-        Re7M7PJNOG+bpKLYvgndiK1Yi3sxygHp7zevgwv03WBQXruo7Si2YzLmfk6DztvkIGdWFClV1HvO
-        5Q9jleSc4ubCobfO6bGDD65S8SVRHLjkVS8Dl1hRQjGGaNXz2dLSKdafQiFamCOqhyVlDXosFpCD
-        TSM1Jyq2N9jKZCLsMPBPaz1CI4+B/J+5QbYRPViH1P4tka1HfKU2b4uOvTycg51WMdG9Wm0QChEF
-        HxzljkxRkvOAuusj9HJszDn1wsUnZyhGG0H1qJ4nQNpkqLIZcIxA/YNHpR3OCDgqTo5JE5m3criS
-        xnqd46qaiVFpSEZGhD+xBttCSLu5xly5SXT1o5ul8ZI0XUnZMaQBL1jKd+51g0CyyaSC3aPfazxM
-        YHp7AOWRjm4g6oGYlIMjX72sq0VVLer6rlpt6+W2ri8Yd15TX6WgkTs0UzVpDNXLFnDEcRo1q4XV
-        QFpNpgEGcEd0ePs60f9+Vv9OemVpOsT2xzQ+jM0lfHmepjAqvK6rdbV8eqKoLO15nGadFrQ/GxMj
-        SbvUjiIoS/S/IUL9TJnvP2lEc7Vp5nj8TzByI9mbAv7lKEDOlxbrDePFQwp7aRKTvHl8LAK8DM0j
-        lKtlgHNCKQKy6zx2zCqjtMk6uJL6Ma6cME/1S5Jj1PGYSTxth9Ni44amxfZd0jq5utZuxrJiCrkc
-        OJO8ZD1x1UDWYuDpGkgYzBEp5uPlcmf/yc0uBSWqDTMj990sMVGtCsrWkM5PyjuZc/Z1veY3YCbn
-        ekgR8Ii/IvCCaIj/rMHqabHcLJb8ZMwvxQmtyweK9t/xTiW3s9I3FHzlobqZ0ZqfLB1o0ml5o6d7
-        LAURJ2n9yA4h9GhaMLqdn4xN9eWRVO+sNuB5E9L+ULQ9xXb19WGTS51FfV5xjC89cLSUtWlIH600
-        Ad9/A5ls1FuIBwAA
+        H4sIAAAAAAAAA81VTW/bMAz9K4XPTWC76bbmuj+w+zAQikzbwmRJ1UeytMh/HyVbjpMWQYtddikq
+        8ulFfI+kXwtjdRO4L7avhWiKbbEp7gvFBqR/v1vhjKNzg45bYbzQqtiqIOV9vgad1cFAulkRknEv
+        9jgdpOYs3oGZ2PXaGKE6uEiNjM+BDmCC5T1zkeKhyEHnNf99jrT0K9rOUPB6RlTrkjCDUGME2KCD
+        8jFRpjpaFqSHHbr4p9UWoWFHR/lbaWCtRwvaoPoYsrWIL1Tmx9C+Z4cz2AjuAwFaIRFGI0Z9ULEd
+        hTyj5AFF13vomWrk+eoiFSNJCqU98B5JilGQNkhilgMqD/QQsMiFwayAIQZKZHPP5nAmtRUJV9XR
+        Bh6GIJlHuNYadAsu7DLHrG2gpx9Nbo3nIOgG18qFARcupTf3okHQmVbv0e4FHq7EHJOS7VBm4nLs
+        sCAbiGXvSESrX2bTrD4At0iPbsCLgcxgg6FcXdb1qtysqi93dbWtqm39GMWMyOQ5wZkDHcbScqMl
+        bUEf1Bxavi5X9qbPT+fR2THLdRM1/TnNXhR2qX2amQkWT3W1qcqnpzwX042s3ujUrRGTzEVzBZ+b
+        6nOakKrTzdOvzDYNYXNxqZiy4Z3E1WA+zqE9kyH1x9d1dYWbfMgeLzOs6yx2sYBItn6Tzw4uYeNo
+        ZK+eA1Ne+CMEJfxiAS1MmRbiD0ZGv7sOP65jPdGBkcEyObHGLTsG4lQObm6Wy8dNrfZfvGzZTMlF
+        tu/m88N6E+m0bHCBqtcP39LusNOauQgnwlvtO4/+DYzCPx7ismmYx1xmVa6qKFbGv/uxo116vOPB
+        7DSzzb9qGYmFGz8EaFPfnqJCaFmHVADKFqRo8+dntaGuNVpIsHGnGrQc43SUieXcu+exSXuS1hLv
+        hWyIoWXS4ekvc9+rFM8HAAA=
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -43,18 +42,28 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:58 GMT
+      - Sat, 16 Apr 2022 19:12:43 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.11
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
 - request:
-    body: '{"new_amount": 45, "best_before_date": "2019-05-04", "shopping_location_id":
+    body: '{"new_amount": 5, "best_before_date": "2019-05-04", "shopping_location_id":
       1, "location_id": 150, "price": true}'
     headers:
       Accept-Encoding:
@@ -62,15 +71,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '114'
+      - '113'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/stock/products/4/inventory
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/4/inventory
   response:
     body:
       string: '{"error_message":"The new amount cannot equal the current stock amount"}'
@@ -86,13 +95,21 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:58 GMT
+      - Sat, 16 Apr 2022 19:12:43 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.11
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 400
       message: Bad Request

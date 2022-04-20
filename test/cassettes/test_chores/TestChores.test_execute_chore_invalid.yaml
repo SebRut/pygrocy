@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"tracked_time": "2021-08-23T08:17:14.341685+00:00"}'
+    body: '{"tracked_time": "2022-04-16T19:12:38.643745+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
@@ -11,11 +11,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/chores/1000/execute
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/1000/execute
   response:
     body:
       string: '{"error_message":"Chore does not exist"}'
@@ -31,13 +31,21 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 23 Aug 2021 08:17:14 GMT
+      - Sat, 16 Apr 2022 19:12:40 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 400
       message: Bad Request

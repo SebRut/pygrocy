@@ -7,22 +7,20 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/tasks
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/tasks
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA+2WX2uDMBDAv0rIc4Wqbcd8HmWDPYyxPY0hQU+bVY0kcUWG332X+ZfqoI7uqX3T
-        S+4ud7/cXd6+KA+pZy9oxlKgHn2GnHFJ9A5IzCSLgYRCSLqgIahA8lxzkVEvK5IERQX4IdNGzVk6
-        trV0LOfGbBUZypb1h695CkqzNG/VAlSJhSz9xjNTiscZhL4WfqFAtnIpDn4gAXfjUm+k82W7xL71
-        VrbnbtDpsRXqdaEZo014d5AK8or/qBFxqbRfL9QBJexIcPoRViZurvKElY1JOvSV80AXEvyIJzBw
-        WS1om43BeZuz3gskglbHiT/9WBtaVYs6EU7HeCvknrAsJDzNpfhE0lIE5bSrEWPXstdm6wzG7pjO
-        ZTPGhDSMn6T4gECr6eT/iXNv/IWpvT1teYTVsWxnJla8UMdFd9lY+wp75NE5S3fV3ReD9IfTuClc
-        kfYD4Wzd+N+QrjukW46dmBElksIMVxIJSQ47pokWOHvxEzLyYKQxoAznshnIZA/lL01j6h6YATmn
-        Y9fj8Frd5plSP1vaKbrpuJlSdE/vrnMfRlcEw7eRyUb1/g1XhIa7rgoAAA==
+        H4sIAAAAAAAAA+2VS27DIBCGrxLN2pZsYrLwtj1Cu6oqhMwkQrWNBVhVVPnuNcZJcZK2RF1UVbNj
+        HjDz8/F4egMpoIQcEmh5g+PwgZsXZwo0lZadlaqFsu3renT1yAS3eLRV62Zk4IfMygaN5U13SKjG
+        5J3Se+aKeBc3Ru5aFMwq1hvUQUirV1ZpHOeIcCkgGSFpVqT5ZkXyMs9LQuF8odOa3h6SWSFZKiTf
+        KfyoSuFapdN2XhQ6RX6qM2DmHLOqe2zU6tElJLCV2ljmA76/mp844puYtkqaruZ7dqFWJyvba2Rb
+        WWNQYQhJnJ+yuzn2yUmL747CcGS8XjJexzPe3Bj/EcbFknERzZgcwMYz/uLF+qeQF08qXaKgkSho
+        ml1/3X7n83h+B3OYncQgBwAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -37,13 +35,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:54 GMT
+      - Sat, 16 Apr 2022 19:12:59 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK

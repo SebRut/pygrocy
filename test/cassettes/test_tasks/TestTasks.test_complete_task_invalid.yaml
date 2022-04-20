@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"done_time": "2021-08-23T09:10:00.314599+00:00"}'
+    body: '{"done_time": "2022-04-16T19:12:38.643788+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
@@ -11,11 +11,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/tasks/1000/complete
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/tasks/1000/complete
   response:
     body:
       string: '{"error_message":"Task does not exist"}'
@@ -31,13 +31,21 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 23 Aug 2021 09:10:01 GMT
+      - Sat, 16 Apr 2022 19:12:59 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 400
       message: Bad Request

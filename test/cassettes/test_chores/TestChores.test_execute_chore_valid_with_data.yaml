@@ -1,27 +1,27 @@
 interactions:
 - request:
-    body: '{"tracked_time": "2020-12-01T15:00:00+00:00", "done_by": 1}'
+    body: '{"tracked_time": "2022-04-16T19:12:40.460986+00:00", "done_by": 1}'
     headers:
       Accept-Encoding:
       - gzip, deflate
       Connection:
       - keep-alive
       Content-Length:
-      - '59'
+      - '66'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
-    uri: https://localhost/api/chores/1/execute
+    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/1/execute
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAEA3WNywrCMBBFf0XuOoU0QSzzM0NMBiy2iUwTRMR/lz5curtncc59Y0yg3hvEW1Hh
-        jQyqhniXxHWcBQRnXd/ZoXP+ZAdyns4XGKSSha8vbovoT9Ty5KgS6iEvNcyPv4WW1wbIGuxzOzyc
-        3Kbp8wVSZJlQoAAAAA==
+        H4sIAAAAAAAAA1WMywrDIBBFf6XMOgEdbBb+zGB1oJJExQellP57TVpIA7O5d+45L/AONMirggHs
+        PWamb9FjzcbO7Kj6lXuFAnEUapTTRQi9Xx+5GJhuT2qF84Hm+CCb2dQfXqpZ09mBUkvUanO0sFn6
+        +wj/VGjLMkCZfUrs9tX7A4ks9pC3AAAA
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -36,13 +36,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 23 Aug 2021 08:23:57 GMT
+      - Sat, 16 Apr 2022 19:12:40 GMT
+      Keep-Alive:
+      - timeout=5
+      Referrer-Policy:
+      - no-referrer-when-downgrade
       Server:
-      - nginx/1.20.1
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
       Transfer-Encoding:
       - chunked
-      X-Powered-By:
-      - PHP/8.0.9
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-XSS-Protection:
+      - 1; mode=block
     status:
       code: 200
       message: OK
