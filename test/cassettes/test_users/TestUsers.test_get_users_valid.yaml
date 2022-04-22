@@ -11,14 +11,17 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/users
+    uri: https://localhost/api/users
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA73OQQrCMBAF0KuUrFtoJsFF1l7BlUgIzRQGkrYkKUXEuxvUhYipLqTL+QP/v+OF
-        kWWKcVazOWIYjMd87tGP1SHfOe4pxKQfj2F2rmbOvAVhXHQX0CS0OpHHmIyfcg20AE0rG76rgCvO
-        FUAutBQnZ876w9ZEXZoD6p4cvixc6ycTCswK/g2VK9D72jeqKFHFplTxA1WWqHJTqlyhnm7wQJRd
-        qQIAAA==
+      string: '[{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},{"id":"2","username":"Demo
+        User 2","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 2","picture_file_name":null},{"id":"3","username":"Demo
+        User 3","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 3","picture_file_name":null},{"id":"4","username":"Demo
+        User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -28,28 +31,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:59 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:27 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

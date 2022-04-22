@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"tracked_time": "2022-04-16T19:12:38.643807+00:00"}'
+    body: '{"tracked_time": "2022-04-22T08:40:12.632543+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
@@ -15,13 +15,11 @@ interactions:
       accept:
       - application/json
     method: POST
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/batteries/1/charge
+    uri: https://localhost/api/batteries/1/charge
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA6tWykxRslIyNFTSUUpKLClJLaqMh4gABUqKEpOzU1PiSzJzU4FCRgZGRroGJrqG
-        ZgpGhlaGRlbGlkBFpXkp+XkgaQM4B6yhuCQxt0DJKq80J0dHqSi/PD65KDWxBGoaVBKrkbUAo9em
-        GpQAAAA=
+      string: '{"id":"11","battery_id":"1","tracked_time":"2022-04-22 09:40:13","undone":"0","undone_timestamp":null,"row_created_timestamp":"2022-04-22
+        08:40:13"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -31,28 +29,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:13 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

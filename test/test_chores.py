@@ -33,15 +33,15 @@ class TestChores:
 
         assert chore_details.name == "Take out the trash"
         assert chore_details.assignment_type == AssignmentType.RANDOM
-        assert chore_details.last_done_by.id == 2
+        assert chore_details.last_done_by.id == 1
         assert chore_details.period_type == PeriodType.HOURLY
         assert chore_details.period_days is None
         assert chore_details.period_config is None
         assert chore_details.track_date_only is True
         assert chore_details.rollover is False
         assert chore_details.assignment_config == "1,2,3,4"
-        assert chore_details.next_execution_assigned_user.id == 4
-        assert chore_details.next_execution_assigned_to_user_id == 4
+        assert chore_details.next_execution_assigned_user.id == 1
+        assert chore_details.next_execution_assigned_to_user_id == 1
         assert chore_details.userfields is None
 
     @pytest.mark.vcr

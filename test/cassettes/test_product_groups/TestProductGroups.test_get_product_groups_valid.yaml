@@ -11,14 +11,16 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/product_groups
+    uri: https://localhost/api/objects/product_groups
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA7XPQQrCMBAF0KsMWbfYpGkXWXbhAVTcqJSYTDXYJiVNKCLe3QoucoC6Gz7Mf/zT
-        ixhNBKEkI1YOuJwFhf2MGKYl0jgpb8ZgnCXCxr7PiHdzqzzKgLoNZsApyGFc3ljBWF7wnNbAqKBU
-        ME7e2a+eJfUMGvlA/4TROx3Vqk6ZOCUcjLWooXNOr2jwxODQxKDuf1pTJVIFR7xhkNcep/Nm66NZ
-        laoTqoYddt7c0H871hx2+QBcUaUibwIAAA==
+      string: '[{"id":"1","name":"01 Sweets","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"2","name":"02 Bakery products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"3","name":"03 Tinned food","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"4","name":"04 Butchery products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"5","name":"05 Vegetables\/Fruits","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"6","name":"06 Refrigerated products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -28,28 +30,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:54 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:23 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

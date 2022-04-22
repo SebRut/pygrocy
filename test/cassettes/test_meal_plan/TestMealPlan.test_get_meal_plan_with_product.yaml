@@ -11,16 +11,24 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan
+    uri: https://localhost/api/objects/meal_plan
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA93WX2vDIBAA8K8SfE5HNH+65mtsb2UEidLJGk2j6Shj333GyWK5bmFjpU0hD5cj
-        F+6Herh+Q4KhEmEUI0YPNiIJIYskW+AhZQ4tt7mO18IGsQ+qrxL/rnm3F3KjfVYqY6tkv93GqO0U
-        62vjSo4ztFG9NLYkuUvQmN71wbedeq3qjlPDWWVEw7WhTRs2WUQElxiXJB8ASg7dDn/TvDZCyc9O
-        CXqPvZNAJ5lwkjk6U+hMJ5zpbJzp6MygM5twZrNx4tGZQ2d+i/u2gM5iwjnLObSEzuXN7NvAeQ+d
-        wbx1jR8pfRs/MNHjs9CRfWjky6+BHBzVFSQnI9n38Fs1XFw3rwEUnxsazF7H+v7S8H/S1UWkwZLi
-        E9ej9BxS19BlqSduSMEE/tOJfVANjzZKsUhLWr/oKzmzdis/fQCIBsetAAsAAA==
+      string: '[{"id":"1","day":"2022-04-18","type":"recipe","recipe_id":"1","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"2","day":"2022-04-19","type":"recipe","recipe_id":"2","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"3","day":"2022-04-20","type":"recipe","recipe_id":"3","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"},{"id":"4","day":"2022-04-21","type":"recipe","recipe_id":"4","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"5","day":"2022-04-22","type":"recipe","recipe_id":"2","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"6","day":"2022-04-23","type":"recipe","recipe_id":"1","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"7","day":"2022-04-24","type":"recipe","recipe_id":"4","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"8","day":"2022-04-19","type":"note","recipe_id":null,"recipe_servings":"1","note":"This
+        is a note","product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"9","day":"2022-04-17","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"3","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"},{"id":"10","day":"2022-04-18","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"9","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"11","day":"2022-04-20","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"25","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"12","day":"2022-04-23","type":"note","recipe_id":null,"recipe_servings":"1","note":"Some
+        good snacks","product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -30,28 +38,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:50 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -67,20 +63,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/1
+    uri: https://localhost/api/objects/recipes/1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5Cy3SaiHEqIxJ0DEtdIkWPPpt76C3tc1EX8d8algu6iBbUU
-        LlEyr+eZyeuR/aXSqlpXTVVXTljk1w/64UHwp8Ikow6kveNot2n69z6iBR1Stt1wy4EunMagm3rl
-        jY+QNPGCqQcmUg3Su4SElFkRitdK7WZAoynWkFCB0sKC8y7bPaCO1isgtIFJ2u20yo4gExgxcTFA
-        gkMVBCtmJ0AY/SnvGYBR0Alv500OlMUC3hHsMHpAn0q2kDKnsp7gPifyoLI/Ig86Cog4ZbuAj9w0
-        SO5TwFYkBXOeMM4RXc3dciUBJLbaCtaTcJIy5yeCU09+GHLwYvEb7ZFPXQrCQaK9wbdDNQm5naPP
-        Tt3IkrOGOE8v2tWqhsNj+fLNUPVPveUtKJT+f3jMtULfZdN3RveX+s0Qzi6E6xt/ZA+3pcfrzPIQ
-        B3edeS6k8/x+fqYL6+/nulDOtfgZraD+7XwffvkS3x95fujzct9PPP+5nWf7/ovnhfXn0Q49H9jR
-        fx5lREGoRtKWs4QNfHS3y7a9Wb66aV5D26ybZt2ueHXQzI843mmD4/HoD+XoX9yHmfVJJBwTxh37
-        nY43BF8JOjL9Sdh5GuUG5XZMGx8CK0YnYnHJIu1DQTsfrTClbvQqSxrLteOyMXWVGXen0aj0PfL1
-        GyiUG2mUBgAA
+      string: '{"id":"1","name":"Pizza","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"pizza.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -90,28 +95,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:50 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -127,13 +120,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D2
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAx3KTQqAIBAG0KvErBN0qBaeoRtEiNVEQo5hSovo7lm77+cNN7gFNCDUwNZTiX3m
-        eSv1DDEZzn6i+AFZphguM0eyiRaTnKczWX/8J6KQjVBdhUorpbEt+hPG8RpAc973Z3wB+rGghG0A
-        AAA=
+      string: '[{"id":"2","name":"Lunch","sort_number":"20","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -143,28 +134,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:50 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -180,20 +159,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/2
+    uri: https://localhost/api/objects/recipes/2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5DSbhNRDiVE4s5tr5Uix55NvfUX9rioQvx3xtkC3UUL6lK4
-        RJHfmWcmr0eZL5VW1aZqq7pywiK/3gYx7ZBIw+iNnxwmZFFhklEH0t5xTLdr+o8+ogUdUrbd9oYP
-        unB+Bt3YKwZESJo4YOyB+VSD9C4hIWVWhOJYqd0EaDTFGhIqUFpYcN5lewTU0XoFhDYwSbuDVtkR
-        ZAIjRi4GSDBXQbBicgKE0Z/ykQEYBZ3xDt7kQFks4QPBAaMH9KlkCylzKvEE9zmRB5X9CTnrKCDi
-        mO0SbrlpkNyngL1ICqY8Ypwiupq75UoCSOy1Fawn4SRlzk8E5578MGT2Yvkb7ZFPXQrCQaKjwffb
-        ahRyP0WfnVrIkrOBOI2v2vW6hvmxev1uW/VPveUrKJT+f3jMtULfZdN3Rvcv9ZshnF0I1zf+xN7e
-        lB6vM8vbuHXXmedCuszv52e6sP5+rgvlUouf0Qrq3873/Mkv8f2R53OfL/f9zPOf13mx7794Xlh/
-        Hu3Q8w87+s+DjCgI1UDacpawofzpV227WL1ZNG+hbTZNs2nXHB008yMOd9rgcFoE6fsiWN6HiWNG
-        kXBIGA/seWK9eVgLOnKFJ8fO0yB3KPdD2vkQWDE6EYsrFukYCt75aIUptaNXWdJQFpHLxtRVZtyd
-        RqPSw8nXb+Ed+AqmBgAA
+      string: '{"id":"2","name":"Spaghetti bolognese","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"spaghetti.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -203,28 +191,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:50 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -240,13 +216,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D2
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAx3KTQqAIBAG0KvErBN0qBaeoRtEiNVEQo5hSovo7lm77+cNN7gFNCDUwNZTiX3m
-        eSv1DDEZzn6i+AFZphguM0eyiRaTnKczWX/8J6KQjVBdhUorpbEt+hPG8RpAc973Z3wB+rGghG0A
-        AAA=
+      string: '[{"id":"2","name":"Lunch","sort_number":"20","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -256,28 +230,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -293,20 +255,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/3
+    uri: https://localhost/api/objects/recipes/3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTW/bMAyG/wrh0wYkaZwtO2Segd1369WAIUuso0Zfk6gUwbD/PsoNurRDNyTL
-        djEMvuRL+hEhf6u0qjbVu2pWOWGRX2+FUw9abjFxTGGSUQfS3rHUbOv2i49oQYeUbdPdcKAJpzFo
-        hlZ54yMkTZwwtMC2NAPpXUJCyqwIxblSuxHQaIozSKhAaWHBeZftAVBH6xUQ2sBO2u21yo4gExgx
-        cDNAgqkLghWjEyCM/poPbIBR0Inf3pscKIsFfCbYY/SAPpVqIWVOJZ/gPifyoLI/Wk46Cog4ZLuA
-        Wx4aJM8pYCeSgjEPGMeIbsbTcicBJHbaCtaTcJIy1yeCUyZPQCYWi99ozzg1KQgHiQ4GP3XVIORu
-        jD47NZelZgNxHN6s1usZTI/l249d1b5ky0dQXNr/wZh7hbbJpm2Mbi/lzSZcXRyuD/7o3d2UGa+z
-        y13s3HX2uTidx/v1nS5ef7/XxeVcxK9oxerf7vf0yZdwf8Z8mvNy7ifMfx7n2dx/YV68/rzaoeUL
-        O/qHXkYUhKonbblK2MBX92q5Ws2X7+f1B1jVm7rerNacHTT7R+zvtMH+eP+np/t/cR9GThpEwj5h
-        3DP0xAn1439BR27xIuw89Vwpd33a+hBYMToRi0sW6RCKv/PRClOaR6+ypL78gFw2ZlZltrvTaFR6
-        jHz/AVqeqmyeBgAA
+      string: '{"id":"3","name":"Sandwiches","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"sandwiches.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -316,28 +287,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -353,13 +312,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D3
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxWKOwqAMBAFryJbKyTrp0jtLURC1BUCZiMxwUK8u2v35s1MD/gNDLRQA7tAMkfP
-        TEn4iilbLmERkkLJleJt10Qu02azD3RlF06RqBAb1TV6qFAbrQ32Uv+F9bxHMFyO450/56GQEG4A
-        AAA=
+      string: '[{"id":"3","name":"Dinner","sort_number":"30","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -369,28 +326,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -406,20 +351,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/4
+    uri: https://localhost/api/objects/recipes/4
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5Cy3SbacighEncOSFwjRY49m3rrL+xxUYX474y7FXQXLail
-        cImieWfemTweOV8rrap1dVfVlRMW+fWjcFJsMXFEYZJRB9LesdBtmv6Dj2hBh5RtN9xyoAunMeim
-        XnnjIyRNnDD1wKZUg/QuISFlVoTiXKndDGg0xRoSKlBaWHDeZbsH1NF6BYQ2sJN2O62yI8gERkzc
-        DJDg0AXBitkJEEZ/zns2wCjoxG/nTQ6UxQLeE+wwekCfSrWQMqeST/CQE3lQ2R8tDzoKiDhlu4BP
-        PDRInlPAViQFc54wzhFdzdNyJwEkttoK1hODo8z1ieCUyQ8gBxaL32hPOHUpCAeJ9gbfDdUk5HaO
-        Pjt1I0vNGuI8vWpXqxoOj+Xrt0PVP2fLR1Bc+v/BmHuFvsum74zuL+XNJlxdHK4P/ug93JYZr7PL
-        Qxzcdfa5OJ3H++WdLl5/v9fF5VzEL2jF6t/u9+GTL+H+hPlhzsu5nzD/eZxnc/+FefH682qHni/s
-        6L+MMqIgVCNpy1XCBr6622Xb3izvbpo30Dbrplm3K84Omv0jjvfa4Hi8/cPx9l88hJlTJpFwTBh3
-        jDyx3Dz+FXTkBs/CztMoNyi3Y9r4EFgxOhGLSxZpH4q789EKU1pHr7Kksfx8XDamrjLb3Ws0Kj1G
-        vn0HOuMumJoGAAA=
+      string: '{"id":"4","name":"Pancakes","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"pancakes.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -429,28 +383,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -466,13 +408,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxXKQQqEMAyF4asMWY/QBHXRpdcQKR2NULSttJFZiHc37h7/+8YLwgIWEL6QfGSd
-        Q2G/rb6KppqLuHTGH5cXGU0l/92sRHhxEiJX8fHQkwxRY9oG+w+hRbTUqX6FC2nNYNO57/f0AOGX
-        FkZxAAAA
+      string: '[{"id":"1","name":"Breakfast","sort_number":"10","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -482,28 +422,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -519,20 +447,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/2
+    uri: https://localhost/api/objects/recipes/2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5DSbhNRDiVE4s5tr5Uix55NvfUX9rioQvx3xtkC3UUL6lK4
-        RJHfmWcmr0eZL5VW1aZqq7pywiK/3gYx7ZBIw+iNnxwmZFFhklEH0t5xTLdr+o8+ogUdUrbd9oYP
-        unB+Bt3YKwZESJo4YOyB+VSD9C4hIWVWhOJYqd0EaDTFGhIqUFpYcN5lewTU0XoFhDYwSbuDVtkR
-        ZAIjRi4GSDBXQbBicgKE0Z/ykQEYBZ3xDt7kQFks4QPBAaMH9KlkCylzKvEE9zmRB5X9CTnrKCDi
-        mO0SbrlpkNyngL1ICqY8Ypwiupq75UoCSOy1Fawn4SRlzk8E5578MGT2Yvkb7ZFPXQrCQaKjwffb
-        ahRyP0WfnVrIkrOBOI2v2vW6hvmxev1uW/VPveUrKJT+f3jMtULfZdN3Rvcv9ZshnF0I1zf+xN7e
-        lB6vM8vbuHXXmedCuszv52e6sP5+rgvlUouf0Qrq3873/Mkv8f2R53OfL/f9zPOf13mx7794Xlh/
-        Hu3Q8w87+s+DjCgI1UDacpawofzpV227WL1ZNG+hbTZNs2nXHB008yMOd9rgcFoE6fsiWN6HiWNG
-        kXBIGA/seWK9eVgLOnKFJ8fO0yB3KPdD2vkQWDE6EYsrFukYCt75aIUptaNXWdJQFpHLxtRVZtyd
-        RqPSw8nXb+Ed+AqmBgAA
+      string: '{"id":"2","name":"Spaghetti bolognese","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"spaghetti.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -542,28 +479,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -579,13 +504,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D2
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAx3KTQqAIBAG0KvErBN0qBaeoRtEiNVEQo5hSovo7lm77+cNN7gFNCDUwNZTiX3m
-        eSv1DDEZzn6i+AFZphguM0eyiRaTnKczWX/8J6KQjVBdhUorpbEt+hPG8RpAc973Z3wB+rGghG0A
-        AAA=
+      string: '[{"id":"2","name":"Lunch","sort_number":"20","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -595,28 +518,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -632,20 +543,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/1
+    uri: https://localhost/api/objects/recipes/1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5Cy3SaiHEqIxJ0DEtdIkWPPpt76C3tc1EX8d8algu6iBbUU
-        LlEyr+eZyeuR/aXSqlpXTVVXTljk1w/64UHwp8Ikow6kveNot2n69z6iBR1Stt1wy4EunMagm3rl
-        jY+QNPGCqQcmUg3Su4SElFkRitdK7WZAoynWkFCB0sKC8y7bPaCO1isgtIFJ2u20yo4gExgxcTFA
-        gkMVBCtmJ0AY/SnvGYBR0Alv500OlMUC3hHsMHpAn0q2kDKnsp7gPifyoLI/Ig86Cog4ZbuAj9w0
-        SO5TwFYkBXOeMM4RXc3dciUBJLbaCtaTcJIy5yeCU09+GHLwYvEb7ZFPXQrCQaK9wbdDNQm5naPP
-        Tt3IkrOGOE8v2tWqhsNj+fLNUPVPveUtKJT+f3jMtULfZdN3RveX+s0Qzi6E6xt/ZA+3pcfrzPIQ
-        B3edeS6k8/x+fqYL6+/nulDOtfgZraD+7XwffvkS3x95fujzct9PPP+5nWf7/ovnhfXn0Q49H9jR
-        fx5lREGoRtKWs4QNfHS3y7a9Wb66aV5D26ybZt2ueHXQzI843mmD4/HoD+XoX9yHmfVJJBwTxh37
-        nY43BF8JOjL9Sdh5GuUG5XZMGx8CK0YnYnHJIu1DQTsfrTClbvQqSxrLteOyMXWVGXen0aj0PfL1
-        GyiUG2mUBgAA
+      string: '{"id":"1","name":"Pizza","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"pizza.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -655,28 +575,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:51 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -692,13 +600,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D2
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAx3KTQqAIBAG0KvErBN0qBaeoRtEiNVEQo5hSovo7lm77+cNN7gFNCDUwNZTiX3m
-        eSv1DDEZzn6i+AFZphguM0eyiRaTnKczWX/8J6KQjVBdhUorpbEt+hPG8RpAc973Z3wB+rGghG0A
-        AAA=
+      string: '[{"id":"2","name":"Lunch","sort_number":"20","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -708,28 +614,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:21 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -745,20 +639,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/recipes/4
+    uri: https://localhost/api/objects/recipes/4
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA72VTY/TMBCG/8ooJ5Cy3SbacighEncOSFwjRY49m3rrL+xxUYX474y7FXQXLail
-        cImieWfemTweOV8rrap1dVfVlRMW+fWjcFJsMXFEYZJRB9LesdBtmv6Dj2hBh5RtN9xyoAunMeim
-        XnnjIyRNnDD1wKZUg/QuISFlVoTiXKndDGg0xRoSKlBaWHDeZbsH1NF6BYQ2sJN2O62yI8gERkzc
-        DJDg0AXBitkJEEZ/zns2wCjoxG/nTQ6UxQLeE+wwekCfSrWQMqeST/CQE3lQ2R8tDzoKiDhlu4BP
-        PDRInlPAViQFc54wzhFdzdNyJwEkttoK1hODo8z1ieCUyQ8gBxaL32hPOHUpCAeJ9gbfDdUk5HaO
-        Pjt1I0vNGuI8vWpXqxoOj+Xrt0PVP2fLR1Bc+v/BmHuFvsum74zuL+XNJlxdHK4P/ug93JYZr7PL
-        Qxzcdfa5OJ3H++WdLl5/v9fF5VzEL2jF6t/u9+GTL+H+hPlhzsu5nzD/eZxnc/+FefH682qHni/s
-        6L+MMqIgVCNpy1XCBr6622Xb3izvbpo30Dbrplm3K84Omv0jjvfa4Hi8/cPx9l88hJlTJpFwTBh3
-        jDyx3Dz+FXTkBs/CztMoNyi3Y9r4EFgxOhGLSxZpH4q789EKU1pHr7Kksfx8XDamrjLb3Ws0Kj1G
-        vn0HOuMumJoGAAA=
+      string: '{"id":"4","name":"Pancakes","description":"<h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+        no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
+        sit amet, consetetur <span style=\"background-color: rgb(255, 255, 0);\">sadipscing
+        elitr<\/span>, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua.<\/p><ul><li>At vero eos et accusam
+        et justo duo dolores et ea rebum.<\/li><li>Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet.<\/li><\/ul><h1>Lorem ipsum<\/h1><p>Lorem
+        ipsum <b>dolor sit<\/b> amet, consetetur \r\nsadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et \r\ndolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et\r\n justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea \r\ntakimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit \r\namet, consetetur <span style=\"background-color:
+        rgb(255, 255, 0);\">sadipscing elitr<\/span>,\r\n sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna \r\naliquyam erat, sed diam voluptua. At
+        vero eos et accusam et justo duo \r\ndolores et ea rebum. Stet clita kasd
+        gubergren, no sea takimata sanctus \r\nest Lorem ipsum dolor sit amet.<\/p>","row_created_timestamp":"2022-04-22
+        08:37:58","picture_file_name":"pancakes.jpg","base_servings":"1","desired_servings":"1","not_check_shoppinglist":"0","type":"normal","product_id":null,"userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -768,28 +671,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -805,13 +696,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D2
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAx3KTQqAIBAG0KvErBN0qBaeoRtEiNVEQo5hSovo7lm77+cNN7gFNCDUwNZTiX3m
-        eSv1DDEZzn6i+AFZphguM0eyiRaTnKczWX/8J6KQjVBdhUorpbEt+hPG8RpAc973Z3wB+rGghG0A
-        AAA=
+      string: '[{"id":"2","name":"Lunch","sort_number":"20","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -821,28 +710,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -858,13 +735,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxXKQQqEMAyF4asMWY/QBHXRpdcQKR2NULSttJFZiHc37h7/+8YLwgIWEL6QfGSd
-        Q2G/rb6KppqLuHTGH5cXGU0l/92sRHhxEiJX8fHQkwxRY9oG+w+hRbTUqX6FC2nNYNO57/f0AOGX
-        FkZxAAAA
+      string: '[{"id":"1","name":"Breakfast","sort_number":"10","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -874,28 +749,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -911,13 +774,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D3
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxWKOwqAMBAFryJbKyTrp0jtLURC1BUCZiMxwUK8u2v35s1MD/gNDLRQA7tAMkfP
-        TEn4iilbLmERkkLJleJt10Qu02azD3RlF06RqBAb1TV6qFAbrQ32Uv+F9bxHMFyO450/56GQEG4A
-        AAA=
+      string: '[{"id":"3","name":"Dinner","sort_number":"30","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -927,28 +788,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -964,13 +813,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxXKQQqEMAyF4asMWY/QBHXRpdcQKR2NULSttJFZiHc37h7/+8YLwgIWEL6QfGSd
-        Q2G/rb6KppqLuHTGH5cXGU0l/92sRHhxEiJX8fHQkwxRY9oG+w+hRbTUqX6FC2nNYNO57/f0AOGX
-        FkZxAAAA
+      string: '[{"id":"1","name":"Breakfast","sort_number":"10","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -980,28 +827,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -1017,13 +852,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D1
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxXKQQqEMAyF4asMWY/QBHXRpdcQKR2NULSttJFZiHc37h7/+8YLwgIWEL6QfGSd
-        Q2G/rb6KppqLuHTGH5cXGU0l/92sRHhxEiJX8fHQkwxRY9oG+w+hRbTUqX6FC2nNYNO57/f0AOGX
-        FkZxAAAA
+      string: '[{"id":"1","name":"Breakfast","sort_number":"10","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -1033,28 +866,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:52 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -1070,13 +891,11 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan_sections?query%5B%5D=id%3D3
+    uri: https://localhost/api/objects/meal_plan_sections?query%5B%5D=id%3D3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAAxWKOwqAMBAFryJbKyTrp0jtLURC1BUCZiMxwUK8u2v35s1MD/gNDLRQA7tAMkfP
-        TEn4iilbLmERkkLJleJt10Qu02azD3RlF06RqBAb1TV6qFAbrQ32Uv+F9bxHMFyO450/56GQEG4A
-        AAA=
+      string: '[{"id":"3","name":"Dinner","sort_number":"30","row_created_timestamp":"2022-04-22
+        08:37:58","time_info":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -1086,28 +905,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:53 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:22 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

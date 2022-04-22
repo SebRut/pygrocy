@@ -11,11 +11,10 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/tasks/30000
+    uri: https://localhost/api/objects/tasks/30000
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA6tWSi0qyi+Kz00tLk5MT1WyUvJPykpNLlHIyy9RSMsvzUtRqgUAcMoJfiQAAAA=
+      string: '{"error_message":"Object not found"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -25,28 +24,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:41 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:16 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 404
       message: Not Found

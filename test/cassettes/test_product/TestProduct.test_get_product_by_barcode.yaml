@@ -11,23 +11,15 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/stock/products/by-barcode/42141099
+    uri: https://localhost/api/stock/products/by-barcode/42141099
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA81VTW/bMAz9K4PPTWB7abfmuj+w+zAQikzbwmRJ1UeytMh/HyVbtpsGRYdddilq
-        8ulFfI+kXgpjdRO4L/YvhWiKfbEr7grFBqR/v1nhjKPvBh23wnihVbFXQcq7fAw6q4OBdLIiJONe
-        HHH6kJqzeAZmYtdrY4Tq4FVqZHwK9AEmWN4zFyk+FznovOa/lkhLv6LtDAWvZ0S1LQkzCDVGgA06
-        KB8TZaqjZUF6OKCLf1ptERp2dpR/Lw2s9WhBG1QfQ7YW8ZnK/Bja9+y0gI3gPhCgFRJhNGLUBxU7
-        UMgzSp5QdL2HnqlGLkdXqRhJUijtgfdIUoyCtEESsxxQeaCLgEUuDGYFDDFQIpu7mMOZ1FYkXFVH
-        G3gYgmQe4Vpr0C24cMgcs7aBrn42uTWegqATXCsXBly5lO7ciwZBZ1p9RHsUeLoSc0xKdkCZicux
-        w4JsIJZ9IBGtfp5Ns/oE3CJdugEvBjKDDYZydVnXm3K3qR4+1dW+qvb1fRQzIpPnBGcOdBhLy42W
-        tAV9UnNofbtc2Zs+vyyjc2CW6yZq+mOavSjsWvs0MxMsftXVriofH/NcTCeyeqNT742YZC6aK/jc
-        VH+nCak6nbz8zGzTEDavDhVTNtxIXA1mIh5jRyZDGvyy+rKtrqCTFdnmdYZ1ncUu1pD4tm8A2cU1
-        bhyP7NdTYMoLf4aghF8toZUx01L8zsjsmyvx41rWEx0YGSyTE2vctGMgTubg5oZ5fbmp3f6Lm60b
-        qqjuo6Ls2C2Rutw+fKWglg2+QfJgp22zjibK202chm6e/3f6XOFvD3HjNCw2LNVZPW7Keyq1WF6l
-        my8eLdTzJx7MQTPb/KuYkVi48TVAmzr3EgVCyzqkAlC2IEWb36DNjtrWaCHBxsVq0HKMI1ImlqV5
-        l9lJy5J2E++FbIihZdLh5Q+3/B1l1AcAAA==
+      string: '{"product":{"id":"4","name":"Crisps","description":null,"product_group_id":"1","active":"1","location_id":"4","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"10","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[{"id":"3","product_id":"4","barcode":"42141099","qu_id":"3","amount":null,"shopping_location_id":null,"last_price":null,"row_created_timestamp":"2022-04-22
+        08:37:58","note":null}],"last_purchased":"2022-04-22","last_used":"2022-04-22","stock_amount":"25","stock_value":"3019.09","stock_amount_opened":"0","stock_amount_aggregated":"25.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"quantity_unit_stock":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"last_price":"150","avg_price":"120.76","oldest_price":"150","current_price":"150","last_shopping_location_id":"1","default_shopping_location_id":null,"next_due_date":"2019-05-04","location":{"id":"4","name":"Candy
+        cupboard","description":null,"row_created_timestamp":"2022-04-22 08:37:57","is_freezer":"0"},"average_shelf_life_days":-5,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -37,28 +29,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:54 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:23 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

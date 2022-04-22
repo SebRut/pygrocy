@@ -11,16 +11,24 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/meal_plan
+    uri: https://localhost/api/objects/meal_plan
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA93WX2vDIBAA8K8SfE5HNH+65mtsb2UEidLJGk2j6Shj333GyWK5bmFjpU0hD5cj
-        F+6Herh+Q4KhEmEUI0YPNiIJIYskW+AhZQ4tt7mO18IGsQ+qrxL/rnm3F3KjfVYqY6tkv93GqO0U
-        62vjSo4ztFG9NLYkuUvQmN71wbedeq3qjlPDWWVEw7WhTRs2WUQElxiXJB8ASg7dDn/TvDZCyc9O
-        CXqPvZNAJ5lwkjk6U+hMJ5zpbJzp6MygM5twZrNx4tGZQ2d+i/u2gM5iwjnLObSEzuXN7NvAeQ+d
-        wbx1jR8pfRs/MNHjs9CRfWjky6+BHBzVFSQnI9n38Fs1XFw3rwEUnxsazF7H+v7S8H/S1UWkwZLi
-        E9ej9BxS19BlqSduSMEE/tOJfVANjzZKsUhLWr/oKzmzdis/fQCIBsetAAsAAA==
+      string: '[{"id":"1","day":"2022-04-18","type":"recipe","recipe_id":"1","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"2","day":"2022-04-19","type":"recipe","recipe_id":"2","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"3","day":"2022-04-20","type":"recipe","recipe_id":"3","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"},{"id":"4","day":"2022-04-21","type":"recipe","recipe_id":"4","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"5","day":"2022-04-22","type":"recipe","recipe_id":"2","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"6","day":"2022-04-23","type":"recipe","recipe_id":"1","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"7","day":"2022-04-24","type":"recipe","recipe_id":"4","recipe_servings":"1","note":null,"product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"2"},{"id":"8","day":"2022-04-19","type":"note","recipe_id":null,"recipe_servings":"1","note":"This
+        is a note","product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"9","day":"2022-04-17","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"3","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"},{"id":"10","day":"2022-04-18","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"9","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"11","day":"2022-04-20","type":"product","recipe_id":null,"recipe_servings":"1","note":null,"product_id":"25","product_amount":"1.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"1"},{"id":"12","day":"2022-04-23","type":"note","recipe_id":null,"recipe_servings":"1","note":"Some
+        good snacks","product_id":null,"product_amount":"0.0","product_qu_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","done":"0","section_id":"3"}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -30,28 +38,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:44 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:18 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

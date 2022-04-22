@@ -11,19 +11,29 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores
+    uri: https://localhost/api/chores
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA+WWQU/DIBTHvwrpeUta2i1Zr3r1pl6MIdi+rWQUlvKqM8bvLmXMrtO52RAvJlze
-        63t/6P8HhIe3SJRRHiXRJCoq3QA7ChWvwSauKq5WQFC/gDREKIIVkCeOVaN1bYslN8iw4cUaSobC
-        9dCY0mmcTZM5iePcDVupYIsMjK3haGthC0WLQqsvXQtC03y2sMN2OWlW2hamlXz1S9xpfSpwY8RK
-        dQvQrDXQ9P8iDGvAFBWUrYQuGe+T+x6fO6XYyUX5gVldwntzDbUmd13BJFqKxhqx+6BaKb0zh4lG
-        v7DCTozeKYO83gztokmeJDmlVrAUZiP5K/tmro0osLWIlkLCwQzv7xO/TjqE2ode7EZvHMe1QGuN
-        IkupdXMGZrwYBTMJBDMNDjM9AZOkoXFmP+B0s50Fmg6B9qGXu+VrILpFR9W6bKpzRzMbRXMeiGYW
-        nGZ2imb2pzSzS2hmQ5p96OXuedG2tWMpxbNQK9Jdthed0nFXLk3DcN1ZGQis82xv2Wxo2ezYsisJ
-        XHnHEC2IJ709Z9VsjFXBjsD/vtDmQ559ePTs6B4bUBJTAaD5EWg6peP2fiCgJ/b+5yPkV0SdWY8f
-        DX1aFqQJAAA=
+      string: '[{"id":"1","chore_id":"1","chore_name":"Change towels in the bathroom","last_tracked_time":"2022-04-22
+        00:00:00","next_estimated_execution_time":"2022-04-25 23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":"4","is_rescheduled":"0","is_reassigned":"0","next_execution_assigned_user":{"id":"4","username":"Demo
+        User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null}},{"id":"2","chore_id":"2","chore_name":"Mop
+        the kitchen floor","last_tracked_time":"2022-04-15 00:00:00","next_estimated_execution_time":"2022-04-18
+        23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":"4","is_rescheduled":"0","is_reassigned":"0","next_execution_assigned_user":{"id":"4","username":"Demo
+        User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null}},{"id":"3","chore_id":"3","chore_name":"Take
+        out the trash","last_tracked_time":"2022-04-20 00:00:00","next_estimated_execution_time":"2022-04-22
+        23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":"1","is_rescheduled":"0","is_reassigned":"0","next_execution_assigned_user":{"id":"1","username":"Demo
+        User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null}},{"id":"4","chore_id":"4","chore_name":"Vacuum
+        the living room floor","last_tracked_time":"2022-04-22 00:00:00","next_estimated_execution_time":"2022-04-23
+        23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":null,"is_rescheduled":"0","is_reassigned":"0","next_execution_assigned_user":null},{"id":"5","chore_id":"5","chore_name":"Clean
+        the litter box","last_tracked_time":"2022-04-21 00:00:00","next_estimated_execution_time":"2022-04-22
+        23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":"4","is_rescheduled":"0","is_reassigned":"0","next_execution_assigned_user":{"id":"4","username":"Demo
+        User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null}},{"id":"6","chore_id":"6","chore_name":"Change
+        the bed sheets","last_tracked_time":"2022-04-01 00:00:00","next_estimated_execution_time":"2022-05-02
+        23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":null,"is_rescheduled":"1","is_reassigned":"0","next_execution_assigned_user":null}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -33,28 +43,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:13 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -70,18 +68,16 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/1
+    uri: https://localhost/api/chores/1
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA9VTTW/cIBD9KxZnb2VI0ia+pn8hZ0Rgdo2KwR1gEyva/57BxlmnqqpcK7gwX+/N
-        m+GN6SEgsP6NWcN6xlnLvBrJwB4H5U/QpPACLjbWN2mA5lmlAUMYKcxA1GinZINnvc/OtWwCtMHI
-        NE+lwBAyupl9mI2a4xaJ4UVqBJWAwu0IMalxohzRCXHobg/8eyN4z3kv7q4FdPBHe9pKJFT6FxVN
-        IIMnnJU8BufCGZCeHT1VjPbkR/BpY4XKm4X/zrUVZrwV7U17W0SA1yThFXQuDco1uJANMkdA+aEW
-        5cY8gpwwmKwTcbmmVRKbq+RUoapFjSH79Id81ifAs3KU/UMUojrZM1Q4EgrT0vWqFj905ZbOaR4D
-        mOzAVH+Vemf/Slcl69IypyJpVjQG83kwXdcvl9UZQJnM0oboap4JHuTz/GmtCkBdrZ8whuaJ3mQ+
-        WqSE1bESXirsDV9fliKXsXFyapZ/wZqsThlBHq2DHcJlG3ek6gvKVaKCt4d6aMRNf/dA9x9LUlr9
-        f3pX9F3UCXaNHBF+Z/B6luUP06dl9/zbPd8ddnkHYRCtkjoEAAA=
+      string: '{"chore":{"id":"1","name":"Change towels in the bathroom","description":null,"period_type":"hourly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":null,"track_date_only":"1","rollover":"0","assignment_type":"random","assignment_config":"1,2,3,4","next_execution_assigned_to_user_id":"4","consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"72","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-22
+        00:00:00","tracked_count":20,"last_done_by":{"id":"3","username":"Demo User
+        3","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 3","picture_file_name":null},"next_estimated_execution_time":"2022-04-25
+        23:59:59","next_execution_assigned_user":{"id":"4","username":"Demo User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null},"average_execution_frequency_hours":"81.8181818181818"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -91,28 +87,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -128,18 +112,15 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/2
+    uri: https://localhost/api/chores/2
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA61TuW7jMBD9FYG1HIiSs4BVb5tya4JLjizCPBQeToTA/56hTNnaIAlSLMBCc755
-        b0ZvRIzOA+nfiJKkJy2pieUGHeTJTVUcoTqpKEaw1aCd8xiWEIRXU1TOkt4mrWsygVdOsjhPufAF
-        4KRncnNLPoc107sXJjzwCJiuDITIzZRxm7bdNfsd/VW1tKe0bx/vDYSzgzpilnEWm9VxTD7gB2ZE
-        z8UJESIwZxG0J5RkFK3dGTyaDZo8BHW0BmxcR/TcSmf+Dd1QaN3WXb3PSsBrZPAKImW27JqcJ3cs
-        BfBskazDRKwNyQCbvJNJRJzlXlaGWEO5pqhWPNy4ZOMHLZWN4M9cF0ZcRHWGYqBoPi6kr8rRXZNf
-        Jo67GUEmDbLEi+wb/09I5apLTTQPKFmWGORmSc2happ+eesKIG9pYUEPpU46C+zvfDutPF8GKOf1
-        G4yr/qCN7kF5LLgGrgMvHbaOnx9OPmGpwqT5zD7BmpSIyQMblIYNwmXddsDuC8pdooy3haJV2/WP
-        B3zf3EimeuPefcG96v43+/037Be0r/lz/GP4ETZkBg/PCayY2ejwl8tLPLQPDbm8Axmw8Lg3BAAA
+      string: '{"chore":{"id":"2","name":"Mop the kitchen floor","description":null,"period_type":"weekly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":"monday,thursday","track_date_only":"1","rollover":"0","assignment_type":"random","assignment_config":"1,2,3,4","next_execution_assigned_to_user_id":"4","consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"1","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-15
+        00:00:00","tracked_count":19,"last_done_by":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},"next_estimated_execution_time":"2022-04-18
+        23:59:59","next_execution_assigned_user":{"id":"4","username":"Demo User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null},"average_execution_frequency_hours":"192.0"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -149,28 +130,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -186,18 +155,15 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/3
+    uri: https://localhost/api/chores/3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA71T227bMAz9FUPPTmE5Ttv4eZ+wPQuaxMRCZcnTJatR5N9L+pJ4xVb0aYAgQCQP
-        yXNIvTHV+QCsfWNGs5btWcmc7NHAvssXKHxOReqgSEHGDn0aogpmSMY71rpsbckGCMZrkcaBUJ3P
-        wY7sZtZyjGtk8L+FCiATYLjpISbZD4ipq7reVc2OPxY1bzlv68M9gfLuZM5rCuxDvWDSBMI7rNMy
-        ziixtf4CAZ8VPmWM5ux6cGntKkinff+na03MeFmX+7Ih5vCaBLyCykRQzMHUrBc5QhCTRBSI2Jh7
-        EEPwOquEvdxhSxOrizCLUItF9j679EE+4xKEi7RU4JkaVclcYOGHQoU0sZ7V4ruKDjHHeXSgswW9
-        +BepN/avsCLUtWRWRtSMNAa9HUxTVFU7HbbMAGgyEw1+XHDaOxA/x9su1RhLBZZ9+ga9L37guyDH
-        yQSEzK655SnH1vD1daGRaBMHK0fx12qDUSkHECdjYVPjuo48Yv6pzl0mqvih2L49HPF8sihE98a/
-        +Rf/5r/ybz7lL/HbyDNsyJwC/Mrg1CjoL+PnZYfm4fnwxJt6vo/s+g4bElnaNwQAAA==
+      string: '{"chore":{"id":"3","name":"Take out the trash","description":null,"period_type":"hourly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":null,"track_date_only":"1","rollover":"0","assignment_type":"random","assignment_config":"1,2,3,4","next_execution_assigned_to_user_id":"1","consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"48","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-20
+        00:00:00","tracked_count":19,"last_done_by":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},"next_estimated_execution_time":"2022-04-22
+        23:59:59","next_execution_assigned_user":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},"average_execution_frequency_hours":"54.8571428571429"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -207,28 +173,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -244,18 +198,14 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/4
+    uri: https://localhost/api/chores/4
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA41SyW7rMAz8FUPnpJCdtkB87i+8XgVVohOhkuinJa1R5N9LeYkdoAUK6UJyyBku
-        X0ydMQBrv5jRrGWPbMe8dORgr1Ll7Kp0hsqai/GnKiC6qrOIgVAaogqmTwY9a322dsd6CAa1SENf
-        8j8A3u3Abm4th7ggA34IFUAmILhxEJN0PeU0vGn2/HFfP1dN3dZ12zytBRT6zpwIFWXKgcpRKAWp
-        3ql0AoGe2FpWs1LeWrxAIJOTKWM0J+/Ap0Wbx/3qvEcsLJNQD59JwCeoXBoVE66IRpEjBFGGNiEp
-        L2YHog+os0okZ82bdSyhNWnxSIeZhNzP0fgE4SLt3JRUyVxgNmhgIY19T1Or97z80jvt5Qw6W9Bz
-        fB75xv/Xrq47ZmWkqZUpg75fEOft+JctQNnQ2EXD5zyNHsTbcLuuA2ELwXxhL+Cw+kd2VQKdCZQy
-        hSbJY42t4+9nU+5Ym9hbOYgf2Xqj6IhAdMbChuO6rDxS/ZFnHVNh3JA1h6o5tE9H+uz3QyntLvIl
-        naQ8wQbWBfifwatBnDGHWJZ75A9Hfns1u34Dv6rAi6MDAAA=
+      string: '{"chore":{"id":"4","name":"Vacuum the living room floor","description":null,"period_type":"weekly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":"saturday","track_date_only":"1","rollover":"0","assignment_type":"no-assignment","assignment_config":null,"next_execution_assigned_to_user_id":null,"consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"1","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-22
+        00:00:00","tracked_count":20,"last_done_by":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},"next_estimated_execution_time":"2022-04-23
+        23:59:59","next_execution_assigned_user":null,"average_execution_frequency_hours":"190.909090909091"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -265,28 +215,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -302,18 +240,16 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/5
+    uri: https://localhost/api/chores/5
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA71Ty47bMAz8FUNnp7DsuNv1tf2FngWtxCRCZcnVI42xyL+XdOTEXbSLPRUQDIjk
-        cDhD+ZWpkw/AhldmNBtYz2rm5IgB9tWCdFU6QWVNShCqF3/BrIaogpmS8Y4NLltbswmC8VqkeSLc
-        yedgZ3YPaznHtTL4X0IFkAmw3IwQkxwnxLRN2+6a/Y5/rlo+cD60/aOB8u5gjmuLFKT6gU0TCO+Q
-        Z2CcUWNr/RkCXhu8yhjN0Y3g0jpVkE778c/U2pjxuq27ek/a4ZIEXEBlEihuxTSsFzlCEItJHRYi
-        NuYRxBS8zirhLA9YGWJNEaYYVSJy9NmlN/YZhyafpSU7aBSpkjlD0YdGhbSovrnFdw0dUo77OIHO
-        FnTJF6s38Y+oItS1ZlZG9Iw8Br1dTF81zbAcVnYAtJlFBn8uOO0diJf5/pparCWC8qK+weir73iv
-        KHEwASG31G3kpcc28PHnQoZpEycrZ/FXtsmolAOIg7Gw4biuK4/Yf+F52ESMb8i6oX/G885DIbl3
-        /d2/9Hf/VX/3rn6Jv408wkbMIcDPDE7Ngv7lSIRPn/btl/6Jly+7/gafYzpAOQQAAA==
+      string: '{"chore":{"id":"5","name":"Clean the litter box","description":null,"period_type":"hourly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":null,"track_date_only":"1","rollover":"0","assignment_type":"random","assignment_config":"1,2,3,4","next_execution_assigned_to_user_id":"4","consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"24","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-21
+        00:00:00","tracked_count":19,"last_done_by":{"id":"2","username":"Demo User
+        2","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 2","picture_file_name":null},"next_estimated_execution_time":"2022-04-22
+        23:59:59","next_execution_assigned_user":{"id":"4","username":"Demo User 4","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:57","display_name":"Demo User 4","picture_file_name":null},"average_execution_frequency_hours":"27.4285714285714"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -323,28 +259,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:39 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -360,18 +284,14 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/chores/6
+    uri: https://localhost/api/chores/6
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Ty07DMBD8lcjnFiUpLSJX+AXOlrGnjYVjBz8KEeq/s06apkUgIfni3Z3Z2fH6
-        i8nWebDmi2nFGrZjK2ZFRwH21Ap7QBFbFK9QRWiBGCitEKTXfdTOssYmY1ash9dO8Tj0GfgBvJmB
-        XcJKDGGu9O6DSw8RQeW6Q4ii6wlTl3W9Lu/X1a6oq6aqmnq7EEhn9/pAVZ2zREaJ6IV8I+II7iz1
-        aljFMrkx7ghP15KuIgR9sB1snJVZt16CtxVzj0mmxWfk+IRMeUw+1WXJjqcAz7NXUyXhQurAe+9U
-        kpHkLLizjjm1gOaI6FwiIbcuahvhj8IQepM1yqiPOE9Idvk4zj15Vq3LfPLs9CotVDJQV/nR03r3
-        I//f6U4rZkQg97LbUBfKDVEWZdmMZ34N5Hcap6kezzjlLPjrcFmurDM3OC/YMzpXvNCdwnvtCTAl
-        JjdGhuvA/1enzluqQ2/EwH/p1WsZkwffa4OrDqf52QOxj10Wi3K/G0eLetNsH+mwv5cljzqLF7SW
-        4oCrsr3He4KVA29d8vRB2PZhd1ey0ze4oAqlkwMAAA==
+      string: '{"chore":{"id":"6","name":"Change the bed sheets","description":null,"period_type":"weekly","period_days":null,"row_created_timestamp":"2022-04-22
+        08:37:58","period_config":"monday","track_date_only":"1","rollover":"0","assignment_type":"no-assignment","assignment_config":null,"next_execution_assigned_to_user_id":null,"consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"3","active":"1","start_date":"2021-01-01","rescheduled_date":"2022-05-02","rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-04-01
+        00:00:00","tracked_count":19,"last_done_by":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
+        08:37:55","display_name":"Demo User","picture_file_name":null},"next_estimated_execution_time":"2022-05-02
+        23:59:59","next_execution_assigned_user":null,"average_execution_frequency_hours":"576.0"}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -381,28 +301,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:40 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:14 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

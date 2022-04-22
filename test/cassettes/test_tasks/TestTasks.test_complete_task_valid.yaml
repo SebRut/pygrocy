@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"done_time": "2022-04-16T19:12:59.440758+00:00"}'
+    body: '{"done_time": "2022-04-22T08:40:26.983637+00:00"}'
     headers:
       Accept-Encoding:
       - gzip, deflate
@@ -15,7 +15,7 @@ interactions:
       accept:
       - application/json
     method: POST
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/tasks/4/complete
+    uri: https://localhost/api/tasks/4/complete
   response:
     body:
       string: ''
@@ -31,19 +31,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:59 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:27 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      - nginx/1.20.2
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 204
       message: No Content

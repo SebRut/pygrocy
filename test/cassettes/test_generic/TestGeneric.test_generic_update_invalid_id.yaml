@@ -15,7 +15,7 @@ interactions:
       accept:
       - '*/*'
     method: PUT
-    uri: https://test-d7rsxj63ymn8kfi7aid0p7.demo.grocy.info/api/objects/batteries/1000
+    uri: https://localhost/api/objects/batteries/1000
   response:
     body:
       string: '{"error_message":"Object not found"}'
@@ -31,21 +31,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 16 Apr 2022 19:12:41 GMT
-      Keep-Alive:
-      - timeout=5
-      Referrer-Policy:
-      - no-referrer-when-downgrade
+      - Fri, 22 Apr 2022 08:40:15 GMT
       Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
-      X-Content-Type-Options:
-      - nosniff
-      X-XSS-Protection:
-      - 1; mode=block
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 400
       message: Bad Request
