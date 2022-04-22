@@ -19,6 +19,7 @@ class PeriodType(str, Enum):
     MONTHLY = "monthly"
     YEARLY = "yearly"
     ADAPTIVE = "adaptive"
+    HOURLY = "hourly"
 
 
 class AssignmentType(str, Enum):
