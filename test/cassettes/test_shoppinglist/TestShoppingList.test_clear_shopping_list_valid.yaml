@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
@@ -31,11 +31,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 10 May 2021 07:22:02 GMT
+      - Fri, 22 Apr 2022 08:40:24 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.2
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.13
     status:
       code: 204
       message: No Content
