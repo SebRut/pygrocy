@@ -7,30 +7,25 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
     uri: https://localhost/api/stock/volatile
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA+1YTVPbMBD9K4zPkIkdCJArh5460+n01mE0iizHamxLyFLSlOG/d1eSYzsEJuUr
-        UHL0av30sfu0T3sbpZYTpWVqmamjyc/biJbSViaaRGfRcfggdDbTfEYNT9E+GMLIghaWw1d8OTgf
-        w/eU14ZMeSY1Jyl4wlAyTOKTYXISd5Ck4pVDQQw/FfG2/iRDN4moO1ayXhn+i+s2K+WWAJ9hC0Tg
-        CuOktUST26g1VrTEP75RpcWcIgyvmRbKCFlFk8oWRQs109IqD+g2wIxYNNMVklH8xw/jdHUulRLV
-        jPSGPOKNBT+irGY5rd3JwA/eWBvJ5nhW3pJRZqReuxIjSeMRuxMpReUtG6fBM2oLDEA3CiuIaHTu
-        drl9mNDMcO0CAJ7uWB8ACp6Z5vwP7HI3b5PTZeusBDMWsiMTBSchEMoHYvBLzWCZvKJTGDMUvJZc
-        zHJDclqlRYvRGcIluCOppCEs52weDiazBUxRlLwyBNKRaM6E4ngUuEEF4DDQzRcfJEYLqYXzi5MR
-        eDJb2gIymWyeOZEZqe20wWiQNzLyxgpYEpNVbUveRsuHMRcpJ5A+LrhELrheCL4MS9RySZjmSDdi
-        RAkhpaWCsTWfRkfx5eQ0nozG0d3d8b9T9mxw8e4oe4qx8fdQS1k0hkz5TlNR5/C9H8Yii/qMDZZP
-        xljPlQNR3V3ydKLidR+qX6+2Jr3aOh7EF+DYv9T3W1rdzbjJU2cMPP0qivnOLMVbCCrei9XVGG/4
-        Pk0b0yvwdId6idIm3Orpm1bWd8ZTCMsHKafXxxGW4+fK4iQeXKBqfIy7MWa/U9tBAodM6dk6AhiH
-        nyWLUdVscjdGY+DulYUgTbkGy36qbFDBIJYb1ftJdTELkTgI4zcWxmOkw7siLd4i90iLxkDaH7Kk
-        Rh4ou++nrHFxOBD26YSF0st/K6Hh2RsSfqMj1SmYPdXs39RNR+p0gE+zxzjcUd+v0Y9C+LCB0B9y
-        jYeNx22CxrVorhhPj0p48+9MZHwbv6R2xouvL52D5QMp5/hiB03edqVcoLZ0pZLh/0ZjL6PepiEF
-        NC5FXWMvtEdj34Vtk/5Kyjn229YiOPwFMhdfvdD7hV6dKVakaXk6eYz9LoeEW2p0ay6ZxFbdNqxR
-        I5nvo8XRGg1zPaB9sWW5OppyqreuDXm3dW0dtE7f6kqLWm0Fwhr+END13V80yNKkmhcAAA==
+      string: '{"due_products":[{"amount":"5","amount_aggregated":"5.0","value":"17.64","best_before_date":"2022-04-24","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"12","product":{"id":"12","name":"Paprika","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"2","qu_id_stock":"2","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":"paprika.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}},{"amount":"5","amount_aggregated":"5.0","value":"16.31","best_before_date":"2022-04-24","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"14","product":{"id":"14","name":"Radish","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"7","qu_id_stock":"7","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}},{"amount":"2","amount_aggregated":"2.0","value":"9.86","best_before_date":"2022-04-24","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"23","product":{"id":"23","name":"Milk","description":null,"product_group_id":"6","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"10","qu_id_stock":"10","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"418","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:58","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}}],"overdue_products":[{"amount":"25","amount_aggregated":"25.0","value":"3019.09","best_before_date":"2019-05-04","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"4","product":{"id":"4","name":"Crisps","description":null,"product_group_id":"1","active":"1","location_id":"4","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"10","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}},{"amount":"5","amount_aggregated":"5.0","value":"17.67","best_before_date":"2022-04-20","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"13","product":{"id":"13","name":"Cucumber","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"2","qu_id_stock":"2","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":"cucumber.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}},{"amount":"5","amount_aggregated":"5.0","value":"16.34","best_before_date":"2022-04-20","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"1","product_id":"15","product":{"id":"15","name":"Tomato","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"2","qu_id_stock":"2","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":"tomato.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}},{"amount":"1","amount_aggregated":"1.0","value":"1.74","best_before_date":"2022-04-21","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"2","product_id":"20","product":{"id":"20","name":"Minced
+        meat","description":null,"product_group_id":"4","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"180","default_best_before_days_after_thawing":"2","picture_file_name":"20.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"2","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:58","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}}],"expired_products":[{"amount":"1","amount_aggregated":"1.0","value":"1.74","best_before_date":"2022-04-21","amount_opened":"0","amount_opened_aggregated":"0.0","is_aggregated_amount":"0","due_type":"2","product_id":"20","product":{"id":"20","name":"Minced
+        meat","description":null,"product_group_id":"4","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"180","default_best_before_days_after_thawing":"2","picture_file_name":"20.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"2","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:58","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null}}],"missing_products":[{"id":"1","name":"Cookies","amount_missing":"8","is_partly_in_stock":"0"},{"id":"2","name":"Chocolate","amount_missing":"3.0","is_partly_in_stock":"1"},{"id":"3","name":"Gummy
+        bears","amount_missing":"4.0","is_partly_in_stock":"1"}]}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -40,18 +35,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 20:05:24 GMT
+      - Fri, 22 Apr 2022 08:40:26 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -63,26 +56,61 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/4
+  response:
+    body:
+      string: '{"product":{"id":"4","name":"Crisps","description":null,"product_group_id":"1","active":"1","location_id":"4","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"10","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[{"id":"3","product_id":"4","barcode":"42141099","qu_id":"3","amount":null,"shopping_location_id":null,"last_price":null,"row_created_timestamp":"2022-04-22
+        08:37:58","note":null}],"last_purchased":"2022-04-22","last_used":"2022-04-22","stock_amount":"25","stock_value":"3019.09","stock_amount_opened":"0","stock_amount_aggregated":"25.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"quantity_unit_stock":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"last_price":"150","avg_price":"120.76","oldest_price":"150","current_price":"150","last_shopping_location_id":"1","default_shopping_location_id":null,"next_due_date":"2019-05-04","location":{"id":"4","name":"Candy
+        cupboard","description":null,"row_created_timestamp":"2022-04-22 08:37:57","is_freezer":"0"},"average_shelf_life_days":-5,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Apr 2022 08:40:26 GMT
+      Server:
+      - nginx/1.20.2
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.13
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
     uri: https://localhost/api/stock/products/13
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA81UTW/bMAz9K4PObRA7Sdf5OmDn3YeBUGTa1ipLij6SZcX++yjJjpMhKHrYYZcg
-        5pfI9x75yqwzbRSBNa9Mtqxh1YY9MM1HpP+fo4jjHh1ZWvTCSRuk0azRUamHORN6Z6KFnLyjSC6C
-        PKbsij6UETzlFHdNFj8Ya6Xu4cZVKh4ixYGNTgzcpxIpoRh9MOJlsXT0inGXUAgG5ohqtaasUepi
-        AT6aqGk+lswtdjyqAHv06aczDqHlZ0/uj2+4gXcBHRiLNP2bhabIziH+oinfFx0GflqCrRQhUl+d
-        VAgTE2JiYvXD9tQnar4nZ+AUdkLZDwEGrlu1FLlypR4yJtoEEAOKlwmZLip6Q42oAxAS4FBIiwmL
-        BJWl4uSY9JEJLCwJroyTOa6qk1pIJFHxgPA36GA68HE/15grt5FaP9tZI4coqSVhtI8jLnQVHgfZ
-        IpB+MrtgjuiOEk9Ti86cQDikp1sIciRO+WjJV6/r6nFdP1abD9WnZls1myf2exHsnjthSNCs+fad
-        JMpJCrPm0gbM2es0W/ZGj+Qo05dGLqJKii+mI1cxa7ZaPS/WEpiVk2pkZK9LAO97h30agby7zNON
-        P2mOxrsJK3TOWj5EroMMZ4haLpNcFjrt0KSirxIF0uedZX4/lNupHlgVHVfUdS7ryVwsSUsjgZvw
-        ItRv28uz/Te9Fe6dJFQatlntnup8wY49SbYYt6tNOgxGEWZpGW6sOf3+QcvXb2bofkjRk8afAdJG
-        tKQB6mJWX3V9Pu8B9sXJtv8nbEoP+V7RoU8CJc447RnvEfyAqgMlu/lK1s8kd2ukApcW3qITdCRY
-        s35gVGUR6bLGVO8PoacpMWUGAAA=
+      string: '{"product":{"id":"13","name":"Cucumber","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"2","qu_id_stock":"2","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":"cucumber.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[],"last_purchased":"2022-04-12","last_used":null,"stock_amount":"5","stock_value":"17.67","stock_amount_opened":"0","stock_amount_aggregated":"5.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"2","name":"Piece","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Pieces","plural_forms":null},"quantity_unit_stock":{"id":"2","name":"Piece","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Pieces","plural_forms":null},"last_price":"3.0025","avg_price":"3.53","oldest_price":"4.8325","current_price":"4.8325","last_shopping_location_id":"1","default_shopping_location_id":null,"next_due_date":"2022-04-20","location":{"id":"2","name":"Fridge","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","is_freezer":"0"},"average_shelf_life_days":28,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -92,18 +120,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 20:05:24 GMT
+      - Fri, 22 Apr 2022 08:40:26 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
@@ -115,26 +141,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
     uri: https://localhost/api/stock/products/15
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA81UTW/bMAz9K4POaRAnTbv6B+y8w27DQCgybauVJVWWknXF/vtIyY6bISh62GGX
-        IOaXyPce+Sp8cE1SUdSvQjeiFtVerISVA9L/b26Q0dF3g6MK2kftrKhtMmY150EXXPKQUzlTqqiP
-        nFvRh3FKck5xb8ky9s57bTu4cJWKz4niwKegejlyCU4oxjE69bRYWnrFhXMoRAdzRLXeUNagbbGA
-        HFyyNJ1gc4OtTCbCAUf+aV1AaOTLSO77d9wg24gBnEea/t1CU2QbEH/RlB+Ljr08LcFeq5ior1Yb
-        hImHmHlYP/qOukQrD+SKkoJOqLs+Qi9tY5YSb1zcQUbEugiqR/U04dImQy+YAW0EwgECKu2RkWCg
-        PBUnx6SNTF/hSEnjgs5x1XZHkSoNyciI8Dfk4FoY02GuMVduErX+4meFPCdNLSlnxzTgQlZhsdcN
-        AqkncwvuiOGo8TS1GNwJVEB6uoGoB2JUDp582822utlsb6rdp+qhvq3q3Z34vcj1IINyJGdRf/9B
-        ApUkhFlxrP45e8OzZW8akRxl+tLIWVKs92I6SpPySPv1HWe+Dcy64RoZ2QuP7LqAHY9A3n3m6cLP
-        iqPxLsIKnbOSn5O0UccXSFYvk5yXmTdo0tBXjQrp88oqfxzK26keeJOCNNR1LjuSuVhYSwOBy3gR
-        6pft5dn+m94K90ETKrwk+4f7fL+OHUm2GHfrisl0hjDjZbiw5vTr5yzfvpmh6yFFTxZ/RuCNaEgD
-        1MWsvurt8bwG2Jegm+6fsKlHyNcKA6PAmyJpz2SHMPZoWjC6nW/k9jMJ2zttIPDCewyKjoSoNytB
-        VRaRLmtM9f4AqT6ygmEGAAA=
+      string: '{"product":{"id":"15","name":"Tomato","description":null,"product_group_id":"5","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"2","qu_id_stock":"2","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"7","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":"tomato.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[],"last_purchased":"2022-04-12","last_used":null,"stock_amount":"5","stock_value":"16.34","stock_amount_opened":"0","stock_amount_aggregated":"5.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"2","name":"Piece","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Pieces","plural_forms":null},"quantity_unit_stock":{"id":"2","name":"Piece","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Pieces","plural_forms":null},"last_price":"3.225","avg_price":"3.27","oldest_price":"5.2875","current_price":"5.2875","last_shopping_location_id":"1","default_shopping_location_id":null,"next_due_date":"2022-04-20","location":{"id":"2","name":"Fridge","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","is_freezer":"0"},"average_shelf_life_days":28,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -144,18 +162,58 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 13 Feb 2021 20:05:24 GMT
+      - Fri, 22 Apr 2022 08:40:26 GMT
       Server:
-      - nginx/1.18.0
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/7.4.14
+      - PHP/8.0.13
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/stock/products/20
+  response:
+    body:
+      string: '{"product":{"id":"20","name":"Minced meat","description":null,"product_group_id":"4","active":"1","location_id":"2","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"0","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"180","default_best_before_days_after_thawing":"2","picture_file_name":"20.jpg","enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"2","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:58","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[],"last_purchased":"2022-04-12","last_used":null,"stock_amount":"1","stock_value":"1.74","stock_amount_opened":"0","stock_amount_aggregated":"1.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"quantity_unit_stock":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"last_price":"1.735","avg_price":"1.74","oldest_price":"1.735","current_price":"1.735","last_shopping_location_id":"2","default_shopping_location_id":null,"next_due_date":"2022-04-21","location":{"id":"2","name":"Fridge","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","is_freezer":"0"},"average_shelf_life_days":9,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Apr 2022 08:40:26 GMT
+      Server:
+      - nginx/1.20.2
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

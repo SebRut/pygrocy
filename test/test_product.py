@@ -17,22 +17,22 @@ class TestProduct:
 
     @pytest.mark.vcr
     def test_product_get_details_valid(self, grocy):
-        product = grocy.product(10)
+        product = grocy.product(8)
 
         assert isinstance(product, Product)
-        assert product.name == "Cheese"
+        assert product.name == "Gulash soup"
         assert product.available_amount == 5
-        assert product.product_group_id == 6
+        assert product.product_group_id == 3
         assert product.qu_factor_purchase_to_stock == 1.0
-        assert product.default_quantity_unit_purchase.id == 3
-        assert product.default_quantity_unit_purchase.name == "Pack"
+        assert product.default_quantity_unit_purchase.id == 5
+        assert product.default_quantity_unit_purchase.name == "Tin"
         assert product.default_quantity_unit_purchase.description == None
-        assert product.default_quantity_unit_purchase.name_plural == "Packs"
+        assert product.default_quantity_unit_purchase.name_plural == "Tins"
 
-        assert len(product.product_barcodes) == 1
+        assert len(product.product_barcodes) == 2
         barcode = product.product_barcodes[0]
         assert isinstance(barcode, ProductBarcode)
-        assert barcode.barcode == "12345"
+        assert barcode.barcode == "22111968"
 
     @pytest.mark.vcr
     def test_product_no_barcodes(self, grocy):
@@ -68,7 +68,7 @@ class TestProduct:
 
         assert isinstance(product, Product)
         assert product.name == "Crisps"
-        assert product.available_amount == 5
+        assert product.available_amount == 25
         assert product.product_group_id == 1
 
         assert len(product.product_barcodes) == 1

@@ -7,28 +7,19 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
     uri: https://localhost/api/stock/products/by-barcode/42141099
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA81Vy27bMBD8lYDnOLBku0187Q/0XhQLmlpJRCiR4cOuE+Tfu0tKttMagXvrxbD2
-        Re7M7PJNOG+bpKLYvgndiK1Yi3sxygHp7zevgwv03WBQXruo7Si2YzLmfk6DztvkIGdWFClV1HvO
-        5Q9jleSc4ubCobfO6bGDD65S8SVRHLjkVS8Dl1hRQjGGaNXz2dLSKdafQiFamCOqhyVlDXosFpCD
-        TSM1Jyq2N9jKZCLsMPBPaz1CI4+B/J+5QbYRPViH1P4tka1HfKU2b4uOvTycg51WMdG9Wm0QChEF
-        HxzljkxRkvOAuusj9HJszDn1wsUnZyhGG0H1qJ4nQNpkqLIZcIxA/YNHpR3OCDgqTo5JE5m3criS
-        xnqd46qaiVFpSEZGhD+xBttCSLu5xly5SXT1o5ul8ZI0XUnZMaQBL1jKd+51g0CyyaSC3aPfazxM
-        YHp7AOWRjm4g6oGYlIMjX72sq0VVLer6rlpt6+W2ri8Yd15TX6WgkTs0UzVpDNXLFnDEcRo1q4XV
-        QFpNpgEGcEd0ePs60f9+Vv9OemVpOsT2xzQ+jM0lfHmepjAqvK6rdbV8eqKoLO15nGadFrQ/GxMj
-        SbvUjiIoS/S/IUL9TJnvP2lEc7Vp5nj8TzByI9mbAv7lKEDOlxbrDePFQwp7aRKTvHl8LAK8DM0j
-        lKtlgHNCKQKy6zx2zCqjtMk6uJL6Ma6cME/1S5Jj1PGYSTxth9Ni44amxfZd0jq5utZuxrJiCrkc
-        OJO8ZD1x1UDWYuDpGkgYzBEp5uPlcmf/yc0uBSWqDTMj990sMVGtCsrWkM5PyjuZc/Z1veY3YCbn
-        ekgR8Ii/IvCCaIj/rMHqabHcLJb8ZMwvxQmtyweK9t/xTiW3s9I3FHzlobqZ0ZqfLB1o0ml5o6d7
-        LAURJ2n9yA4h9GhaMLqdn4xN9eWRVO+sNuB5E9L+ULQ9xXb19WGTS51FfV5xjC89cLSUtWlIH600
-        Ad9/A5ls1FuIBwAA
+      string: '{"product":{"id":"4","name":"Crisps","description":null,"product_group_id":"1","active":"1","location_id":"4","shopping_location_id":null,"qu_id_purchase":"3","qu_id_stock":"3","qu_factor_purchase_to_stock":"1.0","min_stock_amount":"10","default_best_before_days":"0","default_best_before_days_after_open":"0","default_best_before_days_after_freezing":"0","default_best_before_days_after_thawing":"0","picture_file_name":null,"enable_tare_weight_handling":"0","tare_weight":"0.0","not_check_stock_fulfillment_for_recipes":"0","parent_product_id":null,"calories":"123","cumulate_min_stock_amount_of_sub_products":"0","due_type":"1","quick_consume_amount":"1.0","hide_on_stock_overview":"0","default_stock_label_type":"0","should_not_be_frozen":"0","row_created_timestamp":"2022-04-22
+        08:37:57","treat_opened_as_out_of_stock":"1","no_own_stock":"0","default_consume_location_id":null},"product_barcodes":[{"id":"3","product_id":"4","barcode":"42141099","qu_id":"3","amount":null,"shopping_location_id":null,"last_price":null,"row_created_timestamp":"2022-04-22
+        08:37:58","note":null}],"last_purchased":"2022-04-22","last_used":"2022-04-22","stock_amount":"5","stock_value":"19.09","stock_amount_opened":"0","stock_amount_aggregated":"5.0","stock_amount_opened_aggregated":"0.0","default_quantity_unit_purchase":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"quantity_unit_stock":{"id":"3","name":"Pack","description":null,"row_created_timestamp":"2022-04-22
+        08:37:55","name_plural":"Packs","plural_forms":null},"last_price":"5","avg_price":"3.82","oldest_price":"4.855","current_price":"4.855","last_shopping_location_id":null,"default_shopping_location_id":null,"next_due_date":"2022-10-19","location":{"id":"4","name":"Candy
+        cupboard","description":null,"row_created_timestamp":"2022-04-22 08:37:57","is_freezer":"0"},"average_shelf_life_days":-5,"spoil_rate_percent":0,"is_aggregated_amount":"0","has_childs":false}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -38,23 +29,21 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:58 GMT
+      - Fri, 22 Apr 2022 08:40:16 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/8.0.11
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
 - request:
-    body: '{"new_amount": 45, "best_before_date": "2019-05-04", "shopping_location_id":
+    body: '{"new_amount": 5, "best_before_date": "2019-05-04", "shopping_location_id":
       1, "location_id": 150, "price": true}'
     headers:
       Accept-Encoding:
@@ -62,11 +51,11 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '114'
+      - '113'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: POST
@@ -86,13 +75,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Nov 2021 14:53:58 GMT
+      - Fri, 22 Apr 2022 08:40:17 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/8.0.11
+      - PHP/8.0.13
     status:
       code: 400
       message: Bad Request
