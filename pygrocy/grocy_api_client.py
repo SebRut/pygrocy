@@ -184,7 +184,7 @@ class TaskResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date
+    due_date: date = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None

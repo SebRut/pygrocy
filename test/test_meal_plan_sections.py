@@ -8,11 +8,11 @@ class TestMealPlanSections:
     def test_get_sections_valid(self, grocy):
         sections = grocy.meal_plan_sections()
 
-        assert len(sections) == 2
+        assert len(sections) == 4
         section = sections[1]
         assert section.id == 1
         assert section.name == "Breakfast"
-        assert section.sort_number == 3
+        assert section.sort_number == 10
         assert isinstance(section.row_created_timestamp, datetime.datetime)
 
     @pytest.mark.vcr
