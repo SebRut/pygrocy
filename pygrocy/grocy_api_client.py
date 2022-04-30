@@ -323,7 +323,7 @@ class GrocyApiClient(object):
 
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
 
         _LOGGER.debug("-->\tDELETE /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
