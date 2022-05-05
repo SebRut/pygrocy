@@ -10,7 +10,7 @@ interactions:
       - python-requests/2.27.1
       accept:
       - application/json
-    method: GET
+    method: DELETE
     uri: https://localhost/api/objects/tasks/3
   response:
     body:
