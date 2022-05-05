@@ -130,7 +130,10 @@ class Product(DataModel):
 
     @property
     def product_group_id(self) -> int:
-        return self._product_group_id
+        if (not self._product_group_id):
+            return None
+        else:
+            return int(self._product_group_id)
 
     @property
     def available_amount(self) -> float:
