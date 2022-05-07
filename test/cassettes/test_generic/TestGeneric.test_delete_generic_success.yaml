@@ -7,17 +7,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
-    method: GET
+    method: DELETE
     uri: https://localhost/api/objects/tasks/3
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA0WN3QoCIRCFXyXm2gV/Isjn6F5Ep0XyZ3GUiOjd05bYu+HMd873huBBKwbZJgQN
-        N0sPAQw8kqtha6Fk0LnHOKKOxts2KcmlWLhchJxoySPj+2FaSEjNpu1fc6OylvoyUyQZWKKwZvSm
-        FdMJ6y8XDGp5Gldx0ON1jBwudRJXfRZaXYZ0Nu8Bo6fd8/kCH9CrIckAAAA=
+      string: '{"id":"3","name":"Task3","description":null,"due_date":"2022-04-22","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
+        08:37:58","userfields":null}'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -27,18 +25,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:50 GMT
+      - Fri, 22 Apr 2022 08:40:15 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/8.0.9
+      - PHP/8.0.13
     status:
       code: 200
       message: OK

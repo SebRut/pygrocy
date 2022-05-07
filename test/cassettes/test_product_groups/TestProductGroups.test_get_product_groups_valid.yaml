@@ -7,18 +7,20 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - application/json
     method: GET
     uri: https://localhost/api/objects/product_groups
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAEA7XRTQrCMBAF4KsMs67YpD9gll14ABU3KiUmYw22SUlTRMS7qwjmANUDzPt483Z3
-        NBoFS9DKjlBgymB9JQoDJqhpUN70wTiLwo5tm6B311p5koF0HUxHQ5Bd/zrjKWezlM9YBmwhciay
-        Ah/JJ5zHcA6VvJC/Qe+dHtV0pfwqWVQy2BhrScPJOT21RxTyKORQjUGd/9OkiE4BW2ooyGNLw36+
-        9KP55cvKCJWwopM3Dfn3tL+c5/AE0GdNo2MCAAA=
+      string: '[{"id":"1","name":"01 Sweets","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"2","name":"02 Bakery products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"3","name":"03 Tinned food","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"4","name":"04 Butchery products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"5","name":"05 Vegetables\/Fruits","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"},{"id":"6","name":"06 Refrigerated products","description":null,"row_created_timestamp":"2022-04-22
+        08:37:57"}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'
@@ -28,18 +30,16 @@ interactions:
       - '*'
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Fri, 22 Apr 2022 08:40:23 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       Transfer-Encoding:
       - chunked
       X-Powered-By:
-      - PHP/8.0.9
+      - PHP/8.0.13
     status:
       code: 200
       message: OK
