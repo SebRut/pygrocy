@@ -598,7 +598,7 @@ class GrocyApiClient(object):
         return last_change_timestamp
 
     def get_tasks(self, exclude_done) -> List[TaskResponse]:
-        params = {'query[]': 'done=0'} if exclude_done else None
+        params = {"query[]": "done=0"} if exclude_done else None
         parsed_json = self._do_get_request("objects/tasks", params=params)
         return [TaskResponse(**data) for data in parsed_json]
 
