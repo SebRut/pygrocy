@@ -598,7 +598,7 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request("tasks")
         return [TaskResponse(**data) for data in parsed_json]
 
-    def get_task(self,  task_id: int) -> TaskResponse:
+    def get_task(self, task_id: int) -> TaskResponse:
         url = f"objects/tasks/{task_id}"
         parsed_json = self._do_get_request(url)
         return TaskResponse(**parsed_json)
