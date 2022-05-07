@@ -595,13 +595,13 @@ class GrocyApiClient(object):
         return last_change_timestamp
 
     def get_tasks(self) -> List[TaskResponse]:
-        parsed_json = self._do_get_request("objects/tasks", params={'query[]': 'done=0'})
-        return [TaskResponse(data) for data in parsed_json]
+        parsed_json = self._do_get_request("tasks")
+        return [TaskResponse(**data) for data in parsed_json]
 
     def get_task(self,  task_id: int) -> TaskResponse:
         url = f"objects/tasks/{task_id}"
         parsed_json = self._do_get_request(url)
-        return TaskResponse(parsed_json)
+        return TaskResponse(**parsed_json)
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
