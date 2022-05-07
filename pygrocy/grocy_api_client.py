@@ -270,10 +270,8 @@ class GrocyApiClient(object):
     def _do_get_request(self, end_url: str, params: dict = None):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(
-            req_url,
-            params=params,
-            verify=self._verify_ssl,
-            headers=self._headers)
+            req_url, params=params, verify=self._verify_ssl, headers=self._headers
+        )
 
         _LOGGER.debug("-->\tGET /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
