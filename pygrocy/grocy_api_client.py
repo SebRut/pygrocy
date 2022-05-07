@@ -267,7 +267,7 @@ class GrocyApiClient(object):
         else:
             self._headers = {"accept": "application/json", "GROCY-API-KEY": api_key}
 
-    def _do_get_request(self, end_url, params=None):
+    def _do_get_request(self, end_url: str, params: dict = None):
         req_url = urljoin(self._base_url, end_url)
         resp = requests.get(
             req_url,
