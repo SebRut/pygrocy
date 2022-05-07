@@ -281,13 +281,9 @@ class Grocy(object):
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
 
-    def tasks(self) -> List[Task]:
-        raw_tasks = self._api_client.get_tasks()
+    def tasks(self, exclude_done=False) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks(exclude_done)
         return [Task(task) for task in raw_tasks]
-
-    def task(self, task_id: int) -> Task:
-        resp = self._api_client.get_task(task_id)
-        return Task(resp)
 
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)

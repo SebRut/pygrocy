@@ -11,20 +11,20 @@ interactions:
       accept:
       - application/json
     method: GET
-    uri: https://localhost/api/tasks
+    uri: https://localhost/api/objects/tasks
   response:
     body:
       string: '[{"id":"1","name":"Task1","description":null,"due_date":null,"done":"0","done_timestamp":null,"category_id":null,"assigned_to_user_id":null,"row_created_timestamp":"2022-04-22
-        08:37:58","assigned_to_user":null,"category":null},{"id":"2","name":"Task2","description":null,"due_date":"2022-04-21","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
+        08:37:58","assigned_to_user":null,"category":null, "userfields": { "postponeevent": "True", "taskcallbackevent": "callback"}},{"id":"2","name":"Task2","description":null,"due_date":"2022-04-21","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
         08:37:58","assigned_to_user":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
         08:37:55","display_name":"Demo User","picture_file_name":null},"category":{"id":"1","name":"Category1","description":null,"row_created_timestamp":"2022-04-22
-        08:37:58"}},{"id":"3","name":"Task3","description":null,"due_date":"2022-04-22","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
+        08:37:58"}, "userfields": { "postponeevent": "True", "taskcallbackevent": "callback"}},{"id":"3","name":"Task3","description":null,"due_date":"2022-04-22","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
         08:37:58","assigned_to_user":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
         08:37:55","display_name":"Demo User","picture_file_name":null},"category":{"id":"1","name":"Category1","description":null,"row_created_timestamp":"2022-04-22
-        08:37:58"}},{"id":"4","name":"Task4","description":null,"due_date":"2022-04-26","done":"0","done_timestamp":null,"category_id":null,"assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
+        08:37:58"}, "userfields": { "postponeevent": "True", "taskcallbackevent": "callback"}},{"id":"4","name":"Task4","description":null,"due_date":"2022-04-26","done":"0","done_timestamp":null,"category_id":null,"assigned_to_user_id":"1","row_created_timestamp":"2022-04-22
         08:37:58","assigned_to_user":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-04-22
-        08:37:55","display_name":"Demo User","picture_file_name":null},"category":null},{"id":"5","name":"Task5","description":null,"due_date":"2022-05-12","done":"0","done_timestamp":null,"category_id":null,"assigned_to_user_id":null,"row_created_timestamp":"2022-04-22
-        08:37:58","assigned_to_user":null,"category":null}]'
+        08:37:55","display_name":"Demo User","picture_file_name":null},"category":null},{"id":"5","name":"Task5","description":null,"due_date":"2022-05-12","done":"0","done_timestamp":null,"category_id":null, "userfields": { "postponeevent": "True", "taskcallbackevent": "callback"},"assigned_to_user_id":null,"row_created_timestamp":"2022-04-22
+        08:37:58","assigned_to_user":null,"category":null, "userfields": { "postponeevent": "True", "taskcallbackevent": "callback"}}]'
     headers:
       Access-Control-Allow-Headers:
       - '*'

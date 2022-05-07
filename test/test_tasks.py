@@ -20,6 +20,9 @@ class TestTasks:
         assert isinstance(task.category, TaskCategory)
         assert task.category.id == 1
         assert task.category.name == "Category1"
+        assert len(task.userfields) == 2
+        assert task.userfields["taskcallbackevent"] == "callback"
+        assert task.userfields["postponeevent"] == "True"
 
     @pytest.mark.vcr
     def test_complete_task_valid_with_defaults(self, grocy):

@@ -243,13 +243,13 @@ def _enable_debug_mode():
 
 class GrocyApiClient(object):
     def __init__(
-        self,
-        base_url,
-        api_key,
-        port: int = DEFAULT_PORT_NUMBER,
-        path: str = None,
-        verify_ssl=True,
-        debug=False,
+            self,
+            base_url,
+            api_key,
+            port: int = DEFAULT_PORT_NUMBER,
+            path: str = None,
+            verify_ssl=True,
+            debug=False,
     ):
         if debug:
             _enable_debug_mode()
@@ -267,9 +267,13 @@ class GrocyApiClient(object):
         else:
             self._headers = {"accept": "application/json", "GROCY-API-KEY": api_key}
 
-    def _do_get_request(self, end_url: str):
+    def _do_get_request(self, end_url, params=None):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.get(
+            req_url,
+            params=params,
+            verify=self._verify_ssl,
+            headers=self._headers)
 
         _LOGGER.debug("-->\tGET /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
@@ -366,10 +370,10 @@ class GrocyApiClient(object):
             return ChoreDetailsResponse(**parsed_json)
 
     def execute_chore(
-        self,
-        chore_id: int,
-        done_by: int = None,
-        tracked_time: datetime = datetime.now(),
+            self,
+            chore_id: int,
+            done_by: int = None,
+            tracked_time: datetime = datetime.now(),
     ):
         localized_tracked_time = localize_datetime(tracked_time)
 
@@ -381,12 +385,12 @@ class GrocyApiClient(object):
         return self._do_post_request(f"chores/{chore_id}/execute", data)
 
     def add_product(
-        self,
-        product_id,
-        amount: float,
-        price: float,
-        best_before_date: datetime = None,
-        transaction_type: TransactionType = TransactionType.PURCHASE,
+            self,
+            product_id,
+            amount: float,
+            price: float,
+            best_before_date: datetime = None,
+            transaction_type: TransactionType = TransactionType.PURCHASE,
     ):
         data = {
             "amount": amount,
@@ -400,12 +404,12 @@ class GrocyApiClient(object):
         return self._do_post_request(f"stock/products/{product_id}/add", data)
 
     def consume_product(
-        self,
-        product_id: int,
-        amount: float = 1,
-        spoiled: bool = False,
-        transaction_type: TransactionType = TransactionType.CONSUME,
-        allow_subproduct_substitution: bool = False,
+            self,
+            product_id: int,
+            amount: float = 1,
+            spoiled: bool = False,
+            transaction_type: TransactionType = TransactionType.CONSUME,
+            allow_subproduct_substitution: bool = False,
     ):
         data = {
             "amount": amount,
@@ -417,13 +421,13 @@ class GrocyApiClient(object):
         self._do_post_request(f"stock/products/{product_id}/consume", data)
 
     def inventory_product(
-        self,
-        product_id: int,
-        new_amount: float,
-        best_before_date: datetime = None,
-        shopping_location_id: int = None,
-        location_id: int = None,
-        price: int = None,
+            self,
+            product_id: int,
+            new_amount: float,
+            best_before_date: datetime = None,
+            shopping_location_id: int = None,
+            location_id: int = None,
+            price: int = None,
     ):
         data = {
             "new_amount": new_amount,
@@ -451,11 +455,11 @@ class GrocyApiClient(object):
             return stockLog[0]
 
     def add_product_by_barcode(
-        self,
-        barcode: str,
-        amount: float,
-        price: float,
-        best_before_date: datetime = None,
+            self,
+            barcode: str,
+            amount: float,
+            price: float,
+            best_before_date: datetime = None,
     ) -> StockLogResponse:
         data = {
             "amount": amount,
@@ -477,7 +481,7 @@ class GrocyApiClient(object):
             return stockLog[0]
 
     def consume_product_by_barcode(
-        self, barcode: str, amount: float = 1, spoiled: bool = False
+            self, barcode: str, amount: float = 1, spoiled: bool = False
     ):
         data = {
             "amount": amount,
@@ -494,12 +498,12 @@ class GrocyApiClient(object):
             return stockLog[0]
 
     def inventory_product_by_barcode(
-        self,
-        barcode: str,
-        new_amount: float,
-        best_before_date: datetime = None,
-        location_id: int = None,
-        price: int = None,
+            self,
+            barcode: str,
+            new_amount: float,
+            best_before_date: datetime = None,
+            location_id: int = None,
+            price: int = None,
     ):
         data = {
             "new_amount": new_amount,
@@ -536,11 +540,11 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/add-missing-products", data)
 
     def add_product_to_shopping_list(
-        self,
-        product_id: int,
-        shopping_list_id: int = 1,
-        amount: int = 1,
-        quantity_unit_id: int = None,
+            self,
+            product_id: int,
+            shopping_list_id: int = 1,
+            amount: int = 1,
+            quantity_unit_id: int = None,
     ):
         data = {
             "product_id": product_id,
@@ -549,6 +553,7 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data["qu_id"] = quantity_unit_id
+        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -557,7 +562,7 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/clear", data)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+            self, product_id: int, shopping_list_id: int = 1, amount: int = 1
     ):
         data = {
             "product_id": product_id,
@@ -594,14 +599,10 @@ class GrocyApiClient(object):
         last_change_timestamp = parse_date(resp.get("changed_time"))
         return last_change_timestamp
 
-    def get_tasks(self) -> List[TaskResponse]:
-        parsed_json = self._do_get_request("objects/tasks", params={'query[]': 'done=0'})
-        return [TaskResponse(data) for data in parsed_json]
-
-    def get_task(self,  task_id: int) -> TaskResponse:
-        url = f"objects/tasks/{task_id}"
-        parsed_json = self._do_get_request(url)
-        return TaskResponse(parsed_json)
+    def get_tasks(self, exclude_done) -> List[TaskResponse]:
+        params = {'query[]': 'done=0'} if exclude_done else None
+        parsed_json = self._do_get_request("objects/tasks", params=params)
+        return [TaskResponse(**data) for data in parsed_json]
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
