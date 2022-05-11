@@ -574,7 +574,6 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data["qu_id"] = quantity_unit_id
-        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -624,6 +623,11 @@ class GrocyApiClient(object):
         params = {"query[]": "done=0"} if exclude_done else None
         parsed_json = self._do_get_request("objects/tasks", params=params)
         return [TaskResponse(**data) for data in parsed_json]
+
+    def get_task(self, task_id: int) -> TaskResponse:
+        url = f"objects/tasks/{task_id}"
+        parsed_json = self._do_get_request(url)
+        return TaskResponse(**parsed_json)
 
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"

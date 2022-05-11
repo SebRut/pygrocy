@@ -25,6 +25,17 @@ class TestTasks:
         assert task.userfields["postponeevent"] == "True"
 
     @pytest.mark.vcr
+    def test_get_task_valid(self, grocy):
+        task = grocy.task(2)
+
+        assert task.id == 2
+        assert task.name == "Task2"
+        assert isinstance(task.assigned_to_user, User)
+        assert isinstance(task.category, TaskCategory)
+        assert task.category.id == 1
+        assert task.category.name == "Category1"
+
+    @pytest.mark.vcr
     def test_complete_task_valid_with_defaults(self, grocy):
         grocy.complete_task(3)
 
