@@ -26,7 +26,7 @@ class TestProduct:
         assert product.qu_factor_purchase_to_stock == 1.0
         assert product.default_quantity_unit_purchase.id == 5
         assert product.default_quantity_unit_purchase.name == "Tin"
-        assert product.default_quantity_unit_purchase.description == None
+        assert product.default_quantity_unit_purchase.description is None
         assert product.default_quantity_unit_purchase.name_plural == "Tins"
 
         assert len(product.product_barcodes) == 2
