@@ -8,9 +8,9 @@ class TestMealPlan:
     def test_get_meal_plan_valid(self, grocy):
         meal_plan = grocy.meal_plan(get_details=False)
 
-        assert len(meal_plan) == 8
+        assert len(meal_plan) == 12
         item = next(item for item in meal_plan if item.id == 1)
-        assert item.day.day == 8
+        assert item.day.day == 18
         assert item.recipe_id == 1
         assert item.recipe_servings == 1
         assert item.note is None
@@ -20,9 +20,9 @@ class TestMealPlan:
     def test_get_meal_plan_with_details_valid(self, grocy):
         meal_plan = grocy.meal_plan(get_details=True)
 
-        assert len(meal_plan) == 9
+        assert len(meal_plan) == 12
         item = next(item for item in meal_plan if item.id == 1)
-        assert item.day.day == 8
+        assert item.day.day == 18
         assert item.recipe_id == 1
         assert item.recipe_servings == 1
         assert item.note is None
@@ -55,4 +55,4 @@ class TestMealPlan:
         product_entry = next(
             item for item in meal_plan if item.type == MealPlanItemType.PRODUCT
         )
-        assert product_entry.product_id == 4
+        assert product_entry.product_id == 3

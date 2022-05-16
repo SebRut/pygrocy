@@ -148,9 +148,10 @@ class Grocy(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         return self._api_client.consume_product(
-            product_id, amount, spoiled, transaction_type
+            product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -283,6 +284,10 @@ class Grocy(object):
     def tasks(self) -> List[Task]:
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
+
+    def task(self, task_id: int) -> Task:
+        resp = self._api_client.get_task(task_id)
+        return Task(resp)
 
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)

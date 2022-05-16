@@ -3,11 +3,11 @@ import json
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from urllib.parse import urljoin
 
 import requests
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from pydantic.schema import date
 
 from pygrocy import EntityType
@@ -19,6 +19,17 @@ DEFAULT_PORT_NUMBER = 9192
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.INFO)
+
+
+def _field_not_empty_validator(field_name: str):
+    """Reusable Pydantic field pre-validator to convert empty str to None."""
+    return validator(field_name, allow_reuse=True, pre=True)(_none_if_empty_str)
+
+
+def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == "":
+        return None
+    return value
 
 
 class ShoppingListItem(BaseModel):
@@ -76,7 +87,7 @@ class ProductData(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    location_id: int
+    location_id: Optional[int] = None
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
@@ -86,6 +97,9 @@ class ProductData(BaseModel):
     row_created_timestamp: datetime
     min_stock_amount: Optional[float]
     default_best_before_days: int
+
+    location_id_validator = _field_not_empty_validator("location_id")
+    product_group_id_validator = _field_not_empty_validator("product_group_id")
 
 
 class ChoreData(BaseModel):
@@ -102,6 +116,10 @@ class ChoreData(BaseModel):
     next_execution_assigned_to_user_id: Optional[int] = None
     userfields: Optional[Dict]
 
+    next_execution_assigned_to_user_id_validator = _field_not_empty_validator(
+        "next_execution_assigned_to_user_id"
+    )
+
 
 class UserDto(BaseModel):
     id: int
@@ -113,8 +131,8 @@ class UserDto(BaseModel):
 
 class CurrentChoreResponse(BaseModel):
     chore_id: int
-    last_tracked_time: Optional[datetime]
-    next_estimated_execution_time: datetime
+    last_tracked_time: Optional[datetime] = None
+    next_estimated_execution_time: Optional[datetime] = None
 
 
 class CurrentStockResponse(BaseModel):
@@ -160,7 +178,7 @@ class ProductDetailsResponse(BaseModel):
 class ChoreDetailsResponse(BaseModel):
     chore: ChoreData
     last_tracked: Optional[datetime] = None
-    next_estimated_execution_time: datetime
+    next_estimated_execution_time: Optional[datetime] = None
     track_count: int = 0
     next_execution_assigned_user: Optional[UserDto] = None
     last_done_by: Optional[UserDto] = None
@@ -184,7 +202,7 @@ class TaskResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date
+    due_date: date = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
@@ -193,11 +211,14 @@ class TaskResponse(BaseModel):
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
 
+    category_id_validator = _field_not_empty_validator("category_id")
+    assigned_to_user_id_validator = _field_not_empty_validator("assigned_to_user_id")
+
 
 class CurrentBatteryResponse(BaseModel):
     id: int
     last_tracked_time: Optional[datetime] = None
-    next_estimated_charge_time: datetime
+    next_estimated_charge_time: Optional[datetime] = None
 
 
 class BatteryData(BaseModel):
@@ -214,7 +235,7 @@ class BatteryDetailsResponse(BaseModel):
     battery: BatteryData
     charge_cycles_count: int
     last_charged: Optional[datetime] = None
-    next_estimated_charge_time: datetime
+    next_estimated_charge_time: Optional[datetime] = None
 
 
 class MealPlanSectionResponse(BaseModel):
@@ -222,6 +243,8 @@ class MealPlanSectionResponse(BaseModel):
     name: str
     sort_number: Optional[int] = None
     row_created_timestamp: datetime
+
+    sort_number_validator = _field_not_empty_validator("sort_number")
 
 
 class StockLogResponse(BaseModel):
@@ -323,7 +346,7 @@ class GrocyApiClient(object):
 
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
 
         _LOGGER.debug("-->\tDELETE /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
@@ -405,11 +428,13 @@ class GrocyApiClient(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         data = {
             "amount": amount,
             "spoiled": spoiled,
             "transaction_type": transaction_type.value,
+            "allow_subproduct_substitution": allow_subproduct_substitution,
         }
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
@@ -547,7 +572,6 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data["qu_id"] = quantity_unit_id
-        print(data)
         self._do_post_request("stock/shoppinglist/add-product", data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -597,6 +621,11 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request("tasks")
         return [TaskResponse(**data) for data in parsed_json]
 
+    def get_task(self, task_id: int) -> TaskResponse:
+        url = f"objects/tasks/{task_id}"
+        parsed_json = self._do_get_request(url)
+        return TaskResponse(**parsed_json)
+
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f"tasks/{task_id}/complete"
 
@@ -615,7 +644,7 @@ class GrocyApiClient(object):
             return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -> List[CurrentBatteryResponse]:
-        parsed_json = self._do_get_request(f"batteries")
+        parsed_json = self._do_get_request("batteries")
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
 

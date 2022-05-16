@@ -11,7 +11,7 @@ interactions:
       Transfer-Encoding:
       - chunked
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - '*/*'
     method: PUT
@@ -31,11 +31,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Fri, 22 Apr 2022 08:40:23 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       X-Powered-By:
-      - PHP/8.0.9
+      - PHP/8.0.13
     status:
       code: 204
       message: No Content
@@ -51,7 +51,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.26.0
+      - python-requests/2.27.1
       accept:
       - '*/*'
     method: PUT
@@ -71,11 +71,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 21 Aug 2021 19:42:51 GMT
+      - Fri, 22 Apr 2022 08:40:23 GMT
       Server:
-      - nginx/1.20.1
+      - nginx/1.20.2
       X-Powered-By:
-      - PHP/8.0.9
+      - PHP/8.0.13
     status:
       code: 204
       message: No Content
