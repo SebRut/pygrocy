@@ -1,5 +1,30 @@
 # Changelog
 
+## [v1.2.0](https://github.com/SebRut/pygrocy/tree/v1.2.0) (2022-05-16)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.1.0...v1.2.0)
+
+**Fixed bugs:**
+
+- Bug: Error if product group is not set [\#215](https://github.com/SebRut/pygrocy/issues/215)
+
+**Closed issues:**
+
+- Failed TC with Grocy 3.3.0 [\#229](https://github.com/SebRut/pygrocy/issues/229)
+- Enable "allow\_subproduct\_substitution" on consume endpoint [\#220](https://github.com/SebRut/pygrocy/issues/220)
+
+**Merged pull requests:**
+
+- Fix parsing API responses with empty str or null values for optional fields [\#234](https://github.com/SebRut/pygrocy/pull/234) ([marcelvriend](https://github.com/marcelvriend))
+- Add get task method [\#233](https://github.com/SebRut/pygrocy/pull/233) ([onegambler](https://github.com/onegambler))
+- Add adaptive PeriodType [\#231](https://github.com/SebRut/pygrocy/pull/231) ([BenoitAnastay](https://github.com/BenoitAnastay))
+- Updated tests to be compatible with Grocy 3.3.0 [\#230](https://github.com/SebRut/pygrocy/pull/230) ([andreheuer](https://github.com/andreheuer))
+- Added support for hourly chores [\#228](https://github.com/SebRut/pygrocy/pull/228) ([andreheuer](https://github.com/andreheuer))
+- Delete generic now uses DELETE verb, instead of GET [\#227](https://github.com/SebRut/pygrocy/pull/227) ([onegambler](https://github.com/onegambler))
+- Update pytz requirement from ~=2021.1 to \>=2021.1,\<2023.0 [\#225](https://github.com/SebRut/pygrocy/pull/225) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update responses requirement from ~=0.18.0 to ~=0.19.0 [\#223](https://github.com/SebRut/pygrocy/pull/223) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Add subproduct substution to consume\_product [\#221](https://github.com/SebRut/pygrocy/pull/221) ([kingo55](https://github.com/kingo55))
+
 ## [v1.1.0](https://github.com/SebRut/pygrocy/tree/v1.1.0) (2022-03-05)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.0.0...v1.1.0)
