@@ -46,6 +46,8 @@ class PeriodType(str, Enum):
     WEEKLY = &#34;weekly&#34;
     MONTHLY = &#34;monthly&#34;
     YEARLY = &#34;yearly&#34;
+    ADAPTIVE = &#34;adaptive&#34;
+    HOURLY = &#34;hourly&#34;
 
 
 class AssignmentType(str, Enum):
@@ -619,7 +621,9 @@ def userfields(self) -&gt; Dict[str, str]:
     DAILY = &#34;daily&#34;
     WEEKLY = &#34;weekly&#34;
     MONTHLY = &#34;monthly&#34;
-    YEARLY = &#34;yearly&#34;</code></pre>
+    YEARLY = &#34;yearly&#34;
+    ADAPTIVE = &#34;adaptive&#34;
+    HOURLY = &#34;hourly&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -628,11 +632,19 @@ def userfields(self) -&gt; Dict[str, str]:
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="pygrocy.data_models.chore.PeriodType.ADAPTIVE"><code class="name">var <span class="ident">ADAPTIVE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="pygrocy.data_models.chore.PeriodType.DAILY"><code class="name">var <span class="ident">DAILY</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR"><code class="name">var <span class="ident">DYNAMIC_REGULAR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pygrocy.data_models.chore.PeriodType.HOURLY"><code class="name">var <span class="ident">HOURLY</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -705,8 +717,10 @@ def userfields(self) -&gt; Dict[str, str]:
 <li>
 <h4><code><a title="pygrocy.data_models.chore.PeriodType" href="#pygrocy.data_models.chore.PeriodType">PeriodType</a></code></h4>
 <ul class="two-column">
+<li><code><a title="pygrocy.data_models.chore.PeriodType.ADAPTIVE" href="#pygrocy.data_models.chore.PeriodType.ADAPTIVE">ADAPTIVE</a></code></li>
 <li><code><a title="pygrocy.data_models.chore.PeriodType.DAILY" href="#pygrocy.data_models.chore.PeriodType.DAILY">DAILY</a></code></li>
 <li><code><a title="pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR" href="#pygrocy.data_models.chore.PeriodType.DYNAMIC_REGULAR">DYNAMIC_REGULAR</a></code></li>
+<li><code><a title="pygrocy.data_models.chore.PeriodType.HOURLY" href="#pygrocy.data_models.chore.PeriodType.HOURLY">HOURLY</a></code></li>
 <li><code><a title="pygrocy.data_models.chore.PeriodType.MANUALLY" href="#pygrocy.data_models.chore.PeriodType.MANUALLY">MANUALLY</a></code></li>
 <li><code><a title="pygrocy.data_models.chore.PeriodType.MONTHLY" href="#pygrocy.data_models.chore.PeriodType.MONTHLY">MONTHLY</a></code></li>
 <li><code><a title="pygrocy.data_models.chore.PeriodType.WEEKLY" href="#pygrocy.data_models.chore.PeriodType.WEEKLY">WEEKLY</a></code></li>

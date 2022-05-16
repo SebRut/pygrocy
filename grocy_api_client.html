@@ -31,11 +31,11 @@ import json
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from urllib.parse import urljoin
 
 import requests
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from pydantic.schema import date
 
 from pygrocy import EntityType
@@ -47,6 +47,17 @@ DEFAULT_PORT_NUMBER = 9192
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.INFO)
+
+
+def _field_not_empty_validator(field_name: str):
+    &#34;&#34;&#34;Reusable Pydantic field pre-validator to convert empty str to None.&#34;&#34;&#34;
+    return validator(field_name, allow_reuse=True, pre=True)(_none_if_empty_str)
+
+
+def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value
 
 
 class ShoppingListItem(BaseModel):
@@ -104,7 +115,7 @@ class ProductData(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    location_id: int
+    location_id: Optional[int] = None
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
@@ -114,6 +125,9 @@ class ProductData(BaseModel):
     row_created_timestamp: datetime
     min_stock_amount: Optional[float]
     default_best_before_days: int
+
+    location_id_validator = _field_not_empty_validator(&#34;location_id&#34;)
+    product_group_id_validator = _field_not_empty_validator(&#34;product_group_id&#34;)
 
 
 class ChoreData(BaseModel):
@@ -130,6 +144,10 @@ class ChoreData(BaseModel):
     next_execution_assigned_to_user_id: Optional[int] = None
     userfields: Optional[Dict]
 
+    next_execution_assigned_to_user_id_validator = _field_not_empty_validator(
+        &#34;next_execution_assigned_to_user_id&#34;
+    )
+
 
 class UserDto(BaseModel):
     id: int
@@ -141,8 +159,8 @@ class UserDto(BaseModel):
 
 class CurrentChoreResponse(BaseModel):
     chore_id: int
-    last_tracked_time: Optional[datetime]
-    next_estimated_execution_time: datetime
+    last_tracked_time: Optional[datetime] = None
+    next_estimated_execution_time: Optional[datetime] = None
 
 
 class CurrentStockResponse(BaseModel):
@@ -188,7 +206,7 @@ class ProductDetailsResponse(BaseModel):
 class ChoreDetailsResponse(BaseModel):
     chore: ChoreData
     last_tracked: Optional[datetime] = None
-    next_estimated_execution_time: datetime
+    next_estimated_execution_time: Optional[datetime] = None
     track_count: int = 0
     next_execution_assigned_user: Optional[UserDto] = None
     last_done_by: Optional[UserDto] = None
@@ -212,7 +230,7 @@ class TaskResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date
+    due_date: date = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
@@ -221,11 +239,14 @@ class TaskResponse(BaseModel):
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
 
+    category_id_validator = _field_not_empty_validator(&#34;category_id&#34;)
+    assigned_to_user_id_validator = _field_not_empty_validator(&#34;assigned_to_user_id&#34;)
+
 
 class CurrentBatteryResponse(BaseModel):
     id: int
     last_tracked_time: Optional[datetime] = None
-    next_estimated_charge_time: datetime
+    next_estimated_charge_time: Optional[datetime] = None
 
 
 class BatteryData(BaseModel):
@@ -242,7 +263,7 @@ class BatteryDetailsResponse(BaseModel):
     battery: BatteryData
     charge_cycles_count: int
     last_charged: Optional[datetime] = None
-    next_estimated_charge_time: datetime
+    next_estimated_charge_time: Optional[datetime] = None
 
 
 class MealPlanSectionResponse(BaseModel):
@@ -250,6 +271,8 @@ class MealPlanSectionResponse(BaseModel):
     name: str
     sort_number: Optional[int] = None
     row_created_timestamp: datetime
+
+    sort_number_validator = _field_not_empty_validator(&#34;sort_number&#34;)
 
 
 class StockLogResponse(BaseModel):
@@ -351,7 +374,7 @@ class GrocyApiClient(object):
 
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
 
         _LOGGER.debug(&#34;--&gt;\tDELETE /%s&#34;, end_url)
         _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
@@ -433,11 +456,13 @@ class GrocyApiClient(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         data = {
             &#34;amount&#34;: amount,
             &#34;spoiled&#34;: spoiled,
             &#34;transaction_type&#34;: transaction_type.value,
+            &#34;allow_subproduct_substitution&#34;: allow_subproduct_substitution,
         }
 
         self._do_post_request(f&#34;stock/products/{product_id}/consume&#34;, data)
@@ -575,7 +600,6 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data[&#34;qu_id&#34;] = quantity_unit_id
-        print(data)
         self._do_post_request(&#34;stock/shoppinglist/add-product&#34;, data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -625,6 +649,11 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(&#34;tasks&#34;)
         return [TaskResponse(**data) for data in parsed_json]
 
+    def get_task(self, task_id: int) -&gt; TaskResponse:
+        url = f&#34;objects/tasks/{task_id}&#34;
+        parsed_json = self._do_get_request(url)
+        return TaskResponse(**parsed_json)
+
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
 
@@ -643,7 +672,7 @@ class GrocyApiClient(object):
             return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
-        parsed_json = self._do_get_request(f&#34;batteries&#34;)
+        parsed_json = self._do_get_request(&#34;batteries&#34;)
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
 
@@ -777,7 +806,7 @@ class GrocyApiClient(object):
     battery: BatteryData
     charge_cycles_count: int
     last_charged: Optional[datetime] = None
-    next_estimated_charge_time: datetime</code></pre>
+    next_estimated_charge_time: Optional[datetime] = None</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -798,7 +827,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.BatteryDetailsResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -827,7 +856,11 @@ class GrocyApiClient(object):
     assignment_type: Optional[str] = None
     assignment_config: Optional[str] = None
     next_execution_assigned_to_user_id: Optional[int] = None
-    userfields: Optional[Dict]</code></pre>
+    userfields: Optional[Dict]
+
+    next_execution_assigned_to_user_id_validator = _field_not_empty_validator(
+        &#34;next_execution_assigned_to_user_id&#34;
+    )</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -885,6 +918,24 @@ class GrocyApiClient(object):
 <div class="desc"></div>
 </dd>
 </dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id_validator"><code class="name flex">
+<span>def <span class="ident">next_execution_assigned_to_user_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 <dt id="pygrocy.grocy_api_client.ChoreDetailsResponse"><code class="flex name class">
 <span>class <span class="ident">ChoreDetailsResponse</span></span>
@@ -900,7 +951,7 @@ class GrocyApiClient(object):
 <pre><code class="python">class ChoreDetailsResponse(BaseModel):
     chore: ChoreData
     last_tracked: Optional[datetime] = None
-    next_estimated_execution_time: datetime
+    next_estimated_execution_time: Optional[datetime] = None
     track_count: int = 0
     next_execution_assigned_user: Optional[UserDto] = None
     last_done_by: Optional[UserDto] = None</code></pre>
@@ -924,7 +975,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.ChoreDetailsResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -952,7 +1003,7 @@ class GrocyApiClient(object):
 <pre><code class="python">class CurrentBatteryResponse(BaseModel):
     id: int
     last_tracked_time: Optional[datetime] = None
-    next_estimated_charge_time: datetime</code></pre>
+    next_estimated_charge_time: Optional[datetime] = None</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -969,7 +1020,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentBatteryResponse.next_estimated_charge_time"><code class="name">var <span class="ident">next_estimated_charge_time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -988,8 +1039,8 @@ class GrocyApiClient(object):
 </summary>
 <pre><code class="python">class CurrentChoreResponse(BaseModel):
     chore_id: int
-    last_tracked_time: Optional[datetime]
-    next_estimated_execution_time: datetime</code></pre>
+    last_tracked_time: Optional[datetime] = None
+    next_estimated_execution_time: Optional[datetime] = None</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1006,7 +1057,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : datetime.datetime</code></dt>
+<dt id="pygrocy.grocy_api_client.CurrentChoreResponse.next_estimated_execution_time"><code class="name">var <span class="ident">next_estimated_execution_time</span> : Union[datetime.datetime, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1193,7 +1244,7 @@ class GrocyApiClient(object):
 
     def _do_delete_request(self, end_url: str):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        resp = requests.delete(req_url, verify=self._verify_ssl, headers=self._headers)
 
         _LOGGER.debug(&#34;--&gt;\tDELETE /%s&#34;, end_url)
         _LOGGER.debug(&#34;&lt;--\t%d for /%s&#34;, resp.status_code, end_url)
@@ -1275,11 +1326,13 @@ class GrocyApiClient(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         data = {
             &#34;amount&#34;: amount,
             &#34;spoiled&#34;: spoiled,
             &#34;transaction_type&#34;: transaction_type.value,
+            &#34;allow_subproduct_substitution&#34;: allow_subproduct_substitution,
         }
 
         self._do_post_request(f&#34;stock/products/{product_id}/consume&#34;, data)
@@ -1417,7 +1470,6 @@ class GrocyApiClient(object):
         }
         if quantity_unit_id:
             data[&#34;qu_id&#34;] = quantity_unit_id
-        print(data)
         self._do_post_request(&#34;stock/shoppinglist/add-product&#34;, data)
 
     def clear_shopping_list(self, shopping_list_id: int = 1):
@@ -1467,6 +1519,11 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(&#34;tasks&#34;)
         return [TaskResponse(**data) for data in parsed_json]
 
+    def get_task(self, task_id: int) -&gt; TaskResponse:
+        url = f&#34;objects/tasks/{task_id}&#34;
+        parsed_json = self._do_get_request(url)
+        return TaskResponse(**parsed_json)
+
     def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
         url = f&#34;tasks/{task_id}/complete&#34;
 
@@ -1485,7 +1542,7 @@ class GrocyApiClient(object):
             return RecipeDetailsResponse(**parsed_json)
 
     def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
-        parsed_json = self._do_get_request(f&#34;batteries&#34;)
+        parsed_json = self._do_get_request(&#34;batteries&#34;)
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
 
@@ -1657,12 +1714,11 @@ class GrocyApiClient(object):
     }
     if quantity_unit_id:
         data[&#34;qu_id&#34;] = quantity_unit_id
-    print(data)
     self._do_post_request(&#34;stock/shoppinglist/add-product&#34;, data)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 928169))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480522))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1693,7 +1749,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 928082))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480501))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1711,7 +1767,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.consume_product"><code class="name flex">
-<span>def <span class="ident">consume_product</span></span>(<span>self, product_id: int, amount: float = 1, spoiled: bool = False, transaction_type: <a title="pygrocy.grocy_api_client.TransactionType" href="#pygrocy.grocy_api_client.TransactionType">TransactionType</a> = TransactionType.CONSUME)</span>
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id: int, amount: float = 1, spoiled: bool = False, transaction_type: <a title="pygrocy.grocy_api_client.TransactionType" href="#pygrocy.grocy_api_client.TransactionType">TransactionType</a> = TransactionType.CONSUME, allow_subproduct_substitution: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1725,11 +1781,13 @@ class GrocyApiClient(object):
     amount: float = 1,
     spoiled: bool = False,
     transaction_type: TransactionType = TransactionType.CONSUME,
+    allow_subproduct_substitution: bool = False,
 ):
     data = {
         &#34;amount&#34;: amount,
         &#34;spoiled&#34;: spoiled,
         &#34;transaction_type&#34;: transaction_type.value,
+        &#34;allow_subproduct_substitution&#34;: allow_subproduct_substitution,
     }
 
     self._do_post_request(f&#34;stock/products/{product_id}/consume&#34;, data)</code></pre>
@@ -1776,7 +1834,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 928015))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480369))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1810,7 +1868,7 @@ class GrocyApiClient(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_batteries(self) -&gt; List[CurrentBatteryResponse]:
-    parsed_json = self._do_get_request(f&#34;batteries&#34;)
+    parsed_json = self._do_get_request(&#34;batteries&#34;)
     if parsed_json:
         return [CurrentBatteryResponse(**data) for data in parsed_json]</code></pre>
 </details>
@@ -2021,6 +2079,21 @@ class GrocyApiClient(object):
 <pre><code class="python">def get_stock(self) -&gt; List[CurrentStockResponse]:
     parsed_json = self._do_get_request(&#34;stock&#34;)
     return [CurrentStockResponse(**response) for response in parsed_json]</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.GrocyApiClient.get_task"><code class="name flex">
+<span>def <span class="ident">get_task</span></span>(<span>self, task_id: int) ‑> <a title="pygrocy.grocy_api_client.TaskResponse" href="#pygrocy.grocy_api_client.TaskResponse">TaskResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_task(self, task_id: int) -&gt; TaskResponse:
+    url = f&#34;objects/tasks/{task_id}&#34;
+    parsed_json = self._do_get_request(url)
+    return TaskResponse(**parsed_json)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.get_tasks"><code class="name flex">
@@ -2402,7 +2475,9 @@ class GrocyApiClient(object):
     id: Optional[int] = None
     name: str
     sort_number: Optional[int] = None
-    row_created_timestamp: datetime</code></pre>
+    row_created_timestamp: datetime
+
+    sort_number_validator = _field_not_empty_validator(&#34;sort_number&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2426,6 +2501,24 @@ class GrocyApiClient(object):
 <dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number"><code class="name">var <span class="ident">sort_number</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number_validator"><code class="name flex">
+<span>def <span class="ident">sort_number_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -2513,7 +2606,7 @@ class GrocyApiClient(object):
     id: int
     name: str
     description: Optional[str] = None
-    location_id: int
+    location_id: Optional[int] = None
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
@@ -2522,7 +2615,10 @@ class GrocyApiClient(object):
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
     min_stock_amount: Optional[float]
-    default_best_before_days: int</code></pre>
+    default_best_before_days: int
+
+    location_id_validator = _field_not_empty_validator(&#34;location_id&#34;)
+    product_group_id_validator = _field_not_empty_validator(&#34;product_group_id&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2547,7 +2643,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductData.location_id"><code class="name">var <span class="ident">location_id</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductData.location_id"><code class="name">var <span class="ident">location_id</span> : Union[int, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2582,6 +2678,39 @@ class GrocyApiClient(object):
 <dt id="pygrocy.grocy_api_client.ProductData.row_created_timestamp"><code class="name">var <span class="ident">row_created_timestamp</span> : datetime.datetime</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.ProductData.location_id_validator"><code class="name flex">
+<span>def <span class="ident">location_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.ProductData.product_group_id_validator"><code class="name flex">
+<span>def <span class="ident">product_group_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -2957,14 +3086,17 @@ class GrocyApiClient(object):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date
+    due_date: date = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
     category: Optional[TaskCategoryDto] = None
     assigned_to_user_id: Optional[int] = None
     assigned_to_user: Optional[UserDto] = None
-    userfields: Optional[Dict] = None</code></pre>
+    userfields: Optional[Dict] = None
+
+    category_id_validator = _field_not_empty_validator(&#34;category_id&#34;)
+    assigned_to_user_id_validator = _field_not_empty_validator(&#34;assigned_to_user_id&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3016,6 +3148,39 @@ class GrocyApiClient(object):
 <dt id="pygrocy.grocy_api_client.TaskResponse.userfields"><code class="name">var <span class="ident">userfields</span> : Union[Dict, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id_validator"><code class="name flex">
+<span>def <span class="ident">assigned_to_user_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.category_id_validator"><code class="name flex">
+<span>def <span class="ident">category_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -3152,6 +3317,7 @@ class GrocyApiClient(object):
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.id" href="#pygrocy.grocy_api_client.ChoreData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.name" href="#pygrocy.grocy_api_client.ChoreData.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id" href="#pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id">next_execution_assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id_validator" href="#pygrocy.grocy_api_client.ChoreData.next_execution_assigned_to_user_id_validator">next_execution_assigned_to_user_id_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.period_config" href="#pygrocy.grocy_api_client.ChoreData.period_config">period_config</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.period_days" href="#pygrocy.grocy_api_client.ChoreData.period_days">period_days</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ChoreData.period_type" href="#pygrocy.grocy_api_client.ChoreData.period_type">period_type</a></code></li>
@@ -3236,6 +3402,7 @@ class GrocyApiClient(object):
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_recipe" href="#pygrocy.grocy_api_client.GrocyApiClient.get_recipe">get_recipe</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list" href="#pygrocy.grocy_api_client.GrocyApiClient.get_shopping_list">get_shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_stock" href="#pygrocy.grocy_api_client.GrocyApiClient.get_stock">get_stock</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_task" href="#pygrocy.grocy_api_client.GrocyApiClient.get_task">get_task</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_tasks" href="#pygrocy.grocy_api_client.GrocyApiClient.get_tasks">get_tasks</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_user" href="#pygrocy.grocy_api_client.GrocyApiClient.get_user">get_user</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.GrocyApiClient.get_userfields" href="#pygrocy.grocy_api_client.GrocyApiClient.get_userfields">get_userfields</a></code></li>
@@ -3283,6 +3450,7 @@ class GrocyApiClient(object):
 <li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.name" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.row_created_timestamp" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.row_created_timestamp">row_created_timestamp</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number">sort_number</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number_validator" href="#pygrocy.grocy_api_client.MealPlanSectionResponse.sort_number_validator">sort_number_validator</a></code></li>
 </ul>
 </li>
 <li>
@@ -3308,10 +3476,12 @@ class GrocyApiClient(object):
 <li><code><a title="pygrocy.grocy_api_client.ProductData.description" href="#pygrocy.grocy_api_client.ProductData.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.id" href="#pygrocy.grocy_api_client.ProductData.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.location_id" href="#pygrocy.grocy_api_client.ProductData.location_id">location_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.location_id_validator" href="#pygrocy.grocy_api_client.ProductData.location_id_validator">location_id_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.min_stock_amount" href="#pygrocy.grocy_api_client.ProductData.min_stock_amount">min_stock_amount</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.name" href="#pygrocy.grocy_api_client.ProductData.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.picture_file_name" href="#pygrocy.grocy_api_client.ProductData.picture_file_name">picture_file_name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id" href="#pygrocy.grocy_api_client.ProductData.product_group_id">product_group_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id_validator" href="#pygrocy.grocy_api_client.ProductData.product_group_id_validator">product_group_id_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock" href="#pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock">qu_factor_purchase_to_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_purchase" href="#pygrocy.grocy_api_client.ProductData.qu_id_purchase">qu_id_purchase</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_stock" href="#pygrocy.grocy_api_client.ProductData.qu_id_stock">qu_id_stock</a></code></li>
@@ -3395,11 +3565,13 @@ class GrocyApiClient(object):
 </li>
 <li>
 <h4><code><a title="pygrocy.grocy_api_client.TaskResponse" href="#pygrocy.grocy_api_client.TaskResponse">TaskResponse</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.assigned_to_user" href="#pygrocy.grocy_api_client.TaskResponse.assigned_to_user">assigned_to_user</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id" href="#pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id">assigned_to_user_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id_validator" href="#pygrocy.grocy_api_client.TaskResponse.assigned_to_user_id_validator">assigned_to_user_id_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.category" href="#pygrocy.grocy_api_client.TaskResponse.category">category</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.category_id" href="#pygrocy.grocy_api_client.TaskResponse.category_id">category_id</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.category_id_validator" href="#pygrocy.grocy_api_client.TaskResponse.category_id_validator">category_id_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.description" href="#pygrocy.grocy_api_client.TaskResponse.description">description</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.done" href="#pygrocy.grocy_api_client.TaskResponse.done">done</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.done_timestamp" href="#pygrocy.grocy_api_client.TaskResponse.done_timestamp">done_timestamp</a></code></li>

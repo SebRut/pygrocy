@@ -176,9 +176,10 @@ class Grocy(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         return self._api_client.consume_product(
-            product_id, amount, spoiled, transaction_type
+            product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -311,6 +312,10 @@ class Grocy(object):
     def tasks(self) -&gt; List[Task]:
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
+
+    def task(self, task_id: int) -&gt; Task:
+        resp = self._api_client.get_task(task_id)
+        return Task(resp)
 
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
@@ -512,9 +517,10 @@ class Grocy(object):
         amount: float = 1,
         spoiled: bool = False,
         transaction_type: TransactionType = TransactionType.CONSUME,
+        allow_subproduct_substitution: bool = False,
     ):
         return self._api_client.consume_product(
-            product_id, amount, spoiled, transaction_type
+            product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -647,6 +653,10 @@ class Grocy(object):
     def tasks(self) -&gt; List[Task]:
         raw_tasks = self._api_client.get_tasks()
         return [Task(task) for task in raw_tasks]
+
+    def task(self, task_id: int) -&gt; Task:
+        resp = self._api_client.get_task(task_id)
+        return Task(resp)
 
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
@@ -870,7 +880,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930147))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 482329))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -929,7 +939,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930128))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 482291))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -942,7 +952,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.consume_product"><code class="name flex">
-<span>def <span class="ident">consume_product</span></span>(<span>self, product_id: int, amount: float = 1, spoiled: bool = False, transaction_type: <a title="pygrocy.grocy_api_client.TransactionType" href="grocy_api_client.html#pygrocy.grocy_api_client.TransactionType">TransactionType</a> = TransactionType.CONSUME)</span>
+<span>def <span class="ident">consume_product</span></span>(<span>self, product_id: int, amount: float = 1, spoiled: bool = False, transaction_type: <a title="pygrocy.grocy_api_client.TransactionType" href="grocy_api_client.html#pygrocy.grocy_api_client.TransactionType">TransactionType</a> = TransactionType.CONSUME, allow_subproduct_substitution: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -956,9 +966,10 @@ class Grocy(object):
     amount: float = 1,
     spoiled: bool = False,
     transaction_type: TransactionType = TransactionType.CONSUME,
+    allow_subproduct_substitution: bool = False,
 ):
     return self._api_client.consume_product(
-        product_id, amount, spoiled, transaction_type
+        product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
     )</code></pre>
 </details>
 </dd>
@@ -1020,7 +1031,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 3, 5, 14, 11, 21, 930078))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 482215))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1385,6 +1396,20 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
     return stock</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy.Grocy.task"><code class="name flex">
+<span>def <span class="ident">task</span></span>(<span>self, task_id: int) ‑> <a title="pygrocy.data_models.task.Task" href="data_models/task.html#pygrocy.data_models.task.Task">Task</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def task(self, task_id: int) -&gt; Task:
+    resp = self._api_client.get_task(task_id)
+    return Task(resp)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Grocy.tasks"><code class="name flex">
 <span>def <span class="ident">tasks</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.task.Task" href="data_models/task.html#pygrocy.data_models.task.Task">Task</a>]</span>
 </code></dt>
@@ -1503,6 +1528,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.set_userfields" href="#pygrocy.grocy.Grocy.set_userfields">set_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.shopping_list" href="#pygrocy.grocy.Grocy.shopping_list">shopping_list</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.stock" href="#pygrocy.grocy.Grocy.stock">stock</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.task" href="#pygrocy.grocy.Grocy.task">task</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.tasks" href="#pygrocy.grocy.Grocy.tasks">tasks</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.update_generic" href="#pygrocy.grocy.Grocy.update_generic">update_generic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.user" href="#pygrocy.grocy.Grocy.user">user</a></code></li>
