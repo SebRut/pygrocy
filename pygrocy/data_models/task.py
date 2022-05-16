@@ -40,9 +40,11 @@ class Task(DataModel):
         self._done = response.done
         self._done_timestamp = response.done_timestamp
         self._category_id = response.category_id
+        self._category = None
         if response.category:
             self._category = TaskCategory(response.category)
         self._assigned_to_user_id = response.assigned_to_user_id
+        self._assigned_to_user = None
         if response.assigned_to_user:
             self._assigned_to_user = User(response.assigned_to_user)
         self._userfields = response.userfields

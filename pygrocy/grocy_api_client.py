@@ -202,7 +202,7 @@ class TaskResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date = None
+    due_date: Optional[date] = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
@@ -211,6 +211,7 @@ class TaskResponse(BaseModel):
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
 
+    due_date_validator = _field_not_empty_validator("due_date")
     category_id_validator = _field_not_empty_validator("category_id")
     assigned_to_user_id_validator = _field_not_empty_validator("assigned_to_user_id")
 
