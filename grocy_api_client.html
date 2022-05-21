@@ -230,7 +230,7 @@ class TaskResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date = None
+    due_date: Optional[date] = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
@@ -239,6 +239,7 @@ class TaskResponse(BaseModel):
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
 
+    due_date_validator = _field_not_empty_validator(&#34;due_date&#34;)
     category_id_validator = _field_not_empty_validator(&#34;category_id&#34;)
     assigned_to_user_id_validator = _field_not_empty_validator(&#34;assigned_to_user_id&#34;)
 
@@ -1718,7 +1719,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480522))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266615))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1749,7 +1750,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480501))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266587))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1834,7 +1835,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 16, 5, 30, 39, 480369))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266448))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3086,7 +3087,7 @@ class GrocyApiClient(object):
     id: int
     name: str
     description: Optional[str] = None
-    due_date: date = None
+    due_date: Optional[date] = None
     done: int
     done_timestamp: Optional[datetime] = None
     category_id: Optional[int] = None
@@ -3095,6 +3096,7 @@ class GrocyApiClient(object):
     assigned_to_user: Optional[UserDto] = None
     userfields: Optional[Dict] = None
 
+    due_date_validator = _field_not_empty_validator(&#34;due_date&#34;)
     category_id_validator = _field_not_empty_validator(&#34;category_id&#34;)
     assigned_to_user_id_validator = _field_not_empty_validator(&#34;assigned_to_user_id&#34;)</code></pre>
 </details>
@@ -3133,7 +3135,7 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.TaskResponse.due_date"><code class="name">var <span class="ident">due_date</span> : datetime.date</code></dt>
+<dt id="pygrocy.grocy_api_client.TaskResponse.due_date"><code class="name">var <span class="ident">due_date</span> : Union[datetime.date, NoneType]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -3169,6 +3171,21 @@ class GrocyApiClient(object):
 </dd>
 <dt id="pygrocy.grocy_api_client.TaskResponse.category_id_validator"><code class="name flex">
 <span>def <span class="ident">category_id_validator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _none_if_empty_str(value: Any):
+    if isinstance(value, str) and value == &#34;&#34;:
+        return None
+    return value</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy_api_client.TaskResponse.due_date_validator"><code class="name flex">
+<span>def <span class="ident">due_date_validator</span></span>(<span>)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3576,6 +3593,7 @@ class GrocyApiClient(object):
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.done" href="#pygrocy.grocy_api_client.TaskResponse.done">done</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.done_timestamp" href="#pygrocy.grocy_api_client.TaskResponse.done_timestamp">done_timestamp</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.due_date" href="#pygrocy.grocy_api_client.TaskResponse.due_date">due_date</a></code></li>
+<li><code><a title="pygrocy.grocy_api_client.TaskResponse.due_date_validator" href="#pygrocy.grocy_api_client.TaskResponse.due_date_validator">due_date_validator</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.id" href="#pygrocy.grocy_api_client.TaskResponse.id">id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.name" href="#pygrocy.grocy_api_client.TaskResponse.name">name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.TaskResponse.userfields" href="#pygrocy.grocy_api_client.TaskResponse.userfields">userfields</a></code></li>
