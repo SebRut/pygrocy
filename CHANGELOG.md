@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.1](https://github.com/SebRut/pygrocy/tree/v1.2.1) (2022-05-21)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.2.0...v1.2.1)
+
+**Merged pull requests:**
+
+- Fix for optional task due\_date, category and user [\#237](https://github.com/SebRut/pygrocy/pull/237) ([marcelvriend](https://github.com/marcelvriend))
+
 ## [v1.2.0](https://github.com/SebRut/pygrocy/tree/v1.2.0) (2022-05-16)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.1.0...v1.2.0)
