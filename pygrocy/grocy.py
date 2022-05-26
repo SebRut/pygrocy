@@ -157,11 +157,11 @@ class Grocy(object):
     def inventory_product(
         self,
         product_id: int,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -> Product:
         product = Product(
@@ -215,10 +215,10 @@ class Grocy(object):
     def inventory_product_by_barcode(
         self,
         barcode: str,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -> Product:
         product = Product(
@@ -247,7 +247,7 @@ class Grocy(object):
         self,
         product_id: int,
         shopping_list_id: int = None,
-        amount: int = None,
+        amount: float = None,
         quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
@@ -258,7 +258,7 @@ class Grocy(object):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         return self._api_client.remove_product_in_shopping_list(
             product_id, shopping_list_id, amount
