@@ -164,8 +164,8 @@ class ProductBarcodeData(BaseModel):
 class ProductDetailsResponse(BaseModel):
     last_purchased: Optional[date] = None
     last_used: Optional[date] = None
-    stock_amount: int
-    stock_amount_opened: int
+    stock_amount: float
+    stock_amount_opened: float
     next_best_before_date: Optional[date] = None
     last_price: Optional[float] = None
     product: ProductData
@@ -251,7 +251,7 @@ class MealPlanSectionResponse(BaseModel):
 class StockLogResponse(BaseModel):
     id: int
     product_id: int
-    amount: int
+    amount: float
     best_before_date: date
     purchased_date: date
     used_date: Optional[date] = None
@@ -447,7 +447,7 @@ class GrocyApiClient(object):
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             "new_amount": new_amount,
@@ -523,7 +523,7 @@ class GrocyApiClient(object):
         new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             "new_amount": new_amount,
@@ -563,7 +563,7 @@ class GrocyApiClient(object):
         self,
         product_id: int,
         shopping_list_id: int = 1,
-        amount: int = 1,
+        amount: float = 1,
         quantity_unit_id: int = None,
     ):
         data = {
@@ -581,7 +581,7 @@ class GrocyApiClient(object):
         self._do_post_request("stock/shoppinglist/clear", data)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         data = {
             "product_id": product_id,
