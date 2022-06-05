@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.3.0](https://github.com/SebRut/pygrocy/tree/v1.3.0) (2022-06-05)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.2.1...v1.3.0)
+
+**Merged pull requests:**
+
+- Fix int type for amount and price floats [\#239](https://github.com/SebRut/pygrocy/pull/239) ([marcelvriend](https://github.com/marcelvriend))
+- Update responses requirement from ~=0.19.0 to ~=0.21.0 [\#238](https://github.com/SebRut/pygrocy/pull/238) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.2.1](https://github.com/SebRut/pygrocy/tree/v1.2.1) (2022-05-21)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.2.0...v1.2.1)
