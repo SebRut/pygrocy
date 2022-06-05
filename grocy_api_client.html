@@ -192,8 +192,8 @@ class ProductBarcodeData(BaseModel):
 class ProductDetailsResponse(BaseModel):
     last_purchased: Optional[date] = None
     last_used: Optional[date] = None
-    stock_amount: int
-    stock_amount_opened: int
+    stock_amount: float
+    stock_amount_opened: float
     next_best_before_date: Optional[date] = None
     last_price: Optional[float] = None
     product: ProductData
@@ -279,7 +279,7 @@ class MealPlanSectionResponse(BaseModel):
 class StockLogResponse(BaseModel):
     id: int
     product_id: int
-    amount: int
+    amount: float
     best_before_date: date
     purchased_date: date
     used_date: Optional[date] = None
@@ -475,7 +475,7 @@ class GrocyApiClient(object):
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             &#34;new_amount&#34;: new_amount,
@@ -551,7 +551,7 @@ class GrocyApiClient(object):
         new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             &#34;new_amount&#34;: new_amount,
@@ -591,7 +591,7 @@ class GrocyApiClient(object):
         self,
         product_id: int,
         shopping_list_id: int = 1,
-        amount: int = 1,
+        amount: float = 1,
         quantity_unit_id: int = None,
     ):
         data = {
@@ -609,7 +609,7 @@ class GrocyApiClient(object):
         self._do_post_request(&#34;stock/shoppinglist/clear&#34;, data)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         data = {
             &#34;product_id&#34;: product_id,
@@ -1345,7 +1345,7 @@ class GrocyApiClient(object):
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             &#34;new_amount&#34;: new_amount,
@@ -1421,7 +1421,7 @@ class GrocyApiClient(object):
         new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
     ):
         data = {
             &#34;new_amount&#34;: new_amount,
@@ -1461,7 +1461,7 @@ class GrocyApiClient(object):
         self,
         product_id: int,
         shopping_list_id: int = 1,
-        amount: int = 1,
+        amount: float = 1,
         quantity_unit_id: int = None,
     ):
         data = {
@@ -1479,7 +1479,7 @@ class GrocyApiClient(object):
         self._do_post_request(&#34;stock/shoppinglist/clear&#34;, data)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         data = {
             &#34;product_id&#34;: product_id,
@@ -1693,7 +1693,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.add_product_to_shopping_list"><code class="name flex">
-<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: int = 1, quantity_unit_id: int = None)</span>
+<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: float = 1, quantity_unit_id: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1705,7 +1705,7 @@ class GrocyApiClient(object):
     self,
     product_id: int,
     shopping_list_id: int = 1,
-    amount: int = 1,
+    amount: float = 1,
     quantity_unit_id: int = None,
 ):
     data = {
@@ -1719,7 +1719,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266615))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 429942))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1750,7 +1750,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266587))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 429916))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1835,7 +1835,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 266448))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 429776))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2173,7 +2173,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.inventory_product"><code class="name flex">
-<span>def <span class="ident">inventory_product</span></span>(<span>self, product_id: int, new_amount: float, best_before_date: datetime.datetime = None, shopping_location_id: int = None, location_id: int = None, price: int = None)</span>
+<span>def <span class="ident">inventory_product</span></span>(<span>self, product_id: int, new_amount: float, best_before_date: datetime.datetime = None, shopping_location_id: int = None, location_id: int = None, price: float = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2188,7 +2188,7 @@ class GrocyApiClient(object):
     best_before_date: datetime = None,
     shopping_location_id: int = None,
     location_id: int = None,
-    price: int = None,
+    price: float = None,
 ):
     data = {
         &#34;new_amount&#34;: new_amount,
@@ -2217,7 +2217,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.inventory_product_by_barcode"><code class="name flex">
-<span>def <span class="ident">inventory_product_by_barcode</span></span>(<span>self, barcode: str, new_amount: float, best_before_date: datetime.datetime = None, location_id: int = None, price: int = None)</span>
+<span>def <span class="ident">inventory_product_by_barcode</span></span>(<span>self, barcode: str, new_amount: float, best_before_date: datetime.datetime = None, location_id: int = None, price: float = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2231,7 +2231,7 @@ class GrocyApiClient(object):
     new_amount: float,
     best_before_date: datetime = None,
     location_id: int = None,
-    price: int = None,
+    price: float = None,
 ):
     data = {
         &#34;new_amount&#34;: new_amount,
@@ -2258,7 +2258,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.remove_product_in_shopping_list"><code class="name flex">
-<span>def <span class="ident">remove_product_in_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: int = 1)</span>
+<span>def <span class="ident">remove_product_in_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: float = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2267,7 +2267,7 @@ class GrocyApiClient(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def remove_product_in_shopping_list(
-    self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+    self, product_id: int, shopping_list_id: int = 1, amount: float = 1
 ):
     data = {
         &#34;product_id&#34;: product_id,
@@ -2729,8 +2729,8 @@ class GrocyApiClient(object):
 <pre><code class="python">class ProductDetailsResponse(BaseModel):
     last_purchased: Optional[date] = None
     last_used: Optional[date] = None
-    stock_amount: int
-    stock_amount_opened: int
+    stock_amount: float
+    stock_amount_opened: float
     next_best_before_date: Optional[date] = None
     last_price: Optional[float] = None
     product: ProductData
@@ -2782,11 +2782,11 @@ class GrocyApiClient(object):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount"><code class="name">var <span class="ident">stock_amount</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount"><code class="name">var <span class="ident">stock_amount</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened"><code class="name">var <span class="ident">stock_amount_opened</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.ProductDetailsResponse.stock_amount_opened"><code class="name">var <span class="ident">stock_amount_opened</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2972,7 +2972,7 @@ class GrocyApiClient(object):
 <pre><code class="python">class StockLogResponse(BaseModel):
     id: int
     product_id: int
-    amount: int
+    amount: float
     best_before_date: date
     purchased_date: date
     used_date: Optional[date] = None
@@ -2988,7 +2988,7 @@ class GrocyApiClient(object):
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="pygrocy.grocy_api_client.StockLogResponse.amount"><code class="name">var <span class="ident">amount</span> : int</code></dt>
+<dt id="pygrocy.grocy_api_client.StockLogResponse.amount"><code class="name">var <span class="ident">amount</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>

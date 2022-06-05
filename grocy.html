@@ -185,11 +185,11 @@ class Grocy(object):
     def inventory_product(
         self,
         product_id: int,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -&gt; Product:
         product = Product(
@@ -243,10 +243,10 @@ class Grocy(object):
     def inventory_product_by_barcode(
         self,
         barcode: str,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -&gt; Product:
         product = Product(
@@ -275,7 +275,7 @@ class Grocy(object):
         self,
         product_id: int,
         shopping_list_id: int = None,
-        amount: int = None,
+        amount: float = None,
         quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
@@ -286,7 +286,7 @@ class Grocy(object):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         return self._api_client.remove_product_in_shopping_list(
             product_id, shopping_list_id, amount
@@ -526,11 +526,11 @@ class Grocy(object):
     def inventory_product(
         self,
         product_id: int,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         shopping_location_id: int = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -&gt; Product:
         product = Product(
@@ -584,10 +584,10 @@ class Grocy(object):
     def inventory_product_by_barcode(
         self,
         barcode: str,
-        new_amount: int,
+        new_amount: float,
         best_before_date: datetime = None,
         location_id: int = None,
-        price: int = None,
+        price: float = None,
         get_details: bool = True,
     ) -&gt; Product:
         product = Product(
@@ -616,7 +616,7 @@ class Grocy(object):
         self,
         product_id: int,
         shopping_list_id: int = None,
-        amount: int = None,
+        amount: float = None,
         quantity_unit_id: int = None,
     ):
         return self._api_client.add_product_to_shopping_list(
@@ -627,7 +627,7 @@ class Grocy(object):
         return self._api_client.clear_shopping_list(shopping_list_id)
 
     def remove_product_in_shopping_list(
-        self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+        self, product_id: int, shopping_list_id: int = 1, amount: float = 1
     ):
         return self._api_client.remove_product_in_shopping_list(
             product_id, shopping_list_id, amount
@@ -813,7 +813,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.add_product_to_shopping_list"><code class="name flex">
-<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = None, amount: int = None, quantity_unit_id: int = None)</span>
+<span>def <span class="ident">add_product_to_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = None, amount: float = None, quantity_unit_id: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -825,7 +825,7 @@ class Grocy(object):
     self,
     product_id: int,
     shopping_list_id: int = None,
-    amount: int = None,
+    amount: float = None,
     quantity_unit_id: int = None,
 ):
     return self._api_client.add_product_to_shopping_list(
@@ -880,7 +880,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 268464))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431625))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -939,7 +939,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 268368))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431535))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1031,7 +1031,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 5, 21, 18, 57, 49, 268306))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431486))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1123,7 +1123,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.inventory_product"><code class="name flex">
-<span>def <span class="ident">inventory_product</span></span>(<span>self, product_id: int, new_amount: int, best_before_date: datetime.datetime = None, shopping_location_id: int = None, location_id: int = None, price: int = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+<span>def <span class="ident">inventory_product</span></span>(<span>self, product_id: int, new_amount: float, best_before_date: datetime.datetime = None, shopping_location_id: int = None, location_id: int = None, price: float = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1134,11 +1134,11 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <pre><code class="python">def inventory_product(
     self,
     product_id: int,
-    new_amount: int,
+    new_amount: float,
     best_before_date: datetime = None,
     shopping_location_id: int = None,
     location_id: int = None,
-    price: int = None,
+    price: float = None,
     get_details: bool = True,
 ) -&gt; Product:
     product = Product(
@@ -1158,7 +1158,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.inventory_product_by_barcode"><code class="name flex">
-<span>def <span class="ident">inventory_product_by_barcode</span></span>(<span>self, barcode: str, new_amount: int, best_before_date: datetime.datetime = None, location_id: int = None, price: int = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
+<span>def <span class="ident">inventory_product_by_barcode</span></span>(<span>self, barcode: str, new_amount: float, best_before_date: datetime.datetime = None, location_id: int = None, price: float = None, get_details: bool = True) ‑> <a title="pygrocy.data_models.product.Product" href="data_models/product.html#pygrocy.data_models.product.Product">Product</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1169,10 +1169,10 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <pre><code class="python">def inventory_product_by_barcode(
     self,
     barcode: str,
-    new_amount: int,
+    new_amount: float,
     best_before_date: datetime = None,
     location_id: int = None,
-    price: int = None,
+    price: float = None,
     get_details: bool = True,
 ) -&gt; Product:
     product = Product(
@@ -1333,7 +1333,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.remove_product_in_shopping_list"><code class="name flex">
-<span>def <span class="ident">remove_product_in_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: int = 1)</span>
+<span>def <span class="ident">remove_product_in_shopping_list</span></span>(<span>self, product_id: int, shopping_list_id: int = 1, amount: float = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1342,7 +1342,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def remove_product_in_shopping_list(
-    self, product_id: int, shopping_list_id: int = 1, amount: int = 1
+    self, product_id: int, shopping_list_id: int = 1, amount: float = 1
 ):
     return self._api_client.remove_product_in_shopping_list(
         product_id, shopping_list_id, amount
