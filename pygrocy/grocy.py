@@ -154,6 +154,12 @@ class Grocy(object):
             product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
         )
 
+    def consume_recipe(
+        self,
+        recipe_id: int,
+    ):
+        return self._api_client.consume_recipe(recipe_id)
+
     def inventory_product(
         self,
         product_id: int,

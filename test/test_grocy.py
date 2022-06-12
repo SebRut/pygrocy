@@ -218,6 +218,16 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
+    @responses.activate
+    def test_consume_recipe_valid(self):
+        responses.add(responses.POST, f"{self.base_url}/recipes/1/consume", status=200)
+        self.assertIsNone(self.grocy.consume_recipe(1))
+
+    @responses.activate
+    def test_consume_recipe_error(self):
+        responses.add(responses.POST, f"{self.base_url}/recipes/1/consume", status=400)
+        self.assertRaises(GrocyError, self.grocy.consume_recipe, 1)
+
     @pytest.mark.vcr
     def test_inventory_product_valid(self):
         current_inventory = int(self.grocy.product(4).available_amount)
