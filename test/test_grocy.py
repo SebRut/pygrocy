@@ -301,12 +301,12 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_execute_chore_valid(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=200)
-        self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test))
+        self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test, False))
 
     @responses.activate
     def test_execute_chore_error(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
-        self.assertRaises(GrocyError, self.grocy.execute_chore, 1, 1, self.date_test)
+        self.assertRaises(GrocyError, self.grocy.execute_chore, 1, 1, self.date_test, False)
 
     @responses.activate
     def test_get_meal_plan(self):
