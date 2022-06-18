@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.27.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/recipes/4464/consume
+  response:
+    body:
+      string: '{"error_message":"Recipe does not exist"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 18 Jun 2022 14:16:54 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+    status:
+      code: 400
+      message: Bad Request
+version: 1

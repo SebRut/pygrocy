@@ -218,15 +218,17 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
-    @responses.activate
+    @pytest.mark.vcr
     def test_consume_recipe_valid(self):
-        responses.add(responses.POST, f"{self.base_url}/recipes/1/consume", status=200)
-        self.assertIsNone(self.grocy.consume_recipe(1))
+        self.grocy.consume_recipe(5)
 
-    @responses.activate
+    @pytest.mark.vcr
     def test_consume_recipe_error(self):
-        responses.add(responses.POST, f"{self.base_url}/recipes/1/consume", status=400)
-        self.assertRaises(GrocyError, self.grocy.consume_recipe, 1)
+        with pytest.raises(GrocyError) as exc_info:
+            self.grocy.consume_recipe(4464)
+
+        error = exc_info.value
+        assert error.status_code == 400
 
     @pytest.mark.vcr
     def test_inventory_product_valid(self):
