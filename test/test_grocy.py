@@ -219,6 +219,18 @@ class TestGrocy(TestCase):
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @pytest.mark.vcr
+    def test_consume_recipe_valid(self):
+        self.grocy.consume_recipe(5)
+
+    @pytest.mark.vcr
+    def test_consume_recipe_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            self.grocy.consume_recipe(4464)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_inventory_product_valid(self):
         current_inventory = int(self.grocy.product(4).available_amount)
         new_amount = current_inventory + 10

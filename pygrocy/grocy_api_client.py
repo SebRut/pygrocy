@@ -444,6 +444,12 @@ class GrocyApiClient(object):
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
 
+    def consume_recipe(
+        self,
+        recipe_id: int,
+    ):
+        self._do_post_request(f"recipes/{recipe_id}/consume", None)
+
     def inventory_product(
         self,
         product_id: int,
