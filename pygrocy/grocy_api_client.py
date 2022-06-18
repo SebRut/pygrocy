@@ -394,10 +394,14 @@ class GrocyApiClient(object):
         chore_id: int,
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
+        skipped: bool = False,
     ):
         localized_tracked_time = localize_datetime(tracked_time)
 
-        data = {"tracked_time": localized_tracked_time.isoformat()}
+        data = {
+            "tracked_time": localized_tracked_time.isoformat(),
+            "skipped": skipped,
+        }
 
         if done_by is not None:
             data["done_by"] = done_by
