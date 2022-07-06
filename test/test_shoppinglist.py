@@ -60,3 +60,21 @@ class TestShoppingList:
     @pytest.mark.vcr
     def test_remove_product_in_shopping_list_valid(self, grocy):
         grocy.remove_product_in_shopping_list(20)
+
+    @pytest.mark.vcr
+    def test_get_shopping_list_filters_valid(self, grocy):
+        query_filter = ["note~snacks"]
+        shopping_list = grocy.shopping_list(
+            get_details=True, query_filters=query_filter
+        )
+
+        for item in shopping_list:
+            assert "snacks" in item.note
+
+    @pytest.mark.vcr
+    def test_get_shopping_list_filters_invalid(self, grocy, invalid_query_filter):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.shopping_list(get_details=True, query_filters=invalid_query_filter)
+
+        error = exc_info.value
+        assert error.status_code == 500

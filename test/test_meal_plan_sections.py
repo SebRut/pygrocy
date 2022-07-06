@@ -2,6 +2,8 @@ import datetime
 
 import pytest
 
+from pygrocy.errors import GrocyError
+
 
 class TestMealPlanSections:
     @pytest.mark.vcr
@@ -25,3 +27,19 @@ class TestMealPlanSections:
     def test_get_section_by_id_invalid(self, grocy):
         section = grocy.meal_plan_section(1000)
         assert section is None
+
+    @pytest.mark.vcr
+    def test_get_sections_filters_valid(self, grocy):
+        query_filter = ["name=Breakfast"]
+        sections = grocy.meal_plan_sections(query_filters=query_filter)
+
+        for item in sections:
+            assert item.name == "Breakfast"
+
+    @pytest.mark.vcr
+    def test_get_sections_filters_invalid(self, grocy, invalid_query_filter):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.meal_plan_sections(query_filters=invalid_query_filter)
+
+        error = exc_info.value
+        assert error.status_code == 500

@@ -3,7 +3,7 @@ import json
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -291,9 +291,14 @@ class GrocyApiClient(object):
         else:
             self._headers = {"accept": "application/json", "GROCY-API-KEY": api_key}
 
-    def _do_get_request(self, end_url: str):
+    def _do_get_request(self, end_url: str, query_filters: List[str] = None):
         req_url = urljoin(self._base_url, end_url)
-        resp = requests.get(req_url, verify=self._verify_ssl, headers=self._headers)
+        params = None
+        if query_filters:
+            params = {"query[]": query_filters}
+        resp = requests.get(
+            req_url, verify=self._verify_ssl, headers=self._headers, params=params
+        )
 
         _LOGGER.debug("-->\tGET /%s", end_url)
         _LOGGER.debug("<--\t%d for /%s", resp.status_code, end_url)
@@ -379,8 +384,8 @@ class GrocyApiClient(object):
         if parsed_json:
             return ProductDetailsResponse(**parsed_json)
 
-    def get_chores(self) -> List[CurrentChoreResponse]:
-        parsed_json = self._do_get_request("chores")
+    def get_chores(self, query_filters: List[str] = None) -> List[CurrentChoreResponse]:
+        parsed_json = self._do_get_request("chores", query_filters)
         return [CurrentChoreResponse(**chore) for chore in parsed_json]
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
@@ -558,8 +563,10 @@ class GrocyApiClient(object):
             stockLog = [StockLogResponse(**response) for response in parsed_json]
             return stockLog[0]
 
-    def get_shopping_list(self) -> List[ShoppingListItem]:
-        parsed_json = self._do_get_request("objects/shopping_list")
+    def get_shopping_list(
+        self, query_filters: List[str] = None
+    ) -> List[ShoppingListItem]:
+        parsed_json = self._do_get_request("objects/shopping_list", query_filters)
         return [ShoppingListItem(**response) for response in parsed_json]
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
@@ -600,8 +607,8 @@ class GrocyApiClient(object):
         }
         self._do_post_request("stock/shoppinglist/remove-product", data)
 
-    def get_product_groups(self) -> List[LocationData]:
-        parsed_json = self._do_get_request("objects/product_groups")
+    def get_product_groups(self, query_filters: List[str] = None) -> List[LocationData]:
+        parsed_json = self._do_get_request("objects/product_groups", query_filters)
         return [LocationData(**response) for response in parsed_json]
 
     def upload_product_picture(self, product_id: int, pic_path: str):
@@ -628,8 +635,8 @@ class GrocyApiClient(object):
         last_change_timestamp = parse_date(resp.get("changed_time"))
         return last_change_timestamp
 
-    def get_tasks(self) -> List[TaskResponse]:
-        parsed_json = self._do_get_request("tasks")
+    def get_tasks(self, query_filters: List[str] = None) -> List[TaskResponse]:
+        parsed_json = self._do_get_request("tasks", query_filters)
         return [TaskResponse(**data) for data in parsed_json]
 
     def get_task(self, task_id: int) -> TaskResponse:
@@ -645,8 +652,8 @@ class GrocyApiClient(object):
         data = {"done_time": localized_done_time.isoformat()}
         self._do_post_request(url, data)
 
-    def get_meal_plan(self) -> List[MealPlanResponse]:
-        parsed_json = self._do_get_request("objects/meal_plan")
+    def get_meal_plan(self, query_filters: List[str] = None) -> List[MealPlanResponse]:
+        parsed_json = self._do_get_request("objects/meal_plan", query_filters)
         return [MealPlanResponse(**data) for data in parsed_json]
 
     def get_recipe(self, object_id: int) -> RecipeDetailsResponse:
@@ -654,8 +661,10 @@ class GrocyApiClient(object):
         if parsed_json:
             return RecipeDetailsResponse(**parsed_json)
 
-    def get_batteries(self) -> List[CurrentBatteryResponse]:
-        parsed_json = self._do_get_request("batteries")
+    def get_batteries(
+        self, query_filters: List[str] = None
+    ) -> List[CurrentBatteryResponse]:
+        parsed_json = self._do_get_request("batteries", query_filters)
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
 
@@ -679,11 +688,17 @@ class GrocyApiClient(object):
     def delete_generic(self, entity_type: str, object_id: int):
         return self._do_delete_request(f"objects/{entity_type}/{object_id}")
 
-    def get_generic_objects_for_type(self, entity_type: str):
-        return self._do_get_request(f"objects/{entity_type}")
+    def get_generic_objects_for_type(
+        self, entity_type: str, query_filters: List[str] = None
+    ):
+        return self._do_get_request(f"objects/{entity_type}", query_filters)
 
-    def get_meal_plan_sections(self) -> List[MealPlanSectionResponse]:
-        parsed_json = self.get_generic_objects_for_type(EntityType.MEAL_PLAN_SECTIONS)
+    def get_meal_plan_sections(
+        self, query_filters: List[str] = None
+    ) -> List[MealPlanSectionResponse]:
+        parsed_json = self.get_generic_objects_for_type(
+            EntityType.MEAL_PLAN_SECTIONS, query_filters
+        )
         if parsed_json:
             return [MealPlanSectionResponse(**resp) for resp in parsed_json]
 
