@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/tasks?query%5B%5D=category_id%3D1
+  response:
+    body:
+      string: '[{"id":"2","name":"Task2","description":null,"due_date":"2022-06-16","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-06-17
+        19:33:37"},{"id":"3","name":"Task3","description":null,"due_date":"2022-06-17","done":"0","done_timestamp":null,"category_id":"1","assigned_to_user_id":"1","row_created_timestamp":"2022-06-17
+        19:33:37"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 06 Jul 2022 18:52:59 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '385'
+    status:
+      code: 200
+      message: OK
+version: 1
