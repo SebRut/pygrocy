@@ -218,6 +218,20 @@ class TestGrocy(TestCase):
         )
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
+    @responses.activate
+    def test_open_product_valid(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/1/open", status=200
+        )
+        self.assertIsNone(self.grocy.open_product(1, 1.3))
+
+    @responses.activate
+    def test_open_product_error(self):
+        responses.add(
+            responses.POST, f"{self.base_url}/stock/products/1/open", status=400
+        )
+        self.assertRaises(GrocyError, self.grocy.open_product, 1, 1.3)
+
     @pytest.mark.vcr
     def test_consume_recipe_valid(self):
         self.grocy.consume_recipe(5)

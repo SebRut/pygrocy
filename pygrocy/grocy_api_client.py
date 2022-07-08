@@ -449,6 +449,19 @@ class GrocyApiClient(object):
 
         self._do_post_request(f"stock/products/{product_id}/consume", data)
 
+    def open_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        allow_subproduct_substitution: bool = False
+    ):
+        data = {
+            "amount": amount,
+            "allow_subproduct_substitution": allow_subproduct_substitution,
+        }
+
+        self._do_post_request(f"stock/products/{product_id}/open", data)
+
     def consume_recipe(
         self,
         recipe_id: int,

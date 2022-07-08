@@ -163,6 +163,16 @@ class Grocy(object):
     ):
         return self._api_client.consume_recipe(recipe_id)
 
+    def open_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        allow_subproduct_substitution: bool = False,
+    ):
+        return self._api_client.open_product(
+            product_id, amount, allow_subproduct_substitution
+        )
+
     def inventory_product(
         self,
         product_id: int,
