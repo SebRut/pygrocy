@@ -4,7 +4,7 @@ import pytest
 
 from pygrocy.data_models.chore import AssignmentType, Chore, PeriodType
 from pygrocy.data_models.user import User
-from pygrocy.errors.grocy_error import GrocyError
+from pygrocy.errors import GrocyError
 
 
 class TestChores:
@@ -63,3 +63,19 @@ class TestChores:
 
         error = exc_info.value
         assert error.status_code == 400
+
+    @pytest.mark.vcr
+    def test_get_chores_filters_valid(self, grocy):
+        query_filter = ["next_execution_assigned_to_user_id=1"]
+        chores = grocy.chores(get_details=True, query_filters=query_filter)
+
+        for item in chores:
+            assert item.next_execution_assigned_to_user_id == 1
+
+    @pytest.mark.vcr
+    def test_get_chores_filters_invalid(self, grocy, invalid_query_filter):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.chores(get_details=True, query_filters=invalid_query_filter)
+
+        error = exc_info.value
+        assert error.status_code == 500

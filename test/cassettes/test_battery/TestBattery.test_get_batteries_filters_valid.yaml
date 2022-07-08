@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries?query%5B%5D=next_estimated_charge_time%3C2022-06-20
+  response:
+    body:
+      string: '[{"id":"1","battery_id":"1","last_tracked_time":"2021-12-19 23:59:59","next_estimated_charge_time":"2022-06-17
+        23:59:59"},{"id":"3","battery_id":"3","last_tracked_time":"2022-04-13 19:33:45","next_estimated_charge_time":"2022-06-12
+        19:33:45"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 06 Jul 2022 18:52:57 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '243'
+    status:
+      code: 200
+      message: OK
+version: 1

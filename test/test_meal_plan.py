@@ -1,6 +1,9 @@
+import datetime
+
 import pytest
 
 from pygrocy.data_models.meal_items import MealPlanItemType, MealPlanSection, RecipeItem
+from pygrocy.errors import GrocyError
 
 
 class TestMealPlan:
@@ -56,3 +59,19 @@ class TestMealPlan:
             item for item in meal_plan if item.type == MealPlanItemType.PRODUCT
         )
         assert product_entry.product_id == 3
+
+    @pytest.mark.vcr
+    def test_get_meal_plan_filters_valid(self, grocy):
+        query_filter = ["day>=2022-06-15", "product_amount>0"]
+        meal_plans = grocy.meal_plan(get_details=True, query_filters=query_filter)
+
+        for item in meal_plans:
+            assert item.day >= datetime.date(2022, 6, 15)
+
+    @pytest.mark.vcr
+    def test_get_meal_plan_filters_invalid(self, grocy, invalid_query_filter):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.meal_plan(get_details=True, query_filters=invalid_query_filter)
+
+        error = exc_info.value
+        assert error.status_code == 500

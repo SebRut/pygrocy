@@ -109,8 +109,10 @@ class Grocy(object):
         product_datas = [ProductData(**product) for product in raw_products]
         return [Product(product) for product in product_datas]
 
-    def chores(self, get_details: bool = False) -> List[Chore]:
-        raw_chores = self._api_client.get_chores()
+    def chores(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[Chore]:
+        raw_chores = self._api_client.get_chores(query_filters)
         chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
@@ -238,8 +240,10 @@ class Grocy(object):
             product.get_details(self._api_client)
         return product
 
-    def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
-        raw_shoppinglist = self._api_client.get_shopping_list()
+    def shopping_list(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list(query_filters)
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -271,8 +275,8 @@ class Grocy(object):
             product_id, shopping_list_id, amount
         )
 
-    def product_groups(self) -> List[Group]:
-        raw_groups = self._api_client.get_product_groups()
+    def product_groups(self, query_filters: List[str] = None) -> List[Group]:
+        raw_groups = self._api_client.get_product_groups(query_filters)
         return [Group(resp) for resp in raw_groups]
 
     def add_product_pic(self, product_id: int, pic_path: str):
@@ -288,8 +292,8 @@ class Grocy(object):
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
 
-    def tasks(self) -> List[Task]:
-        raw_tasks = self._api_client.get_tasks()
+    def tasks(self, query_filters: List[str] = None) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks(query_filters)
         return [Task(task) for task in raw_tasks]
 
     def task(self, task_id: int) -> Task:
@@ -299,8 +303,10 @@ class Grocy(object):
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
 
-    def meal_plan(self, get_details: bool = False) -> List[MealPlanItem]:
-        raw_meal_plan = self._api_client.get_meal_plan()
+    def meal_plan(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan(query_filters)
         meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
 
         if get_details:
@@ -313,8 +319,8 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def batteries(self) -> List[Battery]:
-        raw_batteries = self._api_client.get_batteries()
+    def batteries(self, query_filters: List[str] = None) -> List[Battery]:
+        raw_batteries = self._api_client.get_batteries(query_filters)
         return [Battery(bat) for bat in raw_batteries]
 
     def battery(self, battery_id: int) -> Battery:
@@ -336,11 +342,17 @@ class Grocy(object):
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
 
-    def get_generic_objects_for_type(self, entity_type: EntityType):
-        return self._api_client.get_generic_objects_for_type(entity_type.value)
+    def get_generic_objects_for_type(
+        self, entity_type: EntityType, query_filters: List[str] = None
+    ):
+        return self._api_client.get_generic_objects_for_type(
+            entity_type.value, query_filters
+        )
 
-    def meal_plan_sections(self) -> List[MealPlanSection]:
-        raw_sections = self._api_client.get_meal_plan_sections()
+    def meal_plan_sections(
+        self, query_filters: List[str] = None
+    ) -> List[MealPlanSection]:
+        raw_sections = self._api_client.get_meal_plan_sections(query_filters)
         return [MealPlanSection(section) for section in raw_sections]
 
     def meal_plan_section(self, meal_plan_section_id: int) -> MealPlanSection:

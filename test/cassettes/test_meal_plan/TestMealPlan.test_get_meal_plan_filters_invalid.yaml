@@ -1,0 +1,63 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/objects/meal_plan?query%5B%5D=invalid
+  response:
+    body:
+      string: '{"error_message":"Invalid query","error_details":{"stack_trace":"#0
+        \/var\/www\/controllers\/BaseApiController.php(50): Grocy\\Controllers\\BaseApiController->filter()\n#1
+        \/var\/www\/controllers\/GenericEntityApiController.php(152): Grocy\\Controllers\\BaseApiController->queryData()\n#2
+        \/var\/www\/vendor\/slim\/slim\/Slim\/Handlers\/Strategies\/RequestResponse.php(43):
+        Grocy\\Controllers\\GenericEntityApiController->GetObjects()\n#3 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/Route.php(384):
+        Slim\\Handlers\\Strategies\\RequestResponse->__invoke()\n#4 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        Slim\\Routing\\Route->handle()\n#5 \/var\/www\/middleware\/JsonMiddleware.php(13):
+        Slim\\MiddlewareDispatcher->handle()\n#6 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(209):
+        Grocy\\Middleware\\JsonMiddleware->__invoke()\n#7 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        Psr\\Http\\Server\\RequestHandlerInterface@anonymous->handle()\n#8 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/Route.php(341):
+        Slim\\MiddlewareDispatcher->handle()\n#9 \/var\/www\/vendor\/slim\/slim\/Slim\/Routing\/RouteRunner.php(84):
+        Slim\\Routing\\Route->run()\n#10 \/var\/www\/middleware\/AuthMiddleware.php(48):
+        Slim\\Routing\\RouteRunner->handle()\n#11 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(313):
+        Grocy\\Middleware\\AuthMiddleware->__invoke()\n#12 \/var\/www\/vendor\/slim\/slim\/Slim\/Middleware\/RoutingMiddleware.php(59):
+        Psr\\Http\\Server\\RequestHandlerInterface@anonymous->handle()\n#13 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(147):
+        Slim\\Middleware\\RoutingMiddleware->process()\n#14 \/var\/www\/vendor\/slim\/slim\/Slim\/Middleware\/ErrorMiddleware.php(107):
+        Psr\\Http\\Server\\RequestHandlerInterface@anonymous->handle()\n#15 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(147):
+        Slim\\Middleware\\ErrorMiddleware->process()\n#16 \/var\/www\/middleware\/CorsMiddleware.php(30):
+        Psr\\Http\\Server\\RequestHandlerInterface@anonymous->handle()\n#17 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(313):
+        Grocy\\Middleware\\CorsMiddleware->__invoke()\n#18 \/var\/www\/vendor\/slim\/slim\/Slim\/MiddlewareDispatcher.php(81):
+        Psr\\Http\\Server\\RequestHandlerInterface@anonymous->handle()\n#19 \/var\/www\/vendor\/slim\/slim\/Slim\/App.php(215):
+        Slim\\MiddlewareDispatcher->handle()\n#20 \/var\/www\/vendor\/slim\/slim\/Slim\/App.php(199):
+        Slim\\App->handle()\n#21 \/var\/www\/app.php(106): Slim\\App->run()\n#22 \/var\/www\/public\/index.php(45):
+        require_once(''...'')\n#23 {main}","file":"\/var\/www\/controllers\/BaseApiController.php","line":95}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 06 Jul 2022 18:52:59 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+    status:
+      code: 500
+      message: Internal Server Error
+version: 1
