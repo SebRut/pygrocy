@@ -453,7 +453,7 @@ class GrocyApiClient(object):
         self,
         product_id: int,
         amount: float = 1,
-        allow_subproduct_substitution: bool = False
+        allow_subproduct_substitution: bool = False,
     ):
         data = {
             "amount": amount,

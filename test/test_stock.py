@@ -1,6 +1,7 @@
 import pytest
 
 from pygrocy.data_models.product import Product
+from pygrocy.errors import GrocyError
 
 
 class TestStock:
@@ -54,3 +55,15 @@ class TestStock:
         assert len(overdue_products) == 4
         for prod in overdue_products:
             assert isinstance(prod, Product)
+
+    @pytest.mark.vcr
+    def test_open_product_valid(self, grocy):
+        grocy.open_product(13, 1)
+
+    @pytest.mark.vcr
+    def test_open_product_error(self, grocy):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.open_product(13, 0)
+
+        error = exc_info.value
+        assert error.status_code == 400
