@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: '{"amount": 0}'
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.27.1
+      accept:
+      - application/json
+    method: POST
+    uri: https://localhost/api/stock/products/13/open
+  response:
+    body:
+      string: '{"error_message":"No transaction was found by the given transaction id"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 9 Jul 2022 15:40:16 GMT
+      Server:
+      - nginx/1.20.2
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.13
+    status:
+      code: 400
+      message: Bad Request
+version: 1
