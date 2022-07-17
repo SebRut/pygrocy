@@ -236,6 +236,7 @@ class BatteryDetailsResponse(BaseModel):
     battery: BatteryData
     charge_cycles_count: int
     last_charged: Optional[datetime] = None
+    last_tracked_time: Optional[datetime] = None
     next_estimated_charge_time: Optional[datetime] = None
 
 
@@ -680,6 +681,7 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request("batteries", query_filters)
         if parsed_json:
             return [CurrentBatteryResponse(**data) for data in parsed_json]
+        return []
 
     def get_battery(self, battery_id: int) -> BatteryDetailsResponse:
         parsed_json = self._do_get_request(f"batteries/{battery_id}")
