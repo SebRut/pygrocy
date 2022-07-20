@@ -140,6 +140,9 @@ class CurrentStockResponse(BaseModel):
     amount: float
     best_before_date: date
     amount_opened: float
+    amount_aggregated: float
+    amount_opened_aggregated: float
+    is_aggregated_amount: bool
     product: ProductData
 
 
