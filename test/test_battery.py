@@ -8,10 +8,20 @@ from pygrocy.errors import GrocyError
 class TestBattery:
     @pytest.mark.vcr
     def test_get_batteries_valid(self, grocy):
-        batteries = grocy.batteries()
+        batteries = grocy.batteries(get_details=False)
 
         assert len(batteries) == 4
         assert isinstance(batteries[0].last_tracked_time, datetime)
+
+    @pytest.mark.vcr
+    def test_get_batteries_with_details_valid(self, grocy):
+        batteries = grocy.batteries(get_details=True)
+
+        assert len(batteries) == 4
+        assert isinstance(batteries[0].last_tracked_time, datetime)
+        assert batteries[0].last_charged == batteries[0].last_tracked_time
+        assert batteries[0].id == 1
+        assert batteries[0].name == "Battery1"
 
     @pytest.mark.vcr
     def test_get_battery_details_valid(self, grocy):
