@@ -1,7 +1,11 @@
 from datetime import datetime
 
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import BatteryDetailsResponse, CurrentBatteryResponse
+from pygrocy.grocy_api_client import (
+    BatteryDetailsResponse,
+    CurrentBatteryResponse,
+    GrocyApiClient,
+)
 
 
 class Battery(DataModel):
@@ -22,6 +26,7 @@ class Battery(DataModel):
     def _init_from_BatteryDetailsResponse(self, response: BatteryDetailsResponse):
         self._charge_cycles_count = response.charge_cycles_count
         self._last_charged = response.last_charged
+        self._last_tracked_time = response.last_charged  # For compatibility
         self._id = response.battery.id
         self._name = response.battery.name
         self._description = response.battery.description
@@ -40,6 +45,10 @@ class Battery(DataModel):
         self._charge_interval_days = None
         self._created_timestamp = None
         self._userfields = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_battery(self._id)
+        self._init_from_BatteryDetailsResponse(details)
 
     @property
     def id(self) -> int:

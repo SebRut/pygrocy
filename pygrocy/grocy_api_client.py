@@ -140,6 +140,9 @@ class CurrentStockResponse(BaseModel):
     amount: float
     best_before_date: date
     amount_opened: float
+    amount_aggregated: float
+    amount_opened_aggregated: float
+    is_aggregated_amount: bool
     product: ProductData
 
 
@@ -236,6 +239,7 @@ class BatteryDetailsResponse(BaseModel):
     battery: BatteryData
     charge_cycles_count: int
     last_charged: Optional[datetime] = None
+    last_tracked_time: Optional[datetime] = None
     next_estimated_charge_time: Optional[datetime] = None
 
 
