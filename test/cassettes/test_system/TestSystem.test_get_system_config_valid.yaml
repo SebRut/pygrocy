@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/system/config
+  response:
+    body:
+      string: '{"MODE":"demo","DEFAULT_LOCALE":"en","CALENDAR_FIRST_DAY_OF_WEEK":"","CALENDAR_SHOW_WEEK_OF_YEAR":true,"MEAL_PLAN_FIRST_DAY_OF_WEEK":"","CURRENCY":"USD","BASE_PATH":"","BASE_URL":"\/","STOCK_BARCODE_LOOKUP_PLUGIN":"DemoBarcodeLookupPlugin","DISABLE_URL_REWRITING":false,"ENTRY_PAGE":"stock","DISABLE_AUTH":false,"AUTH_CLASS":"Grocy\\Middleware\\DefaultAuthMiddleware","REVERSE_PROXY_AUTH_HEADER":"REMOTE_USER","REVERSE_PROXY_AUTH_USE_ENV":false,"LDAP_ADDRESS":"","LDAP_BASE_DN":"","LDAP_BIND_DN":"","LDAP_BIND_PW":"","LDAP_USER_FILTER":"","LDAP_UID_ATTR":"","DEFAULT_PERMISSIONS":["ADMIN"],"GROCYCODE_TYPE":"1D","LABEL_PRINTER_WEBHOOK":"","LABEL_PRINTER_RUN_SERVER":true,"LABEL_PRINTER_PARAMS":{"font_family":"Source
+        Sans Pro (Regular)"},"LABEL_PRINTER_HOOK_JSON":false,"TPRINTER_IS_NETWORK_PRINTER":false,"TPRINTER_PRINT_QUANTITY_NAME":true,"TPRINTER_PRINT_NOTES":true,"TPRINTER_IP":"127.0.0.1","TPRINTER_PORT":9100,"TPRINTER_CONNECTOR":"\/dev\/usb\/lp0","FEATURE_FLAG_STOCK":true,"FEATURE_FLAG_SHOPPINGLIST":true,"FEATURE_FLAG_RECIPES":true,"FEATURE_FLAG_CHORES":true,"FEATURE_FLAG_TASKS":true,"FEATURE_FLAG_BATTERIES":true,"FEATURE_FLAG_EQUIPMENT":true,"FEATURE_FLAG_CALENDAR":true,"FEATURE_FLAG_LABEL_PRINTER":false,"FEATURE_FLAG_STOCK_PRICE_TRACKING":true,"FEATURE_FLAG_STOCK_LOCATION_TRACKING":true,"FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING":true,"FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING":true,"FEATURE_FLAG_STOCK_PRODUCT_FREEZING":true,"FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_FIELD_NUMBER_PAD":true,"FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS":true,"FEATURE_FLAG_CHORES_ASSIGNMENTS":true,"FEATURE_FLAG_THERMAL_PRINTER":false,"FEATURE_FLAG_DISABLE_BROWSER_BARCODE_CAMERA_SCANNING":false,"FEATURE_FLAG_AUTO_TORCH_ON_WITH_CAMERA":true,"LOCALE":"en","USER_USERNAME":"Demo
+        User","USER_PICTURE_FILE_NAME":null}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 24 Jul 2022 16:18:25 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '1813'
+    status:
+      code: 200
+      message: OK
+version: 1

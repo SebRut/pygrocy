@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import requests
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Extra, Field, root_validator, validator
 from pydantic.schema import date
 
 from pygrocy import EntityType
@@ -259,6 +259,53 @@ class StockLogResponse(BaseModel):
     stock_id: str
     transaction_id: str
     transaction_type: TransactionType
+
+
+class GrocyVersionDto(BaseModel):
+    version: str = Field(alias="Version")
+    release_date: date = Field(alias="ReleaseDate")
+
+
+class SystemInfoDto(BaseModel):
+    grocy_version_info: GrocyVersionDto = Field(alias="grocy_version")
+    php_version: str
+    sqlite_version: str
+    os: str
+    client: str
+
+
+class SystemTimeDto(BaseModel):
+    timezone: str
+    time_local: datetime
+    time_local_sqlite3: datetime
+    time_utc: datetime
+    timestamp: int
+
+
+class SystemConfigDto(BaseModel, extra=Extra.allow):
+    username: str = Field(alias="USER_USERNAME")
+    base_path: str = Field(alias="BASE_PATH")
+    base_url: str = Field(alias="BASE_URL")
+    mode: str = Field(alias="MODE")
+    default_locale: str = Field(alias="DEFAULT_LOCALE")
+    locale: str = Field(alias="LOCALE")
+    currency: str = Field(alias="CURRENCY")
+    feature_flags: Dict[str, Any]
+
+    @root_validator(pre=True)
+    def feature_flags_root_validator(cls, fields: Dict[str, Any]) -> Dict[str, Any]:
+        """Pydantic root validator to add all "FEATURE_FLAG_" settings to Dict."""
+        features: Dict[str, Any] = {}
+
+        class_defined_fields = cls.__fields__.values()
+
+        for field, value in fields.items():
+            if field.startswith("FEATURE_FLAG_") and field not in class_defined_fields:
+                features[field] = value
+
+        fields["feature_flags"] = features
+
+        return fields
 
 
 def _enable_debug_mode():
@@ -647,6 +694,21 @@ class GrocyApiClient(object):
         resp = self._do_get_request("system/db-changed-time")
         last_change_timestamp = parse_date(resp.get("changed_time"))
         return last_change_timestamp
+
+    def get_system_info(self) -> SystemInfoDto:
+        parsed_json = self._do_get_request("system/info")
+        if parsed_json:
+            return SystemInfoDto(**parsed_json)
+
+    def get_system_time(self) -> SystemTimeDto:
+        parsed_json = self._do_get_request("system/time")
+        if parsed_json:
+            return SystemTimeDto(**parsed_json)
+
+    def get_system_config(self) -> SystemConfigDto:
+        parsed_json = self._do_get_request("system/config")
+        if parsed_json:
+            return SystemConfigDto(**parsed_json)
 
     def get_tasks(self, query_filters: List[str] = None) -> List[TaskResponse]:
         parsed_json = self._do_get_request("tasks", query_filters)

@@ -10,6 +10,7 @@ from .data_models.chore import Chore
 from .data_models.generic import EntityType
 from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
+from .data_models.system import SystemConfig, SystemInfo, SystemTime
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
 from .errors import GrocyError  # noqa: F401
@@ -301,6 +302,21 @@ class Grocy(object):
 
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
+
+    def get_system_info(self) -> SystemInfo:
+        raw_system_info = self._api_client.get_system_info()
+        if raw_system_info:
+            return SystemInfo(raw_system_info)
+
+    def get_system_time(self) -> SystemTime:
+        raw_system_time = self._api_client.get_system_time()
+        if raw_system_time:
+            return SystemTime(raw_system_time)
+
+    def get_system_config(self) -> SystemConfig:
+        raw_system_config = self._api_client.get_system_config()
+        if raw_system_config:
+            return SystemConfig(raw_system_config)
 
     def tasks(self, query_filters: List[str] = None) -> List[Task]:
         raw_tasks = self._api_client.get_tasks(query_filters)
