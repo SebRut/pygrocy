@@ -1,5 +1,20 @@
 # Changelog
 
+## [v1.4.0](https://github.com/SebRut/pygrocy/tree/v1.4.0) (2022-07-24)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.3.0...v1.4.0)
+
+**Merged pull requests:**
+
+- Add system endpoints [\#247](https://github.com/SebRut/pygrocy/pull/247) ([marcelvriend](https://github.com/marcelvriend))
+- Add aggregated amounts to stock info [\#246](https://github.com/SebRut/pygrocy/pull/246) ([marcelvriend](https://github.com/marcelvriend))
+- Return empty list instead of None [\#245](https://github.com/SebRut/pygrocy/pull/245) ([marcelvriend](https://github.com/marcelvriend))
+- Get details for all batteries [\#244](https://github.com/SebRut/pygrocy/pull/244) ([marcelvriend](https://github.com/marcelvriend))
+- Add open\_product API support [\#243](https://github.com/SebRut/pygrocy/pull/243) ([grablair](https://github.com/grablair))
+- Add support for filter conditions [\#242](https://github.com/SebRut/pygrocy/pull/242) ([marcelvriend](https://github.com/marcelvriend))
+- Add consume recipe endpoint [\#241](https://github.com/SebRut/pygrocy/pull/241) ([marcelvriend](https://github.com/marcelvriend))
+- Add support for skipping chores [\#240](https://github.com/SebRut/pygrocy/pull/240) ([marcelvriend](https://github.com/marcelvriend))
+
 ## [v1.3.0](https://github.com/SebRut/pygrocy/tree/v1.3.0) (2022-06-05)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.2.1...v1.3.0)
