@@ -370,7 +370,9 @@ class GrocyApiClient(object):
 
     def get_stock(self) -> List[CurrentStockResponse]:
         parsed_json = self._do_get_request("stock")
-        return [CurrentStockResponse(**response) for response in parsed_json]
+        if parsed_json:
+            return [CurrentStockResponse(**response) for response in parsed_json]
+        return []
 
     def get_volatile_stock(self) -> CurrentVolatilStockResponse:
         parsed_json = self._do_get_request("stock/volatile")
@@ -390,7 +392,9 @@ class GrocyApiClient(object):
 
     def get_chores(self, query_filters: List[str] = None) -> List[CurrentChoreResponse]:
         parsed_json = self._do_get_request("chores", query_filters)
-        return [CurrentChoreResponse(**chore) for chore in parsed_json]
+        if parsed_json:
+            return [CurrentChoreResponse(**chore) for chore in parsed_json]
+        return []
 
     def get_chore(self, chore_id: int) -> ChoreDetailsResponse:
         url = f"chores/{chore_id}"
@@ -584,7 +588,9 @@ class GrocyApiClient(object):
         self, query_filters: List[str] = None
     ) -> List[ShoppingListItem]:
         parsed_json = self._do_get_request("objects/shopping_list", query_filters)
-        return [ShoppingListItem(**response) for response in parsed_json]
+        if parsed_json:
+            return [ShoppingListItem(**response) for response in parsed_json]
+        return []
 
     def add_missing_product_to_shopping_list(self, shopping_list_id: int = None):
         data = None
@@ -626,7 +632,9 @@ class GrocyApiClient(object):
 
     def get_product_groups(self, query_filters: List[str] = None) -> List[LocationData]:
         parsed_json = self._do_get_request("objects/product_groups", query_filters)
-        return [LocationData(**response) for response in parsed_json]
+        if parsed_json:
+            return [LocationData(**response) for response in parsed_json]
+        return []
 
     def upload_product_picture(self, product_id: int, pic_path: str):
         b64fn = base64.b64encode("{}.jpg".format(product_id).encode("ascii"))
@@ -654,7 +662,9 @@ class GrocyApiClient(object):
 
     def get_tasks(self, query_filters: List[str] = None) -> List[TaskResponse]:
         parsed_json = self._do_get_request("tasks", query_filters)
-        return [TaskResponse(**data) for data in parsed_json]
+        if parsed_json:
+            return [TaskResponse(**data) for data in parsed_json]
+        return []
 
     def get_task(self, task_id: int) -> TaskResponse:
         url = f"objects/tasks/{task_id}"
@@ -671,7 +681,9 @@ class GrocyApiClient(object):
 
     def get_meal_plan(self, query_filters: List[str] = None) -> List[MealPlanResponse]:
         parsed_json = self._do_get_request("objects/meal_plan", query_filters)
-        return [MealPlanResponse(**data) for data in parsed_json]
+        if parsed_json:
+            return [MealPlanResponse(**data) for data in parsed_json]
+        return []
 
     def get_recipe(self, object_id: int) -> RecipeDetailsResponse:
         parsed_json = self._do_get_request(f"objects/recipes/{object_id}")
@@ -719,6 +731,7 @@ class GrocyApiClient(object):
         )
         if parsed_json:
             return [MealPlanSectionResponse(**resp) for resp in parsed_json]
+        return []
 
     def get_meal_plan_section(self, meal_plan_section_id) -> MealPlanSectionResponse:
         parsed_json = self._do_get_request(
@@ -731,6 +744,7 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request("users")
         if parsed_json:
             return [UserDto(**user) for user in parsed_json]
+        return []
 
     def get_user(self, user_id: int) -> UserDto:
         query_params = []
