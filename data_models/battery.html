@@ -29,7 +29,11 @@
 <pre><code class="python">from datetime import datetime
 
 from pygrocy.base import DataModel
-from pygrocy.grocy_api_client import BatteryDetailsResponse, CurrentBatteryResponse
+from pygrocy.grocy_api_client import (
+    BatteryDetailsResponse,
+    CurrentBatteryResponse,
+    GrocyApiClient,
+)
 
 
 class Battery(DataModel):
@@ -50,6 +54,7 @@ class Battery(DataModel):
     def _init_from_BatteryDetailsResponse(self, response: BatteryDetailsResponse):
         self._charge_cycles_count = response.charge_cycles_count
         self._last_charged = response.last_charged
+        self._last_tracked_time = response.last_charged  # For compatibility
         self._id = response.battery.id
         self._name = response.battery.name
         self._description = response.battery.description
@@ -68,6 +73,10 @@ class Battery(DataModel):
         self._charge_interval_days = None
         self._created_timestamp = None
         self._userfields = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_battery(self._id)
+        self._init_from_BatteryDetailsResponse(details)
 
     @property
     def id(self) -&gt; int:
@@ -151,6 +160,7 @@ class Battery(DataModel):
     def _init_from_BatteryDetailsResponse(self, response: BatteryDetailsResponse):
         self._charge_cycles_count = response.charge_cycles_count
         self._last_charged = response.last_charged
+        self._last_tracked_time = response.last_charged  # For compatibility
         self._id = response.battery.id
         self._name = response.battery.name
         self._description = response.battery.description
@@ -169,6 +179,10 @@ class Battery(DataModel):
         self._charge_interval_days = None
         self._created_timestamp = None
         self._userfields = None
+
+    def get_details(self, api_client: GrocyApiClient):
+        details = api_client.get_battery(self._id)
+        self._init_from_BatteryDetailsResponse(details)
 
     @property
     def id(self) -&gt; int:
@@ -353,6 +367,23 @@ def userfields(self):
 </details>
 </dd>
 </dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygrocy.data_models.battery.Battery.get_details"><code class="name flex">
+<span>def <span class="ident">get_details</span></span>(<span>self, api_client: <a title="pygrocy.grocy_api_client.GrocyApiClient" href="../grocy_api_client.html#pygrocy.grocy_api_client.GrocyApiClient">GrocyApiClient</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_details(self, api_client: GrocyApiClient):
+    details = api_client.get_battery(self._id)
+    self._init_from_BatteryDetailsResponse(details)</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -377,6 +408,7 @@ def userfields(self):
 <li><code><a title="pygrocy.data_models.battery.Battery.charge_interval_days" href="#pygrocy.data_models.battery.Battery.charge_interval_days">charge_interval_days</a></code></li>
 <li><code><a title="pygrocy.data_models.battery.Battery.created_timestamp" href="#pygrocy.data_models.battery.Battery.created_timestamp">created_timestamp</a></code></li>
 <li><code><a title="pygrocy.data_models.battery.Battery.description" href="#pygrocy.data_models.battery.Battery.description">description</a></code></li>
+<li><code><a title="pygrocy.data_models.battery.Battery.get_details" href="#pygrocy.data_models.battery.Battery.get_details">get_details</a></code></li>
 <li><code><a title="pygrocy.data_models.battery.Battery.id" href="#pygrocy.data_models.battery.Battery.id">id</a></code></li>
 <li><code><a title="pygrocy.data_models.battery.Battery.last_charged" href="#pygrocy.data_models.battery.Battery.last_charged">last_charged</a></code></li>
 <li><code><a title="pygrocy.data_models.battery.Battery.last_tracked_time" href="#pygrocy.data_models.battery.Battery.last_tracked_time">last_tracked_time</a></code></li>

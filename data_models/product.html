@@ -98,6 +98,10 @@ class Product(DataModel):
         self._is_partly_in_stock = None
 
         self._available_amount = None
+        self._amount_aggregated = None
+        self._amount_opened = None
+        self._amount_opened_aggregated = None
+        self._is_aggregated_amount = None
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
@@ -109,6 +113,10 @@ class Product(DataModel):
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
+        self._amount_aggregated = response.amount_aggregated
+        self._amount_opened = response.amount_opened
+        self._amount_opened_aggregated = response.amount_opened_aggregated
+        self._is_aggregated_amount = response.is_aggregated_amount
         self._best_before_date = response.best_before_date
 
         if response.product:
@@ -163,6 +171,22 @@ class Product(DataModel):
     @property
     def available_amount(self) -&gt; float:
         return self._available_amount
+
+    @property
+    def amount_aggregated(self) -&gt; float:
+        return self._amount_aggregated
+
+    @property
+    def amount_opened(self) -&gt; float:
+        return self._amount_opened
+
+    @property
+    def amount_opened_aggregated(self) -&gt; float:
+        return self._amount_opened_aggregated
+
+    @property
+    def is_aggregated_amount(self) -&gt; bool:
+        return self._is_aggregated_amount
 
     @property
     def best_before_date(self) -&gt; datetime.date:
@@ -357,6 +381,10 @@ def name(self) -&gt; str:
         self._is_partly_in_stock = None
 
         self._available_amount = None
+        self._amount_aggregated = None
+        self._amount_opened = None
+        self._amount_opened_aggregated = None
+        self._is_aggregated_amount = None
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
@@ -368,6 +396,10 @@ def name(self) -&gt; str:
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
+        self._amount_aggregated = response.amount_aggregated
+        self._amount_opened = response.amount_opened
+        self._amount_opened_aggregated = response.amount_opened_aggregated
+        self._is_aggregated_amount = response.is_aggregated_amount
         self._best_before_date = response.best_before_date
 
         if response.product:
@@ -424,6 +456,22 @@ def name(self) -&gt; str:
         return self._available_amount
 
     @property
+    def amount_aggregated(self) -&gt; float:
+        return self._amount_aggregated
+
+    @property
+    def amount_opened(self) -&gt; float:
+        return self._amount_opened
+
+    @property
+    def amount_opened_aggregated(self) -&gt; float:
+        return self._amount_opened_aggregated
+
+    @property
+    def is_aggregated_amount(self) -&gt; bool:
+        return self._is_aggregated_amount
+
+    @property
     def best_before_date(self) -&gt; datetime.date:
         return self._best_before_date
 
@@ -457,6 +505,18 @@ def name(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="pygrocy.data_models.product.Product.amount_aggregated"><code class="name">var <span class="ident">amount_aggregated</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def amount_aggregated(self) -&gt; float:
+    return self._amount_aggregated</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.data_models.product.Product.amount_missing"><code class="name">var <span class="ident">amount_missing</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
@@ -467,6 +527,30 @@ def name(self) -&gt; str:
 <pre><code class="python">@property
 def amount_missing(self) -&gt; float:
     return self._amount_missing</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.Product.amount_opened"><code class="name">var <span class="ident">amount_opened</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def amount_opened(self) -&gt; float:
+    return self._amount_opened</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.Product.amount_opened_aggregated"><code class="name">var <span class="ident">amount_opened_aggregated</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def amount_opened_aggregated(self) -&gt; float:
+    return self._amount_opened_aggregated</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.product.Product.available_amount"><code class="name">var <span class="ident">available_amount</span> : float</code></dt>
@@ -527,6 +611,18 @@ def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
 <pre><code class="python">@property
 def id(self) -&gt; int:
     return self._id</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.data_models.product.Product.is_aggregated_amount"><code class="name">var <span class="ident">is_aggregated_amount</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def is_aggregated_amount(self) -&gt; bool:
+    return self._is_aggregated_amount</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.data_models.product.Product.is_partly_in_stock"><code class="name">var <span class="ident">is_partly_in_stock</span> : int</code></dt>
@@ -893,13 +989,17 @@ def product_id(self) -&gt; int:
 <li>
 <h4><code><a title="pygrocy.data_models.product.Product" href="#pygrocy.data_models.product.Product">Product</a></code></h4>
 <ul class="">
+<li><code><a title="pygrocy.data_models.product.Product.amount_aggregated" href="#pygrocy.data_models.product.Product.amount_aggregated">amount_aggregated</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.amount_missing" href="#pygrocy.data_models.product.Product.amount_missing">amount_missing</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.amount_opened" href="#pygrocy.data_models.product.Product.amount_opened">amount_opened</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.amount_opened_aggregated" href="#pygrocy.data_models.product.Product.amount_opened_aggregated">amount_opened_aggregated</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.available_amount" href="#pygrocy.data_models.product.Product.available_amount">available_amount</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.barcodes" href="#pygrocy.data_models.product.Product.barcodes">barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.best_before_date" href="#pygrocy.data_models.product.Product.best_before_date">best_before_date</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.default_quantity_unit_purchase" href="#pygrocy.data_models.product.Product.default_quantity_unit_purchase">default_quantity_unit_purchase</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.get_details" href="#pygrocy.data_models.product.Product.get_details">get_details</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.id" href="#pygrocy.data_models.product.Product.id">id</a></code></li>
+<li><code><a title="pygrocy.data_models.product.Product.is_aggregated_amount" href="#pygrocy.data_models.product.Product.is_aggregated_amount">is_aggregated_amount</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.is_partly_in_stock" href="#pygrocy.data_models.product.Product.is_partly_in_stock">is_partly_in_stock</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.name" href="#pygrocy.data_models.product.Product.name">name</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_barcodes" href="#pygrocy.data_models.product.Product.product_barcodes">product_barcodes</a></code></li>

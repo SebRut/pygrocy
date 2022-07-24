@@ -5,6 +5,7 @@
 ./data_models/index.html
 ./data_models/meal_items.html
 ./data_models/product.html
+./data_models/system.html
 ./data_models/task.html
 ./data_models/user.html
 ./errors/grocy_error.html

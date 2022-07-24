@@ -38,6 +38,7 @@ from .data_models.chore import Chore
 from .data_models.generic import EntityType
 from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
+from .data_models.system import SystemConfig, SystemInfo, SystemTime
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
 from .errors import GrocyError  # noqa: F401
@@ -137,8 +138,10 @@ class Grocy(object):
         product_datas = [ProductData(**product) for product in raw_products]
         return [Product(product) for product in product_datas]
 
-    def chores(self, get_details: bool = False) -&gt; List[Chore]:
-        raw_chores = self._api_client.get_chores()
+    def chores(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[Chore]:
+        raw_chores = self._api_client.get_chores(query_filters)
         chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
@@ -151,8 +154,9 @@ class Grocy(object):
         chore_id: int,
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
+        skipped: bool = False,
     ):
-        return self._api_client.execute_chore(chore_id, done_by, tracked_time)
+        return self._api_client.execute_chore(chore_id, done_by, tracked_time, skipped)
 
     def chore(self, chore_id: int) -&gt; Chore:
         resp = self._api_client.get_chore(chore_id)
@@ -180,6 +184,22 @@ class Grocy(object):
     ):
         return self._api_client.consume_product(
             product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
+        )
+
+    def consume_recipe(
+        self,
+        recipe_id: int,
+    ):
+        return self._api_client.consume_recipe(recipe_id)
+
+    def open_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        allow_subproduct_substitution: bool = False,
+    ):
+        return self._api_client.open_product(
+            product_id, amount, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -259,8 +279,10 @@ class Grocy(object):
             product.get_details(self._api_client)
         return product
 
-    def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
-        raw_shoppinglist = self._api_client.get_shopping_list()
+    def shopping_list(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list(query_filters)
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -292,8 +314,8 @@ class Grocy(object):
             product_id, shopping_list_id, amount
         )
 
-    def product_groups(self) -&gt; List[Group]:
-        raw_groups = self._api_client.get_product_groups()
+    def product_groups(self, query_filters: List[str] = None) -&gt; List[Group]:
+        raw_groups = self._api_client.get_product_groups(query_filters)
         return [Group(resp) for resp in raw_groups]
 
     def add_product_pic(self, product_id: int, pic_path: str):
@@ -309,8 +331,23 @@ class Grocy(object):
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
 
-    def tasks(self) -&gt; List[Task]:
-        raw_tasks = self._api_client.get_tasks()
+    def get_system_info(self) -&gt; SystemInfo:
+        raw_system_info = self._api_client.get_system_info()
+        if raw_system_info:
+            return SystemInfo(raw_system_info)
+
+    def get_system_time(self) -&gt; SystemTime:
+        raw_system_time = self._api_client.get_system_time()
+        if raw_system_time:
+            return SystemTime(raw_system_time)
+
+    def get_system_config(self) -&gt; SystemConfig:
+        raw_system_config = self._api_client.get_system_config()
+        if raw_system_config:
+            return SystemConfig(raw_system_config)
+
+    def tasks(self, query_filters: List[str] = None) -&gt; List[Task]:
+        raw_tasks = self._api_client.get_tasks(query_filters)
         return [Task(task) for task in raw_tasks]
 
     def task(self, task_id: int) -&gt; Task:
@@ -320,8 +357,10 @@ class Grocy(object):
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
 
-    def meal_plan(self, get_details: bool = False) -&gt; List[MealPlanItem]:
-        raw_meal_plan = self._api_client.get_meal_plan()
+    def meal_plan(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan(query_filters)
         meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
 
         if get_details:
@@ -334,9 +373,16 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def batteries(self) -&gt; List[Battery]:
-        raw_batteries = self._api_client.get_batteries()
-        return [Battery(bat) for bat in raw_batteries]
+    def batteries(
+        self, query_filters: List[str] = None, get_details: bool = False
+    ) -&gt; List[Battery]:
+        raw_batteries = self._api_client.get_batteries(query_filters)
+        batteries = [Battery(bat) for bat in raw_batteries]
+
+        if get_details:
+            for item in batteries:
+                item.get_details(self._api_client)
+        return batteries
 
     def battery(self, battery_id: int) -&gt; Battery:
         battery = self._api_client.get_battery(battery_id)
@@ -357,11 +403,17 @@ class Grocy(object):
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
 
-    def get_generic_objects_for_type(self, entity_type: EntityType):
-        return self._api_client.get_generic_objects_for_type(entity_type.value)
+    def get_generic_objects_for_type(
+        self, entity_type: EntityType, query_filters: List[str] = None
+    ):
+        return self._api_client.get_generic_objects_for_type(
+            entity_type.value, query_filters
+        )
 
-    def meal_plan_sections(self) -&gt; List[MealPlanSection]:
-        raw_sections = self._api_client.get_meal_plan_sections()
+    def meal_plan_sections(
+        self, query_filters: List[str] = None
+    ) -&gt; List[MealPlanSection]:
+        raw_sections = self._api_client.get_meal_plan_sections(query_filters)
         return [MealPlanSection(section) for section in raw_sections]
 
     def meal_plan_section(self, meal_plan_section_id: int) -&gt; MealPlanSection:
@@ -478,8 +530,10 @@ class Grocy(object):
         product_datas = [ProductData(**product) for product in raw_products]
         return [Product(product) for product in product_datas]
 
-    def chores(self, get_details: bool = False) -&gt; List[Chore]:
-        raw_chores = self._api_client.get_chores()
+    def chores(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[Chore]:
+        raw_chores = self._api_client.get_chores(query_filters)
         chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
@@ -492,8 +546,9 @@ class Grocy(object):
         chore_id: int,
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
+        skipped: bool = False,
     ):
-        return self._api_client.execute_chore(chore_id, done_by, tracked_time)
+        return self._api_client.execute_chore(chore_id, done_by, tracked_time, skipped)
 
     def chore(self, chore_id: int) -&gt; Chore:
         resp = self._api_client.get_chore(chore_id)
@@ -521,6 +576,22 @@ class Grocy(object):
     ):
         return self._api_client.consume_product(
             product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
+        )
+
+    def consume_recipe(
+        self,
+        recipe_id: int,
+    ):
+        return self._api_client.consume_recipe(recipe_id)
+
+    def open_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        allow_subproduct_substitution: bool = False,
+    ):
+        return self._api_client.open_product(
+            product_id, amount, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -600,8 +671,10 @@ class Grocy(object):
             product.get_details(self._api_client)
         return product
 
-    def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
-        raw_shoppinglist = self._api_client.get_shopping_list()
+    def shopping_list(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list(query_filters)
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -633,8 +706,8 @@ class Grocy(object):
             product_id, shopping_list_id, amount
         )
 
-    def product_groups(self) -&gt; List[Group]:
-        raw_groups = self._api_client.get_product_groups()
+    def product_groups(self, query_filters: List[str] = None) -&gt; List[Group]:
+        raw_groups = self._api_client.get_product_groups(query_filters)
         return [Group(resp) for resp in raw_groups]
 
     def add_product_pic(self, product_id: int, pic_path: str):
@@ -650,8 +723,23 @@ class Grocy(object):
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
 
-    def tasks(self) -&gt; List[Task]:
-        raw_tasks = self._api_client.get_tasks()
+    def get_system_info(self) -&gt; SystemInfo:
+        raw_system_info = self._api_client.get_system_info()
+        if raw_system_info:
+            return SystemInfo(raw_system_info)
+
+    def get_system_time(self) -&gt; SystemTime:
+        raw_system_time = self._api_client.get_system_time()
+        if raw_system_time:
+            return SystemTime(raw_system_time)
+
+    def get_system_config(self) -&gt; SystemConfig:
+        raw_system_config = self._api_client.get_system_config()
+        if raw_system_config:
+            return SystemConfig(raw_system_config)
+
+    def tasks(self, query_filters: List[str] = None) -&gt; List[Task]:
+        raw_tasks = self._api_client.get_tasks(query_filters)
         return [Task(task) for task in raw_tasks]
 
     def task(self, task_id: int) -&gt; Task:
@@ -661,8 +749,10 @@ class Grocy(object):
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
 
-    def meal_plan(self, get_details: bool = False) -&gt; List[MealPlanItem]:
-        raw_meal_plan = self._api_client.get_meal_plan()
+    def meal_plan(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -&gt; List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan(query_filters)
         meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
 
         if get_details:
@@ -675,9 +765,16 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def batteries(self) -&gt; List[Battery]:
-        raw_batteries = self._api_client.get_batteries()
-        return [Battery(bat) for bat in raw_batteries]
+    def batteries(
+        self, query_filters: List[str] = None, get_details: bool = False
+    ) -&gt; List[Battery]:
+        raw_batteries = self._api_client.get_batteries(query_filters)
+        batteries = [Battery(bat) for bat in raw_batteries]
+
+        if get_details:
+            for item in batteries:
+                item.get_details(self._api_client)
+        return batteries
 
     def battery(self, battery_id: int) -&gt; Battery:
         battery = self._api_client.get_battery(battery_id)
@@ -698,11 +795,17 @@ class Grocy(object):
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
 
-    def get_generic_objects_for_type(self, entity_type: EntityType):
-        return self._api_client.get_generic_objects_for_type(entity_type.value)
+    def get_generic_objects_for_type(
+        self, entity_type: EntityType, query_filters: List[str] = None
+    ):
+        return self._api_client.get_generic_objects_for_type(
+            entity_type.value, query_filters
+        )
 
-    def meal_plan_sections(self) -&gt; List[MealPlanSection]:
-        raw_sections = self._api_client.get_meal_plan_sections()
+    def meal_plan_sections(
+        self, query_filters: List[str] = None
+    ) -&gt; List[MealPlanSection]:
+        raw_sections = self._api_client.get_meal_plan_sections(query_filters)
         return [MealPlanSection(section) for section in raw_sections]
 
     def meal_plan_section(self, meal_plan_section_id: int) -&gt; MealPlanSection:
@@ -851,7 +954,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.batteries"><code class="name flex">
-<span>def <span class="ident">batteries</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.battery.Battery" href="data_models/battery.html#pygrocy.data_models.battery.Battery">Battery</a>]</span>
+<span>def <span class="ident">batteries</span></span>(<span>self, query_filters: List[str] = None, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.battery.Battery" href="data_models/battery.html#pygrocy.data_models.battery.Battery">Battery</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -859,9 +962,16 @@ class Grocy(object):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def batteries(self) -&gt; List[Battery]:
-    raw_batteries = self._api_client.get_batteries()
-    return [Battery(bat) for bat in raw_batteries]</code></pre>
+<pre><code class="python">def batteries(
+    self, query_filters: List[str] = None, get_details: bool = False
+) -&gt; List[Battery]:
+    raw_batteries = self._api_client.get_batteries(query_filters)
+    batteries = [Battery(bat) for bat in raw_batteries]
+
+    if get_details:
+        for item in batteries:
+            item.get_details(self._api_client)
+    return batteries</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.battery"><code class="name flex">
@@ -880,7 +990,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431625))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 7, 24, 16, 53, 9, 768459))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -907,7 +1017,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.chores"><code class="name flex">
-<span>def <span class="ident">chores</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.chore.Chore" href="data_models/chore.html#pygrocy.data_models.chore.Chore">Chore</a>]</span>
+<span>def <span class="ident">chores</span></span>(<span>self, get_details: bool = False, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.chore.Chore" href="data_models/chore.html#pygrocy.data_models.chore.Chore">Chore</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -915,8 +1025,10 @@ class Grocy(object):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def chores(self, get_details: bool = False) -&gt; List[Chore]:
-    raw_chores = self._api_client.get_chores()
+<pre><code class="python">def chores(
+    self, get_details: bool = False, query_filters: List[str] = None
+) -&gt; List[Chore]:
+    raw_chores = self._api_client.get_chores(query_filters)
     chores = [Chore(chore) for chore in raw_chores]
 
     if get_details:
@@ -939,7 +1051,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431535))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id, done_time: datetime.datetime = datetime.datetime(2022, 7, 24, 16, 53, 9, 768438))</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -998,6 +1110,22 @@ class Grocy(object):
     return product</code></pre>
 </details>
 </dd>
+<dt id="pygrocy.grocy.Grocy.consume_recipe"><code class="name flex">
+<span>def <span class="ident">consume_recipe</span></span>(<span>self, recipe_id: int)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def consume_recipe(
+    self,
+    recipe_id: int,
+):
+    return self._api_client.consume_recipe(recipe_id)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.grocy.Grocy.delete_generic"><code class="name flex">
 <span>def <span class="ident">delete_generic</span></span>(<span>self, entity_type: <a title="pygrocy.data_models.generic.EntityType" href="data_models/generic.html#pygrocy.data_models.generic.EntityType">EntityType</a>, object_id: int)</span>
 </code></dt>
@@ -1031,7 +1159,7 @@ class Grocy(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 6, 5, 8, 33, 8, 431486))</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 7, 24, 16, 53, 9, 768374), skipped: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1044,8 +1172,9 @@ class Grocy(object):
     chore_id: int,
     done_by: int = None,
     tracked_time: datetime = datetime.now(),
+    skipped: bool = False,
 ):
-    return self._api_client.execute_chore(chore_id, done_by, tracked_time)</code></pre>
+    return self._api_client.execute_chore(chore_id, done_by, tracked_time, skipped)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.expired_products"><code class="name flex">
@@ -1084,7 +1213,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.get_generic_objects_for_type"><code class="name flex">
-<span>def <span class="ident">get_generic_objects_for_type</span></span>(<span>self, entity_type: <a title="pygrocy.data_models.generic.EntityType" href="data_models/generic.html#pygrocy.data_models.generic.EntityType">EntityType</a>)</span>
+<span>def <span class="ident">get_generic_objects_for_type</span></span>(<span>self, entity_type: <a title="pygrocy.data_models.generic.EntityType" href="data_models/generic.html#pygrocy.data_models.generic.EntityType">EntityType</a>, query_filters: List[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1092,8 +1221,12 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_generic_objects_for_type(self, entity_type: EntityType):
-    return self._api_client.get_generic_objects_for_type(entity_type.value)</code></pre>
+<pre><code class="python">def get_generic_objects_for_type(
+    self, entity_type: EntityType, query_filters: List[str] = None
+):
+    return self._api_client.get_generic_objects_for_type(
+        entity_type.value, query_filters
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.get_last_db_changed"><code class="name flex">
@@ -1107,6 +1240,51 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </summary>
 <pre><code class="python">def get_last_db_changed(self):
     return self._api_client.get_last_db_changed()</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.get_system_config"><code class="name flex">
+<span>def <span class="ident">get_system_config</span></span>(<span>self) ‑> <a title="pygrocy.data_models.system.SystemConfig" href="data_models/system.html#pygrocy.data_models.system.SystemConfig">SystemConfig</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_system_config(self) -&gt; SystemConfig:
+    raw_system_config = self._api_client.get_system_config()
+    if raw_system_config:
+        return SystemConfig(raw_system_config)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.get_system_info"><code class="name flex">
+<span>def <span class="ident">get_system_info</span></span>(<span>self) ‑> <a title="pygrocy.data_models.system.SystemInfo" href="data_models/system.html#pygrocy.data_models.system.SystemInfo">SystemInfo</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_system_info(self) -&gt; SystemInfo:
+    raw_system_info = self._api_client.get_system_info()
+    if raw_system_info:
+        return SystemInfo(raw_system_info)</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.get_system_time"><code class="name flex">
+<span>def <span class="ident">get_system_time</span></span>(<span>self) ‑> <a title="pygrocy.data_models.system.SystemTime" href="data_models/system.html#pygrocy.data_models.system.SystemTime">SystemTime</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_system_time(self) -&gt; SystemTime:
+    raw_system_time = self._api_client.get_system_time()
+    if raw_system_time:
+        return SystemTime(raw_system_time)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.get_userfields"><code class="name flex">
@@ -1187,7 +1365,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.meal_plan"><code class="name flex">
-<span>def <span class="ident">meal_plan</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.meal_items.MealPlanItem" href="data_models/meal_items.html#pygrocy.data_models.meal_items.MealPlanItem">MealPlanItem</a>]</span>
+<span>def <span class="ident">meal_plan</span></span>(<span>self, get_details: bool = False, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.meal_items.MealPlanItem" href="data_models/meal_items.html#pygrocy.data_models.meal_items.MealPlanItem">MealPlanItem</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1195,8 +1373,10 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def meal_plan(self, get_details: bool = False) -&gt; List[MealPlanItem]:
-    raw_meal_plan = self._api_client.get_meal_plan()
+<pre><code class="python">def meal_plan(
+    self, get_details: bool = False, query_filters: List[str] = None
+) -&gt; List[MealPlanItem]:
+    raw_meal_plan = self._api_client.get_meal_plan(query_filters)
     meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
 
     if get_details:
@@ -1222,7 +1402,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.meal_plan_sections"><code class="name flex">
-<span>def <span class="ident">meal_plan_sections</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.meal_items.MealPlanSection" href="data_models/meal_items.html#pygrocy.data_models.meal_items.MealPlanSection">MealPlanSection</a>]</span>
+<span>def <span class="ident">meal_plan_sections</span></span>(<span>self, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.meal_items.MealPlanSection" href="data_models/meal_items.html#pygrocy.data_models.meal_items.MealPlanSection">MealPlanSection</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1230,8 +1410,10 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def meal_plan_sections(self) -&gt; List[MealPlanSection]:
-    raw_sections = self._api_client.get_meal_plan_sections()
+<pre><code class="python">def meal_plan_sections(
+    self, query_filters: List[str] = None
+) -&gt; List[MealPlanSection]:
+    raw_sections = self._api_client.get_meal_plan_sections(query_filters)
     return [MealPlanSection(section) for section in raw_sections]</code></pre>
 </details>
 </dd>
@@ -1252,6 +1434,26 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
         for item in missing_products:
             item.get_details(self._api_client)
     return missing_products</code></pre>
+</details>
+</dd>
+<dt id="pygrocy.grocy.Grocy.open_product"><code class="name flex">
+<span>def <span class="ident">open_product</span></span>(<span>self, product_id: int, amount: float = 1, allow_subproduct_substitution: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open_product(
+    self,
+    product_id: int,
+    amount: float = 1,
+    allow_subproduct_substitution: bool = False,
+):
+    return self._api_client.open_product(
+        product_id, amount, allow_subproduct_substitution
+    )</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.overdue_products"><code class="name flex">
@@ -1304,7 +1506,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.product_groups"><code class="name flex">
-<span>def <span class="ident">product_groups</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.product.Group" href="data_models/product.html#pygrocy.data_models.product.Group">Group</a>]</span>
+<span>def <span class="ident">product_groups</span></span>(<span>self, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.product.Group" href="data_models/product.html#pygrocy.data_models.product.Group">Group</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1312,8 +1514,8 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def product_groups(self) -&gt; List[Group]:
-    raw_groups = self._api_client.get_product_groups()
+<pre><code class="python">def product_groups(self, query_filters: List[str] = None) -&gt; List[Group]:
+    raw_groups = self._api_client.get_product_groups(query_filters)
     return [Group(resp) for resp in raw_groups]</code></pre>
 </details>
 </dd>
@@ -1363,7 +1565,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.shopping_list"><code class="name flex">
-<span>def <span class="ident">shopping_list</span></span>(<span>self, get_details: bool = False) ‑> List[<a title="pygrocy.data_models.product.ShoppingListProduct" href="data_models/product.html#pygrocy.data_models.product.ShoppingListProduct">ShoppingListProduct</a>]</span>
+<span>def <span class="ident">shopping_list</span></span>(<span>self, get_details: bool = False, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.product.ShoppingListProduct" href="data_models/product.html#pygrocy.data_models.product.ShoppingListProduct">ShoppingListProduct</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1371,8 +1573,10 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def shopping_list(self, get_details: bool = False) -&gt; List[ShoppingListProduct]:
-    raw_shoppinglist = self._api_client.get_shopping_list()
+<pre><code class="python">def shopping_list(
+    self, get_details: bool = False, query_filters: List[str] = None
+) -&gt; List[ShoppingListProduct]:
+    raw_shoppinglist = self._api_client.get_shopping_list(query_filters)
     shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
     if get_details:
@@ -1411,7 +1615,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 </details>
 </dd>
 <dt id="pygrocy.grocy.Grocy.tasks"><code class="name flex">
-<span>def <span class="ident">tasks</span></span>(<span>self) ‑> List[<a title="pygrocy.data_models.task.Task" href="data_models/task.html#pygrocy.data_models.task.Task">Task</a>]</span>
+<span>def <span class="ident">tasks</span></span>(<span>self, query_filters: List[str] = None) ‑> List[<a title="pygrocy.data_models.task.Task" href="data_models/task.html#pygrocy.data_models.task.Task">Task</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1419,8 +1623,8 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def tasks(self) -&gt; List[Task]:
-    raw_tasks = self._api_client.get_tasks()
+<pre><code class="python">def tasks(self, query_filters: List[str] = None) -&gt; List[Task]:
+    raw_tasks = self._api_client.get_tasks(query_filters)
     return [Task(task) for task in raw_tasks]</code></pre>
 </details>
 </dd>
@@ -1505,6 +1709,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.complete_task" href="#pygrocy.grocy.Grocy.complete_task">complete_task</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.consume_product" href="#pygrocy.grocy.Grocy.consume_product">consume_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.consume_product_by_barcode" href="#pygrocy.grocy.Grocy.consume_product_by_barcode">consume_product_by_barcode</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.consume_recipe" href="#pygrocy.grocy.Grocy.consume_recipe">consume_recipe</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.delete_generic" href="#pygrocy.grocy.Grocy.delete_generic">delete_generic</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.due_products" href="#pygrocy.grocy.Grocy.due_products">due_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.execute_chore" href="#pygrocy.grocy.Grocy.execute_chore">execute_chore</a></code></li>
@@ -1512,6 +1717,9 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.expiring_products" href="#pygrocy.grocy.Grocy.expiring_products">expiring_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.get_generic_objects_for_type" href="#pygrocy.grocy.Grocy.get_generic_objects_for_type">get_generic_objects_for_type</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.get_last_db_changed" href="#pygrocy.grocy.Grocy.get_last_db_changed">get_last_db_changed</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.get_system_config" href="#pygrocy.grocy.Grocy.get_system_config">get_system_config</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.get_system_info" href="#pygrocy.grocy.Grocy.get_system_info">get_system_info</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.get_system_time" href="#pygrocy.grocy.Grocy.get_system_time">get_system_time</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.get_userfields" href="#pygrocy.grocy.Grocy.get_userfields">get_userfields</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.inventory_product" href="#pygrocy.grocy.Grocy.inventory_product">inventory_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.inventory_product_by_barcode" href="#pygrocy.grocy.Grocy.inventory_product_by_barcode">inventory_product_by_barcode</a></code></li>
@@ -1519,6 +1727,7 @@ def expiring_products(self, get_details: bool = False) -&gt; List[Product]:
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan_section" href="#pygrocy.grocy.Grocy.meal_plan_section">meal_plan_section</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.meal_plan_sections" href="#pygrocy.grocy.Grocy.meal_plan_sections">meal_plan_sections</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.missing_products" href="#pygrocy.grocy.Grocy.missing_products">missing_products</a></code></li>
+<li><code><a title="pygrocy.grocy.Grocy.open_product" href="#pygrocy.grocy.Grocy.open_product">open_product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.overdue_products" href="#pygrocy.grocy.Grocy.overdue_products">overdue_products</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product" href="#pygrocy.grocy.Grocy.product">product</a></code></li>
 <li><code><a title="pygrocy.grocy.Grocy.product_by_barcode" href="#pygrocy.grocy.Grocy.product_by_barcode">product_by_barcode</a></code></li>
