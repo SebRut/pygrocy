@@ -1,0 +1,218 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries
+  response:
+    body:
+      string: '[{"id":"1","battery_id":"1","last_tracked_time":"2022-07-17 21:19:14","next_estimated_charge_time":"2023-01-13
+        21:19:14"},{"id":"2","battery_id":"2","last_tracked_time":"2022-04-28 19:33:45","next_estimated_charge_time":"2999-12-31
+        23:59:59"},{"id":"3","battery_id":"3","last_tracked_time":"2022-04-13 19:33:45","next_estimated_charge_time":"2022-06-12
+        19:33:45"},{"id":"4","battery_id":"4","last_tracked_time":"2022-04-22 19:33:45","next_estimated_charge_time":"2022-06-21
+        19:33:45"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 17 Jul 2022 20:34:26 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '485'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries/1
+  response:
+    body:
+      string: '{"battery":{"id":"1","name":"Battery1","description":"Warranty ends
+        2023","used_in":"TV remote control","charge_interval_days":"180","row_created_timestamp":"2022-06-17
+        19:33:37","active":"1"},"last_charged":"2022-07-17 21:19:14","charge_cycles_count":7,"next_estimated_charge_time":"2023-01-13
+        21:19:14"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 17 Jul 2022 20:34:26 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '305'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries/2
+  response:
+    body:
+      string: '{"battery":{"id":"2","name":"Battery2","description":"Warranty ends
+        2022","used_in":"Alarm clock","charge_interval_days":"0","row_created_timestamp":"2022-06-17
+        19:33:37","active":"1"},"last_charged":"2022-04-28 19:33:45","charge_cycles_count":4,"next_estimated_charge_time":"2999-12-31
+        23:59:59"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 17 Jul 2022 20:34:26 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '297'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries/3
+  response:
+    body:
+      string: '{"battery":{"id":"3","name":"Battery3","description":"Warranty ends
+        2022","used_in":"Heat remote control","charge_interval_days":"60","row_created_timestamp":"2022-06-17
+        19:33:37","active":"1"},"last_charged":"2022-04-13 19:33:45","charge_cycles_count":1,"next_estimated_charge_time":"2022-06-12
+        19:33:45"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 17 Jul 2022 20:34:26 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '306'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/batteries/4
+  response:
+    body:
+      string: '{"battery":{"id":"4","name":"Battery4","description":"Warranty ends
+        2028","used_in":"Heat remote control","charge_interval_days":"60","row_created_timestamp":"2022-06-17
+        19:33:37","active":"1"},"last_charged":"2022-04-22 19:33:45","charge_cycles_count":1,"next_estimated_charge_time":"2022-06-21
+        19:33:45"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 17 Jul 2022 20:34:26 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '306'
+    status:
+      code: 200
+      message: OK
+version: 1

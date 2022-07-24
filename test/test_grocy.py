@@ -219,6 +219,18 @@ class TestGrocy(TestCase):
         self.assertRaises(GrocyError, self.grocy.consume_product, 1, 1.3)
 
     @pytest.mark.vcr
+    def test_consume_recipe_valid(self):
+        self.grocy.consume_recipe(5)
+
+    @pytest.mark.vcr
+    def test_consume_recipe_error(self):
+        with pytest.raises(GrocyError) as exc_info:
+            self.grocy.consume_recipe(4464)
+
+        error = exc_info.value
+        assert error.status_code == 400
+
+    @pytest.mark.vcr
     def test_inventory_product_valid(self):
         current_inventory = int(self.grocy.product(4).available_amount)
         new_amount = current_inventory + 10
@@ -301,12 +313,14 @@ class TestGrocy(TestCase):
     @responses.activate
     def test_execute_chore_valid(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=200)
-        self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test))
+        self.assertIsNone(self.grocy.execute_chore(1, 1, self.date_test, False))
 
     @responses.activate
     def test_execute_chore_error(self):
         responses.add(responses.POST, f"{self.base_url}/chores/1/execute", status=400)
-        self.assertRaises(GrocyError, self.grocy.execute_chore, 1, 1, self.date_test)
+        self.assertRaises(
+            GrocyError, self.grocy.execute_chore, 1, 1, self.date_test, False
+        )
 
     @responses.activate
     def test_get_meal_plan(self):

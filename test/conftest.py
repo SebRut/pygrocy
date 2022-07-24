@@ -1,4 +1,5 @@
 from test.test_const import CONST_BASE_URL, CONST_PORT, CONST_SSL
+from typing import List
 
 import pytest
 
@@ -18,4 +19,9 @@ def grocy_api_client(grocy):
 
 @pytest.fixture
 def vcr_config():
-    return {"record_mode": "once"}
+    yield {"record_mode": "once", "decode_compressed_response": True}
+
+
+@pytest.fixture
+def invalid_query_filter() -> List[str]:
+    yield ["invalid"]

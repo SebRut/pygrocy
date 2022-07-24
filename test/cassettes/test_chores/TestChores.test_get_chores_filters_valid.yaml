@@ -1,0 +1,89 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores?query%5B%5D=next_execution_assigned_to_user_id%3D1
+  response:
+    body:
+      string: '[{"id":"1","chore_id":"1","chore_name":"Change towels in the bathroom","last_tracked_time":"2022-06-17
+        00:00:00","next_estimated_execution_time":"2022-06-20 23:59:59","track_date_only":"1","next_execution_assigned_to_user_id":"1","is_rescheduled":"0","is_reassigned":"0"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 06 Jul 2022 18:52:58 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '272'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.0
+      accept:
+      - application/json
+    method: GET
+    uri: https://localhost/api/chores/1
+  response:
+    body:
+      string: '{"chore":{"id":"1","name":"Change towels in the bathroom","description":null,"period_type":"hourly","period_days":null,"row_created_timestamp":"2022-06-17
+        19:33:37","period_config":null,"track_date_only":"1","rollover":"0","assignment_type":"random","assignment_config":"1,2,3,4","next_execution_assigned_to_user_id":"1","consume_product_on_execution":"0","product_id":null,"product_amount":null,"period_interval":"72","active":"1","start_date":"2021-01-01","rescheduled_date":null,"rescheduled_next_execution_assigned_to_user_id":null},"last_tracked":"2022-06-17
+        00:00:00","tracked_count":20,"last_done_by":{"id":"4","username":"Demo User
+        4","first_name":null,"last_name":null,"row_created_timestamp":"2022-06-17
+        19:33:35","display_name":"Demo User 4","picture_file_name":null},"next_estimated_execution_time":"2022-06-20
+        23:59:59","next_execution_assigned_user":{"id":"1","username":"Demo User","first_name":null,"last_name":null,"row_created_timestamp":"2022-06-17
+        19:33:31","display_name":"Demo User","picture_file_name":null},"average_execution_frequency_hours":"81.8181818181818"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 06 Jul 2022 18:52:58 GMT
+      Server:
+      - nginx/1.22.0
+      Transfer-Encoding:
+      - chunked
+      X-Powered-By:
+      - PHP/8.0.20
+      content-length:
+      - '1086'
+    status:
+      code: 200
+      message: OK
+version: 1

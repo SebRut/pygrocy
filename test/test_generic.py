@@ -1,7 +1,7 @@
 import pytest
 
 from pygrocy.data_models.generic import EntityType
-from pygrocy.errors.grocy_error import GrocyError
+from pygrocy.errors import GrocyError
 
 
 class TestGeneric:
@@ -58,3 +58,24 @@ class TestGeneric:
 
         error = exc_info.value
         assert error.status_code == 404
+
+    @pytest.mark.vcr
+    def test_get_generic_objects_for_type_filters_valid(self, grocy):
+        query_filter = ["name=Walmart"]
+        shopping_locations = grocy.get_generic_objects_for_type(
+            EntityType.SHOPPING_LOCATIONS, query_filters=query_filter
+        )
+
+        assert len(shopping_locations) == 1
+
+    @pytest.mark.vcr
+    def test_get_generic_objects_for_type_filters_invalid(
+        self, grocy, invalid_query_filter
+    ):
+        with pytest.raises(GrocyError) as exc_info:
+            grocy.get_generic_objects_for_type(
+                EntityType.SHOPPING_LOCATIONS, query_filters=invalid_query_filter
+            )
+
+        error = exc_info.value
+        assert error.status_code == 500

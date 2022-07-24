@@ -10,6 +10,7 @@ from .data_models.chore import Chore
 from .data_models.generic import EntityType
 from .data_models.meal_items import MealPlanItem, MealPlanSection, RecipeItem
 from .data_models.product import Group, Product, ShoppingListProduct
+from .data_models.system import SystemConfig, SystemInfo, SystemTime
 from .data_models.task import Task
 from .data_models.user import User  # noqa: F401
 from .errors import GrocyError  # noqa: F401
@@ -109,8 +110,10 @@ class Grocy(object):
         product_datas = [ProductData(**product) for product in raw_products]
         return [Product(product) for product in product_datas]
 
-    def chores(self, get_details: bool = False) -> List[Chore]:
-        raw_chores = self._api_client.get_chores()
+    def chores(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[Chore]:
+        raw_chores = self._api_client.get_chores(query_filters)
         chores = [Chore(chore) for chore in raw_chores]
 
         if get_details:
@@ -123,8 +126,9 @@ class Grocy(object):
         chore_id: int,
         done_by: int = None,
         tracked_time: datetime = datetime.now(),
+        skipped: bool = False,
     ):
-        return self._api_client.execute_chore(chore_id, done_by, tracked_time)
+        return self._api_client.execute_chore(chore_id, done_by, tracked_time, skipped)
 
     def chore(self, chore_id: int) -> Chore:
         resp = self._api_client.get_chore(chore_id)
@@ -152,6 +156,22 @@ class Grocy(object):
     ):
         return self._api_client.consume_product(
             product_id, amount, spoiled, transaction_type, allow_subproduct_substitution
+        )
+
+    def consume_recipe(
+        self,
+        recipe_id: int,
+    ):
+        return self._api_client.consume_recipe(recipe_id)
+
+    def open_product(
+        self,
+        product_id: int,
+        amount: float = 1,
+        allow_subproduct_substitution: bool = False,
+    ):
+        return self._api_client.open_product(
+            product_id, amount, allow_subproduct_substitution
         )
 
     def inventory_product(
@@ -231,8 +251,10 @@ class Grocy(object):
             product.get_details(self._api_client)
         return product
 
-    def shopping_list(self, get_details: bool = False) -> List[ShoppingListProduct]:
-        raw_shoppinglist = self._api_client.get_shopping_list()
+    def shopping_list(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[ShoppingListProduct]:
+        raw_shoppinglist = self._api_client.get_shopping_list(query_filters)
         shopping_list = [ShoppingListProduct(resp) for resp in raw_shoppinglist]
 
         if get_details:
@@ -264,8 +286,8 @@ class Grocy(object):
             product_id, shopping_list_id, amount
         )
 
-    def product_groups(self) -> List[Group]:
-        raw_groups = self._api_client.get_product_groups()
+    def product_groups(self, query_filters: List[str] = None) -> List[Group]:
+        raw_groups = self._api_client.get_product_groups(query_filters)
         return [Group(resp) for resp in raw_groups]
 
     def add_product_pic(self, product_id: int, pic_path: str):
@@ -281,8 +303,23 @@ class Grocy(object):
     def get_last_db_changed(self):
         return self._api_client.get_last_db_changed()
 
-    def tasks(self) -> List[Task]:
-        raw_tasks = self._api_client.get_tasks()
+    def get_system_info(self) -> SystemInfo:
+        raw_system_info = self._api_client.get_system_info()
+        if raw_system_info:
+            return SystemInfo(raw_system_info)
+
+    def get_system_time(self) -> SystemTime:
+        raw_system_time = self._api_client.get_system_time()
+        if raw_system_time:
+            return SystemTime(raw_system_time)
+
+    def get_system_config(self) -> SystemConfig:
+        raw_system_config = self._api_client.get_system_config()
+        if raw_system_config:
+            return SystemConfig(raw_system_config)
+
+    def tasks(self, query_filters: List[str] = None) -> List[Task]:
+        raw_tasks = self._api_client.get_tasks(query_filters)
         return [Task(task) for task in raw_tasks]
 
     def task(self, task_id: int) -> Task:
@@ -292,8 +329,10 @@ class Grocy(object):
     def complete_task(self, task_id, done_time: datetime = datetime.now()):
         return self._api_client.complete_task(task_id, done_time)
 
-    def meal_plan(self, get_details: bool = False) -> List[MealPlanItem]:
-        raw_meal_plan = self._api_client.get_meal_plan()
+    def meal_plan(
+        self, get_details: bool = False, query_filters: List[str] = None
+    ) -> List[MealPlanItem]:
+        raw_meal_plan = self._api_client.get_meal_plan(query_filters)
         meal_plan = [MealPlanItem(data) for data in raw_meal_plan]
 
         if get_details:
@@ -306,9 +345,16 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def batteries(self) -> List[Battery]:
-        raw_batteries = self._api_client.get_batteries()
-        return [Battery(bat) for bat in raw_batteries]
+    def batteries(
+        self, query_filters: List[str] = None, get_details: bool = False
+    ) -> List[Battery]:
+        raw_batteries = self._api_client.get_batteries(query_filters)
+        batteries = [Battery(bat) for bat in raw_batteries]
+
+        if get_details:
+            for item in batteries:
+                item.get_details(self._api_client)
+        return batteries
 
     def battery(self, battery_id: int) -> Battery:
         battery = self._api_client.get_battery(battery_id)
@@ -329,11 +375,17 @@ class Grocy(object):
     def delete_generic(self, entity_type: EntityType, object_id: int):
         return self._api_client.delete_generic(entity_type, object_id)
 
-    def get_generic_objects_for_type(self, entity_type: EntityType):
-        return self._api_client.get_generic_objects_for_type(entity_type.value)
+    def get_generic_objects_for_type(
+        self, entity_type: EntityType, query_filters: List[str] = None
+    ):
+        return self._api_client.get_generic_objects_for_type(
+            entity_type.value, query_filters
+        )
 
-    def meal_plan_sections(self) -> List[MealPlanSection]:
-        raw_sections = self._api_client.get_meal_plan_sections()
+    def meal_plan_sections(
+        self, query_filters: List[str] = None
+    ) -> List[MealPlanSection]:
+        raw_sections = self._api_client.get_meal_plan_sections(query_filters)
         return [MealPlanSection(section) for section in raw_sections]
 
     def meal_plan_section(self, meal_plan_section_id: int) -> MealPlanSection:

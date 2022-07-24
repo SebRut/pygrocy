@@ -70,6 +70,10 @@ class Product(DataModel):
         self._is_partly_in_stock = None
 
         self._available_amount = None
+        self._amount_aggregated = None
+        self._amount_opened = None
+        self._amount_opened_aggregated = None
+        self._is_aggregated_amount = None
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
@@ -81,6 +85,10 @@ class Product(DataModel):
     def _init_from_CurrentStockResponse(self, response: CurrentStockResponse):
         self._id = response.product_id
         self._available_amount = response.amount
+        self._amount_aggregated = response.amount_aggregated
+        self._amount_opened = response.amount_opened
+        self._amount_opened_aggregated = response.amount_opened_aggregated
+        self._is_aggregated_amount = response.is_aggregated_amount
         self._best_before_date = response.best_before_date
 
         if response.product:
@@ -135,6 +143,22 @@ class Product(DataModel):
     @property
     def available_amount(self) -> float:
         return self._available_amount
+
+    @property
+    def amount_aggregated(self) -> float:
+        return self._amount_aggregated
+
+    @property
+    def amount_opened(self) -> float:
+        return self._amount_opened
+
+    @property
+    def amount_opened_aggregated(self) -> float:
+        return self._amount_opened_aggregated
+
+    @property
+    def is_aggregated_amount(self) -> bool:
+        return self._is_aggregated_amount
 
     @property
     def best_before_date(self) -> datetime.date:
