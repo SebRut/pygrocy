@@ -345,9 +345,16 @@ class Grocy(object):
         if recipe:
             return RecipeItem(recipe)
 
-    def batteries(self, query_filters: List[str] = None) -> List[Battery]:
+    def batteries(
+        self, query_filters: List[str] = None, get_details: bool = False
+    ) -> List[Battery]:
         raw_batteries = self._api_client.get_batteries(query_filters)
-        return [Battery(bat) for bat in raw_batteries]
+        batteries = [Battery(bat) for bat in raw_batteries]
+
+        if get_details:
+            for item in batteries:
+                item.get_details(self._api_client)
+        return batteries
 
     def battery(self, battery_id: int) -> Battery:
         battery = self._api_client.get_battery(battery_id)
