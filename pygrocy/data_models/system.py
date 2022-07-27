@@ -78,10 +78,12 @@ class SystemConfig(DataModel):
         self._locale = system_config_dto.locale
         self._currency = system_config_dto.currency
 
-        self._enabled_features = []
-        for feature, value in system_config_dto.feature_flags.items():
-            if bool(value):
-                self._enabled_features.append(feature)
+        self._enabled_features = [
+            feature
+            for feature, value in system_config_dto.feature_flags.items()
+            if value
+            not in (False, "0")  # The default is enabled, disabled can be False or "0"
+        ]
 
     @property
     def username(self) -> str:
