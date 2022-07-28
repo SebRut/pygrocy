@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.4.1](https://github.com/SebRut/pygrocy/tree/v1.4.1) (2022-07-28)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.0...v1.4.1)
+
+**Merged pull requests:**
+
+- Fix enabled features lookup [\#248](https://github.com/SebRut/pygrocy/pull/248) ([marcelvriend](https://github.com/marcelvriend))
+
 ## [v1.4.0](https://github.com/SebRut/pygrocy/tree/v1.4.0) (2022-07-24)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.3.0...v1.4.0)
