@@ -100,3 +100,4 @@ pygrocy.egg-info/
 
 .tox/
 .coverage
+dist/
