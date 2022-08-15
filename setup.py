@@ -16,9 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "requests",
-        "iso8601>=0.1.16,<1.1.0",
-        "pytz>=2021.1,<2023.0",
-        "tzlocal>=2.1,<5.0",
+        "backports.zoneinfo",  # backports can be removed when python 3.8 support is dropped
         "deprecation~=2.1.0",
         "pydantic>=1.8.2,<1.10.0",
     ],

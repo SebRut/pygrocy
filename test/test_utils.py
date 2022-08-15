@@ -1,12 +1,17 @@
 from datetime import datetime
-from unittest import TestCase
+
+try:
+    import zoneinfo
+except ImportError:
+    # backports can be removed when python 3.8 support is dropped
+    from backports import zoneinfo
 
 import pygrocy.utils as utils
 
 
-class TestUtils(TestCase):
+class TestUtils:
     def test_parse_date_valid(self):
-        date_str = "2019-05-04T11:31:04.563Z"
+        date_str = "2022-07-10 21:10:53"
         date_obj = utils.parse_date(date_str)
 
         assert isinstance(date_obj, datetime)
@@ -58,3 +63,37 @@ class TestUtils(TestCase):
         float_number = utils.parse_float(float_str, -1)
 
         assert float_number == -1
+
+    def test_localize_datetime_input_timezone_unaware(self):
+        date = datetime(2022, 7, 10, 21, 17, 34, 633809, tzinfo=None)
+
+        localized_datetime = utils.localize_datetime(date)
+
+        assert localized_datetime == datetime(
+            2022, 7, 10, 21, 17, 34, 633809, tzinfo=zoneinfo.ZoneInfo("localtime")
+        )
+
+    def test_localize_datetime_input_timezone_aware(self):
+        date = datetime(
+            2022,
+            7,
+            10,
+            13,
+            17,
+            34,
+            633809,
+            tzinfo=zoneinfo.ZoneInfo("America/Los_Angeles"),
+        )
+
+        localized_datetime = utils.localize_datetime(date)
+
+        assert localized_datetime == datetime(
+            2022,
+            7,
+            10,
+            13,
+            17,
+            34,
+            633809,
+            tzinfo=zoneinfo.ZoneInfo("America/Los_Angeles"),
+        )
