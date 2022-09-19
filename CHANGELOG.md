@@ -1,12 +1,22 @@
 # Changelog
 
-## [v1.4.1](https://github.com/SebRut/pygrocy/tree/v1.4.1) (2022-07-28)
+## [v1.5.0](https://github.com/SebRut/pygrocy/tree/v1.5.0) (2022-09-19)
 
-[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.0...v1.4.1)
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.1...v1.5.0)
+
+**Closed issues:**
+
+- Update pydantic requirements from 1.10.0 to 1.10.2 [\#252](https://github.com/SebRut/pygrocy/issues/252)
 
 **Merged pull requests:**
 
+- Update pydantic requirement from \<1.10.0,\>=1.8.2 to \>=1.8.2,\<1.11.0 [\#251](https://github.com/SebRut/pygrocy/pull/251) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Fix tzlocal dependency causing an exception [\#250](https://github.com/SebRut/pygrocy/pull/250) ([marcelvriend](https://github.com/marcelvriend))
 - Fix enabled features lookup [\#248](https://github.com/SebRut/pygrocy/pull/248) ([marcelvriend](https://github.com/marcelvriend))
+
+## [v1.4.1](https://github.com/SebRut/pygrocy/tree/v1.4.1) (2022-07-28)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.0...v1.4.1)
 
 ## [v1.4.0](https://github.com/SebRut/pygrocy/tree/v1.4.0) (2022-07-24)
 

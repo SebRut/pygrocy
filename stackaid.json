@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "dependencies": [
+        {
+            "source": "https://github.com/psf/requests"
+        },
+        {
+            "source": "https://github.com/pydantic/pydantic"
+        },
+        {
+            "source": "https://github.com/tox-dev/tox"
+        }
+    ]
+}
