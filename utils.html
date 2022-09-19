@@ -28,15 +28,11 @@
 </summary>
 <pre><code class="python">from datetime import datetime
 
-import iso8601
-import pytz
-from tzlocal import get_localzone
-
 
 def parse_date(input_value):
     if input_value == &#34;&#34; or input_value is None:
         return None
-    return iso8601.parse_date(input_value)
+    return datetime.fromisoformat(input_value)
 
 
 def parse_int(input_value, default_value=None):
@@ -68,11 +64,7 @@ def parse_bool_int(input_value):
 
 
 def localize_datetime(timestamp: datetime) -&gt; datetime:
-    if timestamp.tzinfo is not None:
-        return timestamp
-
-    local_tz = get_localzone()
-    return local_tz.localize(timestamp).astimezone(pytz.utc)</code></pre>
+    return timestamp.astimezone()</code></pre>
 </details>
 </section>
 <section>
@@ -92,11 +84,7 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def localize_datetime(timestamp: datetime) -&gt; datetime:
-    if timestamp.tzinfo is not None:
-        return timestamp
-
-    local_tz = get_localzone()
-    return local_tz.localize(timestamp).astimezone(pytz.utc)</code></pre>
+    return timestamp.astimezone()</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.utils.parse_bool_int"><code class="name flex">
@@ -130,7 +118,7 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <pre><code class="python">def parse_date(input_value):
     if input_value == &#34;&#34; or input_value is None:
         return None
-    return iso8601.parse_date(input_value)</code></pre>
+    return datetime.fromisoformat(input_value)</code></pre>
 </details>
 </dd>
 <dt id="pygrocy.utils.parse_float"><code class="name flex">
