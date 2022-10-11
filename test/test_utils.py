@@ -97,3 +97,9 @@ class TestUtils:
             633809,
             tzinfo=zoneinfo.ZoneInfo("America/Los_Angeles"),
         )
+
+    def test_grocy_datetime_str(self):
+        date = datetime(2022, 7, 10, 21, 17, 34, 633809, tzinfo=None)
+        date_str = utils.grocy_datetime_str(date)
+
+        assert date_str == "2022-07-10 21:17:34"
