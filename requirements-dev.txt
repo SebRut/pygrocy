@@ -1,4 +1,4 @@
-responses~=0.21.0
+responses~=0.22.0
 pre-commit
 isort
 pytest
