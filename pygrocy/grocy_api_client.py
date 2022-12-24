@@ -91,7 +91,7 @@ class ProductData(BaseModel):
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
-    qu_factor_purchase_to_stock: float
+    qu_factor_purchase_to_stock: Optional[float] = None
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
@@ -100,6 +100,9 @@ class ProductData(BaseModel):
 
     location_id_validator = _field_not_empty_validator("location_id")
     product_group_id_validator = _field_not_empty_validator("product_group_id")
+    qu_factor_purchase_to_stock_validator = _field_not_empty_validator(
+        "qu_factor_purchase_to_stock"
+    )
 
 
 class ChoreData(BaseModel):
