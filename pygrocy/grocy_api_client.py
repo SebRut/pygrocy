@@ -99,7 +99,6 @@ class ProductData(BaseModel):
 
     location_id_validator = _field_not_empty_validator("location_id")
     product_group_id_validator = _field_not_empty_validator("product_group_id")
-    )
 
 
 class ChoreData(BaseModel):
