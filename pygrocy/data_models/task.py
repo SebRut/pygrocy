@@ -32,7 +32,6 @@ class TaskCategory(DataModel):
 
 class Task(DataModel):
     def __init__(self, response: TaskResponse):
-
         self._id = response.id
         self._name = response.name
         self._description = response.description
