@@ -64,7 +64,13 @@ def parse_bool_int(input_value):
 
 
 def localize_datetime(timestamp: datetime) -&gt; datetime:
-    return timestamp.astimezone()</code></pre>
+    return timestamp.astimezone()
+
+
+def grocy_datetime_str(timestamp: datetime) -&gt; str:
+    if timestamp is None:
+        return &#34;&#34;
+    return timestamp.strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -74,6 +80,21 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="pygrocy.utils.grocy_datetime_str"><code class="name flex">
+<span>def <span class="ident">grocy_datetime_str</span></span>(<span>timestamp: datetime.datetime) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grocy_datetime_str(timestamp: datetime) -&gt; str:
+    if timestamp is None:
+        return &#34;&#34;
+    return timestamp.strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)</code></pre>
+</details>
+</dd>
 <dt id="pygrocy.utils.localize_datetime"><code class="name flex">
 <span>def <span class="ident">localize_datetime</span></span>(<span>timestamp: datetime.datetime) ‑> datetime.datetime</span>
 </code></dt>
@@ -174,7 +195,8 @@ def localize_datetime(timestamp: datetime) -&gt; datetime:
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="pygrocy.utils.grocy_datetime_str" href="#pygrocy.utils.grocy_datetime_str">grocy_datetime_str</a></code></li>
 <li><code><a title="pygrocy.utils.localize_datetime" href="#pygrocy.utils.localize_datetime">localize_datetime</a></code></li>
 <li><code><a title="pygrocy.utils.parse_bool_int" href="#pygrocy.utils.parse_bool_int">parse_bool_int</a></code></li>
 <li><code><a title="pygrocy.utils.parse_date" href="#pygrocy.utils.parse_date">parse_date</a></code></li>

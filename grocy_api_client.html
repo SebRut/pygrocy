@@ -39,7 +39,7 @@ from pydantic import BaseModel, Extra, Field, root_validator, validator
 from pydantic.schema import date
 
 from pygrocy import EntityType
-from pygrocy.utils import localize_datetime, parse_date
+from pygrocy.utils import grocy_datetime_str, localize_datetime, parse_date
 
 from .errors import GrocyError
 
@@ -119,7 +119,6 @@ class ProductData(BaseModel):
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
-    qu_factor_purchase_to_stock: float
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
@@ -481,13 +480,16 @@ class GrocyApiClient(object):
         self,
         chore_id: int,
         done_by: int = None,
-        tracked_time: datetime = datetime.now(),
+        tracked_time: datetime = None,
         skipped: bool = False,
     ):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
 
         data = {
-            &#34;tracked_time&#34;: localized_tracked_time.isoformat(),
+            &#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time),
             &#34;skipped&#34;: skipped,
         }
 
@@ -761,12 +763,15 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(url)
         return TaskResponse(**parsed_json)
 
-    def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
+    def complete_task(self, task_id: int, done_time: datetime = None):
         url = f&#34;tasks/{task_id}/complete&#34;
+
+        if done_time is None:
+            done_time = datetime.now()
 
         localized_done_time = localize_datetime(done_time)
 
-        data = {&#34;done_time&#34;: localized_done_time.isoformat()}
+        data = {&#34;done_time&#34;: grocy_datetime_str(localized_done_time)}
         self._do_post_request(url, data)
 
     def get_meal_plan(self, query_filters: List[str] = None) -&gt; List[MealPlanResponse]:
@@ -793,9 +798,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return BatteryDetailsResponse(**parsed_json)
 
-    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    def charge_battery(self, battery_id: int, tracked_time: datetime = None):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
-        data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+        data = {&#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time)}
 
         return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)
 
@@ -1439,13 +1447,16 @@ class GrocyApiClient(object):
         self,
         chore_id: int,
         done_by: int = None,
-        tracked_time: datetime = datetime.now(),
+        tracked_time: datetime = None,
         skipped: bool = False,
     ):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
 
         data = {
-            &#34;tracked_time&#34;: localized_tracked_time.isoformat(),
+            &#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time),
             &#34;skipped&#34;: skipped,
         }
 
@@ -1719,12 +1730,15 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(url)
         return TaskResponse(**parsed_json)
 
-    def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
+    def complete_task(self, task_id: int, done_time: datetime = None):
         url = f&#34;tasks/{task_id}/complete&#34;
+
+        if done_time is None:
+            done_time = datetime.now()
 
         localized_done_time = localize_datetime(done_time)
 
-        data = {&#34;done_time&#34;: localized_done_time.isoformat()}
+        data = {&#34;done_time&#34;: grocy_datetime_str(localized_done_time)}
         self._do_post_request(url, data)
 
     def get_meal_plan(self, query_filters: List[str] = None) -&gt; List[MealPlanResponse]:
@@ -1751,9 +1765,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return BatteryDetailsResponse(**parsed_json)
 
-    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    def charge_battery(self, battery_id: int, tracked_time: datetime = None):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
-        data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+        data = {&#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time)}
 
         return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)
 
@@ -1926,7 +1943,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.charge_battery"><code class="name flex">
-<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = datetime.datetime(2022, 9, 19, 17, 29, 38, 478724))</span>
+<span>def <span class="ident">charge_battery</span></span>(<span>self, battery_id: int, tracked_time: datetime.datetime = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1934,9 +1951,12 @@ class GrocyApiClient(object):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+<pre><code class="python">def charge_battery(self, battery_id: int, tracked_time: datetime = None):
+    if tracked_time is None:
+        tracked_time = datetime.now()
+
     localized_tracked_time = localize_datetime(tracked_time)
-    data = {&#34;tracked_time&#34;: localized_tracked_time.isoformat()}
+    data = {&#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time)}
 
     return self._do_post_request(f&#34;batteries/{battery_id}/charge&#34;, data)</code></pre>
 </details>
@@ -1957,7 +1977,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.complete_task"><code class="name flex">
-<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = datetime.datetime(2022, 9, 19, 17, 29, 38, 478694))</span>
+<span>def <span class="ident">complete_task</span></span>(<span>self, task_id: int, done_time: datetime.datetime = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1965,12 +1985,15 @@ class GrocyApiClient(object):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
+<pre><code class="python">def complete_task(self, task_id: int, done_time: datetime = None):
     url = f&#34;tasks/{task_id}/complete&#34;
+
+    if done_time is None:
+        done_time = datetime.now()
 
     localized_done_time = localize_datetime(done_time)
 
-    data = {&#34;done_time&#34;: localized_done_time.isoformat()}
+    data = {&#34;done_time&#34;: grocy_datetime_str(localized_done_time)}
     self._do_post_request(url, data)</code></pre>
 </details>
 </dd>
@@ -2058,7 +2081,7 @@ class GrocyApiClient(object):
 </details>
 </dd>
 <dt id="pygrocy.grocy_api_client.GrocyApiClient.execute_chore"><code class="name flex">
-<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = datetime.datetime(2022, 9, 19, 17, 29, 38, 478629), skipped: bool = False)</span>
+<span>def <span class="ident">execute_chore</span></span>(<span>self, chore_id: int, done_by: int = None, tracked_time: datetime.datetime = None, skipped: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2070,13 +2093,16 @@ class GrocyApiClient(object):
     self,
     chore_id: int,
     done_by: int = None,
-    tracked_time: datetime = datetime.now(),
+    tracked_time: datetime = None,
     skipped: bool = False,
 ):
+    if tracked_time is None:
+        tracked_time = datetime.now()
+
     localized_tracked_time = localize_datetime(tracked_time)
 
     data = {
-        &#34;tracked_time&#34;: localized_tracked_time.isoformat(),
+        &#34;tracked_time&#34;: grocy_datetime_str(localized_tracked_time),
         &#34;skipped&#34;: skipped,
     }
 
@@ -2963,7 +2989,6 @@ class GrocyApiClient(object):
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
-    qu_factor_purchase_to_stock: float
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
@@ -3013,10 +3038,6 @@ class GrocyApiClient(object):
 <div class="desc"></div>
 </dd>
 <dt id="pygrocy.grocy_api_client.ProductData.product_group_id"><code class="name">var <span class="ident">product_group_id</span> : Union[int, NoneType]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock"><code class="name">var <span class="ident">qu_factor_purchase_to_stock</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -4066,7 +4087,6 @@ def feature_flags_root_validator(cls, fields: Dict[str, Any]) -&gt; Dict[str, An
 <li><code><a title="pygrocy.grocy_api_client.ProductData.picture_file_name" href="#pygrocy.grocy_api_client.ProductData.picture_file_name">picture_file_name</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id" href="#pygrocy.grocy_api_client.ProductData.product_group_id">product_group_id</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.product_group_id_validator" href="#pygrocy.grocy_api_client.ProductData.product_group_id_validator">product_group_id_validator</a></code></li>
-<li><code><a title="pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock" href="#pygrocy.grocy_api_client.ProductData.qu_factor_purchase_to_stock">qu_factor_purchase_to_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_purchase" href="#pygrocy.grocy_api_client.ProductData.qu_id_purchase">qu_id_purchase</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.qu_id_stock" href="#pygrocy.grocy_api_client.ProductData.qu_id_stock">qu_id_stock</a></code></li>
 <li><code><a title="pygrocy.grocy_api_client.ProductData.row_created_timestamp" href="#pygrocy.grocy_api_client.ProductData.row_created_timestamp">row_created_timestamp</a></code></li>

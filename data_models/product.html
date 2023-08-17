@@ -105,7 +105,6 @@ class Product(DataModel):
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
-        self._qu_factor_purchase_to_stock = None
 
         self._barcodes = []
         self._product_group_id = None
@@ -143,7 +142,6 @@ class Product(DataModel):
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
-        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
 
     def _init_from_StockLogResponse(self, response: StockLogResponse):
         self._id = response.product_id
@@ -211,10 +209,6 @@ class Product(DataModel):
     @property
     def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
         return self._default_quantity_unit_purchase
-
-    @property
-    def qu_factor_purchase_to_stock(self) -&gt; float:
-        return self._qu_factor_purchase_to_stock
 
 
 class Group(DataModel):
@@ -388,7 +382,6 @@ def name(self) -&gt; str:
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
-        self._qu_factor_purchase_to_stock = None
 
         self._barcodes = []
         self._product_group_id = None
@@ -426,7 +419,6 @@ def name(self) -&gt; str:
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
-        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
 
     def _init_from_StockLogResponse(self, response: StockLogResponse):
         self._id = response.product_id
@@ -493,11 +485,7 @@ def name(self) -&gt; str:
 
     @property
     def default_quantity_unit_purchase(self) -&gt; QuantityUnit:
-        return self._default_quantity_unit_purchase
-
-    @property
-    def qu_factor_purchase_to_stock(self) -&gt; float:
-        return self._qu_factor_purchase_to_stock</code></pre>
+        return self._default_quantity_unit_purchase</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -671,18 +659,6 @@ def product_barcodes(self) -&gt; List[ProductBarcode]:
 <pre><code class="python">@property
 def product_group_id(self) -&gt; int:
     return self._product_group_id</code></pre>
-</details>
-</dd>
-<dt id="pygrocy.data_models.product.Product.qu_factor_purchase_to_stock"><code class="name">var <span class="ident">qu_factor_purchase_to_stock</span> : float</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def qu_factor_purchase_to_stock(self) -&gt; float:
-    return self._qu_factor_purchase_to_stock</code></pre>
 </details>
 </dd>
 </dl>
@@ -1004,7 +980,6 @@ def product_id(self) -&gt; int:
 <li><code><a title="pygrocy.data_models.product.Product.name" href="#pygrocy.data_models.product.Product.name">name</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_barcodes" href="#pygrocy.data_models.product.Product.product_barcodes">product_barcodes</a></code></li>
 <li><code><a title="pygrocy.data_models.product.Product.product_group_id" href="#pygrocy.data_models.product.Product.product_group_id">product_group_id</a></code></li>
-<li><code><a title="pygrocy.data_models.product.Product.qu_factor_purchase_to_stock" href="#pygrocy.data_models.product.Product.qu_factor_purchase_to_stock">qu_factor_purchase_to_stock</a></code></li>
 </ul>
 </li>
 <li>
