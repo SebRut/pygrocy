@@ -77,7 +77,6 @@ class Product(DataModel):
         self._best_before_date = None
 
         self._default_quantity_unit_purchase = None
-        self._qu_factor_purchase_to_stock = None
 
         self._barcodes = []
         self._product_group_id = None
@@ -115,7 +114,6 @@ class Product(DataModel):
         self._id = product.id
         self._product_group_id = product.product_group_id
         self._name = product.name
-        self._qu_factor_purchase_to_stock = product.qu_factor_purchase_to_stock
 
     def _init_from_StockLogResponse(self, response: StockLogResponse):
         self._id = response.product_id
@@ -183,10 +181,6 @@ class Product(DataModel):
     @property
     def default_quantity_unit_purchase(self) -> QuantityUnit:
         return self._default_quantity_unit_purchase
-
-    @property
-    def qu_factor_purchase_to_stock(self) -> float:
-        return self._qu_factor_purchase_to_stock
 
 
 class Group(DataModel):

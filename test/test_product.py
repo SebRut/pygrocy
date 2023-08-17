@@ -23,7 +23,6 @@ class TestProduct:
         assert product.name == "Gulash soup"
         assert product.available_amount == 5
         assert product.product_group_id == 3
-        assert product.qu_factor_purchase_to_stock == 1.0
         assert product.default_quantity_unit_purchase.id == 5
         assert product.default_quantity_unit_purchase.name == "Tin"
         assert product.default_quantity_unit_purchase.description is None

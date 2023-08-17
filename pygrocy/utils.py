@@ -37,3 +37,9 @@ def parse_bool_int(input_value):
 
 def localize_datetime(timestamp: datetime) -> datetime:
     return timestamp.astimezone()
+
+
+def grocy_datetime_str(timestamp: datetime) -> str:
+    if timestamp is None:
+        return ""
+    return timestamp.strftime("%Y-%m-%d %H:%M:%S")

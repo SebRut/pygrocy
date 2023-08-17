@@ -125,7 +125,7 @@ class Grocy(object):
         self,
         chore_id: int,
         done_by: int = None,
-        tracked_time: datetime = datetime.now(),
+        tracked_time: datetime = None,
         skipped: bool = False,
     ):
         return self._api_client.execute_chore(chore_id, done_by, tracked_time, skipped)
@@ -326,7 +326,7 @@ class Grocy(object):
         resp = self._api_client.get_task(task_id)
         return Task(resp)
 
-    def complete_task(self, task_id, done_time: datetime = datetime.now()):
+    def complete_task(self, task_id, done_time: datetime = None):
         return self._api_client.complete_task(task_id, done_time)
 
     def meal_plan(
@@ -361,7 +361,7 @@ class Grocy(object):
         if battery:
             return Battery(battery)
 
-    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    def charge_battery(self, battery_id: int, tracked_time: datetime = None):
         return self._api_client.charge_battery(battery_id, tracked_time)
 
     def add_generic(self, entity_type: EntityType, data):

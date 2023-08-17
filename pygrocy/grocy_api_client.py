@@ -11,7 +11,7 @@ from pydantic import BaseModel, Extra, Field, root_validator, validator
 from pydantic.schema import date
 
 from pygrocy import EntityType
-from pygrocy.utils import localize_datetime, parse_date
+from pygrocy.utils import grocy_datetime_str, localize_datetime, parse_date
 
 from .errors import GrocyError
 
@@ -91,7 +91,6 @@ class ProductData(BaseModel):
     product_group_id: Optional[int] = None
     qu_id_stock: int
     qu_id_purchase: int
-    qu_factor_purchase_to_stock: float
     picture_file_name: Optional[str] = None
     allow_partial_units_in_stock: Optional[bool] = False
     row_created_timestamp: datetime
@@ -453,13 +452,16 @@ class GrocyApiClient(object):
         self,
         chore_id: int,
         done_by: int = None,
-        tracked_time: datetime = datetime.now(),
+        tracked_time: datetime = None,
         skipped: bool = False,
     ):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
 
         data = {
-            "tracked_time": localized_tracked_time.isoformat(),
+            "tracked_time": grocy_datetime_str(localized_tracked_time),
             "skipped": skipped,
         }
 
@@ -733,12 +735,15 @@ class GrocyApiClient(object):
         parsed_json = self._do_get_request(url)
         return TaskResponse(**parsed_json)
 
-    def complete_task(self, task_id: int, done_time: datetime = datetime.now()):
+    def complete_task(self, task_id: int, done_time: datetime = None):
         url = f"tasks/{task_id}/complete"
+
+        if done_time is None:
+            done_time = datetime.now()
 
         localized_done_time = localize_datetime(done_time)
 
-        data = {"done_time": localized_done_time.isoformat()}
+        data = {"done_time": grocy_datetime_str(localized_done_time)}
         self._do_post_request(url, data)
 
     def get_meal_plan(self, query_filters: List[str] = None) -> List[MealPlanResponse]:
@@ -765,9 +770,12 @@ class GrocyApiClient(object):
         if parsed_json:
             return BatteryDetailsResponse(**parsed_json)
 
-    def charge_battery(self, battery_id: int, tracked_time: datetime = datetime.now()):
+    def charge_battery(self, battery_id: int, tracked_time: datetime = None):
+        if tracked_time is None:
+            tracked_time = datetime.now()
+
         localized_tracked_time = localize_datetime(tracked_time)
-        data = {"tracked_time": localized_tracked_time.isoformat()}
+        data = {"tracked_time": grocy_datetime_str(localized_tracked_time)}
 
         return self._do_post_request(f"batteries/{battery_id}/charge", data)
 
