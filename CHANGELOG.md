@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.0.0](https://github.com/SebRut/pygrocy/tree/v2.0.0) (2023-08-17)
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.5.0...v2.0.0)
+
+**Closed issues:**
+
+- Grocy API doesn't use offset timezone info \(chore execution gets the wrong time\) [\#254](https://github.com/SebRut/pygrocy/issues/254)
+
+**Merged pull requests:**
+
+- Remove qu\_factor\_purchase\_to\_stock to maintain compatibility with API v4 [\#265](https://github.com/SebRut/pygrocy/pull/265) ([fedefreue](https://github.com/fedefreue))
+- Convert empty value to None for qu\_factor\_purchase\_to\_stock [\#257](https://github.com/SebRut/pygrocy/pull/257) ([marcelvriend](https://github.com/marcelvriend))
+- Fix tracking time for chores, tasks and batteries [\#255](https://github.com/SebRut/pygrocy/pull/255) ([marcelvriend](https://github.com/marcelvriend))
+
 ## [v1.5.0](https://github.com/SebRut/pygrocy/tree/v1.5.0) (2022-09-19)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.1...v1.5.0)
@@ -12,11 +26,14 @@
 
 - Update pydantic requirement from \<1.10.0,\>=1.8.2 to \>=1.8.2,\<1.11.0 [\#251](https://github.com/SebRut/pygrocy/pull/251) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Fix tzlocal dependency causing an exception [\#250](https://github.com/SebRut/pygrocy/pull/250) ([marcelvriend](https://github.com/marcelvriend))
-- Fix enabled features lookup [\#248](https://github.com/SebRut/pygrocy/pull/248) ([marcelvriend](https://github.com/marcelvriend))
 
 ## [v1.4.1](https://github.com/SebRut/pygrocy/tree/v1.4.1) (2022-07-28)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.4.0...v1.4.1)
+
+**Merged pull requests:**
+
+- Fix enabled features lookup [\#248](https://github.com/SebRut/pygrocy/pull/248) ([marcelvriend](https://github.com/marcelvriend))
 
 ## [v1.4.0](https://github.com/SebRut/pygrocy/tree/v1.4.0) (2022-07-24)
 
