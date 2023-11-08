@@ -373,7 +373,7 @@ class Grocy(object):
         )
 
     def delete_generic(self, entity_type: EntityType, object_id: int):
-        return self._api_client.delete_generic(entity_type, object_id)
+        return self._api_client.delete_generic(entity_type.value, object_id)
 
     def get_generic_objects_for_type(
         self, entity_type: EntityType, query_filters: List[str] = None
