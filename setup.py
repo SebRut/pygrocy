@@ -18,7 +18,7 @@ setuptools.setup(
         "requests",
         "backports.zoneinfo;python_version<'3.9'",  # backports can be removed when python 3.8 support is dropped
         "deprecation~=2.1.0",
-        "pydantic>=1.8.2,<1.11.0",
+        "pydantic>=1.8.2,<2.5.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
