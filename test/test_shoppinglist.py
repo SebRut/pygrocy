@@ -14,6 +14,7 @@ class TestShoppingList:
         for item in shopping_list:
             assert isinstance(item, ShoppingListProduct)
             assert isinstance(item.id, int)
+            assert isinstance(item.done, int)
             if item.product_id:
                 assert isinstance(item.product_id, int)
                 assert isinstance(item.product, Product)
