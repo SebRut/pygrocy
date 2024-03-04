@@ -19,10 +19,15 @@ from pygrocy.grocy_api_client import (
 class ProductBarcode(DataModel):
     def __init__(self, data: ProductBarcodeData):
         self._barcode = data.barcode
+        self._amount = float(data.amount)
 
     @property
     def barcode(self) -> str:
         return self._barcode
+
+    @property
+    def amount(self) -> float:
+        return self._amount
 
 
 class QuantityUnit(DataModel):

@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pygrocy",
-    version="2.0.0",
+    version="2.0.1",
     author="Sebastian Rutofski",
     author_email="kontakt@sebastian-rutofski.de",
     description="",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sebrut/pygrocy",
+    url="https://github.com/looching/pygrocy",
     license="MIT",
     packages=setuptools.find_packages(),
     install_requires=[
