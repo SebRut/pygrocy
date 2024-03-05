@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Union
 
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
@@ -19,14 +19,14 @@ from pygrocy.grocy_api_client import (
 class ProductBarcode(DataModel):
     def __init__(self, data: ProductBarcodeData):
         self._barcode = data.barcode
-        self._amount = float(data.amount)
+        self._amount = float(data.amount) if data.amount else None
 
     @property
     def barcode(self) -> str:
         return self._barcode
 
     @property
-    def amount(self) -> float:
+    def amount(self) -> Union[float, None]:
         return self._amount
 
 
