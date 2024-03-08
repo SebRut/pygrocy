@@ -100,5 +100,3 @@ pygrocy.egg-info/
 
 .tox/
 .coverage
-.python-version
-dist/

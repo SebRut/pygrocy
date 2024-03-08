@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Union
+from typing import List, Optional
 
 from pygrocy.base import DataModel
 from pygrocy.grocy_api_client import (
@@ -26,7 +26,7 @@ class ProductBarcode(DataModel):
         return self._barcode
 
     @property
-    def amount(self) -> Union[float, None]:
+    def amount(self) -> Optional[float]:
         return self._amount
 
 
