@@ -161,6 +161,7 @@ class CurrentVolatilStockResponse(BaseModel):
 
 class ProductBarcodeData(BaseModel):
     barcode: str
+    amount: Optional[float] = None
 
 
 class ProductDetailsResponse(BaseModel):
