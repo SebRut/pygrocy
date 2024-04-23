@@ -1,5 +1,24 @@
 # Changelog
 
+## [v2.1.0](https://github.com/SebRut/pygrocy/tree/v2.1.0) (2024-04-23)
+
+**THIS IS WILL PROBABLY BE THE LAST pygrocy RELEASE, THE LIBRARY WILL GO INTO UNMAINTAINED STATE**
+
+[Full Changelog](https://github.com/SebRut/pygrocy/compare/v2.0.0...v2.1.0)
+
+**Closed issues:**
+
+- Add support for grocy api via reverse proxies [\#276](https://github.com/SebRut/pygrocy/issues/276)
+- getting error when running code [\#274](https://github.com/SebRut/pygrocy/issues/274)
+- Getting product by id fails if name\_plural is null [\#271](https://github.com/SebRut/pygrocy/issues/271)
+- Support for Grocy 4.0 API [\#266](https://github.com/SebRut/pygrocy/issues/266)
+
+**Merged pull requests:**
+
+- Add amount field to ProductBarcode [\#278](https://github.com/SebRut/pygrocy/pull/278) ([looching](https://github.com/looching))
+- use value prop in delete API call [\#273](https://github.com/SebRut/pygrocy/pull/273) ([jeremy-green](https://github.com/jeremy-green))
+- Make plural name optional for Quantity Units [\#272](https://github.com/SebRut/pygrocy/pull/272) ([vorostamas](https://github.com/vorostamas))
+
 ## [v2.0.0](https://github.com/SebRut/pygrocy/tree/v2.0.0) (2023-08-17)
 
 [Full Changelog](https://github.com/SebRut/pygrocy/compare/v1.5.0...v2.0.0)

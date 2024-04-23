@@ -71,7 +71,7 @@ class RecipeDetailsResponse(BaseModel):
 class QuantityUnitData(BaseModel):
     id: int
     name: str
-    name_plural: str
+    name_plural: Optional[str] = None
     description: Optional[str] = None
     row_created_timestamp: datetime
 
@@ -161,6 +161,7 @@ class CurrentVolatilStockResponse(BaseModel):
 
 class ProductBarcodeData(BaseModel):
     barcode: str
+    amount: Optional[float] = None
 
 
 class ProductDetailsResponse(BaseModel):
