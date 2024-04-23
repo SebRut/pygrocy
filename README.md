@@ -1,3 +1,5 @@
+**This project is de-facto unmaintained as haven't been using grocy for a while. Feel free to fork and create pygrocy2!**
+
 # pygrocy
 [![Development Build Status](https://api.travis-ci.com/SebRut/pygrocy.svg?branch=develop)](https://travis-ci.com/SebRut/pygrocy)
 [![PyPI](https://img.shields.io/pypi/v/pygrocy.svg)](https://pypi.org/project/pygrocy/)
