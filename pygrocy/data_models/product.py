@@ -214,6 +214,7 @@ class ShoppingListProduct(DataModel):
         self._note = raw_shopping_list.note
         self._amount = raw_shopping_list.amount
         self._product = None
+        self._done = raw_shopping_list.done
 
     def get_details(self, api_client: GrocyApiClient):
         if self._product_id:
@@ -238,3 +239,7 @@ class ShoppingListProduct(DataModel):
     @property
     def product(self) -> Product:
         return self._product
+    
+    @property
+    def done(self) -> int:
+        return self._done
